@@ -1,6 +1,6 @@
 require_relative "test_helper"
 
-describe Hotel::DateRange do
+describe "Hotel::DateRange" do
   describe "consructor" do
     it "Can be initialized with two dates" do
       start_date = Date.new(2017, 01, 01)
@@ -12,7 +12,7 @@ describe Hotel::DateRange do
       expect(range.end_date).must_equal end_date
     end
 
-    xit "is an an error for negative-lenght ranges" do
+    xit "is an error for negative-length ranges" do
     end
 
     xit "is an error to create a 0-length range" do
@@ -22,14 +22,14 @@ describe Hotel::DateRange do
   describe "overlap?" do
     before do
       start_date = Date.new(2017, 01, 01)
-      end_date = start_date + 3
+      end_date   = start_date + 3
 
       @range = Hotel::DateRange.new(start_date, end_date)
     end
 
     it "returns true for the same range" do
       start_date = @range.start_date
-      end_date = @range.end_date
+      end_date   = @range.end_date
       test_range = Hotel::DateRange.new(start_date, end_date)
 
       expect(@range.overlap?(test_range)).must_equal true
@@ -61,14 +61,21 @@ describe Hotel::DateRange do
   end
 
   xdescribe "include?" do
-    it "reutrns false if the date is clearly out" do
+    it "returns false if the date is clearly before" do
+    end
+
+    it "returns false if the date is clearly after" do
     end
 
     it "returns true for dates in the range" do
     end
 
+    it "returns true for the start_date date" do
+    end
+
     it "returns false for the end_date date" do
     end
+
   end
 
   xdescribe "nights" do
