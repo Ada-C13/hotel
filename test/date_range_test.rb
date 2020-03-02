@@ -11,6 +11,8 @@ describe Hotel::DateRange do
 			range = Hotel::DateRange.new(start_date, end_date)
 
 			expect(range).must_be_instance_of Hotel::DateRange
+			expect(range.start_date).must_be_instance_of Date
+			expect(range.end_date).must_be_instance_of Date
 		end
 
 	end

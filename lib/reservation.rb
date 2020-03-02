@@ -4,13 +4,13 @@ module Hotel
 
 	class Reservation
 
-		# attr_reader :room, :cost, :range
+		attr_reader :room, :cost, :range
 
-		# def initialize(room, cost, range)
-		# 	@room = room
-		# 	@cost = COST
-		# 	@range = range
-		# end
+		def initialize(range)
+			@room = rand(0..20)
+			@cost = COST
+			@range = range
+		end
 
 
 
