@@ -1,11 +1,19 @@
+require 'date'
 require_relative "test_helper"
 
 describe Hotel::HotelSystem do
 
 	describe "Wave 1 Requirements" do
+		before do
+			@hotel = Hotel::HotelSystem.new
+
+			date_one = Hotel::DateRange.new('dec 1', 'dec 5')
+			@hotel.reservations << Hotel::Reservation.new(date_one)
+		end
 
 		it "returns an array of all rooms with reservation including a specific date" do
-
+			date = Date.parse('dec 1')
+			expect(@hotel.get_reservations(date)).must_be_instance_of Array
 		end
 
 	end

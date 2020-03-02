@@ -1,4 +1,5 @@
 # Add simplecov
+require 'date'
 require "minitest"
 require "minitest/autorun"
 require "minitest/reporters"
