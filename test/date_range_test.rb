@@ -44,6 +44,7 @@ describe "Number of Nights" do
   
 end
 
+
 describe "Date In Range?" do
   let (:range) {
     Hotel::DateRange.new(("2020-02-03"), ("2020-02-07"))
