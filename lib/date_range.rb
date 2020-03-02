@@ -11,8 +11,10 @@ module Hotel
 			@end_date = Date.parse(end_date)
 		end
 
-		
-
+		def length_of_stay
+			return (@end_date - @start_date)
+		end
+	
 	end
 
 end
