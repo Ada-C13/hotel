@@ -1,4 +1,6 @@
+require 'date'
+
 module Hotel
-  class Reservations
+  class Reservation
   end
 end
