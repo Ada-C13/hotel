@@ -7,6 +7,11 @@ describe 'initialize' do
   it "can be created" do
     expect(@date).must_be_instance_of Hotel::DateRange
   end
+  it "will have the correct amount of readable attributes" do
+    expect(@date).must_respond_to :check_in_time
+    expect(@date).must_respond_to :check_out_time
+    expect(@date).must_respond_to :days
+  end
   it "will have check in and check out times that are Date objects" do
     expect(@date.check_in_time).must_be_instance_of Date
     expect(@date.check_out_time).must_be_instance_of Date
@@ -29,6 +34,9 @@ end
 describe "nights method" do
   before do
     @date = Hotel::DateRange.new([2020, 1, 28], [2020, 1, 30])
+  end
+  it "can be called" do
+    expect(@date).must_respond_to :nights
   end
   it "will calculate number of nights" do
     expect(@date.nights).must_equal (@date.days.length - 1)

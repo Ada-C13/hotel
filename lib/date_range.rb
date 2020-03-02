@@ -22,7 +22,7 @@ module Hotel
         end
       end
     end
-    
+
     def nights
       return days.length - 1
     end
