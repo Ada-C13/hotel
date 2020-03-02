@@ -3,14 +3,14 @@ require_relative "test_helper"
 describe "Hotel::DateRange" do
 
   describe "constructor" do
-
-    it "Can be initialized with two dates" do
+    it "can be initialized with two dates" do
       start_date = Date.new(2017, 01, 01)
       end_date   = start_date + 3
-      range = Hotel::DateRange.new(start_date, end_date)
+      range      = Hotel::DateRange.new(start_date, end_date)
 
       expect(range.start_date).must_equal start_date
       expect(range.end_date).must_equal end_date
+      expect(range).must_be_kind_of Hotel::DateRange
     end
 
     it "is an error if parameters are not dates" do
