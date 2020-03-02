@@ -7,11 +7,8 @@ module Hotel
     end
 
     def list_rooms
-      if @rooms == []
-        return nil
-      else
-        return @rooms
-      end
+      return @rooms
     end
+
   end
 end
