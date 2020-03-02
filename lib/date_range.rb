@@ -1,0 +1,19 @@
+require 'date'
+
+module Hotel
+  class DateRange
+    attr_reader :check_in, :check_out, :nights_spent
+
+    def initialize(check_in, check_out)
+      @check_in = check_in
+      @check_out = check_out
+      @nights_spent = (@check_out - @check_in) 
+    end
+
+    def to_id
+      return (@check_in.year.to_s + @check_in.mon.to_s + @check_in.mday.to_s)
+    end
+
+
+  end
+end
