@@ -14,22 +14,23 @@ module Hotel
         raise ArgumentError, "The check out time #{check_out_time} is not a valid time."
       elsif (@check_out_time - @check_in_time) <= 0
         raise ArgumentError, "The dates are not valid. Check in: #{@check_in_time}, Check out: #{@check_out_time}"
-
+      else #just create the shit
+        until 
+        @days << date
+        end
       end
-
-      # @days = create_days(@check_in_time, @check_out_time)
-      # @duration = days.length
     end
 
-    # def create_days
-    #   # total_days = Array.new
-    #   # if @check_in_time.next == @check_out_time
-    #   #   total_days = [@check_in_time, @check_out_time]
-    #   # end
-    #   # #take the start and the end, if start.next.to_s is same as end.next.to_s, total_days gets [Date.new(start), Date.new(end)]. Else, do some logic to 
-    #   # # return total_days
-    #   # return total_days
-    # end
+    def create_days
+      if (@check_in_time + 1) == @check_in_time
+        return [@check_in_time, @check_out_time]
+      else
+        total_days = Array.new
+        
+      end
+      #take the start and the end, when start.next.to_s is same as end.next.to_s, total_days gets [Date.new(start), Date.new(end)]. Else, do some logic to 
+      # return total_days
+    end
 
     def nights
       return days.length - 1

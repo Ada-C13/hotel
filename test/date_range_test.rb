@@ -2,7 +2,7 @@ require_relative 'test_helper'
 
 describe 'initialize' do
   before do
-    @date = Hotel::DateRange.new([2020, 1, 28], [2020, 1, 29])
+    @date = Hotel::DateRange.new([2020, 1, 28], [2020, 1, 30])
   end
   it "can be created" do
     expect(@date).must_be_instance_of Hotel::DateRange
@@ -15,12 +15,6 @@ describe 'initialize' do
     expect {
       date = Hotel::DateRange.new([2020, 1, 28], [2020, 1, 27])
     }.must_raise ArgumentError
-  end
-end
-
-describe 'create_days method' do
-  before do
-    @date = Hotel::DateRange.new([2020, 1, 28], [2020, 1, 30])
   end
   it "will assess the correct number of days" do
     expect(@date.days.length).must_equal 3
@@ -38,5 +32,8 @@ describe "nights method" do
   end
   it "will calculate number of nights" do
     expect(@date.nights).must_equal (@date.days.length - 1)
+  end
+  it "will not equal the number of days" do
+    expect(@date.nights).wont_equal @date.days.length
   end
 end
