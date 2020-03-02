@@ -21,6 +21,14 @@ describe Hotel::HotelSystem do
 			expect(@hotel.get_reservations(date).length).must_equal 2
 		end
 
+		it "can access the list of reservations for a specified room and a given date range" do
+			room = 10
+			range_start = "dec 2"
+			range_end = "dec 4"
+			
+			expect(@hotel.get_reservations_by_room(room, range_start, range_end)).must_be_instance_of Array
+		end
+
 	end
 
 end
