@@ -12,7 +12,7 @@ module Hotel
       @days = find_days(check_in, check_out)
     end
 
-    def find_days(start, end)
+    def find_days(check_in, check_out)
       #take the start and the end, if start.next.to_s is same as end.next.to_s, total_days gets [Date.new(start), Date.new(end)]. Else, do some logic to 
       return total_days
     end

@@ -9,7 +9,7 @@ end
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
-require_relative 'date_range'
-require_relative 'hotel_block'
-require_relative 'reception'
-require_relative 'reservation'
+require_relative '../lib/date_range'
+require_relative '../lib/hotel_block'
+require_relative '../lib/reception'
+require_relative '../lib/reservation'
