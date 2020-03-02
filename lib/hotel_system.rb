@@ -24,7 +24,8 @@ module Hotel
 			found_reservations = []
 
 			@reservations.each do |reservation|
-				if reservation.range.include?(Date.parse(date))
+				range = reservation.range.start_date..reservation.range.end_date
+				if (range).include?(date)
 					found_reservations << reservation
 				end
 			end
