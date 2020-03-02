@@ -8,6 +8,7 @@ describe "HotelManager" do
   describe "initialize" do
     it "creates an instance of HotelManager" do
       expect(@hotel_manager).must_be_kind_of Hotel::HotelManager
+      expect(@hotel_manager).must_respond_to :rooms
     end
   end
 
@@ -23,11 +24,19 @@ describe "HotelManager" do
       #TODO after Room class has been created
     end
 
-    it "returns nil if there are no rooms" do
+    it "returns empty array if there are no rooms" do
       @hotel_manager.rooms.empty?()
       rooms = @hotel_manager.list_rooms
 
-      expect(rooms).must_be_nil
+      expect(rooms).must_equal []
     end
   end
+
+  # describe "reserve_room" do
+  #   it "creates a Reservation instance" do
+  #     #TODO after Reservation class has been created
+  #   end
+
+  #   it ""
+  # end
 end
