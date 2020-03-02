@@ -27,18 +27,16 @@ describe 'create_days method' do
   end
   it "will create an array of Date objects" do
     expect(@date.days).must_be_instance_of Array
+    expect(@date.days).wont_be_empty
     expect(@date.days[0]).must_be_instance_of Date
   end
+end
 
-  describe "nights method" do
-    before do
-      @date = Hotel::DateRange.new([2020, 1, 28], [2020, 1, 30])
-    end
-    it "" do
-      
-    end
-    it "" do
-      
-    end
+describe "nights method" do
+  before do
+    @date = Hotel::DateRange.new([2020, 1, 28], [2020, 1, 30])
+  end
+  it "will calculate number of nights" do
+    expect(@date.nights).must_equal (@date.days.length - 1)
   end
 end
