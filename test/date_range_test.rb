@@ -30,4 +30,15 @@ describe 'create_days method' do
     expect(@date.days[0]).must_be_instance_of Date
   end
 
+  describe "nights method" do
+    before do
+      @date = Hotel::DateRange.new([2020, 1, 28], [2020, 1, 30])
+    end
+    it "" do
+      
+    end
+    it "" do
+      
+    end
+  end
 end

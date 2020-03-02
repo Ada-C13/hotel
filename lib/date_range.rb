@@ -31,8 +31,8 @@ module Hotel
     #   # return total_days
     # end
 
-    # def nights
-    #   return duration - 1
-    # end
+    def nights
+      return days.length - 1
+    end
   end
 end
