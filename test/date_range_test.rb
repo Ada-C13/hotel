@@ -13,10 +13,10 @@ describe 'initialize' do
   end
   it "will not create instance if check out time is before check in time" do
     expect {
-      date = Hotel::DateRange.new([2020, 1, 28], [2020, 1, 27])
+      Hotel::DateRange.new([2020, 1, 28], [2020, 1, 27])
     }.must_raise ArgumentError
   end
-  it "will assess the correct number of days" do
+  it "will have the correct number of days" do
     expect(@date.days.length).must_equal 3
   end
   it "will create an array of Date objects" do
