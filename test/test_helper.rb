@@ -1,3 +1,8 @@
+require 'simplecov'
+SimpleCov.start do
+  add_filter 'test/' # Tests should not be checked for coverage.
+end
+
 # Add simplecov
 require "minitest"
 require "minitest/autorun"
