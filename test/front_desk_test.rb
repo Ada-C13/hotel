@@ -155,6 +155,9 @@ describe "front_desk" do
       it "return reservation_id" do 
         expect(@new_reservation.reservation_id).must_be_kind_of Integer
       end 
+      it "return correct start/end date" do 
+        expect(@new_reservation.date_range.start_date).must_equal Date.new(2020,3,4)
+      end 
     end 
   end 
 end 

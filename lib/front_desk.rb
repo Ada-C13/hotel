@@ -40,6 +40,7 @@ module Hotel
 
     #request reservation 
     def self.request_reservation(start_date,end_date)
+      date_range = Hotel::DateRange.new(start_date,end_date)
     end 
 
     # input of start/end
