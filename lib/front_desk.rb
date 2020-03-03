@@ -9,12 +9,21 @@ module Hotel
     def initialize(num_rooms)
       @num_rooms = num_rooms
       
+      valid_number_of_rooms
+
       @rooms = [] # array of room objects
       @reservations = [] # array of reservation objects
       
       build_rooms
     end
     
+
+    def valid_number_of_rooms
+      if @num_rooms < 0
+        raise ArgumentError.new("Number of rooms must be positive")
+      end
+    end
+
 
     def build_rooms
       room_number = 1
@@ -24,20 +33,7 @@ module Hotel
         room_number += 1
       end
     end
-    
-    # add method for validating number of rooms
-    
-    # how to initialize a room
-    # def initialize(room_number, reservations: [], cost: 200)
-    #   @room_number = room_number
-    #   @reservations = reservations
-    #   # holds collection of reservation objects for this specific room (with dates) - this could be how to check for reservations
-    #   @cost = cost
-    
-    #   valid_room_number
-    # end
-    
-    # make room objects method
+  
     
     # List all reservations
     
