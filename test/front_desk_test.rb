@@ -22,12 +22,16 @@ describe "front desk" do
     end
   end
 
-  # describe "self.find_room" do
-  #   it "finds an instance of a room given the room number" do
-  #     room_number = 4
-  #     expect(Hotel::FrontDesk.find_room(room_number)).must_be_instance_of Hotel::Room
-  #   end
-  # end
+  describe "find_room" do
+    before do
+      @front_desk = Hotel::FrontDesk.new
+    end
+
+    it "finds an instance of a room given the room number" do
+      room_number = 4
+      expect(@front_desk.find_room(room_number)).must_be_instance_of Hotel::Room
+    end
+  end
 
   # describe "add_reservation" do
   #   it "" do
