@@ -1,5 +1,5 @@
 require_relative 'test_helper'
-xdescribe "front_desk" do 
+describe "front_desk" do 
   def hotel_manager 
     return Hotel::FrontDesk.new()
   end 
@@ -199,8 +199,31 @@ xdescribe "front_desk" do
       manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,10]),room_num:20)  
       expect{manager.request_reservation([2020,3,3],[2020,3,7])}.must_raise ArgumentError
     end 
-    
-
+    it "will not randomly assign same room same dates" do
+      manager = hotel_manager
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      manager.request_reservation([2020,4,9],[2020,4,10])
+      room_num_array = manager.reservations.map {|bookings|bookings.room_num.to_i}
+      expect(room_num_array.sum).must_equal 210
+    end 
 
   end 
 
