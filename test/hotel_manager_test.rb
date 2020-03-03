@@ -8,6 +8,12 @@ describe "HotelManager class" do
 
      @date_range = Hotel::DateRange.new("2020-3-20", "2020-3-27")
      @date_range_2 =  Hotel::DateRange.new("2020-3-5", "2020-3-10")
+
+    # 1st reservation
+    @hotel_manager.make_reservation(@date_range)
+
+    # 2nd reservation
+    @hotel_manager.make_reservation(@date_range_2)
   end 
 
 
@@ -35,13 +41,28 @@ describe "HotelManager class" do
         expect(reservation).must_be_instance_of Hotel::Reservation
       end 
     end 
+
+    it "Returns the first reservation" do 
+      expect(@hotel_manager.reservations[0].room.number).must_equal 1
+      expect(@hotel_manager.reservations[0].date_range).must_be_instance_of Hotel::DateRange
+    end 
+
+    it "Returns the last reservation" do 
+      last_index = @hotel_manager.reservations.length - 1
+      expect(@hotel_manager.reservations[last_index].room.number).must_equal last_index + 1
+    end 
   end 
 
-  
   describe "#available_room" do 
     it "Returns an available room" do 
+      # Arrange 
+      date_range_3 = Hotel::DateRange.new("2020-3-5", "2020-3-10")
+
+      # 3rd reservation
+      @hotel_manager.make_reservation(date_range_3)
+
       # Act & Assert
-      expect(@hotel_manager.available_room(@date_range).number).must_equal 1
+      expect(@hotel_manager.available_room(date_range_3).number).must_equal 4
     end 
   end 
 
@@ -70,5 +91,3 @@ describe "HotelManager class" do
     end 
   end 
 end 
-
-  
