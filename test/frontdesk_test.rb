@@ -92,6 +92,13 @@ describe "FrontDesk class" do
       expect(front_desk.get_room_bookings(1, "2nd Apr 2020", "4th Apr 2020").first).must_be_instance_of Hotel::Reservation
     end
 
+    it "returns an Argument Error for invalid date range" do
+      # reservation = Hotel::Reservation.new(room: Hotel::Room.new(1), start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
+      front_desk = Hotel::FrontDesk.new
+      # front_desk.add_reservation(reservation)
+      expect{front_desk.get_room_bookings(1, "22nd Apr 2020", "4th Apr 2020")}.must_raise ArgumentError
+    end
+
     it "returns all instances of Reservations if they all satisfy parameters" do
       reservation_1 = Hotel::Reservation.new(room: Hotel::Room.new(1), start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
       reservation_2 = Hotel::Reservation.new(room: Hotel::Room.new(1), start_date: "30th Mar 2020", end_date: "7th Apr 2020")

@@ -22,9 +22,10 @@ module Hotel
       return @reservations.find_all{ |reservation| reservation.start_date <= check_date && reservation.end_date >= check_date}
     end
 
-    def get_room_bookings(number, start_date, end_date)
-      range_start = Date.parse(start_date)
-      range_end = Date.parse(end_date)
+    def get_room_bookings(number, start, finish)
+      range_start = Date.parse(start)
+      range_end = Date.parse(finish)
+      raise ArgumentError, "Date range is invalid" if range_end < range_start
       return @reservations.find_all{ |reservation| reservation.room.number == number &&
         (reservation.start_date <= range_start && reservation.end_date >= range_start ||
         reservation.start_date <= range_end && reservation.end_date >= range_end ||
