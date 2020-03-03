@@ -2,6 +2,7 @@
 require "minitest"
 require "minitest/autorun"
 require "minitest/reporters"
+require 'minitest/skip_dsl'
 
 require 'simplecov'
 SimpleCov.start do
@@ -13,4 +14,6 @@ Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
 # require_relative your lib files here!
 
-require_relative '../lib/hotel'
+require_relative '../lib/hotel_manager'
+require_relative '../lib/reservations'
+require_relative '../lib/room'

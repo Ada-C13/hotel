@@ -2,7 +2,7 @@ require 'time'
 
 
 module Hotel
-    class FrontDesk
+    class Receptionist
         attr_accessor :rooms, :reservations
 
       def initialize(rooms:,reservations:)
