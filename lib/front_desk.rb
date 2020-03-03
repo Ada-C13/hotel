@@ -20,8 +20,14 @@ module Hotel
 
     #access a list of reservations for a specific room number and date range
     # check reservations of specific date
-    def check_for_date(date)
-    end 
+   def check_date_reservations(date)
+      display = ""
+      reservations_include_a_date = @reservations.select {|bookings| bookings.date_range.include_date(date)==true}
+      reservations_include_a_date.map do |bookings|
+        display += "Reservation_id = #{bookings.reservation_id} Start date = #{bookings.date_range.start_date} End_date =#{bookings.date_range.end_date} Room Number = #{bookings.room_num}\n"
+      end 
+      return display
+   end 
 
 
 

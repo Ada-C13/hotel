@@ -59,6 +59,45 @@ describe "DateRange class" do
     end 
   end 
 
+  describe "include_date method" do 
+    it "will return true if date within start/end" do 
+      @date_range = Hotel::DateRange.new(
+        start_date:[2020,3,2],
+        end_date:[2020,3,5]
+      )
+      date = [2020,3,3]
+      expect(@date_range.include_date(date)).must_equal true
+    end 
+    it "will return false if date not within start/end" do 
+      @date_range = Hotel::DateRange.new(
+        start_date:[2020,3,2],
+        end_date:[2020,3,5]
+      )
+      date = [2020,4,3]
+      expect(@date_range.include_date(date)).must_equal false
+    end
+
+    it "will return false if date same as end_date" do 
+      @date_range = Hotel::DateRange.new(
+        start_date:[2020,3,2],
+        end_date:[2020,3,5]
+      )
+      date = [2020,3,5]
+      expect(@date_range.include_date(date)).must_equal false
+    end
+
+
+    it "will return true if date same as start_date" do 
+      @date_range = Hotel::DateRange.new(
+        start_date:[2020,3,2],
+        end_date:[2020,3,5]
+      )
+      date = [2020,3,2]
+      expect(@date_range.include_date(date)).must_equal true
+    end
+
+
+  end 
 
 
 

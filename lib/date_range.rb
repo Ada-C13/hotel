@@ -27,5 +27,16 @@ module Hotel
       return @end_date - @start_date 
     end 
 
+    #include_date method
+    def include_date(date)
+      date = Date.new(date[0],date[1],date[2])
+      if date >= @end_date || date < start_date
+        return false 
+      else  
+        return true
+      end 
+    end
+    
+    
   end 
 end 
