@@ -13,5 +13,7 @@ module Hotel
       @room = room
     end
 
+    
+
   end
 end

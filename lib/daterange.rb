@@ -1,7 +1,7 @@
 require 'date'
 
 module Hotel
-  class Calendar
+  class DateRange
     
   end
 end
