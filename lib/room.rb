@@ -8,6 +8,8 @@ class Room
     @room_num = room_num
   end
 
+  # - Every room is identical, and a room always costs $200/night
+  # - The last day of a reservation is the checkout day, so the guest should not be charged for that night
   def add_reservation
     Reservation.new(@room_num, start_date, end_date)
   end

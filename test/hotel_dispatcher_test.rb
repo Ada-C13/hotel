@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'hotel_dispatcher'
 require_relative 'test_helper'
 
 describe 'HotelDispatcher class' do
   def build_test_dispatcher
-    return HotelDispatcher.new
+    HotelDispatcher.new
   end
   describe 'Initializer' do
     it 'is an instance of HotelDispatcher' do
@@ -16,7 +18,13 @@ describe 'HotelDispatcher class' do
       hotel_dispatcher = build_test_dispatcher
       room_array = hotel_dispatcher.make_rooms
       expect(room_array.length).must_equal 20
-  describe
+    end
+  end
+  describe 'Checks room for availablility' do
+    it 'takes in the start and end date' do
+      hotel_dispatcher = build_test_dispatcher
+      room_check = hotel_dispatcher.check_room_available?('3rd Feb 2001', '5 Feb 2001')
+      expect(room_check).must_be_kind_of Date
     end
   end
 end
