@@ -6,30 +6,38 @@ module Hotel
 
 	class HotelSystem
 
-		attr_reader :reservations
+		attr_reader :rooms, :reservations
 
 		def initialize
 			@rooms = []
-			@reservations = []
-		end
-
-		def get_all_rooms
-			# Hotel has 20 rooms, named 1 - 20.
-			all_rooms = []
-
+			@reservations = []		
+			
 			20.times do |i|
-				all_rooms << (i + 1)
+				@rooms << (i + 1)
 			end
-
-			return all_rooms
 		end
 
 		# Create a reservation from start date and end date.
 		def make_reservation(start_date, end_date)
-			new_reservation = Hotel::Reservation.new(start_date, end_date)
+			room = room_finder(start_date, end_date)
+			new_reservation = Hotel::Reservation.new(room, start_date, end_date)
 			@reservations << new_reservation
 
 			return new_reservation
+		end
+
+		def room_finder(range_start, range_end)
+			possible_rooms = @rooms
+
+			@reservations.each do |reservation|
+				if range_start >= reservation.start_date || range_end < reservation.end_date
+					possible_rooms.delete(reservation.room)
+				end
+			end
+			
+			raise ArgumentError.new("No rooms left for this time range") if possible_rooms.length == 0
+
+			return possible_rooms.sample
 		end
 
 		# Get all reservations by a specific date.
@@ -64,9 +72,19 @@ module Hotel
 
 		# Get all rooms available for a date.
 		def get_rooms_by_date(date)
+			avail_rooms = @rooms
 
+			@reservations.each do |reservation|
+				range = reservation.start_date...reservation.end_date
+
+				if (range).include?(date)
+					avail_rooms.delete(reservation.room)
+				end
+			end
+
+			return avail_rooms
 		end
-		
+
 	end
 
 end

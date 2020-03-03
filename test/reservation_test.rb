@@ -5,10 +5,11 @@ describe Hotel::Reservation do
 	describe "Wave 1 Requirements" do
 
 		before do
+			room = 20
 			start_date = Date.new(2019, 12, 23)
 			end_date = Date.new(2019, 12, 28)
 
-			@new_reservation = Hotel::Reservation.new(start_date, end_date)
+			@new_reservation = Hotel::Reservation.new(room, start_date, end_date)
 		end
 
 		it "makes an instance of a Reservation" do
@@ -28,10 +29,8 @@ describe Hotel::Reservation do
 			inval_end = Date.new(2001, 02, 25)
 			inval_start = Date.new(2001, 02, 26)
 
-			expect{Hotel::Reservation.new(inval_start, inval_end)}.must_raise ArgumentError
+			expect{Hotel::Reservation.new(10, inval_start, inval_end)}.must_raise ArgumentError
 		end
-
-		
 	end
 
 end
