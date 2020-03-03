@@ -15,7 +15,7 @@ describe "Reservation Class" do
     expect(reservation.total_cost).must_equal 800
   end
   
-  # think of some edge cases here - do other method validation methods catch edge cases?
+  # TODO: think of some edge cases here - do other method validation methods catch edge cases?
 end
 
 
@@ -34,6 +34,7 @@ describe "total cost" do
 end
 
 describe "valid reservation id" do
+  # TODO
   # it "raises argument error for reservation numbers that already exist" do
     
   # end

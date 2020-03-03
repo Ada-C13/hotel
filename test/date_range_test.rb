@@ -27,7 +27,7 @@ end
 
 # describe "Valid CheckIn Date" do
 #   it "raises an argument error for check-in dates in the past" do
-#     expect { Hotel::DateRange.new(("2019-02-15"), ("2019-02-17")) }.must_raise ArgumentError
+#     expect{ Hotel::DateRange.new(("2019-02-15"), ("2019-02-17")) }.must_raise ArgumentError
 #   end
 # end
 
