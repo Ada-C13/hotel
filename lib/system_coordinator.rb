@@ -20,7 +20,7 @@ module Hotel
     
     # [method] avail rooms for that day. I can view a list of rooms that are not reserved for a given date range
 
-    
+    # handle/ rescue exceptions when there is no availability
 
 
   end
