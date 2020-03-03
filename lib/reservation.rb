@@ -1,12 +1,16 @@
 module Hotel
   class Reservation
-    # Feel free to change this method signature as needed. Make sure to update the tests!
+    attr_reader :range, :room
+    ROOM_COST = 200
+
     def initialize(start_date, end_date, room)
-      
+      @range = Hotel::DateRange.new(start_date, end_date)
+      @room  = room
     end
 
+    # Reservation - Every room is identical and a room always costs $200/night
     def cost
-      return 3
+      return ROOM_COST * @range.nights
     end
   end
 end

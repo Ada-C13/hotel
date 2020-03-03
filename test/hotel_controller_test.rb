@@ -49,3 +49,11 @@ describe "Hotel::HotelController" do
     end
   end
 end
+
+
+# HotelController - access the list of all of the rooms in the hotel
+# HotelController - access the list of reservations for a specified room and a given date range
+# HotelController - access the list of reservations for a specific date, so that I can track reservations by date
+# HotelController - The hotel has 20 rooms, and they are numbered 1 through 20
+# HotelController - When reserving a room, the user provides only the start and end dates - the library should determine which room to use for the reservation
+# HotelController -  Check whether reservations conflict with each other (this will come in wave 2!)
