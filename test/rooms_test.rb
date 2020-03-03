@@ -11,8 +11,9 @@ describe "rooms" do
       expect(@room).must_be_instance_of Hotel::Room
     end
 
-    it "raises an ArgumentError if status is not available or unavailable" do
-      expect{Hotel::Room.new(room_number: 1, cost: 200, status: "xyz")}.must_raise ArgumentError
+    it "raises an arguement error if room number is less than 1 or more than 20" do
+      expect{Hotel::Room.new(room_number: 21, cost: 200)}.must_raise ArgumentError
+      expect{Hotel::Room.new(room_number: -1, cost: 200)}.must_raise ArgumentError
     end
   end
 end
