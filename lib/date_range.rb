@@ -3,18 +3,18 @@ require "date"
 module Hotel
   class DateRange
     attr_accessor :start_date, :end_date
+    attr_reader :nights
 
     def initialize(start_date:, end_date:)
       if end_date != nil
-        if Date.parse(end_date) > Date.parse(start_date)
-          @start_date = Date.parse(start_date)
-          @end_date = Date.parse(end_date)
+        if end_date > start_date
+          @start_date = start_date
+          @end_date = end_date
         else
           raise ArgumentError, "Those are invalid dates"
         end
       end
-
-      # @nights = nights(start_date, end_date)
+      @nights = self.nights
     end
   end
 
@@ -24,6 +24,7 @@ module Hotel
   # def include?(start_date, end_date)
   # end
 
-  # def nights(start_date, end_date)
-  # end
+  def nights
+    return (@end_date - @start_date) # is this right? -1 night?
+  end
 end

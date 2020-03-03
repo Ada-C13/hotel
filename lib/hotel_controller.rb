@@ -5,7 +5,7 @@ module Hotel
     attr_reader :rooms, :reservations
 
     def initialize(rooms:, reservations:)
-      @rooms = [1..20]
+      @rooms = (1..20).to_a
       @reservations = []
     end
 
