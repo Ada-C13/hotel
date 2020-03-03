@@ -1,6 +1,11 @@
-guard :minitest, bundler: false, autorun: true, rubygems: false do
-  # With Minitest Reporters
-  watch(%r{^test/(.*)_test\.rb$})
-  watch(%r{^lib/(.+)\.rb$})         { |m| "test/#{m[1]}_test.rb" }
-  watch(%r{^test/test_helper\.rb$}) { 'test' }
+require 'room'
+require_relative 'test_helper'
+
+describe 'Room class' do
+  describe 'Initializer' do
+    it 'is an instance of Room' do
+    test_room = Room.new(1)
+      expect(test_room).must_be_kind_of Room
+    end
+  end
 end
