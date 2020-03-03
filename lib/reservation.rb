@@ -1,4 +1,7 @@
-COST = 200
+require_relative 'date_range'
+require_relative 'hotel_system'
+
+PRICE = 200
 
 module Hotel
 
@@ -8,11 +11,9 @@ module Hotel
 
 		def initialize(range)
 			@room = rand(1..20)
-			@cost = COST
+			@cost = (range.length_of_stay * PRICE)
 			@range = range
 		end
-
-
 
 	end
 

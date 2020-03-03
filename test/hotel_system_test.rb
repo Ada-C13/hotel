@@ -25,7 +25,7 @@ describe Hotel::HotelSystem do
 			room = 10
 			range_start = "dec 2"
 			range_end = "dec 4"
-			
+
 			expect(@hotel.get_reservations_by_room(room, range_start, range_end)).must_be_instance_of Array
 		end
 

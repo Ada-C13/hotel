@@ -11,6 +11,13 @@ describe Hotel::DateRange do
 			@range = Hotel::DateRange.new(s_date, e_date)
 		end
 
+		it "raises ArgumentError if invalid dates are provided for creating reservation" do
+			inval_start = "feb 29, 2001"
+			inval_end = "march 2, 2001"
+
+			expect(Hotel::DateRange.new(inval_start, inval_end)).must_raise ArgumentError
+		end
+
 		it "creates an instance of time from taking two dates" do
 			expect(@range).must_be_instance_of Hotel::DateRange
 			expect(@range.start_date).must_be_kind_of Date

@@ -1,5 +1,8 @@
 require 'date'
 
+require_relative 'date_range'
+require_relative 'reservation'
+
 module Hotel
 
 	class HotelSystem
@@ -13,6 +16,7 @@ module Hotel
 		# Create a reservation from start date and end date.
 		def make_reservation(start_date, end_date)
 			range = Hotel::DateRange.new(start_date, end_date)
+
 			new_reservation = Hotel::Reservation.new(range)
 			@reservations << new_reservation
 
