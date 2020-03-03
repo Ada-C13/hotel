@@ -5,8 +5,8 @@ describe Hotel::Reservation do
 	describe "Wave 1 Requirements" do
 
 		before do
-			start_date = "dec 23"
-			end_date = "dec 28"
+			start_date = Date.new(2019, 12, 23)
+			end_date = Date.new(2019, 12, 28)
 
 			@new_reservation = Hotel::Reservation.new(start_date, end_date)
 		end
@@ -25,14 +25,13 @@ describe Hotel::Reservation do
 		end
 
 		it "raises ArgumentError if invalid dates are provided for creating reservation" do
-			inval_start = "feb 29, 2001"
-			inval_end = "march 2, 2001"
-			inval_start_two = "feb 27, 2001"
+			inval_end = Date.new(2001, 02, 25)
+			inval_start = Date.new(2001, 02, 26)
 
 			expect{Hotel::Reservation.new(inval_start, inval_end)}.must_raise ArgumentError
-			expect{Hotel::Reservation.new(inval_start_two, inval_start)}.must_raise ArgumentError
-			expect{Hotel::Reservation.new(inval_start, inval_start_two)}.must_raise ArgumentError
 		end
+
+		
 	end
 
 end

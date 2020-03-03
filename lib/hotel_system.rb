@@ -1,6 +1,5 @@
 require 'date'
 
-require_relative 'date_range'
 require_relative 'reservation'
 
 module Hotel
@@ -54,7 +53,7 @@ module Hotel
 
 			@reservations.each do |reservation|
 				if reservation.room == room
-					if Date.parse(range_start) >= reservation.start_date && Date.parse(range_end) <= reservation.end_date
+					if range_start >= reservation.start_date && range_end <= reservation.end_date
 						found_reservations << reservation
 					end
 				end
@@ -63,6 +62,11 @@ module Hotel
 			return found_reservations
 		end
 
+		# Get all rooms available for a date.
+		def get_rooms_by_date(date)
+
+		end
+		
 	end
 
 end
