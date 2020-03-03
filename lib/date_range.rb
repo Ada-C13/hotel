@@ -11,10 +11,10 @@ module Hotel
           @start_date = start_date
           @end_date = end_date
         else
-          raise ArgumentError, "Those are invalid dates"
+          raise ArgumentError, "Start date must be before end date"
         end
       end
-      @nights = self.nights
+      @nights = (@end_date - @start_date).to_i
     end
   end
 
@@ -23,8 +23,4 @@ module Hotel
 
   # def include?(start_date, end_date)
   # end
-
-  def nights
-    return (@end_date - @start_date) # is this right? -1 night?
-  end
 end
