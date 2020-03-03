@@ -6,13 +6,22 @@ module Hotel
     attr_accessor :reservations, :rooms 
     def initialize(reservations:nil ,rooms:nil)
       @reservations = reservations || []
-      @rooms = {:1 => [],:2 =>[],:3=>[]}
+      @rooms = {1 => [],2 =>[],3=>[]}
     end
 
     #access a list of all rooms in hotel
+    def list_all
+      display = ""
+      @reservations.map do |bookings| 
+        display += "Reservation_id = #{bookings.reservation_id} Start date = #{bookings.date_range.start_date} End_date =#{bookings.date_range.end_date} Room Number = #{bookings.room_num}\n"
+      end 
+      return display
+    end 
+
     #access a list of reservations for a specific room number and date range
     # check reservations of specific date
-    
+    def check_for_date(date)
+    end 
 
 
 
