@@ -29,5 +29,13 @@ describe "Reservation" do
     it "stores correct end_date" do
       expect(@reservation.end_date).must_equal Date.new(2020,5,5)
     end
+
+    it "creates a range that is an Array" do
+      expect(@reservation.range).must_be_kind_of Array
+    end
+
+    it "creates correct number of elements within range" do
+      expect(@reservation.range.length).must_equal 3
+    end
   end
 end
