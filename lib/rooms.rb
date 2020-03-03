@@ -15,7 +15,7 @@ module Hotel
         raise ArgumentError.new("Room status must be availble or unavailable")
       end
 
-      @reservations = []
+      @reservations = reservations || []
 
     end
 
