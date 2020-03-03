@@ -38,11 +38,9 @@ describe "Hotel::DateRange" do
 
   describe "overlap?" do
     before do
-
       def simple_range(start_day, end_day)
         return Hotel::DateRange.new(Date.new(2017, 01, start_day), Date.new(2017, 01, end_day))
       end
-
     end
 
     it "raises an ArgumentError if parameter is not a range" do

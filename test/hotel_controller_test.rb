@@ -60,8 +60,7 @@ describe "Hotel::HotelController" do
       it "takes two dates and returns a list" do
         start_date = @date
         end_date   = start_date + 3
-
-        room_list = @hotel_controller.available_rooms(start_date, end_date) # DateRange?
+        room_list = @hotel_controller.available_rooms(start_date, end_date)
 
         expect(room_list).must_be_kind_of Array
       end
