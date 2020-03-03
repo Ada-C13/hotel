@@ -8,7 +8,8 @@ module Hotel
     # your library code should assume that it's receiving Date objects to start
     def initialize(start_date, end_date)
       raise ArgumentError.new("Arguments passed in should be a Date class instance ") if !(start_date.is_a? Date) || !(end_date.is_a? Date)
-      raise ArgumentError.new("End date should not be earlier than start date")  if end_date < start_date
+      raise ArgumentError.new("Dates should not be earlier than today") if start_date < Date.today
+      raise ArgumentError.new("End date should not be earlier than start date")  if end_date <= start_date
       
       @start_date = start_date
       @end_date = end_date
