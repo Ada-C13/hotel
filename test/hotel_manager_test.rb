@@ -37,6 +37,7 @@ describe "HotelManager class" do
     end 
   end 
 
+  
   describe "#available_room" do 
     it "Returns an available room" do 
       # Act & Assert
@@ -44,12 +45,28 @@ describe "HotelManager class" do
     end 
   end 
 
+
   describe "#make_reservation" do 
     it "Makes a reservation within valid date range" do 
       # Assert 
       expect(@hotel_manager).must_respond_to :make_reservation
 
       expect(@hotel_manager.make_reservation(@date_range)).must_be_instance_of Hotel::Reservation
+    end 
+  end 
+
+
+  # I can access the list of reservations for a specific date, so that I can track reservations by date
+  describe "#find_reservations_by_date" do 
+    
+    it "Finds the list of reservations for a specific date" do 
+      reservations_list = @hotel_manager.find_reservations_by_date(@date_range)
+
+     # Assert
+      expect(reservations_list).must_be_instance_of Array 
+      reservations_list.each do |reservation|
+        expect(reservation).must_be_instance_of Hotel::Reservation
+      end 
     end 
   end 
 end 

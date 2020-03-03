@@ -22,7 +22,7 @@ module Hotel
       return @rooms.find { |room| room.vacancy == true }
     end
 
-    
+
     def make_reservation(date_range) #Date.new(start_date, end_date)
       date_range.valid_dates?
 
@@ -36,6 +36,12 @@ module Hotel
       @reservations << reservation
 
       return reservation
+    end 
+
+
+    def find_reservations_by_date(date_range)
+      return @reservations.filter { |reservation|
+        reservation.date_range == date_range } 
     end 
   end 
 end 
