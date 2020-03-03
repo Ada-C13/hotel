@@ -74,6 +74,24 @@ describe "DateRange Class" do
     end
   end
 
+  describe "#include_date" do
+    it "returns true if the specific date is included in the date range" do
+      date01 = Date.today + 8
+      date03 = Date.today + 5
+      expect(@range01.include_date(date01)).must_equal true
+      expect(@range01.include_date(date03)).must_equal true
+    end
+
+    it "returns false if the specific date is not included in the date range" do
+      date02 = Date.today + 1
+      date04 = Date.today + 20
+      date06 = Date.today + 10
+      expect(@range01.include_date(date02)).must_equal false
+      expect(@range01.include_date(date04)).must_equal false
+      expect(@range01.include_date(date06)).must_equal false
+    end
+  end
+
   describe "#overlapping" do
     it "returns true if the two date ranges overlap" do
       range03 = Hotel::DateRange.new(Date.today + 6, Date.today + 8)

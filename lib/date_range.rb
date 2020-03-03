@@ -28,6 +28,11 @@ module Hotel
       end
     end
 
+    def include_date(date)
+      return true if date >= @start_date && date < @end_date
+      return false
+    end
+
     def overlapping(other_range)
       if other_range.start_date < @end_date && @start_date < other_range.end_date
         return true
