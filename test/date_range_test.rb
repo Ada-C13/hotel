@@ -21,12 +21,25 @@ describe 'Date class' do
 end
 
 
-describe 'Validate Date Range' do
+describe "Gimme valid date format" do 
+  
+  it "returns a valid format for date parsing" do
 
+  end
+  
+  it "rescues an argument error for invalid dates" do 
+    
+  end
+  
+end
+
+
+describe 'Validate Date Range' do
+  
   it 'returns an argument error if check out is before check in' do
     expect { Hotel::DateRange.new(("2020-02-05"), ("2020-02-04")) }.must_raise ArgumentError
   end
-
+  
 end
 
 
@@ -49,7 +62,7 @@ describe "Date In Range?" do
   let (:range) {
     Hotel::DateRange.new(("2020-02-03"), ("2020-02-07"))
   }
-
+  
   it "returns true if a date is included in a given range" do
     date = Date.parse("2020-02-04")
     expect(range.date_in_range?(date)).must_equal true
@@ -59,5 +72,5 @@ describe "Date In Range?" do
     date = Date.parse("2020-02-09")
     expect(range.date_in_range?(date)).wont_equal true
   end
-
+  
 end

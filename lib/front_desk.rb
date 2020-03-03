@@ -6,10 +6,12 @@ module Hotel
     attr_accessor :rooms
 
     def initialize
-      @rooms = {} # how to store room info??
-      @reservations = [] # store reservations
+      @rooms = [] # array of room objects
+      @reservations = [] # array of reservation objects
     end
 
+    # make room objects
+    
     # List all reservations
 
     # List all rooms
