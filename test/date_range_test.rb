@@ -37,7 +37,6 @@ describe "Hotel::DateRange" do
   end
 
   describe "overlap?" do
-
     before do
 
       def simple_range(start_day, end_day)
@@ -105,11 +104,9 @@ describe "Hotel::DateRange" do
       range2 = simple_range(01, 05)
       expect(range1.overlap?(range2)).must_equal false
     end
-
   end
 
   describe "include?" do
-
     before do
       start_date = Date.new(2018, 01, 01)
       end_date   = Date.new(2018, 01, 10)
@@ -140,11 +137,9 @@ describe "Hotel::DateRange" do
     it "returns false for the end_date date" do
       expect(@range.include?(Date.new(2018, 01, 10))).must_equal false
     end
-
   end
 
   describe "nights" do
-
     it "returns the correct number of nights" do
       start_date = Date.new(2017, 01, 01)
       end_date   = start_date + 5
@@ -153,7 +148,6 @@ describe "Hotel::DateRange" do
       expect(range.nights).must_be_kind_of Integer
       expect(range.nights).must_equal 5
     end
-
   end
 
 end

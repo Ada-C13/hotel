@@ -3,7 +3,7 @@ module Hotel
     attr_accessor :start_date, :end_date
 
     def initialize(start_date, end_date)
-      unless start_date.class == Date && end_date.class == Date
+      unless start_date.instance_of?(Date) && end_date.instance_of?(Date)
         raise ArgumentError, "Parameters must be of class Date"
       end
       if start_date >= end_date
@@ -14,17 +14,15 @@ module Hotel
     end
 
     def overlap?(other)
-      unless other.class == Hotel::DateRange
+      unless other.instance_of?(Hotel::DateRange)
         raise ArgumentError, "Parameters must be of class Hotel::DateRange"
       end
 
       return other.start_date < @end_date && other.end_date > @start_date
-
-      # return !(other.start_date >= @end_date || other.end_date <= @start_date)
     end
 
     def include?(date)
-      unless date.class == Date
+      unless date.instance_of?(Date)
         raise ArgumentError, "Parameters must be of class Date"
       end
 
@@ -34,5 +32,6 @@ module Hotel
     def nights
       return (@end_date - @start_date).to_i
     end
+
   end
 end

@@ -5,12 +5,14 @@ describe "Hotel::HotelController" do
     @hotel_controller = Hotel::HotelController.new
     @date = Date.parse("2020-08-04")
   end
+
   describe "wave 1" do
     describe "rooms" do
       it "returns a list" do
         expect(@hotel_controller.rooms).must_be_kind_of Array
       end
     end
+     
     describe "reserve_room" do
       it "takes two Date objects and returns a Reservation" do
         start_date = @date
