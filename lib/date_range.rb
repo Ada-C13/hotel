@@ -1,6 +1,5 @@
 require 'date'
 
-require_relative 'hotel_system'
 require_relative 'reservation'
 
 module Hotel
@@ -12,6 +11,8 @@ module Hotel
 		def initialize(start_date, end_date)
 			if !Date.parse(start_date) or !Date.parse(end_date)
 				raise ArgumentError.new("Invalid date provided for start or end.")
+			elsif Date.parse(end_date) < Date.parse(start_date)
+				raise ArgumentError.new("End date cannot be earlier than start.")
 			else
 				@start_date = Date.parse(start_date)
 				@end_date = Date.parse(end_date)

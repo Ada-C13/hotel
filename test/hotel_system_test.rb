@@ -23,8 +23,8 @@ describe Hotel::HotelSystem do
 
 		it "returns an array of all rooms with reservation including a specific date" do
 			date = Date.parse('dec 1')
-			expect(@hotel.get_reservations(date)).must_be_instance_of Array
-			expect(@hotel.get_reservations(date).length).must_equal 2
+			expect(@hotel.get_reservations_by_date(date)).must_be_instance_of Array
+			expect(@hotel.get_reservations_by_date(date).length).must_equal 2
 		end
 
 		it "can access the list of reservations for a specified room and a given date range" do

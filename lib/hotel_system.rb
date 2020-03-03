@@ -12,15 +12,17 @@ module Hotel
 		def initialize
 			@rooms = []
 			@reservations = []
-
-			# Hotel has 20 rooms, named 1 - 20.
-			20.times do |i|
-				@rooms << (i + 1)
-			end
 		end
 
 		def get_all_rooms
-			return @rooms
+			# Hotel has 20 rooms, named 1 - 20.
+			all_rooms = []
+
+			20.times do |i|
+				all_rooms << (i + 1)
+			end
+			
+			return all_rooms
 		end
 
 		# Create a reservation from start date and end date.
@@ -33,8 +35,8 @@ module Hotel
 			return new_reservation
 		end
 
-		# Get all reservations including a specific date.
-		def get_reservations(date)
+		# Get all reservations by a specific date.
+		def get_reservations_by_date(date)
 			found_reservations = []
 
 			@reservations.each do |reservation|

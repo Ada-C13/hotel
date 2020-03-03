@@ -18,6 +18,7 @@ describe Hotel::DateRange do
 
 			expect{Hotel::DateRange.new(inval_start, inval_end)}.must_raise ArgumentError
 			expect{Hotel::DateRange.new(inval_start_two, inval_start)}.must_raise ArgumentError
+			expect{Hotel::DateRange.new(inval_start, inval_start_two)}.must_raise ArgumentError
 		end
 
 		it "creates an instance of time from taking two dates" do
