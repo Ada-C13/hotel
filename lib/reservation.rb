@@ -3,9 +3,7 @@ require_relative 'date_range'
 
 module Hotel
   class Reservation < DateRange
-    attr_reader :start_date, :end_date, :id, :total_cost, :room_number
-
-    attr_accessor :nights
+    attr_reader :start_date, :end_date, :id, :total_cost, :room_number, :nights
 
     def initialize(start_date, end_date)
       super(start_date, end_date)
