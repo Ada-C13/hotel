@@ -21,5 +21,21 @@ module Hotel
 
       return @rooms.find { |room| room.vacancy == true }
     end
+
+    
+    def make_reservation(date_range) #Date.new(start_date, end_date)
+      date_range.valid_dates?
+
+      room = self.available_room(date_range)
+      reservation = Hotel::Reservation.new(date_range, room)
+
+      # Invoke the method
+      reservation.room.change_vacancy
+
+      # Add reservation
+      @reservations << reservation
+
+      return reservation
+    end 
   end 
 end 

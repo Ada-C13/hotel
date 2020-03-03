@@ -43,6 +43,15 @@ describe "HotelManager class" do
       expect(@hotel_manager.available_room(@date_range).number).must_equal 1
     end 
   end 
+
+  describe "#make_reservation" do 
+    it "Makes a reservation within valid date range" do 
+      # Assert 
+      expect(@hotel_manager).must_respond_to :make_reservation
+
+      expect(@hotel_manager.make_reservation(@date_range)).must_be_instance_of Hotel::Reservation
+    end 
+  end 
 end 
 
   
