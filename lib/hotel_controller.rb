@@ -10,6 +10,10 @@ module Hotel
     end
 
     def make_reservation
+      date_range = date_range.new(start_date: "2001-02-03", end_date: "2001-02-04") # update
+      reservation = Reservation.new(date_range: date_range, cost: nil, room: nil) # update
+      @reservations << reservation
+      return reservation
     end
 
     # def find_by_date(reservations)

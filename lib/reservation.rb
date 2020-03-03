@@ -12,7 +12,7 @@ module Hotel
       @room = room
     end
 
-    # def calculate_cost(date_range)
+    # def calculate_cost(date_range) # implement "date" first
     # end
   end
 end

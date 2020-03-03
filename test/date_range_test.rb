@@ -4,7 +4,7 @@ require_relative "test_helper"
 describe "DateRange class" do
   describe "DateRange instantiation" do
     before do
-      @date_range = Hotel::DateRange.new(start_date: "today", end_date: "tomorrow") # change dates
+      @date_range = Hotel::DateRange.new(start_date: "2001-02-03", end_date: "2001-02-04")
     end
     describe "is an instance of DateRange" do
       it do
