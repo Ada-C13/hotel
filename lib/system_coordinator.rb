@@ -1,12 +1,13 @@
-module Hotel
-  class SystemCoordinator
+require_relative 'room'
 
-    # attr_reader
+module Hotel
+  class SystemCoordinator    
+    attr_reader :rooms
     # SystemCoordinator should know rooms
 
-    # def initialize
-    #   @rooms? (I can access the list of all of the rooms in the hotel)
-    # end
+    def initialize
+      @rooms = Array.new(20){|i| Hotel::Room.new(i+1)} #access the list of all of the rooms in the hotel
+    end
 
     
 
