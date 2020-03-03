@@ -11,9 +11,15 @@ describe Hotel::HotelSystem do
 			@hotel.reservations << Hotel::Reservation.new(4, Date.new(2019, 11, 27), Date.new(2019, 12, 2))
 			@hotel.reservations << Hotel::Reservation.new(5, Date.new(2019, 12, 3), Date.new(2019, 12, 9))
 		end
+
+		it "creates an instance of Hotel" do
+			expect(@hotel).must_be_instance_of Hotel::HotelSystem
+			expect(@hotel.reservations).must_be_instance_of Array
+			expect(@hotel.rooms).must_be_instance_of Array
+		end
 		
 		it "returns an array of all rooms at the hotel" do
-			expect(@hotel.rooms).must_be_instance_of Array
+
 			expect(@hotel.rooms[0]).must_equal 1
 			expect(@hotel.rooms[19]).must_equal 20
 		end

@@ -16,6 +16,7 @@ describe Hotel::Reservation do
 			expect(@new_reservation).must_be_instance_of Hotel::Reservation
 			expect(@new_reservation.room).must_be :>, 0
 			expect(@new_reservation.room).must_be :<, 21
+			expect(@new_reservation.room).must_be_instance_of Integer
 			expect(@new_reservation.start_date).must_be_instance_of Date
 			expect(@new_reservation.end_date).must_be_instance_of Date
 			expect(@new_reservation.length_of_stay).must_equal 5
