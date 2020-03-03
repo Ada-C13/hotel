@@ -32,8 +32,8 @@ module Hotel
 
     def create_days_array
       days = []
-      days_in_range = check_in_time.clone
-        until days_in_range === check_out_time.next
+      days_in_range = @check_in_time.clone
+        until days_in_range === @check_out_time.next
           days << days_in_range
           days_in_range = days_in_range.next
         end
