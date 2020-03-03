@@ -137,28 +137,42 @@ describe "front_desk" do
       expect(result).wont_match (/2020-04-08/)
       expect(result).wont_match (/2020-03-10/)
     end 
-
-    xdescribe "#request_reservation_wave1" do
-      before do 
-        manager = hotel_manager
-        start_date = [2020,3,4]
-        end_date = [2020,3,5]
-        @new_reservation = hotel_manager.request_reservation(start_date,end_date)
-      end 
-      it "return an instance of reservation" do
-         expect(@new_reservation).must_be_kind_of Hotel::Reservation
-      end  
-      it "return room number 1 to 20" do 
-        expect(@new_reservation.room_num).must_be_kind_of Integer
-        expect(@new_reservation.room_num).must_be :>, 0
-        expect(@new_reservation.room_num).must_be :<, 21
-      end 
-      it "return reservation_id" do 
-        expect(@new_reservation.reservation_id).must_be_kind_of Integer
-      end 
-      it "return correct start/end date" do 
-        expect(@new_reservation.date_range.start_date).must_equal Date.new(2020,3,4)
-      end 
+  end
+  xdescribe "#request_reservation_wave1" do
+    before do 
+      manager = hotel_manager
+      start_date = [2020,3,4]
+      end_date = [2020,3,5]
+      @new_reservation = hotel_manager.request_reservation(start_date,end_date)
+    end 
+    it "return an instance of reservation" do
+        expect(@new_reservation).must_be_kind_of Hotel::Reservation
+    end  
+    it "return room number 1 to 20" do 
+      expect(@new_reservation.room_num).must_be_kind_of Integer
+      expect(@new_reservation.room_num).must_be :>, 0
+      expect(@new_reservation.room_num).must_be :<, 21
+    end 
+    it "return reservation_id" do 
+      expect(@new_reservation.reservation_id).must_be_kind_of Integer
+    end 
+    it "return correct start/end date" do 
+      expect(@new_reservation.date_range.start_date).must_equal Date.new(2020,3,4)
     end 
   end 
+  describe "#request_reservation for wave 2 Check if room added to reservations pool" do 
+    before do 
+      @manager = hotel_manager
+      @reservation_1 = hotel_manager.request_reservation([2020,3,1],[2020,3,5])
+      @reservation_2 = hotel_manager.request_reservation([2020,3,6],[2020,3,8])
+    end 
+    it "will add reservation to front desk reservations pool" do
+      result1 = @manager.reservations.any?{|bookings| bookings == @reservation_1}
+      result2 = @manager.reservations.any?{|bookings| bookings == @reservation_2}
+      expect(result1).must_equal true
+      expect(result2).must_equal true
+    end 
+  end 
+
+
 end 
