@@ -55,6 +55,7 @@ describe "DateRange Class" do
   describe "count_nights" do
     it "counts the total nights of stay within a date range" do
       expect(@range01.count_nights).must_equal 5
+      expect(@range01.count_nights).must_be_instance_of Integer
     end
   end
 end
