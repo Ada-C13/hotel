@@ -14,8 +14,7 @@ module Hotel
       return reservation
     end
 
-    # loop thru reservation list, for each reservation,
-    # use include? to check if the range include the date in question 
+    # on reservation list, for each reservation, check if the range include the date in question 
     def reservations(date)
       return @reservation_list.select do |reservation|
         reservation.range.include?(date)

@@ -8,7 +8,7 @@ module Hotel
       @room  = room
     end
 
-    # Reservation - Every room is identical and a room always costs $200/night
+    # Every room is identical and costs $200/night
     def cost
       return ROOM_COST * @range.nights
     end
