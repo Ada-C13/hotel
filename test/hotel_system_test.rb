@@ -7,12 +7,9 @@ describe Hotel::HotelSystem do
 		before do
 			@hotel = Hotel::HotelSystem.new
 
-			date_one = Hotel::DateRange.new('dec 1', 'dec 5')
-			@hotel.reservations << Hotel::Reservation.new(date_one)
-			date_two = Hotel::DateRange.new('nov 27', 'dec 2')
-			@hotel.reservations << Hotel::Reservation.new(date_two)
-			date_three = Hotel::DateRange.new('dec 3', 'dec 5')
-			@hotel.reservations << Hotel::Reservation.new(date_three)
+			@hotel.reservations << Hotel::Reservation.new('dec 1', 'dec 5')
+			@hotel.reservations << Hotel::Reservation.new('nov 27', 'dec 2')
+			@hotel.reservations << Hotel::Reservation.new('dec 3', 'dec 5')
 		end
 
 		it "returns an array of all rooms at the hotel" do

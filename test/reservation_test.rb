@@ -8,22 +8,31 @@ describe Hotel::Reservation do
 			start_date = "dec 23"
 			end_date = "dec 28"
 
-			range = Hotel::DateRange.new(start_date, end_date)
-
-			@new_reservation = Hotel::Reservation.new(range)
+			@new_reservation = Hotel::Reservation.new(start_date, end_date)
 		end
 
 		it "makes an instance of a Reservation" do
 			expect(@new_reservation).must_be_instance_of Hotel::Reservation
 			expect(@new_reservation.room).must_be :>, 0
 			expect(@new_reservation.room).must_be :<, 21
-			expect(@new_reservation.range).must_be_instance_of Hotel::DateRange
+			expect(@new_reservation.start_date).must_be_instance_of Date
+			expect(@new_reservation.end_date).must_be_instance_of Date
+			expect(@new_reservation.length_of_stay).must_equal 5
 		end
 
 		it "returns the cost of the reservation" do
 			expect(@new_reservation.cost).must_equal 1000
 		end
 
+		it "raises ArgumentError if invalid dates are provided for creating reservation" do
+			inval_start = "feb 29, 2001"
+			inval_end = "march 2, 2001"
+			inval_start_two = "feb 27, 2001"
+
+			expect{Hotel::Reservation.new(inval_start, inval_end)}.must_raise ArgumentError
+			expect{Hotel::Reservation.new(inval_start_two, inval_start)}.must_raise ArgumentError
+			expect{Hotel::Reservation.new(inval_start, inval_start_two)}.must_raise ArgumentError
+		end
 	end
 
 end

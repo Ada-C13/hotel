@@ -1,7 +1,7 @@
 require_relative "test_helper"
 
 describe Hotel::DateRange do
-
+	
 	describe "Wave 1 Requirements" do
 
 		before do
