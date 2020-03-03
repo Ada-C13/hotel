@@ -36,6 +36,17 @@ describe "ReservationDesk class" do
     end
   end
 
+  # describe "find_room_by_id" do
+  #   it "returns an instanse of Room" do
+      
+  #   end
+
+  #   it "returns a Room with a matching ID"
+  #   end
+
+  #   it "returns nill if there is no Room with a matching ID"
+  #  end
+  # end
    
   describe "reservations" do
     it "returns an array" do
@@ -48,19 +59,70 @@ describe "ReservationDesk class" do
     # end
   end
 
+  describe "find_reservations" do
+    it "returns an array" do
+      expect(@reservation_desk.find_reservations(room_id: 1)).must_be_kind_of Array
+    end
+
+    it "returns an array of reservations" do
+      
+    end
+
+    it "Reservation#room_id is what we searched for" do
+      
+    end
+
+    it "Reservation@start_date and end_date are what we searched for" do
+      
+    end
+
+    it "Returns empty array if there are no reservations for the room/dates" do
+      
+    end
+
+    it "Returns nil if room ID doesn't exist" do
+      
+    end
+
+    it "If end_date is nil, returns all reservations from the start date onward" do
+    #TODO: wording
+    end  
+
+    it "If start_date is nil, returns all reservations until the end date" do
+      
+    end
+
+    it "If both start and end dates are nill, returns all reservations" do
+      
+    end
+
+  end
+
   describe "new_reservation" do
     it "creates a new instanse of Reservation" do
+      room_id = 1
       start_date = "2020-4-1"
       end_date = "2020-4-5"
-      expect(@reservation_desk.new_reservation(start_date, end_date)).must_be_kind_of Hotel::Reservation
+      expect(@reservation_desk.new_reservation(room_id, start_date, end_date)).must_be_kind_of Hotel::Reservation
+    end
+
+    it "raises an error if room id is invalid" do
+      room_id = 1000 #TODO: what if there is one?
+      start_date = "2020-4-1"
+      end_date = "2020-4-5"
+      expect {
+        @reservation_desk.new_reservation(room_id, start_date, end_date)
+      }.must_raise ArgumentError
     end
   end
+  
 
   describe "add_reservation" do
     before do
+      @room_id = 1
       @start_date = "2020-4-1"
       @end_date = "2020-4-5"
-      @reservation = @reservation_desk.new_reservation(@start_date, @end_date)
+      @reservation = @reservation_desk.new_reservation(@room_id, @start_date, @end_date)
       @reservations_num = @reservation_desk.reservations.length
       @reservation_desk.add_reservation(@reservation)
     end

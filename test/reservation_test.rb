@@ -3,9 +3,10 @@ require_relative "test_helper"
 describe "Reservation class" do
   describe "Reservation instatiation" do
     before do
+      @room_id = 1
       @start_date = "2020-4-1"
       @end_date = "2020-4-5"
-      @reservation = Hotel::Reservation.new(start_date: @start_date, end_date: @end_date)
+      @reservation = Hotel::Reservation.new(room_id: @room_id, start_date: @start_date, end_date: @end_date)
     end
 
     it "is an instance of reservation" do

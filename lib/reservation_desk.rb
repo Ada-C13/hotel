@@ -15,12 +15,25 @@ module Hotel
       return hotel_rooms
     end
 
-    def new_reservation(start_date, end_date)
-      Reservation.new(start_date: start_date, end_date: end_date)
+    def find_reservations(room_id: , start_date: nil, end_date: nil)
+      room = rooms.find { |room| room.id == room_id}
+      return room.reservations if (start_date == nil && end_date == nil)
+      #TODO: add logic here
+    end
+
+
+    # def find_room_by_id(id)
+    #   hotel_rooms.select {|room| room.id == id}
+    # end
+
+    def new_reservation(room_id, start_date, end_date)
+      raise ArgumentError.new("Invalid room ID.") unless rooms.find {|room| room.id == room_id}
+      Reservation.new(room_id: room_id, start_date: start_date, end_date: end_date)
     end
 
     def add_reservation(new_reservation)
-      reservations << new_reservation
+      reservations << new_reservation # to Room reservations?
+      #new_reservation.room_id
     end
 
 
