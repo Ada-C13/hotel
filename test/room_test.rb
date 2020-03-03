@@ -21,7 +21,8 @@ describe Hotel::Room do
     end
 
     it "stores a cost for the room instance" do
-      expect(@room01.cost).must_equal 200
+      expect(@room01.cost).must_be_instance_of Float
+      expect(@room01.cost).must_equal 200.00
     end
   end
 

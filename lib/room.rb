@@ -3,7 +3,7 @@ module Hotel
   class Room
     attr_reader :id, :cost
 
-    def initialize(room_id, cost = 200)
+    def initialize(room_id, cost = 200.00)
       raise ArgumentError if !room_id.is_a? Integer
       raise ArgumentError if room_id < 1
       @id = room_id
