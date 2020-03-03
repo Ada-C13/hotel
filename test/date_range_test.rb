@@ -25,29 +25,38 @@ describe "DateRange class" do
   end 
 
   describe "overlap method" do 
-  it "return true when 2 date_range overlap" do 
-    @date_range_1 = Hotel::DateRange.new(
-      start_date:[2020,3,2],
-      end_date:[2020,3,5]
-    )
-    @date_range_2 = Hotel::DateRange.new(
-      start_date:[2020,3,3],
-      end_date:[2020,3,5]
-    )
-    expect(@date_range_1.overlap(@date_range_2)).must_equal true
-  end 
-  it "return false when 2 date_range do not overlap" do 
-    @date_range_1 = Hotel::DateRange.new(
-      start_date:[2020,3,2],
-      end_date:[2020,3,5]
-    )
-    @date_range_2 = Hotel::DateRange.new(
-      start_date:[2020,3,5],
-      end_date:[2020,3,6]
-    )
-    expect(@date_range_1.overlap(@date_range_2)).must_equal false
+    it "return true when 2 date_range overlap" do 
+      @date_range_1 = Hotel::DateRange.new(
+        start_date:[2020,3,2],
+        end_date:[2020,3,5]
+      )
+      @date_range_2 = Hotel::DateRange.new(
+        start_date:[2020,3,3],
+        end_date:[2020,3,5]
+      )
+      expect(@date_range_1.overlap(@date_range_2)).must_equal true
+    end 
+    it "return false when 2 date_range do not overlap" do 
+      @date_range_1 = Hotel::DateRange.new(
+        start_date:[2020,3,2],
+        end_date:[2020,3,5]
+      )
+      @date_range_2 = Hotel::DateRange.new(
+        start_date:[2020,3,5],
+        end_date:[2020,3,6]
+      )
+      expect(@date_range_1.overlap(@date_range_2)).must_equal false
+    end 
   end 
 
+  describe "duration method" do 
+    it "will return 3 " do 
+      @date_range = Hotel::DateRange.new(
+        start_date:[2020,3,2],
+        end_date:[2020,3,5]
+      )
+      expect(@date_range.duration).must_equal 3
+    end 
   end 
 
 

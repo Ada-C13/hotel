@@ -21,6 +21,11 @@ module Hotel
         return true
       end 
     end 
-    
+
+    #duration method
+    def duration
+      return @end_date - @start_date 
+    end 
+
   end 
 end 
