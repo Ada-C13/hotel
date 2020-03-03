@@ -9,14 +9,6 @@ module Hotel
       #TODO: not needed?
     end
 
-    def make_rooms
-      rooms = []
-      room_num.times do |i|
-        rooms << Room.new(i+1)
-      end
-      return rooms
-    end
-
     def find_room_by_id(id)
       rooms.find {|room| room.id == id}
     end
@@ -36,6 +28,15 @@ module Hotel
     #   room = find_room_by_id(new_reservation.room_id)
     #   room.reservations << new_reservation
     # end
+
+    private
+    def make_rooms
+      rooms = []
+      room_num.times do |i|
+        rooms << Room.new(i+1)
+      end
+      return rooms
+    end
 
   end
 end
