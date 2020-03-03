@@ -7,6 +7,8 @@ module Hotel
     
     def initialize(reservation_id, date_range, room_number, price_per_night: 200, total_cost: nil)
       @reservation_id = reservation_id
+      valid_reservation_id
+
       @date_range = date_range
       @room_number = room_number
       @price_per_night = price_per_night
@@ -19,11 +21,14 @@ module Hotel
       return total_reservation_cost
     end
     
+    # how will you set reservation id??
+    
     def valid_reservation_id
-      # is the reservation id valid?
-      # if yes, move on
-      # if not, raise/rescue an error
+      if @reservation_id < 1
+        raise ArgumentError.new("Reservation id must be greater than 0")
+      end
     end
+  
     
   end
 end

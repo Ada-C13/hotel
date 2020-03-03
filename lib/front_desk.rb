@@ -10,21 +10,22 @@ module Hotel
       @num_rooms = num_rooms
       
       valid_number_of_rooms
-
-      @rooms = [] # array of room objects
-      @reservations = [] # array of reservation objects
+      
+      @rooms = []
+      @reservations = []
+      # do we need reservations here?
       
       build_rooms
     end
     
-
+    
     def valid_number_of_rooms
       if @num_rooms < 0
         raise ArgumentError.new("Number of rooms must be positive")
       end
     end
-
-
+    
+    
     def build_rooms
       room_number = 1
       @num_rooms.times do
@@ -33,9 +34,10 @@ module Hotel
         room_number += 1
       end
     end
-  
     
-    # List all reservations
+    # make reservation method needs to have a method for setting reservation id to previous one plus one
+    
+    # List all reservations: 
     
     # List all rooms
     

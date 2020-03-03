@@ -14,7 +14,7 @@ describe "Reservation Class" do
     expect(reservation.room_number).must_equal "3"
     expect(reservation.total_cost).must_equal 800
   end
-
+  
   # think of some edge cases here - do other method validation methods catch edge cases?
 end
 
@@ -31,4 +31,17 @@ describe "total cost" do
     reservation = Hotel::Reservation.new(1, date_range, "5") 
     expect(reservation.total_cost).must_equal 600
   end
+end
+
+describe "valid reservation id" do
+  # it "raises argument error for reservation numbers that already exist" do
+    
+  # end
+  
+  it "raises an argument error for invalid reservation numbers" do
+    date_range = Hotel::DateRange.new(("2020-02-03"), ("2020-02-07"))
+    
+    expect{ Hotel::Reservation.new(0, date_range, "3") }.must_raise ArgumentError
+  end
+  
 end
