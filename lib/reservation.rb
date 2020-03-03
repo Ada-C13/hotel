@@ -2,7 +2,8 @@ require_relative 'date_range'
 
 module Hotel
   class Reservation < DateRange
-    attr_reader :reservation_id, :date_range, :room_number, :total_cost
+    attr_reader :reservation_id, :date_range, :room_number
+    # attr_accessor :total_cost - do we need this up here?
     
     def initialize(reservation_id, date_range, room_number, price_per_night: 200, total_cost: nil)
       @reservation_id = reservation_id
@@ -13,18 +14,17 @@ module Hotel
     end
     
     def total_cost
-    # the total cost is the @price per night times @ number of total nights
-    total_reservation_cost = @price_per_night * @date_range.num_nights
-
-    return total_reservation_cost
+      total_reservation_cost = @price_per_night * @date_range.num_nights
+      
+      return total_reservation_cost
     end
-
+    
     def valid_reservation_id
-    # is the reservation id valid?
-    # if yes, move on
-    # if not, raise/rescue an error
+      # is the reservation id valid?
+      # if yes, move on
+      # if not, raise/rescue an error
     end
-
+    
   end
 end
 

@@ -18,20 +18,18 @@ describe 'Date class' do
     expect(date_range.check_out).must_be_instance_of Date
   end
   
+  it "raises an argument error for invalid date" do
+    expect { Hotel::DateRange.new("1/21/19", "2020/03/03") }.must_raise ArgumentError
+  end
+
 end
 
 
-describe "Gimme valid date format" do 
-  
-  it "returns a valid format for date parsing" do
-
-  end
-  
-  it "rescues an argument error for invalid dates" do 
-    
-  end
-  
-end
+# describe "Valid CheckIn Date" do
+#   it "raises an argument error for check-in dates in the past" do
+#     expect { Hotel::DateRange.new(("2019-02-15"), ("2019-02-17")) }.must_raise ArgumentError
+#   end
+# end
 
 
 describe 'Validate Date Range' do
