@@ -1,10 +1,35 @@
+require_relative 'room'
+require_relative 'reservation'
+
 module Hotel
   class FrontDesk
-    attr_reader :reservations, :rooms
+    attr_reader :rooms, :reservations
 
     def initialize
-      @reservations = reservations
-      @rooms = rooms
+      @rooms = []
+      20.times do |i|
+        @rooms << Room.new(i+1)
+      end
+      @reservations = []
+    end
+
+    def add_reservation(reservation)
+      @reservations << reservation
+    end
+
+    def get_bookings(date)
+      check_date = Date.parse(date)
+      return @reservations.find_all{ |reservation| reservation.start_date <= check_date && reservation.end_date >= check_date}
+    end
+
+    def get_room_bookings(number, start_date, end_date)
+      range_start = Date.parse(start_date)
+      range_end = Date.parse(end_date)
+      return @reservations.find_all{ |reservation| reservation.room.number == number &&
+        (reservation.start_date <= range_start && reservation.end_date >= range_start ||
+        reservation.start_date <= range_end && reservation.end_date >= range_end ||
+        reservation.start_date >= range_start && reservation.end_date <= range_end)
+      }
     end
   end
 end
