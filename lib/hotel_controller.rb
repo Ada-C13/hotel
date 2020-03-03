@@ -1,18 +1,25 @@
 module Hotel
   class HotelController
-    # Wave 1
-    def rooms
-      # You might want to replace this method with an attr_reader
-      return []
+    attr_reader :rooms, :reservation_list
+    
+    def initialize
+      @rooms = (1..20).to_a
+      @reservation_list = []
     end
 
     def reserve_room(start_date, end_date)
-      # start_date and end_date should be instances of class Date
-      return Reservation.new(start_date, end_date, nil)
+      room = available_rooms(start_date, end_date).first
+      reservation = Hotel::Reservation.new(start_date, end_date, room)
+      @reservation_list << reservation
+      return reservation
     end
 
+    # loop thru reservation list, for each reservation,
+    # use include? to check if the range include the date in question 
     def reservations(date)
-      return []
+      return @reservation_list.select do |reservation|
+        reservation.range.include?(date)
+      end
     end
 
     # Wave 2
