@@ -1,19 +1,20 @@
 module Hotel
   class ReservationDesk
-    attr_reader :room_num, :reservations
+    attr_reader :room_num, :rooms, :reservations
 
     def initialize(room_num: 20)
       @room_num = room_num
+      @rooms = make_rooms
       @reservations = [] 
       #TODO: not needed?
     end
 
-    def rooms
-      hotel_rooms = []
+    def make_rooms
+      rooms = []
       room_num.times do |i|
-        hotel_rooms << Room.new(i+1)
+        rooms << Room.new(i+1)
       end
-      return hotel_rooms
+      return rooms
     end
 
     def find_room_by_id(id)
@@ -26,7 +27,7 @@ module Hotel
       #TODO: add logic here
     end
 
-    def new_reservation(room_id, start_date, end_date)
+    def new_reservation(room_id: , start_date: , end_date: )
       raise ArgumentError.new("Invalid room ID.") unless rooms.find {|room| room.id == room_id}
       Reservation.new(room_id: room_id, start_date: start_date, end_date: end_date)
     end

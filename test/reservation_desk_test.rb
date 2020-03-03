@@ -105,7 +105,7 @@ describe "ReservationDesk class" do
       room_id = 1
       start_date = "2020-4-1"
       end_date = "2020-4-5"
-      expect(@reservation_desk.new_reservation(room_id, start_date, end_date)).must_be_kind_of Hotel::Reservation
+      expect(@reservation_desk.new_reservation(room_id: room_id, start_date: start_date, end_date: end_date)).must_be_kind_of Hotel::Reservation
     end
 
     it "raises an error if room id is invalid" do
@@ -120,17 +120,18 @@ describe "ReservationDesk class" do
 
   # describe "add_reservation" do
   #   before do
+  #     @room = @reservation_desk.rooms[0]
   #     @room_id = 1
   #     @start_date = "2020-4-1"
   #     @end_date = "2020-4-5"
-  #     @reservation = @reservation_desk.new_reservation(@room_id, @start_date, @end_date)
-  #     @reservations_num = @reservation_desk.reservations.length
+  #     @reservation = @reservation_desk.new_reservation(room_id: @room_id, start_date: @start_date, end_date: @end_date)
+  #     # @reservations_num = @reservation_desk.reservations.length
   #     @reservation_desk.add_reservation(@reservation)
   #   end
 
-  #   it "add a new instance of Reservation to reservations array" do
-  #     expect(@reservation_desk.reservations.include? @reservation).must_equal true
-  #     expect(@reservation_desk.reservations.length).must_equal (@reservations_num + 1)
+  #   it "add a new instance of Reservation to a correct Room's reservations array" do
+  #     expect(@reservation_desk.rooms[0].reservations.include? @reservation).must_equal true
+  #     # expect(@reservation_desk.reservations.length).must_equal (@reservations_num + 1)
   #   end
   # end
 
