@@ -9,8 +9,11 @@ describe 'DateRange class' do
     end
 
     it 'takes in a start and end date' do
-      
       expect(@dates).must_be_kind_of Hotel::DateRange
+    end
+
+    it 'counts the number of nights a guest is staying' do
+      expect(@dates.nights).must_equal 2
     end
   end
 end
