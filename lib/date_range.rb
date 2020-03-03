@@ -20,6 +20,22 @@ module Hotel
       return nights
     end
 
+    def include(date)
+      if date >= @start_date && date < @end_date
+        return true
+      else
+        return false
+      end
+    end
+
+    def overlap(other_range)
+      if other_range.start_date < @end_date && @start_date < other_range.end_date
+        return true
+      else
+        return false
+      end
+    end
+
 
   end
 end

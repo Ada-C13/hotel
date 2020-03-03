@@ -47,29 +47,43 @@ describe "DateRange Class" do
       expect{Hotel::DateRange.new(start_date, end_date)}.must_raise ArgumentError
     end
 
-  
-
-
   end
 
-  describe "count_nights" do
+  describe "#count_nights" do
     it "counts the total nights of stay within a date range" do
       expect(@range01.count_nights).must_equal 5
       expect(@range01.count_nights).must_be_instance_of Integer
     end
   end
+
+  describe "#include" do
+    it "returns true if the date is included in the date range" do
+      day01 = Date.today + 7
+      expect(@range01.include(day01)).must_equal true
+    end
+
+    it "returns false if the date is not included in the date range" do
+      day02 = Date.today + 1
+      expect(@range01.include(day02)).must_equal false
+    end
+  end
+
+  describe "#overlap" do
+    it "returns true if the two date ranges overlap" do
+      start_date = Date.today + 6
+      end_date = Date.today + 8
+      range03 = Hotel::DateRange.new(start_date, end_date)
+      expect(@range01.overlap(range03)).must_equal true
+    end
+
+    it "returns false if it is only the start date overlaps end date" do
+      start_date = Date.today + 10
+      end_date = Date.today + 12
+      range04 = Hotel::DateRange.new(start_date, end_date)
+      expect(@range01.overlap(range04)).must_equal false
+    end
+  end
 end
 
 
-# before do
-#   start_year = 2020
-#   start_month = 03
-#   start_day = 25
-#   end_year = 2020 
-#   end_month = 03 
-#   end_day = 27
-#   @range01 = Hotel::DateRange.new(
-#     start_year: start_year, start_month: start_month, start_day: start_day, 
-#     end_year: end_year, end_month: end_month, end_day: end_day)
-# end
 
