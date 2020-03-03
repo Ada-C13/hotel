@@ -138,7 +138,7 @@ describe "front_desk" do
       expect(result).wont_match (/2020-03-10/)
     end 
 
-    describe "#request_reservation" do
+    xdescribe "#request_reservation_wave1" do
       before do 
         manager = hotel_manager
         start_date = [2020,3,4]
