@@ -14,8 +14,10 @@ describe Hotel::DateRange do
 		it "raises ArgumentError if invalid dates are provided for creating reservation" do
 			inval_start = "feb 29, 2001"
 			inval_end = "march 2, 2001"
+			inval_start_two = "feb 27, 2001"
 
-			expect(Hotel::DateRange.new(inval_start, inval_end)).must_raise ArgumentError
+			expect{Hotel::DateRange.new(inval_start, inval_end)}.must_raise ArgumentError
+			expect{Hotel::DateRange.new(inval_start_two, inval_start)}.must_raise ArgumentError
 		end
 
 		it "creates an instance of time from taking two dates" do

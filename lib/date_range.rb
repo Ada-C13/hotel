@@ -10,19 +10,15 @@ module Hotel
 		attr_reader :start_date, :end_date
 
 		def initialize(start_date, end_date)
-			if Date.parse(start_date) == false 
-				raise ArgumentError.new("Start date was not a real date.")
+			if !Date.parse(start_date) or !Date.parse(end_date)
+				raise ArgumentError.new("Invalid date provided for start or end.")
 			else
 				@start_date = Date.parse(start_date)
-			end
-
-			if Date.parse(end_date) == false
-				raise ArgumentError.new("End date was not a real date.")
-			else
 				@end_date = Date.parse(end_date)
 			end
 		end
 
+		# Provides the number of days of length of stay.
 		def length_of_stay
 			return (@end_date - @start_date)
 		end
