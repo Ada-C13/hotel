@@ -15,6 +15,12 @@ describe Hotel::HotelSystem do
 			@hotel.reservations << Hotel::Reservation.new(date_three)
 		end
 
+		it "returns an array of all rooms at the hotel" do
+			expect(@hotel.get_all_rooms).must_be_instance_of Array
+			expect(@hotel.get_all_rooms[0]).must_equal 1
+			expect(@hotel.get_all_rooms[19]).must_equal 20
+		end
+
 		it "returns an array of all rooms with reservation including a specific date" do
 			date = Date.parse('dec 1')
 			expect(@hotel.get_reservations(date)).must_be_instance_of Array

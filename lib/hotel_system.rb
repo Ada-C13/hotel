@@ -10,7 +10,17 @@ module Hotel
 		attr_reader :reservations
 
 		def initialize
+			@rooms = []
 			@reservations = []
+
+			# Hotel has 20 rooms, named 1 - 20.
+			20.times do |i|
+				@rooms << (i + 1)
+			end
+		end
+
+		def get_all_rooms
+			return @rooms
 		end
 
 		# Create a reservation from start date and end date.
