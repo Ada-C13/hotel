@@ -7,13 +7,14 @@ module Hotel
     def initialize(start_date, end_date)
       @start_date = start_date
       @end_date = end_date
+      validate_date()
     end
 
     def total_nights
       return @end_date - @start_date
     end
 
-    def validate_date
+    def validate_date()
       if (!@start_date.is_a? Date) || (!@end_date.is_a? Date)
         raise ArgumentError.new("Invalid date provided: must be instance of Date")
       end
@@ -23,7 +24,6 @@ module Hotel
       elsif @end_date < @start_date
         raise ArgumentError.new("Invalid date provided: end_date must be prior to start_date")
       end
-      return true
     end
   end
 end
