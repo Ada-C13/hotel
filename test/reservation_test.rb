@@ -1,16 +1,16 @@
 require 'test_helper'
 
-describe "Reservation class" do
+describe Hotel::Reservation do
   describe "initialize" do
     before do
-      checkin = Date.new(2020, 1, 1)
-      checkout = Date.new(2020, 1, 2)
-      id = 1
+      @checkin = Date.new(2020, 1, 1)
+      @checkout = Date.new(2020, 1, 2)
+      @id = 1
 
       @reservation_data = {
-        id: id,
-        checkin: checkin,
-        checkout: checkout,
+        id: @id,
+        checkin: @checkin,
+        checkout: @checkout,
         room_id: 2,
         # when reserved, the status is unavailable. Also could think about an in-progress value for reservation?
         # status: unavailable,
@@ -23,26 +23,35 @@ describe "Reservation class" do
     end
 
     it "throws an argument error with a bad ID value" do
-      expect do
-        Hotel::Reservation.new(id:0, checkin:checkin, checkout:checkout, room_id:2)
-      end.must_raise ArgumentError.new("Bad ID for Reservation")
+      [-1, 0, 0.25].each do |num|
+        expect do
+          Hotel::Reservation.new(id:num, checkin:@checkin, checkout:@checkout, room_id:2)
+        end.must_raise ArgumentError
+      end
     end
 
-    it "throws an argument error with a bad room_ID value" do
-      expect do
-        Hotel::Reservation.new(id:1, checkin:checkin, checkout:checkout, room_id:-1)
-      end.must_raise ArgumentError.new("Invalid room_id")
-
-      expect do
-        Hotel::Reservation.new(id:1, checkin:checkin, checkout:checkout, room_id:21)
-      end.must_raise ArgumentError.new("Invalid room_id")
+    it "throws an argument error if given an invalid room_ID value" do
+      [-1, 0, 21].each do |num|
+        expect do
+          Hotel::Reservation.new(id:1, checkin:@checkin, checkout:@checkout, room_id:num)
+        end.must_raise ArgumentError
+      end
     end
 
     it "throws an argument error if checkout date is before checkin date" do
       expect do
-        Hotel::Reservation.new(id:1, checkin:checkout, checkout:checkin, room_id:2)
-      end
+        Hotel::Reservation.new(id:1, checkin:@checkout, checkout:@checkin, room_id:2)
+      end.must_raise ArgumentError
     end
-    
+  end
+
+  describe "cost" do
+    it "returns a number" do
+      checkin = Date.new(2017, 01, 01)
+      checkout = checkin + 3
+      reservation = Hotel::Reservation.new(id: 1, checkin:checkin, checkout:checkout, room_id:2)
+      expect(reservation.cost).must_be_kind_of Numeric
+    end
+
   end
 end
