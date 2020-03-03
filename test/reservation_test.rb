@@ -1,13 +1,12 @@
-require 'test_helper.rb'
+require_relative "test_helper"
 
-
-describe "Reservation class" do
-  describe "Reservation instantiation" do
-    before do
-      @reservation = Reservation.new(id: 1, room: 2, start_date: Date.new(1993, 2, 24), end_date: Date.new(1993, 2, 28))
-    end
-    it "is an instance of reservation" do
-      expect(@reservation).must_be_kind_of Reservation
+describe Hotel::Reservation do
+  describe "cost" do
+    it "returns a number" do
+      start_date = Date.new(2017, 01, 01)
+      end_date = start_date + 3
+      reservation = Hotel::Reservation.new(start_date, end_date, nil)
+      expect(reservation.cost).must_be_kind_of Numeric
     end
   end
 end
