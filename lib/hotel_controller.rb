@@ -9,10 +9,10 @@ module Hotel
       @reservations = []
     end
 
-    def make_reservation(start_date, end_date)
-      date_range = DateRange.new(start_date, end_date)
-      room = self.rooms.sample
-      reservation = Reservation.new(date_range: date_range, room: nil) # update
+    def make_reservation(check_in:, check_out:)
+      date_range = DateRange.new(check_in: check_in, check_out: check_out)
+      room = @rooms.sample
+      reservation = Reservation.new(date_range: date_range, room: room)
       @reservations << reservation
       return reservation
     end
@@ -25,6 +25,11 @@ module Hotel
 
     # def find_available_rooms
     # end
+
+    # def show_all_rooms
+    # end
+
+    # show reservation cost (by what? how? reservation id?)
 
   end
 end
