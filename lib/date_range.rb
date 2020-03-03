@@ -22,5 +22,9 @@ module Hotel
         raise ArgumentError, "Date range must be between #{Date.today} and #{Date.new(2020, 12, 31)}"
       end 
     end
+
+    def nights 
+      return @end_date.day - @start_date.day
+    end 
   end 
 end 

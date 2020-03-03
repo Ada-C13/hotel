@@ -48,4 +48,17 @@ describe "DateRange class" do
       expect{invalid_date_range_2.valid_dates?}.must_raise ArgumentError
     end 
   end 
+
+  describe "#nights" do 
+    it "Calculates the correct number of nights" do 
+      # Arrange
+      nights = date_range.end_date - date_range.start_date
+
+      # Act & Assert
+      expect(date_range).must_respond_to :nights
+      
+      expect(date_range.nights).must_be_kind_of Integer
+      expect(date_range.nights).must_equal nights
+    end 
+  end 
 end 
