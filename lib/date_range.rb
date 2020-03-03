@@ -20,10 +20,12 @@ module Hotel
       return self.create_days_array.include?(date)
     end
 
-    def overlap?(date_range)
+    def overlap?(other_date_range)
       days = self.create_days_array
-      other_days = date_range.create_days_array
-      return true if (days.difference(other_days) != days.length) && (days.first != other_days.last || days.last != other_days.first)
+      other_days = other_date_range.create_days_array
+    
+      return false if days.first == other_days.last || days.last == other_days.first
+      return true if days.difference(other_days) != days.length
     end
 
     def nights

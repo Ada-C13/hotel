@@ -43,8 +43,20 @@ describe "date_range class" do
     end
   end
 
-  describe "include? method" do
+  describe "overlap? method" do
+    it "will return true if another date range overlaps more than one day" do
+      my_days = Hotel::DateRange.new([2020, 1, 29], [2020, 1, 31])
 
+      expect(@date.overlap?(my_days)).must_equal true
+    end
+
+    it "will return false if the first/end days overlap" do
+      my_days = Hotel::DateRange.new([2020, 1, 27], [2020, 1, 28])
+      my_other_days = Hotel::DateRange.new([2020, 1, 30], [2020, 1, 31])
+
+      expect(@date.overlap?(my_days)).must_equal false
+      expect(@date.overlap?(my_other_days)).must_equal false
+    end
   end
 
   describe "nights method" do
