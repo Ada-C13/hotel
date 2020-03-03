@@ -52,13 +52,14 @@ describe "DateRange class" do
   describe "#nights" do 
     it "Calculates the correct number of nights" do 
       # Arrange
-      nights = date_range.end_date - date_range.start_date
-
+      seven_nights = date_range.end_date - date_range.start_date
+      
       # Act & Assert
       expect(date_range).must_respond_to :nights
       
       expect(date_range.nights).must_be_kind_of Integer
-      expect(date_range.nights).must_equal nights
+
+      expect(date_range.nights).must_equal seven_nights
     end 
   end 
 end 
