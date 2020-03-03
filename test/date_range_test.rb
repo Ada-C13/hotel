@@ -1,7 +1,7 @@
 require_relative "test_helper"
 
 describe Hotel::DateRange do
-  describe "consructor" do
+  describe "constructor" do
     it "Can be initialized with two dates" do
       start_date = Date.new(2017, 01, 01)
       end_date = start_date + 3
@@ -12,10 +12,18 @@ describe Hotel::DateRange do
       expect(range.end_date).must_equal end_date
     end
 
-    xit "is an an error for negative-length ranges" do
+    it "is an an error for negative-length ranges" do
+      start_date = Date.new(2017, 02, 01)
+      end_date = Date.new(2017, 01, 01)
+      
+      expect{(Hotel::DateRange.new(start_date, end_date))}.must_raise ArgumentError
     end
 
-    xit "is an error to create a 0-length range" do
+    it "is an error to create a 0-length range" do
+      start_date = Date.new(2017, 01, 01)
+      end_date = Date.new(2017, 01, 01)
+      
+      expect{(Hotel::DateRange.new(start_date, end_date))}.must_raise ArgumentError
     end
   end
 
@@ -61,7 +69,7 @@ describe Hotel::DateRange do
   end
 
   xdescribe "include?" do
-    it "reutrns false if the date is clearly out" do
+    it "returns false if the date is clearly out" do
     end
 
     it "returns true for dates in the range" do
@@ -71,8 +79,14 @@ describe Hotel::DateRange do
     end
   end
 
-  xdescribe "nights" do
+  describe "nights" do
     it "returns the correct number of nights" do
+      start_date = Date.new(2017, 01, 01)
+      end_date = start_date + 4
+
+      range = Hotel::DateRange.new(start_date, end_date)
+
+      expect(range.nights).must_equal 3
     end
   end
 end
