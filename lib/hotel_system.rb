@@ -3,9 +3,7 @@ require 'date'
 require_relative 'reservation'
 
 module Hotel
-
 	class HotelSystem
-
 		attr_reader :rooms, :reservations
 
 		def initialize
@@ -26,6 +24,7 @@ module Hotel
 			return new_reservation
 		end
 
+		# Finds an available room within constraints of date range.
 		def room_finder(range_start, range_end)
 			possible_rooms = @rooms
 
@@ -84,7 +83,5 @@ module Hotel
 
 			return avail_rooms
 		end
-
 	end
-
 end
