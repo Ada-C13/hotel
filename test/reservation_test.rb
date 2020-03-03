@@ -30,6 +30,13 @@ describe Hotel::Reservation do
       expect(@reservation01.date_range.end_date).must_be_instance_of Date
     end
   end
+
+  describe "#get_price" do
+    it "returns the total price for the reservation" do
+      expect(@reservation01.get_price).must_be_instance_of Float
+      expect(@reservation01.get_price).must_equal 1000.00
+    end
+  end
 end
 
 

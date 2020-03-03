@@ -12,6 +12,7 @@ module Hotel
       @end_date = date_range.end_date
     
       @room_id = room_id
+      #do i want to also know about the room instance?
 
       @id = @@next_id
       @@next_id += 1
@@ -20,7 +21,7 @@ module Hotel
     end
 
     def  get_price
-      price = date_range.count_nights * 200.00
+      price = date_range.count_nights * 200.00 #should require relative room and take room.cost
       return price
     end
 
