@@ -140,9 +140,10 @@ describe "front_desk" do
 
     describe "#request_reservation" do
       before do 
+        manager = hotel_manager
         start_date = [2020,3,4]
         end_date = [2020,3,5]
-        new_reservation = Hotel::FrontDesk.request_reservation(start_date,end_date)
+        @new_reservation = hotel_manager.request_reservation(start_date,end_date)
       end 
       it "return an instance of reservation" do
          expect(@new_reservation).must_be_kind_of Hotel::Reservation
