@@ -12,8 +12,8 @@ module Hotel
     end
 
     def reservations_by_room_date(room_id, date)
-      date = Date.new(date[0], date[1], date[2]) unless date.class == Date
-      return reservations.select { |reservation| reservation.room == room_id && reservation.date_range.days.include?(date)}
+      my_reservations = reservations.select { |reservation| reservation.room == room_id }
+      return my_reservations.difference(self.reservations_by_date(date))
     end
 
     def reservations_by_date(date)
@@ -26,11 +26,8 @@ module Hotel
     end
 
     def available_rooms(check_in_time, check_out_time)
-      # reserved_rooms = reservations.map { |reservation| reservation.room_id }
-      # return rooms.difference(reserved_rooms)
-      reserved_rooms = []
-      date_range = Hotel::DateRange(check_in_time, check_out_time)
-      #look at the date_range for reservations
+      date_range = DateRange.new(check_in_time, check_out_time)
+
       reserved_rooms = reservations.select { |reservation| reservation.room_id if reservation.date_range.overlap?(date_range) }
       return reserved_rooms
     end
