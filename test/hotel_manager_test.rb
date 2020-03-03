@@ -13,6 +13,27 @@ describe "HotelManager" do
     end
   end
 
+  describe "initialize_rooms" do
+    before do
+      @hotel_manager.initialize_rooms(20)
+    end
+
+    it "creates an array" do
+      expect(@hotel_manager.rooms).must_be_kind_of Array
+      expect(@hotel_manager.rooms.length).must_equal 20
+    end
+
+    it "should contain Room objects" do
+      @hotel_manager.rooms.each do |room|
+        expect(room).must_be_kind_of Hotel::Room
+      end
+    end
+
+    it "raises ArgumentError if non-integer is provided" do
+      expect{@hotel_manager.initialize_rooms("twenty")}.must_raise ArgumentError
+    end
+  end
+
   describe "list_rooms" do
     it "returns an array" do
       @hotel_manager.rooms.push("this is a room")
@@ -26,7 +47,7 @@ describe "HotelManager" do
     end
 
     it "returns empty array if there are no rooms" do
-      @hotel_manager.rooms.empty?()
+      @hotel_manager.rooms.clear()
       rooms = @hotel_manager.list_rooms
 
       expect(rooms).must_equal []
@@ -34,18 +55,18 @@ describe "HotelManager" do
   end
 
   describe "reserve_room" do
-    it "creates a Reservation instance" do
+    let(:reservation) {
       daterange = Hotel::DateRange.new(Date.new(2020,5,10), Date.new(2020,5,14))
       reservation = @hotel_manager.reserve_room(daterange)
+    }
 
+    it "creates a Reservation instance" do
       expect(reservation).must_be_kind_of Hotel::Reservation
     end
 
     it "adds 1 to total_reservations" do
       current_reservations = @hotel_manager.total_reservations
-
-      daterange = Hotel::DateRange.new(Date.new(2020,5,10), Date.new(2020,5,14))
-      reservation = @hotel_manager.reserve_room(daterange)
+      reservation
 
       expect(@hotel_manager.total_reservations).must_equal current_reservations + 1
     end
