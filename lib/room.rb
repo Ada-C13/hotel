@@ -14,9 +14,11 @@ class Room
 
   def find_all_resevations
     reservation_array = Reservation.all
-
     reservation_array.each do |reservation|
       return reservation if reservation.room_num == @room_num
     end
+  end
+
+  def find_room_number
   end
 end
