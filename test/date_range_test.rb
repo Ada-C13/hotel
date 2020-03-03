@@ -41,6 +41,11 @@ describe "date_range class" do
       expect(@date.include?(day.next)).must_equal true
       expect(@date.include?(day - 1)).must_equal true
     end
+
+    it "will return false if a day is not included in range" do
+      day = Date.new(2019, 1, 29)
+      expect(@date.include?(day)).must_equal false
+    end
   end
 
   describe "overlap? method" do

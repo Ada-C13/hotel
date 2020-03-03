@@ -9,5 +9,9 @@ module Hotel
       @room_id = room_id
       @cost = @date_range.nights * 200
     end
+
+    def available_rooms
+      
+    end
   end
 end
