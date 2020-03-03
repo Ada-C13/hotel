@@ -1,5 +1,5 @@
 module Hotel
-  class Reception
+  class HotelReception
     attr_reader :rooms, :reservations
 
     def initialize

@@ -11,5 +11,5 @@ Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
 require_relative '../lib/date_range'
 require_relative '../lib/hotel_block'
-require_relative '../lib/reception'
+require_relative '../lib/hotel_reception'
 require_relative '../lib/reservation'

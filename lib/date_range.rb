@@ -23,6 +23,10 @@ module Hotel
       end
     end
 
+    def include?(date)
+      #checks to see if the 
+    end
+
     def nights
       return days.length - 1
     end
