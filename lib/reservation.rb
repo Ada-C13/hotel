@@ -11,5 +11,9 @@ module Hotel
       @date_range = date_range
       @room = room
     end 
+
+    def total_cost 
+      return (@date_range.nights * PRICE).to_f.round(2) 
+    end 
   end 
 end 

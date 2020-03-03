@@ -22,4 +22,14 @@ describe "Reservation class" do
       expect(@reservation.date_range).must_be_kind_of Hotel::DateRange
     end 
   end 
+
+  
+   # I can get the total cost for a given reservation
+   describe "#total_cost" do 
+   it "Returns the total cost for a given reservation" do
+     expect(@reservation.total_cost).must_be_instance_of Float
+
+     expect(@reservation.total_cost).must_be_close_to (7 * 200.00), 0.01
+   end 
+ end 
 end 
