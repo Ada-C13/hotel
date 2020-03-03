@@ -26,7 +26,5 @@ module Hotel
     #     return false if booking.start_date == reservation.start_date && booking.end_date == reservation.end_date
     #   end
     #end
-    
-  
   end
 end

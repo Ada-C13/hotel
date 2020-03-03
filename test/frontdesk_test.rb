@@ -19,9 +19,6 @@ describe "Front Desk" do
 
   describe "add_reservation" do
 
-    # before do
-    #   reservation = Hotel::Reservation.new(start_date: "2020-5-1", end_date: "2020-5-4", num_rooms: 1)
-    # end
     before do
         @start_date = "2019-1-4"
         @end_date = "2019-1-7"
@@ -35,6 +32,21 @@ describe "Front Desk" do
 
     it "can return a list of 20 rooms" do
       expect(@front_desk.rooms).must_equal [*1..20]
+    end
+  end
+
+  describe "find_reservation_by_date" do
+
+    before do
+        @front_desk = Hotel::FrontDesk.new()
+        @front_desk.add_reservation("2019-1-4","2019-1-7", 1)
+        @front_desk.add_reservation("2019-1-1","2019-1-5", 1)
+        @front_desk.add_reservation("2019-1-4","2019-1-5", 1)
+        @front_desk.add_reservation("2019-1-3","2019-1-6", 1)
+      end
+
+    it "can return a list of reservations by date" do
+      expect(@front_desk.find_reservation_by_date("2019-1-4")).must_be_kind_of Array
     end
   end
 end

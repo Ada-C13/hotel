@@ -13,5 +13,15 @@ module Hotel
       @all_reservations << new_reservation
     end
 
+    def find_reservation_by_date(date)
+      reservation_by_date = []
+      @all_reservations.each do |reservation|
+        if reservation.start_date == date || date == reservation.end_date || Time.parse(date).between?(reservation.start_date, reservation.end_date)
+          reservation_by_date << reservation
+        end
+        return reservation_by_date
+      end
+    end
+
   end
 end
