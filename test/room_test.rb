@@ -49,5 +49,24 @@ describe "Room class" do
       }.must_raise ArgumentError
     end 
   end  
+
+
+  describe "#change_vacancy" do
+    it "Changes vacancy as unavailable" do
+      # Act 
+      @room.change_vacancy
+
+      # Assert 
+      expect(@room.vacancy).must_equal false
+    end 
+
+    it "Does not vacancy as unavailable" do
+      # Arrange
+      room = Hotel::Room.new(3)
+
+      # Act & Assert 
+      expect(room.vacancy).must_equal true
+    end 
+  end 
 end 
 

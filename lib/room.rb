@@ -10,5 +10,9 @@ module Hotel
       @number = number 
       @vacancy = true
     end 
+
+    def change_vacancy
+      @vacancy = false if @vacancy == true
+    end 
   end 
 end
