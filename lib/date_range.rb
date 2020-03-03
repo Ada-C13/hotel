@@ -23,7 +23,7 @@ module Hotel
       return other.start_date < @end_date && other.end_date > @start_date
     end
 
-    # Check Date
+    # Check Date***?
     def include?(date)
       unless date.instance_of?(Date)
         raise ArgumentError, "Parameters must be of class Date"

@@ -60,7 +60,8 @@ describe "Hotel::HotelController" do
       it "takes two dates and returns a list" do
         start_date = @date
         end_date   = start_date + 3
-        room_list = @hotel_controller.available_rooms(start_date, end_date)
+        room = 10
+        room_list = @hotel_controller.available_rooms(start_date, end_date, room)
 
         expect(room_list).must_be_kind_of Array
       end
@@ -70,8 +71,7 @@ end
 # access the list of reservations for a specified room and a given date range
 
 
-# User Stories - As a user of the hotel system...I can/want to...so that I can/can't
-
+# ## User Stories - As a user of the hotel system...I can/want to...so that I can/can't
 # HotelController - access the list of all of the rooms in the hotel "Who has the list of all the rooms in the hotel?"
 # HotelController - access the list of reservations for a specified room and a given date range "Who has access to that?"
 # HotelController - access the list of reservations for a specific date, so that I can track reservations by date
@@ -79,11 +79,16 @@ end
 # DateRange       - want exception raised when an invalid date range is provided, so I can't make a reservation for an invalid date range
 
 # Details
-
 # HotelController - the hotel has 20 rooms, numbered 1 through 20 (array from 1 to 20)
 # Reservation     - every room is identical and costs $200/night (constant cost $200)
 # DateRange       - last day is the checkout day, guest shouldn't be charged for that day/night (end_day doesn't count)
 # HotelController - given only start and end dates, determine which room to use for the reservation
 
-# For this wave, you don't need to check whether reservations conflict with each other (this will come in wave 2!)
+### Wave Two: Room Availability
+# ## User Stories - As a user of the hotel system...I can/want to...so that I can/can't
+# view a list of rooms that are not reserved for a given date range, so that I can see all available rooms for that day
+# make a reservation of a room for a given date range, and that room will not be part of any other reservation overlapping that date range
+# want an exception raised if I try to reserve a room during a date range when all rooms are reserved, so that I cannot make two reservations for the same room that overlap by date
 
+# Details
+# A reservation is allowed start on the same day that another reservation for the same room ends
