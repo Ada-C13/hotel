@@ -7,6 +7,17 @@ module Hotel
       @total_reservations = 0
     end
 
+    def initialize_rooms(num)
+      if num.class != Integer
+        raise ArgumentError.new("Integer value must be provided. Value provided: '#{num}'")
+      else
+        num.times do |i|
+          room = Hotel::Room.new((i + 1), 200)
+          @rooms.push(room)
+        end
+      end
+    end
+
     def list_rooms
       return @rooms
     end
