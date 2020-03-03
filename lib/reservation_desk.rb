@@ -16,7 +16,7 @@ module Hotel
     end
 
     def new_reservation(start_date, end_date)
-      Reservation.new(start_date, end_date)
+      Reservation.new(start_date: start_date, end_date: end_date)
     end
 
     def add_reservation(new_reservation)
