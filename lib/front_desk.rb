@@ -3,7 +3,8 @@ require 'reservation'
 
 module Hotel
   class FrontDesk
-    attr_accessor :reservations, :rooms 
+    attr_accessor :reservations, :rooms
+
     def initialize(reservations:nil ,rooms:nil)
       @reservations = reservations || []
       @rooms = {1 => [],2 =>[],3=>[]}
@@ -42,7 +43,7 @@ module Hotel
     def request_reservation(start_date,end_date)
       date_range = Hotel::DateRange.new(start_date:start_date,end_date:end_date)
       new_reservation = Hotel::Reservation.new(date_range:date_range)
-      return new_reservation
+      return new_reservation 
     end 
 
     # input of start/end

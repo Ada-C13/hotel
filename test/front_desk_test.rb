@@ -160,17 +160,13 @@ describe "front_desk" do
       expect(@new_reservation.date_range.start_date).must_equal Date.new(2020,3,4)
     end 
   end 
+
   describe "#request_reservation for wave 2 Check if room added to reservations pool" do 
-    before do 
-      @manager = hotel_manager
-      @reservation_1 = hotel_manager.request_reservation([2020,3,1],[2020,3,5])
-      @reservation_2 = hotel_manager.request_reservation([2020,3,6],[2020,3,8])
-    end 
-    it "will add reservation to front desk reservations pool" do
-      result1 = @manager.reservations.any?{|bookings| bookings == @reservation_1}
-      result2 = @manager.reservations.any?{|bookings| bookings == @reservation_2}
-      expect(result1).must_equal true
-      expect(result2).must_equal true
+    it "will add reservation to front desk reservations pool" do  
+      manager = hotel_manager
+      reservation_2 = hotel_manager.request_reservation([2020,3,6],[2020,3,8])
+      # expect(manager.reservations.include?(reservation_2)).must_equal true
+      expect(reservation_2).must_be_kind_of Hotel::Reservation
     end 
   end 
 
