@@ -24,10 +24,10 @@ module Hotel
       Reservation.new(room_id: room_id, start_date: start_date, end_date: end_date)
     end
 
-    # def add_reservation(new_reservation)
-    #   room = find_room_by_id(new_reservation.room_id)
-    #   room.reservations << new_reservation
-    # end
+    def add_reservation(new_reservation)
+      room = find_room_by_id(new_reservation.room_id)
+      room.reservations << new_reservation
+    end
 
     private
     def make_rooms
