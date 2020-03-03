@@ -6,10 +6,7 @@ describe "Reservation class" do
   before do 
     date_range = Hotel::DateRange.new("2020-3-20", "2020-3-27")
 
-    room = {
-      number: 5,
-      vacancy: true
-    }
+    room = Hotel::HotelManager.new().available_room(date_range)
 
     @reservation = Hotel::Reservation.new(date_range, room)
   end
@@ -20,10 +17,11 @@ describe "Reservation class" do
       expect(@reservation).must_respond_to :room
 
       expect(@reservation.date_range).must_be_kind_of Hotel::DateRange
+      expect(@reservation.room).must_be_kind_of Hotel::Room
     end 
   end 
 
-  
+
    # I can get the total cost for a given reservation
    describe "#total_cost" do 
    it "Returns the total cost for a given reservation" do
