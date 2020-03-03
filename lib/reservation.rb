@@ -8,13 +8,13 @@ module Hotel
     attr_reader :reservation_id, :dates, :occupancy 
 
     def initialize(type, dates, occupancy)
-      @reservation_id = type[0] + dates.to_id + occupancy[:room_id]
+      @reservation_id = type[0] + dates.to_id + occupancy[:room].id
       @dates = dates
       @occupancy = occupancy
     end
 
     def total_price 
-      return @dates.duration * @occupancy[room.price]
+      return @dates.nights_spent * @occupancy[:room].price
     end
 
   end
