@@ -12,7 +12,8 @@ describe Hotel::HotelController do
         expect(rooms).must_be_kind_of Array
       end
     end
-    xdescribe "reserve_room" do
+
+    describe "reserve_room" do
       it "takes two Date objects and returns a Reservation" do
         start_date = @date
         end_date = start_date + 3
@@ -21,9 +22,19 @@ describe Hotel::HotelController do
 
         expect(reservation).must_be_kind_of Hotel::Reservation
       end
+
+      it "start_date and end_date should be instances of class Date" do
+        start_date = @date
+        end_date = start_date + 3
+
+        reservation = @hotel_controller.reserve_room(start_date, end_date)
+
+        expect(reservation.end_date).must_be_kind_of Date
+        expect(reservation.start_date).must_be_kind_of Date
+      end
     end
 
-    xdescribe "reservations" do
+    describe "reservations" do
       it "takes a Date and returns a list of Reservations" do
         reservation_list = @hotel_controller.reservations(@date)
 
@@ -32,6 +43,16 @@ describe Hotel::HotelController do
           res.must_be_kind_of Reservation
         end
       end
+      it "takes a Date and returns a list of Reservations" do
+        reservation1 = @hotel_controller.reserve_room("2020-08-04", "2020-08-10")
+        reservation2 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08")
+        reservation3 = @hotel_controller.reserve_room("2020-08-09", "2020-08-12")
+
+        reservation_list = @hotel_controller.reservations("2020-08-04")
+
+        expect(reservation_list).must_be_kind_of Array
+        #expect(reservation_list(0)).must_equal ["2020-08-04", "2020-08-10"]
+        end
     end
   end
 

@@ -1,4 +1,4 @@
-
+require 'Date'
 
 module Hotel
   class DateRange

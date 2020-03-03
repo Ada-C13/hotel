@@ -84,9 +84,7 @@ describe Hotel::DateRange do
       start_date = Date.new(2017, 01, 01)
       end_date = start_date + 4
 
-      range = Hotel::DateRange.new(start_date, end_date)
-
-      expect(range.nights).must_equal 3
+      expect(DateRange.new(start_date, end_date).nights).must_equal 3
     end
   end
 end
