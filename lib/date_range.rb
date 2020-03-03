@@ -21,7 +21,9 @@ module Hotel
     end
 
     def overlap?(date_range)
-
+      days = self.create_days_array
+      other_days = date_range.create_days_array
+      return true if (days.difference(other_days) != days.length) && (days.first != other_days.last || days.last != other_days.first)
     end
 
     def nights
