@@ -14,5 +14,12 @@ module Hotel
       @rooms = rooms
       @reservations = []
     end 
+
+
+    def available_room(date_range)
+      date_range.valid_dates?
+
+      return @rooms.find { |room| room.vacancy == true }
+    end
   end 
 end 

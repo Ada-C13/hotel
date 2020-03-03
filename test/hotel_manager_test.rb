@@ -36,6 +36,13 @@ describe "HotelManager class" do
       end 
     end 
   end 
+
+  describe "#available_room" do 
+    it "Returns an available room" do 
+      # Act & Assert
+      expect(@hotel_manager.available_room(@date_range).number).must_equal 1
+    end 
+  end 
 end 
 
   
