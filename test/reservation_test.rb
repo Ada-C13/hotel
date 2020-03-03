@@ -19,6 +19,11 @@ describe "reservation" do
       reservation.id.must_equal 3
     end
 
+    it "requires a positive integer id" do
+      expect { HotelBooking::Reservation.new(id: "not and integer", start_date: Date.today, end_date: (Date.today + 1))}.must_raise ArgumentError
+      expect {HotelBooking::Reservation.new(id: -10, start_date: Date.today, end_date: (Date.today + 1))}.must_raise ArgumentError
+    end
+
     it "keeps track of check-in date" do
       reservation.must_respond_to :start_date
       reservation.start_date.must_equal start_date
