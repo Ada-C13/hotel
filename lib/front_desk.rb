@@ -28,8 +28,7 @@ module Hotel
       return @reservations.find_all{ |reservation| reservation.room.number == number &&
         (reservation.start_date <= range_start && reservation.end_date >= range_start ||
         reservation.start_date <= range_end && reservation.end_date >= range_end ||
-        reservation.start_date >= range_start && reservation.end_date <= range_end)
-      }
+        reservation.start_date >= range_start && reservation.end_date <= range_end)}
     end
   end
 end
