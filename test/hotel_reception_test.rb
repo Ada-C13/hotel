@@ -23,24 +23,57 @@ describe 'initialize' do
   end
 end
 
-describe "" do
+describe "make reservation method" do
   before do
-    @reception = Hotel::Reception.new
+    @reception = Hotel::HotelReception.new
+  end
+
+  it "edits the hotel reception reservations array" do
+    check_in_time = [2020, 2, 1]
+    check_out_time = [2020, 2, 3]
+    @reception.make_reservation(check_in_time, check_out_time)
+
+    check_in_time = [2020, 2, 14]
+    check_out_time = [2020, 2, 15]
+    @reception.make_reservation(check_in_time, check_out_time)
+
+    expect(@reception.reservations).wont_be_empty
+    expect(@reception.reservations.length).must_equal 2
+    expect(@reception.reservations[0]).must_be_instance_of Hotel::Reservation
+  end
+
+  it "will reserve the first room available" do
+    check_in_time = [2020, 2, 1]
+    check_out_time = [2020, 2, 3]
+    my_reservation = Hotel::Reservation.new(check_in_time, check_out_time, 1)
+    @reception.make_reservation(check_in_time, check_out_time)
+
+    expect(@reception.reservations[0].room_id).must_equal my_reservation.room_id
+  end
+end
+
+describe "find available room" do
+  before do
+    @reception = Hotel::HotelReception.new
+
+    check_in_time = [2020, 2, 1]
+    check_out_time = [2020, 2, 3]
+    @reception.make_reservation(check_in_time, check_out_time)
+
+    check_in_time = [2020, 2, 14]
+    check_out_time = [2020, 2, 15]
+    @reception.make_reservation(check_in_time, check_out_time)
+  end
+
+  it "will find the available rooms" do
+
   end
 
 end
 
 describe "" do
   before do
-    @reception = Hotel::Reception.new
-  end
-
-
-end
-
-describe "" do
-  before do
-    @reception = Hotel::Reception.new
+    @reception = Hotel::HotelReception.new
   end
 
 end

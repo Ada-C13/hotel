@@ -7,7 +7,7 @@ module Hotel
       @reservations = []
       20.times do |i|
         i += 1
-        @rooms << {room_id: i}
+        @rooms << i
       end
     end
 
