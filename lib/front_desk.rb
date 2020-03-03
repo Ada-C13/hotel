@@ -19,15 +19,24 @@ module Hotel
     end 
 
     #access a list of reservations for a specific room number and date range
+    def room_reservations_and_date(room_num,date)
+      display = ""
+      res_room_date_range = @reservations.select {|bookings| bookings.room_num == room_num && date.overlap(bookings.date_range)}
+      res_room_date_range.map do |bookings|
+        display += "Reservation_id = #{bookings.reservation_id} Start date = #{bookings.date_range.start_date} End_date =#{bookings.date_range.end_date} Room Number = #{bookings.room_num}\n"
+      end 
+      return display
+    end 
+
     # check reservations of specific date
-   def check_date_reservations(date)
+    def check_date_reservations(date)
       display = ""
       reservations_include_a_date = @reservations.select {|bookings| bookings.date_range.include_date(date)==true}
       reservations_include_a_date.map do |bookings|
         display += "Reservation_id = #{bookings.reservation_id} Start date = #{bookings.date_range.start_date} End_date =#{bookings.date_range.end_date} Room Number = #{bookings.room_num}\n"
       end 
       return display
-   end 
+    end 
 
 
 

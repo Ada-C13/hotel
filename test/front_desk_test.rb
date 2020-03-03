@@ -92,4 +92,52 @@ describe "front_desk" do
     end 
   end 
   
+  describe "room_reservations_and_date method" do 
+    
+    it "return a list of reservations under a room and within date_range" do 
+      manager = hotel_manager
+      reservation_1 = Hotel::Reservation.new(
+        date_range: Hotel::DateRange.new(
+          start_date:[2020,3,2],end_date:[2020,3,10]
+        ),
+        room_num:1
+      )
+      reservation_2 = Hotel::Reservation.new(
+        date_range: Hotel::DateRange.new(
+          start_date:[2020,4,1],end_date:[2020,4,8]
+        ),
+        room_num:2
+      )
+      reservation_3 = Hotel::Reservation.new(
+        date_range: Hotel::DateRange.new(
+          start_date:[2020,3,3],end_date:[2020,3,7]
+        ),
+        room_num:2
+      )
+      reservation_4 = Hotel::Reservation.new(
+        date_range: Hotel::DateRange.new(
+          start_date:[2020,3,7],end_date:[2020,3,9]
+        ),
+        room_num:2
+      )
+      manager.reservations << reservation_1
+      manager.reservations << reservation_2
+      manager.reservations << reservation_3
+      manager.reservations << reservation_4
+    
+      date_range = Hotel::DateRange.new(
+        start_date:[2020,3,4],end_date:[2020,3,20]
+      )
+      result = manager.room_reservations_and_date(2,date_range)
+      expect(result).must_match (/2020-03-03/)
+      expect(result).must_match (/2020-03-07/)
+      expect(result).must_match (/2020-03-07/)
+      expect(result).must_match (/2020-03-09/)
+      expect(result).wont_match (/2020-04-01/)
+      expect(result).wont_match (/2020-04-08/)
+      expect(result).wont_match (/2020-03-10/)
+    end 
+
+
+  end 
 end 
