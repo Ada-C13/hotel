@@ -4,7 +4,7 @@ module Hotel
   class DateRange
     attr_reader :check_in, :check_out
     
-    # how to validate date input??
+    # how to validate date input?
     # input should be a string
     # formatted year-mo-day or day-mo-year
     # possible methods: parse, iso8601, strptime

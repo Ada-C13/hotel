@@ -9,7 +9,7 @@ describe "FrontDesk Class" do
   end
   
   it "returns an array of rooms" do
-    expect(front_desk.rooms).must_be_kind_of Array
+    expect(front_desk.rooms).must_be_kind_of Hash
   end
   
   it "returns an array of reservations" do
@@ -18,3 +18,4 @@ describe "FrontDesk Class" do
   
   
 end
+
