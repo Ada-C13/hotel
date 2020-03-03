@@ -3,8 +3,18 @@ module Hotel
     attr_accessor :start_date, :end_date
 
     def initialize(start_date, end_date)
+
+      # allowing for string to be parsed
+      if start_date.is_a?(String) && end_date.is_a?(String)
+        start_date = Date.parse(start_date)
+        end_date = Date.parse(end_date)
+      else
+        start_date = start_date
+        end_date = end_date
+      end
+
+      # verifying proper date range
       difference = end_date - start_date
-      
       if difference == 0
         raise ArgumentError, "Cannot have 0 length date range"
       elsif difference < 0
@@ -19,7 +29,7 @@ module Hotel
     end
 
     def overlap?(range)
-      
+
       return false
     end
 

@@ -12,6 +12,8 @@ describe Hotel::DateRange do
       expect(range.end_date).must_equal end_date
     end
 
+   
+
     it "is an an error for negative-length ranges" do
       start_date = Date.new(2017, 02, 01)
       end_date = Date.new(2017, 01, 01)
@@ -25,6 +27,17 @@ describe Hotel::DateRange do
       
       expect{(Hotel::DateRange.new(start_date, end_date))}.must_raise ArgumentError
     end
+
+    it "it can take string inputs for dates" do
+      start_date = "20190303"
+      end_date = "20190305"
+
+      expect(Hotel::DateRange.new(start_date, end_date)).must_be_kind_of Hotel::DateRange
+    end
+
+    # xit "raises argument error if not a string?" do
+      
+    # end
   end
 
   describe "overlap?" do
