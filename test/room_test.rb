@@ -4,13 +4,10 @@ describe "Room class" do
   describe "initialize" do 
     before do
       @room = Hotel::Room.new(
-        room_num: 10
+        room_num: 10,
+
 
       )
-
-      @cost = 200
-      @date_range = []
-    
     end #before do end
   
     it "is an instance of Room" do
@@ -18,7 +15,7 @@ describe "Room class" do
     end
 
     it "has a cost of 200" do
-      expect(@cost).must_equal 200
+      expect(@room.cost).must_equal 200
     end
 
     it "has a room_num of 10" do
@@ -26,7 +23,23 @@ describe "Room class" do
     end
 
     it 'has a date_range that is an array' do
-      expect(@date_range).must_be_kind_of Array
+      expect(@room.date_range).must_be_kind_of Array
+    end
+
+    describe "date_range" do
+      before do
+        start_date= "March 1, 2019"
+        end_date = "March 5, 2019"
+        @room = Hotel::Room.new(
+          room_num: 13,
+          date_range: [start_date, end_date], 
+        )
+      end #before do end
+
+      it "expect date_range to NOT be empty" do
+        expect(@room.date_range.empty?).must_equal false
+      end
+      
     end
 
   end #describe initialize
