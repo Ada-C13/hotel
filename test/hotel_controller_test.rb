@@ -2,16 +2,24 @@ require_relative "test_helper"
 
 describe Hotel::HotelController do 
   before do
-    @hotel_controller = Hotel::HotelController.new([])
+    @hotel_controller = Hotel::HotelController.new
     @date = Date.parse("2020-08-04")
   end
   describe "wave 1" do
-    describe "rooms" do
+    describe "initializer" do
       it "returns a list" do
         rooms = @hotel_controller.rooms
-        expect(rooms).must_be_kind_of Array
+        expect(@hotel_controller.rooms).must_be_kind_of Array
       end
+
+
+
+
     end
+
+    
+
+
     describe "reserve_room" do
       it "takes two Date objects and returns a Reservation" do
         start_date = @date

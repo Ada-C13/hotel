@@ -16,6 +16,7 @@ describe Hotel::DateRange do
     it " Rais an argument ArgumentError if end_date is smaller then a start date" do
       start_date = Date.today
       end_date = Date.today - 3
+      
       expect{Hotel::DateRange.new(start_date, end_date)}.must_raise ArgumentError
     end
 
@@ -38,7 +39,7 @@ describe Hotel::DateRange do
       expect{Hotel::DateRange.new("2020/03/25", end_date)}.must_raise ArgumentError
       expect{Hotel::DateRange.new(start_date, 20200325)}.must_raise ArgumentError
     end
-    
+
   end
 
   describe "overlap?" do
@@ -57,7 +58,12 @@ describe Hotel::DateRange do
       expect(@range.overlap?(test_range)).must_equal true
     end
 
-    # xit "returns true for a contained range" do
+    # it "returns true for a contained range" do
+    #   start_date = @range.start_date
+    #   end_date = @range.end_date
+    #   test_range = Hotel::DateRange.new(start_date, end_date)
+
+    #   expect(@range.overlap?(@range)).must_equal true
     # end
 
     # xit "returns true for a range that overlaps in front" do

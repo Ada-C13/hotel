@@ -1,6 +1,9 @@
 require_relative "test_helper"
 
 describe Hotel::Reservation do
+
+
+
   describe "cost" do
     it "returns a number" do
       start_date = Date.new(2017, 01, 01)
