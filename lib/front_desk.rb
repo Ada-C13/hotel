@@ -43,10 +43,14 @@ module Hotel
     def request_reservation(start_date,end_date)
       date_range = Hotel::DateRange.new(start_date:start_date,end_date:end_date)
       new_reservation = Hotel::Reservation.new(date_range:date_range)
+      @reservations << new_reservation
+      p @reservations
+      p new_reservation
       return new_reservation 
     end 
 
-    # input of start/end
+
+
     # check availability
     # assgin room and store info
     # confirm reservation to add 

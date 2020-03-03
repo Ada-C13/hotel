@@ -143,7 +143,7 @@ describe "front_desk" do
       manager = hotel_manager
       start_date = [2020,3,4]
       end_date = [2020,3,5]
-      @new_reservation = hotel_manager.request_reservation(start_date,end_date)
+      @new_reservation = manager.request_reservation(start_date,end_date)
     end 
     it "return an instance of reservation" do
         expect(@new_reservation).must_be_kind_of Hotel::Reservation
@@ -162,12 +162,20 @@ describe "front_desk" do
   end 
 
   describe "#request_reservation for wave 2 Check if room added to reservations pool" do 
-    it "will add reservation to front desk reservations pool" do  
+    it "new reservation is an instance of reservation" do 
+      skip 
       manager = hotel_manager
-      reservation_2 = hotel_manager.request_reservation([2020,3,6],[2020,3,8])
-      # expect(manager.reservations.include?(reservation_2)).must_equal true
+      reservation_2 = manager.request_reservation([2020,3,6],[2020,3,8])
       expect(reservation_2).must_be_kind_of Hotel::Reservation
     end 
+    it "reservation pool will have new reservation" do 
+      manager = hotel_manager
+      reservation_2 = manager.request_reservation([2020,3,6],[2020,3,8])
+      expect(manager.reservations.include?(reservation_2)).must_equal true
+
+    end 
+
+
   end 
 
 
