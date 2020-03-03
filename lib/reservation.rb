@@ -22,3 +22,5 @@ module Hotel
     end
   end 
 end 
+
+#assign logic on how to assign room num

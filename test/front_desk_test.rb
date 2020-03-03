@@ -1,5 +1,5 @@
 require_relative 'test_helper'
-describe "front_desk" do 
+xdescribe "front_desk" do 
   def hotel_manager 
     return Hotel::FrontDesk.new()
   end 
@@ -199,6 +199,7 @@ describe "front_desk" do
       manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,10]),room_num:20)  
       expect{manager.request_reservation([2020,3,3],[2020,3,7])}.must_raise ArgumentError
     end 
+    
 
 
   end 

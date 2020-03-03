@@ -52,9 +52,6 @@ module Hotel
       return new_reservation 
     end 
 
-
-    
-
     #reservation_cost method 
     def reservation_cost(reservation)
       looked_up_reservation = @reservations.select {|bookings| reservation==bookings}
