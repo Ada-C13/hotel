@@ -36,17 +36,19 @@ describe "ReservationDesk class" do
     end
   end
 
-  # describe "find_room_by_id" do
-  #   it "returns an instanse of Room" do
-      
-  #   end
+  describe "find_room_by_id" do
+    it "returns an instanse of Room" do
+      expect(@reservation_desk.find_room_by_id(2)).must_be_kind_of Hotel::Room
+    end
 
-  #   it "returns a Room with a matching ID"
-  #   end
+    it "returns a Room with a matching ID" do
+      expect(@reservation_desk.find_room_by_id(2).id).must_equal 2
+    end
 
-  #   it "returns nill if there is no Room with a matching ID"
-  #  end
-  # end
+    it "returns nill if there is no Room with a matching ID" do
+      assert_nil @reservation_desk.find_room_by_id(20000000)
+   end
+  end
    
   describe "reservations" do
     it "returns an array" do
@@ -115,23 +117,21 @@ describe "ReservationDesk class" do
       }.must_raise ArgumentError
     end
   end
-  
 
-  describe "add_reservation" do
-    before do
-      @room_id = 1
-      @start_date = "2020-4-1"
-      @end_date = "2020-4-5"
-      @reservation = @reservation_desk.new_reservation(@room_id, @start_date, @end_date)
-      @reservations_num = @reservation_desk.reservations.length
-      @reservation_desk.add_reservation(@reservation)
-    end
+  # describe "add_reservation" do
+  #   before do
+  #     @room_id = 1
+  #     @start_date = "2020-4-1"
+  #     @end_date = "2020-4-5"
+  #     @reservation = @reservation_desk.new_reservation(@room_id, @start_date, @end_date)
+  #     @reservations_num = @reservation_desk.reservations.length
+  #     @reservation_desk.add_reservation(@reservation)
+  #   end
 
-    it "add a new instance of Reservation to reservations array" do
-      expect(@reservation_desk.reservations.include? @reservation).must_equal true
-      expect(@reservation_desk.reservations.length).must_equal (@reservations_num + 1)
-    end
-
-  end
+  #   it "add a new instance of Reservation to reservations array" do
+  #     expect(@reservation_desk.reservations.include? @reservation).must_equal true
+  #     expect(@reservation_desk.reservations.length).must_equal (@reservations_num + 1)
+  #   end
+  # end
 
 end
