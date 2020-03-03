@@ -21,8 +21,19 @@ module Hotel
       return (@end_date - @start_date).to_i
     end
 
-    # def overlap?(other)
-    # end
+    def overlap?(other)
+      if !other.is_a? Hotel::DateRange
+        raise ArgumentError.new("Invalid argument #{other}. Must be of type Hotel::DateRange")
+      end
+
+      if other.start_date >= @end_date
+        return false
+      elsif other.end_date <= @start_date
+        return false
+      else
+        return true
+      end
+    end
 
     # def include?(date)
     # end
