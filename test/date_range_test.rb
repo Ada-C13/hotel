@@ -2,7 +2,7 @@ require_relative "test_helper"
 
 describe "DateRange" do
   before do
-    @daterange = Hotel::DateRange.new(Date.new(2001,2,3), Date.new(2001,2,5))
+    @daterange = Hotel::DateRange.new(Date.new(2020,5,3), Date.new(2020,5,5))
   end
 
   describe "initialize" do
@@ -20,5 +20,30 @@ describe "DateRange" do
     it "should return correct total of nights for given dates" do
       expect(@daterange.total_nights).must_equal 2
     end
+  end
+
+  describe "validate_date" do
+    it "should return true if start_date and end_date are Date instances" do
+      expect(@daterange.validate_date).must_equal true
+    end
+
+    it "should raise ArgumentError if one or both of start_date and end_date are not Date instances" do
+      daterange = Hotel::DateRange.new(Date.new(2020,5,3), "October 24")
+
+      expect{(daterange.validate_date)}.must_raise ArgumentError
+    end
+
+    it "should raise ArgumentError if start_date is before today" do
+      daterange = Hotel::DateRange.new(Date.new(2020,2,3), Date.new(2020,5,5))
+
+      expect{(daterange.validate_date)}.must_raise ArgumentError
+    end
+
+    it "should raise ArgumentError if end_date is before start_date" do
+      daterange = Hotel::DateRange.new(Date.new(2020,5,3), Date.new(2020,5,2))
+
+      expect{(daterange.validate_date)}.must_raise ArgumentError
+    end
+
   end
 end
