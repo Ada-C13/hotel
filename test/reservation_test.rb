@@ -21,5 +21,13 @@ describe "Reservation" do
     it "determines total number of nights correctly" do
       expect(@reservation.nights).must_equal 2
     end
+
+    it "stores correct start_date" do
+      expect(@reservation.start_date).must_equal Date.new(2020,5,3)
+    end
+
+    it "stores correct end_date" do
+      expect(@reservation.end_date).must_equal Date.new(2020,5,5)
+    end
   end
 end
