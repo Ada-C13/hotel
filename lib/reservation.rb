@@ -1,15 +1,9 @@
-require 'date'
-require 'date_range'
+require_relative 'date_range'
 
 module Hotel
   class Reservation
 
-    def initialize(
-                  id:,
-                  date_range:,
-                  room_id:,
-                  cost:
-    )
+    def initialize(id,date_range,room_id,cost)
       @id = id
       if id < 1
         raise ArgumentError
@@ -24,9 +18,7 @@ module Hotel
       end
 
       @cost = cost
-      if cost <= 0 
-        raise ArgumentError
-      end
+      raise ArgumentError if cost <= 0
     end
 
   end
