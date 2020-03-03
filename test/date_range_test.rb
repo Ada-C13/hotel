@@ -10,7 +10,6 @@ describe 'initialize' do
   it "will have the correct amount of readable attributes" do
     expect(@date).must_respond_to :check_in_time
     expect(@date).must_respond_to :check_out_time
-    expect(@date).must_respond_to :days
   end
   it "will have check in and check out times that are Date objects" do
     expect(@date.check_in_time).must_be_instance_of Date
@@ -21,13 +20,20 @@ describe 'initialize' do
       Hotel::DateRange.new([2020, 1, 28], [2020, 1, 27])
     }.must_raise ArgumentError
   end
-  it "will have the correct number of days" do
-    expect(@date.days.length).must_equal 3
+end
+
+describe "create days array method" do
+  before do
+    @date = Hotel::DateRange.new([2020, 1, 28], [2020, 1, 30])
   end
   it "will create an array of Date objects" do
-    expect(@date.days).must_be_instance_of Array
-    expect(@date.days).wont_be_empty
-    expect(@date.days[0]).must_be_instance_of Date
+    expect(@date.create_days_array).must_be_instance_of Array
+    expect(@date.create_days_array).wont_be_empty
+    expect(@date.create_days_array[0]).must_be_instance_of Date
+  end
+
+  it "will have the correct number of days" do
+    expect(@date.create_days_array.length).must_equal 3
   end
 end
 
@@ -39,9 +45,10 @@ describe "nights method" do
     expect(@date).must_respond_to :nights
   end
   it "will calculate number of nights" do
-    expect(@date.nights).must_equal (@date.days.length - 1)
+    expect(@date.nights).must_equal (@date.create_days_array.length - 1)
+    expect(@date.nights).must_equal 2
   end
   it "will not equal the number of days" do
-    expect(@date.nights).wont_equal @date.days.length
+    expect(@date.nights).wont_equal @date.create_days_array.length
   end
 end

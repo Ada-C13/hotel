@@ -25,14 +25,18 @@ module Hotel
       return reservations.find { |reservations| reservations.id == id }
     end
 
-    def available_rooms
-      reserved_rooms = reservations.map { |reservation| reservation.room_id }
-      return rooms.difference(reserved_rooms)
+    def available_rooms(check_in_time, check_out_time)
+      # reserved_rooms = reservations.map { |reservation| reservation.room_id }
+      # return rooms.difference(reserved_rooms)
+      reserved_rooms = []
+      date_range = Hotel::DateRange(check_in_time, check_out_time)
+      #look at the date_range for reservations
+      reserved_rooms = reservations.select { |reservation| reservation.room_id if reservation.date_range.overlap?(date_range) }
+      return reserved_rooms
     end
 
     def make_reservation(check_in_time, check_out_time)
-      #find free room
-      room_id = available_rooms.first
+      room_id = available_rooms(check_in_time, check_out_time).first
       @reservations << Reservation.new(check_in_time, check_out_time, room_id)
       return reservations.last
     end

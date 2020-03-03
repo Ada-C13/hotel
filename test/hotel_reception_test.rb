@@ -65,17 +65,38 @@ describe "find available room" do
     @reception.make_reservation(check_in_time, check_out_time)
   end
 
-  it "will find the available rooms" do
+  it "will list an array of the available rooms for a given date" do
+    check_in_time = [2020, 2, 1]
+    check_out_time = [2020, 2, 2]
+    my_rooms = @reception.available_rooms(check_in_time, check_out_time)
 
+    expect(my_rooms).must_be_instance_of Array
+    expect(my_rooms).wont_include 1
+    expect(my_rooms[0]).must_equal 2
   end
 
 end
 
-describe "" do
+describe "find reservation method" do
   before do
     @reception = Hotel::HotelReception.new
+
+    check_in_time = [2020, 2, 1]
+    check_out_time = [2020, 2, 3]
+    @reception.make_reservation(check_in_time, check_out_time)
+
+    check_in_time = [2020, 2, 14]
+    check_out_time = [2020, 2, 15]
+    @reception.make_reservation(check_in_time, check_out_time)
   end
 
+  it "will return the reservation with the id given" do
+    my_reservation_id = @reception.reservations[1].id
+    my_reservation = @reception.find_reservation(my_reservation_id)
+
+    expect(my_reservation).must_be_instance_of Hotel::Reservation
+    expect(my_reservation.room_id).must_equal 2
+  end
 end
 
 describe "" do
