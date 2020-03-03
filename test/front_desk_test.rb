@@ -138,6 +138,23 @@ describe "front_desk" do
       expect(result).wont_match (/2020-03-10/)
     end 
 
-
+    describe "#request_reservation" do
+      before do 
+        start_date = [2020,3,4]
+        end_date = [2020,3,5]
+        new_reservation = Hotel::FrontDesk.request_reservation(start_date,end_date)
+      end 
+      it "return an instance of reservation" do
+         expect(@new_reservation).must_be_kind_of Hotel::Reservation
+      end  
+      it "return room number 1 to 20" do 
+        expect(@new_reservation.room_num).must_be_kind_of Integer
+        expect(@new_reservation.room_num).must_be :>, 0
+        expect(@new_reservation.room_num).must_be :<, 21
+      end 
+      it "return reservation_id" do 
+        expect(@new_reservation.reservation_id).must_be_kind_of Integer
+      end 
+    end 
   end 
 end 

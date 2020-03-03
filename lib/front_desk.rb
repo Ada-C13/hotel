@@ -38,10 +38,10 @@ module Hotel
       return display
     end 
 
-
-
-
     #request reservation 
+    def self.request_reservation(start_date,end_date)
+    end 
+
     # input of start/end
     # check availability
     # assgin room and store info
