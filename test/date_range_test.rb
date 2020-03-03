@@ -23,26 +23,29 @@ describe "DateRange" do
   end
 
   describe "validate_date" do
-    it "should return true if start_date and end_date are Date instances" do
-      expect(@daterange.validate_date).must_equal true
+    it "should return instance of DateRange if start_date and end_date are Date instances" do
+      expect(@daterange).must_be_kind_of Hotel::DateRange
     end
 
     it "should raise ArgumentError if one or both of start_date and end_date are not Date instances" do
-      daterange = Hotel::DateRange.new(Date.new(2020,5,3), "October 24")
+      date1 = Date.new(2020,5,3)
+      date2 = "October 24"
 
-      expect{(daterange.validate_date)}.must_raise ArgumentError
+      expect{ Hotel::DateRange.new(date1, date2) }.must_raise ArgumentError
     end
 
     it "should raise ArgumentError if start_date is before today" do
-      daterange = Hotel::DateRange.new(Date.new(2020,2,3), Date.new(2020,5,5))
+      date1 = Date.new(2020,2,3) 
+      date2 = Date.new(2020,5,5)
 
-      expect{(daterange.validate_date)}.must_raise ArgumentError
+      expect{ Hotel::DateRange.new(date1, date2) }.must_raise ArgumentError 
     end
 
     it "should raise ArgumentError if end_date is before start_date" do
-      daterange = Hotel::DateRange.new(Date.new(2020,5,3), Date.new(2020,5,2))
+      date1 = Date.new(2020,5,3)
+      date2 = Date.new(2020,5,1)
 
-      expect{(daterange.validate_date)}.must_raise ArgumentError
+      expect{ Hotel::DateRange.new(date1, date2) }.must_raise ArgumentError
     end
 
   end
