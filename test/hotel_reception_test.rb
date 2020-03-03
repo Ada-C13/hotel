@@ -7,11 +7,14 @@ describe 'initialize' do
 
   it "can be instantiated" do
     expect(@reception).must_be_instance_of Hotel::HotelReception
+    expect(@reception).must_respond_to :rooms
+    expect(@reception).must_respond_to :reservations
   end
 
   it "has an array of rooms as an attribute" do
     expect(@reception.rooms).must_be_instance_of Array
     expect(@reception.rooms).wont_be_empty
+    expect(@reception.rooms.length).must_equal 20
   end
 
   it "has an empty array of reservation objects as an attribute" do
