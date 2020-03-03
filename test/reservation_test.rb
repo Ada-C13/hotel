@@ -11,9 +11,13 @@ describe "Reservation" do
       expect(@reservation).must_respond_to :start_date
       expect(@reservation).must_respond_to :end_date
       expect(@reservation).must_respond_to :nights
-      expect(@reservation).must_respond_to :cost
+      expect(@reservation).must_respond_to :total_cost
       expect(@reservation).must_respond_to :id
       expect(@reservation).must_respond_to :room_number
+    end
+
+    it "determines total number of nights correctly" do
+      expect(@reservation.nights).must_equal 2
     end
   end
 end
