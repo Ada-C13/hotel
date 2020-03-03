@@ -12,7 +12,7 @@ describe Hotel::HotelController do
         expect(rooms).must_be_kind_of Array
       end
     end
-    describe "reserve_room" do
+    xdescribe "reserve_room" do
       it "takes two Date objects and returns a Reservation" do
         start_date = @date
         end_date = start_date + 3
@@ -23,7 +23,7 @@ describe Hotel::HotelController do
       end
     end
 
-    describe "reservations" do
+    xdescribe "reservations" do
       it "takes a Date and returns a list of Reservations" do
         reservation_list = @hotel_controller.reservations(@date)
 
@@ -35,7 +35,7 @@ describe Hotel::HotelController do
     end
   end
 
-  describe "wave 2" do
+  xdescribe "wave 2" do
     describe "available_rooms" do
       it "takes two dates and returns a list" do
         start_date = @date
