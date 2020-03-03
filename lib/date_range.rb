@@ -8,5 +8,9 @@ module Hotel
       @start_date = start_date
       @end_date = end_date
     end
+
+    def nights
+      @end_date - @start_date
+    end
   end
 end
