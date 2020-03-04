@@ -65,10 +65,12 @@ module Hotel
       range_created = Hotel::DateRange.new(start_date,end_date)
       available_rooms = find_availabile_rooms(range_created)
       chosen_room_id = available_rooms[0].room_id
-
+      chosen_room = find_room(chosen_room_id)
       new_reservation = Hotel::Reservation.new(range_created, chosen_room_id)
+      
       @reservations << new_reservation
-      #push new reservation into room reservation container 
+      chosen_room.add_booking_to_room(new_reservation)
+
       return new_reservation
     end
 
