@@ -32,4 +32,26 @@ describe "ReservationManager" do
       expect(reservation).must_be_kind_of Hotel::Reservation
     end
   end
+  describe "find_reservation" do
+    it "Finds reservations for a specific date" do
+      manager = Hotel::ReservationManager.new
+
+      manager.make_reservation("March 3, 2020", "March 5, 2020") 
+      manager.make_reservation("March 13, 2020", "March 15, 2020")
+      manager.make_reservation("March 23, 2020", "March 25, 2020") 
+      manager.make_reservation("March 3, 2020", "March 6, 2020")
+
+      date = "March 3, 2020"
+      specific_reservation = manager.find_reservation(date)
+      # Assert
+      expect(specific_reservation).must_be_kind_of Array
+      expect(specific_reservation.length).must_equal 2
+
+      specific_reservation.each do |reservation|
+        _(reservation).must_be_kind_of Hotel::Reservation
+        _(reservation.start_date).must_equal Date.parse(date)
+      end
+    end  
+
+  end
 end
