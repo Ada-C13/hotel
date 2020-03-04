@@ -18,13 +18,30 @@ module Hotel
       end
     end
 
-    def list_rooms
+    def list_all_rooms
       return @rooms
     end
 
-    def reserve_room(daterange)
+    def reserve_room(date_range)
       @total_reservations += 1
-      return Reservation.new(daterange)
+      return Reservation.new(date_range)
+    end
+
+    def find_room(id)
+      return @rooms.find { |room| room.number == id }
+    end
+
+    def list_reservations(room, date_range)
+      reservation_list = []
+      found_room = find_room(room)
+      
+      found_room.reservations.each do |reservation|
+        if found_room.check_availability(date_range) == false
+          reservation_list.push(reservation)
+        end
+      end
+
+      return reservation_list
     end
   end
 end
