@@ -1,5 +1,5 @@
 module Hotel
-  class Room 
+  class Room   # do we need this? all we really need is a room number
 
     def initialize(id, availability = [])
       @id = id

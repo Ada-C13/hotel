@@ -2,11 +2,12 @@ require 'Date'
 
 module Hotel
   class Reservation 
-    attr_accessor :start_date, :end_date
+    attr_accessor :start_date, :end_date, :room
 
-    def initialize(start_date, end_date, id = nil)  #is a third item needed here an id?
-     @id = id
-    
+    def initialize(start_date, end_date, room, id = nil)  #is a third item needed here an id?
+     @id = id #not needed?
+     @room = room
+
       if start_date.class == String
         start_date = Date.parse(start_date)
       end
