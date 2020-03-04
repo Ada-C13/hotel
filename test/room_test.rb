@@ -14,10 +14,10 @@ describe "Room" do
 
   describe "check_availability" do
     before do
-      daterange1 = Hotel::DateRange.new(Date.new(2020,4,12), Date.new(2020,4,13))
-      reservation1 = Hotel::Reservation.new(daterange1)
-      daterange2 = Hotel::DateRange.new(Date.new(2020,4,15), Date.new(2020,4,20))
-      reservation2 = Hotel::Reservation.new(daterange2)
+      date_range1 = Hotel::DateRange.new(Date.new(2020,4,12), Date.new(2020,4,13))
+      reservation1 = Hotel::Reservation.new(date_range1)
+      date_range2 = Hotel::DateRange.new(Date.new(2020,4,15), Date.new(2020,4,20))
+      reservation2 = Hotel::Reservation.new(date_range2)
 
       @room.reservations.push(reservation1)
       @room.reservations.push(reservation2)
@@ -26,30 +26,30 @@ describe "Room" do
     it "returns true if room has no reservations" do
       @room.reservations.clear()
 
-      daterange = Hotel::DateRange.new(Date.new(2020,5,3), Date.new(2020,5,5))
-      check_availability = @room.check_availability(daterange)
+      date_range = Hotel::DateRange.new(Date.new(2020,5,3), Date.new(2020,5,5))
+      check_availability = @room.check_availability(date_range)
 
       expect(check_availability).must_equal true
     end
 
     it "returns true if room has no reservations 
     during date range provided" do
-      daterange = Hotel::DateRange.new(Date.new(2020,5,3), Date.new(2020,5,5))
-      check_availability = @room.check_availability(daterange)
+      date_range = Hotel::DateRange.new(Date.new(2020,5,3), Date.new(2020,5,5))
+      check_availability = @room.check_availability(date_range)
 
       expect(check_availability).must_equal true
     end
 
     it "returns false if room has a reservation during date range provided" do
-      daterange = Hotel::DateRange.new(Date.new(2020,4,13), Date.new(2020,5,5))
-      check_availability = @room.check_availability(daterange)
+      date_range = Hotel::DateRange.new(Date.new(2020,4,13), Date.new(2020,5,5))
+      check_availability = @room.check_availability(date_range)
 
       expect(check_availability).must_equal false
     end
 
     it "returns true when last day of reservation is same as first day of new reservation" do
-      daterange = Hotel::DateRange.new(Date.new(2020,4,20), Date.new(2020,5,5))
-      check_availability = @room.check_availability(daterange)
+      date_range = Hotel::DateRange.new(Date.new(2020,4,20), Date.new(2020,5,5))
+      check_availability = @room.check_availability(date_range)
 
       expect(check_availability).must_equal true
     end

@@ -8,6 +8,8 @@ module Hotel
       @start_date = start_date
       @end_date = end_date
       validate_date()
+
+      @range = (start_date..end_date).to_a
     end
 
     def total_nights
