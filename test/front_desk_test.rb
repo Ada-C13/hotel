@@ -102,6 +102,35 @@ describe "FrontDesk" do
       # }.must_raise ArgumentError
       
     end
+  end
+
+  describe "#make_reservation" do
+    it "raises ArgumentError for passing invalid arguments" do
+      front_desk = Hotel::FrontDesk.new
+      expect{
+        front_desk.make_reservation("2020, 2, 12", Date.new(2020, 5, 1))
+      }.must_raise ArgumentError
+      
+    end
+
+    it "makes reservation" do 
+      front_desk = Hotel::FrontDesk.new
+      made_reservation = front_desk.make_reservation(Date.new(2020, 5, 1), Date.new(2020, 5, 4))
+      expect(made_reservation.last).must_be_kind_of Hotel::Reservation
+      expect(made_reservation.last.date_range.start_date).must_equal Date.new(2020, 5, 1)
+      expect(made_reservation.last.date_range.end_date).must_equal Date.new(2020, 5, 4)
+
+    end
+
+    it "adds a newly created reservation to the reservations list" do
+      front_desk = Hotel::FrontDesk.new
+      reservations_before = front_desk.reservations.length
+      puts "before length = #{reservations_before}"
+      made_reservation = front_desk.make_reservation(Date.new(2020, 5, 5), Date.new(2020, 5, 8))
+      reservations_after = front_desk.reservations.length
+      puts "after length = #{reservations_after}"
+      expect(reservations_after).must_equal (reservations_before + 1)
+    end
 
   end
 end
