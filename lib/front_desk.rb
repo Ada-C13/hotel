@@ -33,5 +33,22 @@ module Hotel
 
       raise ArgumentError.new("No room is available for the requested dates: #{start_date} to #{end_date}")
     end
+
+    def make_reservation(start_date, end_date)
+      if !(start_date.is_a? Date) || !(end_date.is_a? Date)
+        raise ArgumentError.new("Invalid date format. start_date and end_date should be of type Date")
+      end
+  
+      selected_room = select_available_room(start_date, end_date)
+      date_range = Hotel::DateRange.new(start_date, end_date)
+      @reservations << Hotel::Reservation.new(date_range, selected_room)
+    end
+
+
+
+
+
+
+
   end
 end
