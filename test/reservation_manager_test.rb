@@ -24,4 +24,12 @@ describe "ReservationManager" do
       expect(manager.all_reservations).must_equal []
     end  
   end
+  describe "make_reservation" do
+    it "Creates a new reservation" do
+      manager = Hotel::ReservationManager.new
+      reservation = manager.make_reservation("March 3, 2020", "March 5, 2020")
+      # Assert
+      expect(reservation).must_be_kind_of Hotel::Reservation
+    end
+  end
 end
