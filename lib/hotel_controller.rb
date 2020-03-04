@@ -20,7 +20,13 @@ module Hotel
 
     def reserve_room(start_date, end_date)
       # start_date and end_date should be instances of class Date
-      return Reservation.new(start_date, end_date, nil)
+      book_room = available_rooms(start_date, end_date).first
+      return Reservation.new(
+        start_date: start_date, 
+        end_date: end_date, 
+        room: book_room, 
+        cost: nil,
+      )
     end
 
     # User: I can access the list of reservations for a specific date, so that I can track reservations by date
@@ -34,7 +40,8 @@ module Hotel
     # Wave 2
     def available_rooms(start_date, end_date)
       # start_date and end_date should be instances of class Date
-      return []
+      empty_rooms = @rooms
+      return empty_rooms
     end
   end
 end

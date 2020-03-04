@@ -24,12 +24,6 @@ describe Hotel::HotelController do
   end  
 
   describe "wave 1" do
-    describe "rooms" do
-      it "returns a list" do
-        rooms = @hotel_controller.rooms
-        expect(rooms).must_be_kind_of Array
-      end
-    end
     describe "reserve_room" do
       it "takes two Date objects and returns a Reservation" do
         start_date = @date
