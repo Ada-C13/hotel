@@ -7,6 +7,10 @@ describe Hotel::HotelController do
   end
   describe "wave 1" do
     describe "initializer" do
+
+      it "Creates an instance of hotel controler" do
+        @hotel_controller.must_be_kind_of Hotel::HotelController
+      end
       #make one more test for initializer
 
 
