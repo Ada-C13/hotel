@@ -26,26 +26,57 @@ xdescribe "DateRange class" do
 
   describe "overlap method" do 
     it "return true when 2 date_range overlap" do 
-      @date_range_1 = Hotel::DateRange.new(
-        start_date:[2020,3,2],
-        end_date:[2020,3,5]
-      )
-      @date_range_2 = Hotel::DateRange.new(
+
+      @date_range = Hotel::DateRange.new(
         start_date:[2020,3,3],
-        end_date:[2020,3,5]
+        end_date:[2020,3,6]
       )
-      expect(@date_range_1.overlap(@date_range_2)).must_equal true
-    end 
-    it "return false when 2 date_range do not overlap" do 
       @date_range_1 = Hotel::DateRange.new(
         start_date:[2020,3,2],
-        end_date:[2020,3,5]
+        end_date:[2020,3,4]
       )
       @date_range_2 = Hotel::DateRange.new(
         start_date:[2020,3,5],
+        end_date:[2020,3,8]
+      )
+      @date_range_3 = Hotel::DateRange.new(
+        start_date:[2020,3,4],
+        end_date:[2020,3,5]
+      )
+      @date_range_4 = Hotel::DateRange.new(
+        start_date:[2020,3,2],
+        end_date:[2020,3,9]
+      )
+      expect(@date_range_1.overlap(@date_range)).must_equal true
+      expect(@date_range_2.overlap(@date_range)).must_equal true
+      expect(@date_range_3.overlap(@date_range)).must_equal true
+      expect(@date_range_4.overlap(@date_range)).must_equal true
+    end 
+    it "return false when 2 date_range do not overlap" do 
+      @date_range = Hotel::DateRange.new(
+        start_date:[2020,3,3],
         end_date:[2020,3,6]
       )
-      expect(@date_range_1.overlap(@date_range_2)).must_equal false
+      @date_range_1 = Hotel::DateRange.new(
+        start_date:[2020,3,1],
+        end_date:[2020,3,2]
+      )
+      @date_range_2 = Hotel::DateRange.new(
+        start_date:[2020,3,7],
+        end_date:[2020,3,8]
+      )
+      @date_range_3 = Hotel::DateRange.new(
+        start_date:[2020,3,6],
+        end_date:[2020,3,9]
+      )
+      @date_range_4 = Hotel::DateRange.new(
+        start_date:[2020,3,1],
+        end_date:[2020,3,3]
+      )
+      expect(@date_range_1.overlap(@date_range)).must_equal false
+      expect(@date_range_2.overlap(@date_range)).must_equal false
+      expect(@date_range_3.overlap(@date_range)).must_equal false
+      expect(@date_range_4.overlap(@date_range)).must_equal false
     end 
   end 
 
