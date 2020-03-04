@@ -13,15 +13,24 @@ module Hotel
       rooms.find {|room| room.id == id}
     end
 
-    def find_reservations(room_id: , start_date: , end_date: )
-      room = rooms.find { |room| room.id == room_id}
-      return nil if room == nil
-
+    def find_reservations(room_id: nil , start_date: , end_date: )
       date_range = DateRange.new(start_date: start_date, end_date: end_date)
+
+      if room_id 
+        room = rooms.find { |room| room.id == room_id}
+        return nil if room == nil
+        reservations = room.reservations.select { |reservation| 
+          reservation.date_range.overlap? (date_range) }
+      else
+        reservations = []
+        rooms.each do |room|
+          room_reservations = room.reservations.select { |reservation| 
+            reservation.date_range.overlap? (date_range) }
+          reservations += room_reservations
+        end
+      end
       
-      reservations = room.reservations.select { |reservation| 
-        reservation.date_range.overlap? (date_range)
-      }
+      return reservations
     end
 
     # def find_reservations(room_id: nil , start_date: nil, end_date: nil)
