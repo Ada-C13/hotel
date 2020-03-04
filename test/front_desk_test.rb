@@ -138,7 +138,7 @@ describe "front_desk" do
       expect(result).wont_match (/2020-03-10/)
     end 
   end
-  xdescribe "#request_reservation_wave1" do
+  describe "#request_reservation_wave1" do
     before do 
       manager = hotel_manager
       start_date = [2020,3,4]
@@ -237,6 +237,21 @@ describe "front_desk" do
       
       room_availabe = [6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
       date_range = Hotel::DateRange.new(start_date:[2020,3,7],end_date:[2020,3,8])
+      expect(manager.room_available(date_range)).must_equal room_availabe
+    end 
+    it "will show rooms that are availabe for a given date range" do 
+      manager = hotel_manager
+      manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,10]),room_num:1)
+      manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,10]),room_num:20)
+      manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,10]),room_num:13)
+      manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,10]),room_num:4)
+      manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,10]),room_num:5)
+      manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,10]),room_num:6)
+
+      manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,4,2],end_date:[2020,4,10]),room_num:7)
+      manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,4,10],end_date:[2020,4,11]),room_num:7)
+      room_availabe = [2,3,7,8,9,10,11,12,14,15,16,17,18,19]
+      date_range = Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,12])
       expect(manager.room_available(date_range)).must_equal room_availabe
     end 
   end 

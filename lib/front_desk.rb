@@ -3,11 +3,10 @@ require 'reservation'
 
 module Hotel
   class FrontDesk
-    attr_accessor :reservations, :rooms
+    attr_accessor :reservations
 
-    def initialize(reservations:nil ,rooms:nil)
+    def initialize(reservations:nil )
       @reservations = reservations || []
-      @rooms = {1 => [],2 =>[],3=>[]}
     end
 
     #access a list of all rooms in hotel
