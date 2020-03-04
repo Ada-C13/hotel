@@ -30,6 +30,9 @@ module Hotel
       chosen_room.add_room_reservation(new_reservation)
     end
 
+    # def add_block_reservation(block_count:, date_range:, discount_cost:)
+    # end
+
     def available_rooms(date_range)
       available_rooms = @rooms.select{|room| room.reservations.empty? == true} || @rooms.reject{|room| room.reservations.select{|reservation| reservation.date_range.overlap?(date_range)} == true}
       return available_rooms

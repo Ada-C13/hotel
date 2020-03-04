@@ -16,7 +16,8 @@ module Hotel
     def overlap?(date_range)
       # if the array of the combined arrays is empty, there is no overlap, so return false
       # if the array is not empty, return true
-      return overlap = (self.range & date_range.range).empty? ? false : true
+      overlap = (self.range & date_range.range).empty? || (date_range.start_date >= self.end_date) ? false : true
+      return overlap
     end
 
     def nights

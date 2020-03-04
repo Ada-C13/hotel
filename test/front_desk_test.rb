@@ -1,5 +1,6 @@
 require_relative 'test_helper'
 require_relative '../lib/date_range'
+require_relative '../lib/No_Available_Room_Error.rb'
 require 'date'
 
 describe "front desk" do
@@ -44,6 +45,15 @@ describe "front desk" do
     it "adds date range to front desk date range instance variable array" do
       expect(@front_desk.date_ranges[0]).must_be_instance_of Hotel::DateRange
     end
+
+    it "raises exception when there are no available rooms for a given date range" do
+      19.times do
+        @front_desk.add_reservation(@dates)
+      end
+
+      expect{@front_desk.add_reservation(@dates)}.must_raise NoAvailableRoomError 
+      
+    end
     
     it "adds an id to the reservation" do
       expect(@front_desk.reservations[0].id).must_be_instance_of Integer
@@ -61,6 +71,21 @@ describe "front desk" do
       expect(@front_desk.reservations[0].room.reservations[0]).must_be_instance_of Hotel::Reservation
     end
 
+  end
+
+  describe "add_block_reservation" do
+
+    it "reserves the correct number of rooms" do
+    
+    end
+
+    it "raises exception if block_count is not greater than 1 or less than 6" do
+      
+    end
+
+    it " raises exception if there aren't enough rooms to fill block" do
+      
+    end
   end
 
   describe "available_rooms" do
