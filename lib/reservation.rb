@@ -4,11 +4,7 @@ module Hotel
   class Reservation
 
     attr_reader :id, :date_range, :room_id
-    def initialize(id,date_range,room_id)
-      @id = id
-      if id < 1
-        raise ArgumentError
-      end
+    def initialize(date_range,room_id)
 
       @date_range = date_range
       @room_id = room_id
