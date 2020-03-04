@@ -4,12 +4,10 @@ require_relative 'hotel_manager'
 
 module Hotel
   class Reservation
-    attr_reader :range, :start_date, :end_date, :id, :total_cost, :room_number, :nights
+    attr_reader :date_range, :id, :total_cost, :room_number, :nights
 
     def initialize(date_range)
-      @start_date = date_range.start_date
-      @end_date = date_range.end_date
-      @range = (@start_date..@end_date).to_a
+      @date_range = date_range
       @id = id
       @total_cost = total_cost
       @nights = date_range.total_nights
