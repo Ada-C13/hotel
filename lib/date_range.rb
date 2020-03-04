@@ -5,12 +5,13 @@ module Hotel
     attr_reader :check_in, :check_out
     
     def initialize(check_in, check_out)
-      @check_in = Date.parse(check_in)
-      @check_out = Date.parse(check_out)
+      @check_in = check_in
+      @check_out = check_out
       
       validate_date_range 
     end
-  
+    
+    
     def validate_date_range
       if @check_out < @check_in
         raise ArgumentError, "End date cannot be before start date"
@@ -19,28 +20,30 @@ module Hotel
     
     
     def num_nights
-      num_nights = @check_out.day - @check_in.day
+      num_nights = (@check_out - @check_in).to_i
       return num_nights
-    end
+    end  
     
     
+    # User story: I can access the list of reservations for a specific date, so that I can track reservations by date
     def date_in_range?(date)
       range = @check_in..@check_out
-      
-      if range.include?(date)
-        return true # true means there is an existing reservation
+ 
+      if date == @check_out
+        return false # there are no existing reservations for tonight
+      elsif range.include?(date)
+        return true # there is an existing reservation for tonight
       else
-        return false # false means there is no existing reservation
+        return false # there are no existing reservations for tonight
       end
     end 
     
+    # this method compares ANOTHER date range to the CURRENT daterange
+    def overlap?(other_date_range)
+      if other_date_range.check_in < @check_out && @check_in < other_date_range.check_out
+        return true # there is an overlap - don't make a rez
+      end
+      return false # there is no overlap - make a rez
+    end
   end
 end
-
-
-# This is tricky because tests have past dates in them
-# def validate_checkin
-#   if @check_in < Date.today
-#     raise ArgumentError, "Check-in date cannot be in the past."
-#   end
-# end

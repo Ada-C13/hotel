@@ -1,13 +1,10 @@
 module Hotel
   class Room
     attr_reader :room_number, :reservations
-    attr_accessor :cost
 
-    def initialize(room_number, reservations: [], cost: 200)
+    def initialize(room_number, reservations: [])
       @room_number = room_number
-      @reservations = reservations
-      # holds collection of reservation objects for this specific room (with dates) - this could be how to check for reservations
-      @cost = cost
+      @reservations = reservations # reserved dates
       
       valid_room_number
     end
@@ -18,5 +15,14 @@ module Hotel
       end
     end
 
+
+
   end
 end
+
+# def room_available?(date)
+      
+# end
+# given a date
+# looks at the collection of reservations
+# returns false if given date is within any reserved date

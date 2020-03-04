@@ -9,12 +9,9 @@ module Hotel
     
     def initialize(num_rooms)
       @num_rooms = num_rooms
-      
       valid_number_of_rooms
       
       @rooms = []
-      @reservations = []
-      
       build_rooms
     end
     
@@ -35,7 +32,7 @@ module Hotel
       end
     end
     
-    # could use this to pass room objects rather than just the id_number
+
     def find_room_by_number(room_number)
       room = @rooms.select { |room| room.room_number == room_number }
 
@@ -43,46 +40,39 @@ module Hotel
     end
     
     
-    # this may need to take in a room object rather than number?
-    def reserve_room(date_range, room_number) 
-      # sets new id number
-      if @reservations.empty?
-        reservation_id = 1
-      else
-        reservation_id = @reservations.last.reservation_id + 1
-      end
-      
-      # makes new instance of reservation
-      reservation = Hotel::Reservation.new(reservation_id, date_range, room_number)
-      
-      # need a method for returning which room is available to be rented - seems like returning the first instance of available room through available_rooms_by_date_range is the best way to do this
-      
+    def reserve_room(start_date, end_date) 
+      date_range = Hotel::DateRange.new(start_date, end_date)
+
+      reservation = Hotel::Reservation.new(date_range, 1) # <== change this room number here to the room object
+      # TODO:
+      # update this in reservation, tests
+
+      # get room object so you can add this to the collection of reservations
+
       # adds to collection of reservations
-      @reservations << reservation
-    end
-    
-    
-    # List all available rooms for a given date range - check given range against all ranges in all rooms
-    # def available_rooms_by_date_range(date_range)
-    #   available_rooms = []
-    #   unavailalbe_rooms = []
       
-    #   @rooms.each do |room|
-    #     room.reservations.each do |reservation|
-    #       if raservation.date_range.include?(date_range)
-    #         unavailalbe_rooms << room
-    #       else
-    #         available_rooms << room
-    #       end
-    #     end
-    #   end
-    #   return available_rooms
-    # end
-    
-    
-    # set a room block(number of rooms, discounted rate/percentage)
-    
-    
+      # what to do with this reservation - add to room
+
+    end
     
   end
 end
+
+
+
+# List all available rooms for a given date range - check given range against all ranges in all rooms
+# def available_rooms_by_date_range(date_range)
+#   available_rooms = []
+#   unavailalbe_rooms = []
+  
+#   @rooms.each do |room|
+#     room.reservations.each do |reservation|
+#       if reservation.date_range.include?(date_range.start_date)
+#         unavailalbe_rooms << room
+#       else
+#         available_rooms << room
+#       end
+#     end
+#   end
+#   return available_rooms
+# end

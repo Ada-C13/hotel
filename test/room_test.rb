@@ -10,7 +10,6 @@ describe "Room Class" do
     expect(room.room_number).must_equal "5"
     expect(room.room_number).must_be_kind_of String
     expect(room.reservations).must_be_kind_of Array
-    expect(room.cost).must_equal 200
   end
 end
 
