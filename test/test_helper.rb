@@ -12,7 +12,7 @@ require "date"
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
-require_relative "../lib/room.rb"
-require_relative "../lib/hotel_controller.rb"
-require_relative "../lib/reservation.rb"
-require_relative "../lib/date_range.rb"
+require_relative "../lib/room"
+require_relative "../lib/hotel_controller"
+require_relative "../lib/reservation"
+require_relative "../lib/date_range"

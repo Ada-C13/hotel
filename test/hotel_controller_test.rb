@@ -2,9 +2,27 @@ require_relative "test_helper"
 
 describe Hotel::HotelController do
   before do
-    @hotel_controller = Hotel::HotelController.new
+    @hotel_controller = Hotel::HotelController.new(
+      reservations: 3,
+      rooms: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+    )
     @date = Date.parse("2020-08-04")
   end
+
+  describe "initialize" do
+    it "is an instance of HotelController" do
+      expect(@hotel_controller).must_be_kind_of Hotel::HotelController
+    end
+
+    it "rooms is a type of array" do
+      expect(@hotel_controller.rooms).must_be_kind_of Array
+    end
+
+    it "rooms array has 20 items" do
+      expect(@hotel_controller.rooms.length).must_equal 20
+    end
+  end  
+
   describe "wave 1" do
     describe "rooms" do
       it "returns a list" do

@@ -1,10 +1,22 @@
+require_relative 'reservation'
+require_relative 'date_range'
+
 module Hotel
   class HotelController
-    # Wave 1
-    def rooms
-      # You might want to replace this method with an attr_reader
-      return []
+    attr_reader :rooms 
+    attr_accessor :reservations
+
+    def initialize(
+      rooms:,
+      reservations:
+    )
+
+      rooms = (1..20).map { |i| i }
+      @rooms = rooms
+      @reservations = reservations || []
     end
+
+    # Wave 1
 
     def reserve_room(start_date, end_date)
       # start_date and end_date should be instances of class Date
