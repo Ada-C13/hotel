@@ -9,6 +9,7 @@ module Hotel
       @room  = room
     end
 
+    # Get the total cost for a given reservation
     # Rooms Identical and Cost $200/night
     def cost
       return ROOM_COST * @range.nights
