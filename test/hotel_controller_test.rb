@@ -15,6 +15,12 @@ describe Hotel::HotelController do
       it "create the rooms" do
         rooms = @hotel_controller.rooms
         expect(@hotel_controller.rooms).must_be_kind_of Array
+        expect(@hotel_controller.rooms.length).must_equal 20
+      end
+
+      it "create 20 rooms" do
+        rooms = @hotel_controller.rooms
+        expect(@hotel_controller.rooms.length).must_equal 20
       end
 
       it "create an empty array for reservatios" do
