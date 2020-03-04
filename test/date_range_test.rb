@@ -2,8 +2,8 @@ require_relative 'test_helper'
 
 describe 'DateRange class' do 
   before do 
-    start_date = Date.new(1993, 2, 24)
-    end_date = Date.new(1993, 2, 26)
+    start_date = Date.new(2021, 2, 24)
+    end_date = Date.new(2021, 2, 26)
     @dates = Hotel::DateRange.new(start_date, end_date)
   end
 
@@ -39,19 +39,19 @@ describe 'DateRange class' do
 
   describe 'overlap? method' do
     it 'should return true if given dates are included in reservaton dates' do
-      expect(@dates.overlap?(Date.new(1993, 2, 24), Date.new(1993, 2, 26))).must_equal true
-      expect(@dates.overlap?(Date.new(1993, 2, 22), Date.new(1993, 2, 28))).must_equal true
-      expect(@dates.overlap?(Date.new(1993, 2, 22), Date.new(1993, 2, 26))).must_equal true
-      expect(@dates.overlap?(Date.new(1993, 2, 25), Date.new(1993, 2, 26))).must_equal true
-      expect(@dates.overlap?(Date.new(1993, 2, 25), Date.new(1993, 2, 28))).must_equal true
+      expect(@dates.overlap?(Date.new(2021, 2, 24), Date.new(2021, 2, 26))).must_equal true
+      expect(@dates.overlap?(Date.new(2021, 2, 22), Date.new(2021, 2, 28))).must_equal true
+      expect(@dates.overlap?(Date.new(2021, 2, 22), Date.new(2021, 2, 26))).must_equal true
+      expect(@dates.overlap?(Date.new(2021, 2, 25), Date.new(2021, 2, 26))).must_equal true
+      expect(@dates.overlap?(Date.new(2021, 2, 25), Date.new(2021, 2, 28))).must_equal true
 
     end
 
     it 'should return false if given dates are not included in reservation dates' do
-      expect(@dates.overlap?(Date.new(1993, 2, 22), Date.new(1993, 2, 23))).must_equal false
-      expect(@dates.overlap?(Date.new(1993, 2, 22), Date.new(1993, 2, 24))).must_equal false
-      expect(@dates.overlap?(Date.new(1993, 2, 26), Date.new(1993, 2, 28))).must_equal false
-      expect(@dates.overlap?(Date.new(1993, 2, 27), Date.new(1993, 2, 28))).must_equal false
+      expect(@dates.overlap?(Date.new(2021, 2, 22), Date.new(2021, 2, 23))).must_equal false
+      expect(@dates.overlap?(Date.new(2021, 2, 22), Date.new(2021, 2, 24))).must_equal false
+      expect(@dates.overlap?(Date.new(2021, 2, 26), Date.new(2021, 2, 28))).must_equal false
+      expect(@dates.overlap?(Date.new(2021, 2, 27), Date.new(2021, 2, 28))).must_equal false
     end
   end
 end
