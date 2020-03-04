@@ -4,8 +4,7 @@ require 'reservation'
 module Hotel
   class FrontDesk
     attr_accessor :reservations
-  
-
+    
     def initialize(reservations:nil )
       @reservations = reservations || []
     end
@@ -84,15 +83,17 @@ module Hotel
       end 
 
       block_array = []
+      random_block_id = rand(1000..9999)
 
       num_of_rooms.times do 
         new_block = self.request_reservation(start_date,end_date)
         new_block.room_rate = room_rate
         new_block.block_tag = "block-available"
+        new_block.reservation_id = "B" + random_block_id.to_s + "-" + new_block.reservation_id.to_s
         self.reservations << new_block
         block_array << new_block
       end 
-      p block_array
+      puts block_array[0].reservation_id.to_s[0..4]
       return block_array
       
 
