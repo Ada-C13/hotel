@@ -13,7 +13,7 @@ module Hotel
       rooms.find {|room| room.id == id}
     end
 
-    def find_reservations(room_id: , start_date: nil, end_date: nil)
+    def find_reservations(room_id: nil , start_date: nil, end_date: nil)
       room = rooms.find { |room| room.id == room_id}
       return nil if room == nil
 
@@ -39,7 +39,6 @@ module Hotel
       end
       return reservations
       
-    
       #TODO: add date_range class and refactor
     end
 

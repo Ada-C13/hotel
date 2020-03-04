@@ -81,12 +81,16 @@ describe "ReservationDesk class" do
       expect(@reservation_desk.find_reservations(room_id: 1)[0]).must_be_kind_of Hotel::Reservation
     end
 
-    it "returns reservation for a specific room" do
+    it "returns all reservations if no arguments are provided" do
+      
+    end
+
+    it "returns reservations for a specific room if room ID is provided" do
       expect(@reservation_desk.find_reservations(room_id: 1)[0].room_id).must_equal 1
       expect(@reservation_desk.find_reservations(room_id: 1)[2].room_id).must_equal 1
     end
 
-    it "returns reservations for a specific date range" do
+    it "returns reservations for specific dates for a specific room" do
       result_1 = @reservation_desk.find_reservations(room_id: 1, start_date: "2020-3-1", end_date: "2020-3-17")
       expect(result_1.length).must_equal 2
       result_2 = @reservation_desk.find_reservations(room_id: 1, start_date: "2020-3-1", end_date: "2020-3-10")
@@ -97,33 +101,36 @@ describe "ReservationDesk class" do
       expect(result_4.length).must_equal 1
     end
 
-    it "Returns empty array if there are no reservations for the room/dates" do
+    it "returns reservations for specific dates for all rooms" do
+      
+    end
+
+    it "returns empty array if there are no reservations for the room/dates" do
       result = @reservation_desk.find_reservations(room_id: 1, start_date: "2020-4-1", end_date: "2020-4-17")
       expect(result.length).must_equal 0
     end
 
-    it "Returns nil if room ID doesn't exist" do
-      assert_nil @reservation_desk.find_reservations(room_id: 100000, start_date: "2020-3-1", end_date: "2020-3-17")
-    end
+    # it "Returns nil if room ID doesn't exist" do
+    #   assert_nil @reservation_desk.find_reservations(room_id: 100000, start_date: "2020-3-1", end_date: "2020-3-17")
+    # end
 
-    it "If end_date is nil, returns all reservations from the start date onward" do
+    it "if end_date is nil, returns all reservations from the start date onward" do
     #TODO: wording
       result = @reservation_desk.find_reservations(room_id: 1, start_date: "2020-3-1")
       expect(result.length).must_equal 3
     end  
 
-    it "If start_date is nil, returns all reservations until the end date" do
+    it "if start_date is nil, returns all reservations until the end date" do
       result_1 = @reservation_desk.find_reservations(room_id: 1, end_date: "2020-3-17")
       expect(result_1.length).must_equal 2
       result_2 = @reservation_desk.find_reservations(room_id: 1, end_date: "2020-3-10")
       expect(result_2.length).must_equal 1
     end
 
-    it "If both start and end dates are nill, returns all reservations" do
+    it "if both start and end dates are nill, returns all reservations" do
       result = @reservation_desk.find_reservations(room_id: 1)
       expect(result.length).must_equal 3
     end
-
   end
 
   describe "new_reservation" do
