@@ -26,7 +26,9 @@ module Hotel
 
     def reserve_room(start_date, end_date)
       # start_date and end_date should be instances of class Date
-      return Reservation.new(start_date, end_date, nil)
+      new_reservation = Reservation.new(start_date, end_date, nil)
+      @reservations.push(new_reservation)
+      return new_reservation
     end
 
     def reservations(date)
