@@ -14,7 +14,10 @@ module Hotel
     end
     
     def overlap?(date_range)
-      return (self.range & date_range.range).empty? ? "no overlap" : "overlap"
+      # if the array of the combined arrays is empty, there is no overlap, so return false
+      # if the array is not empty, return true
+      return (self.range & date_range.range).empty? ? false : true
+      
     end
 
   end

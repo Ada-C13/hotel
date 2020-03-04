@@ -31,10 +31,10 @@ describe "DateRange" do
       @date_range3 = Hotel::DateRange.new(start_date: Date.new(2020, 3, 5), end_date: Date.new(2020, 3, 9))
       @date_range4 = Hotel::DateRange.new(start_date: Date.new(2020, 3, 2), end_date: Date.new(2020, 3, 14))
       @date_range5 = Hotel::DateRange.new(start_date: Date.new(2020, 3, 9), end_date: Date.new(2020, 3, 14))
-      expect(@date_range.overlap?(@date_range2)).must_equal "overlap"
-      expect(@date_range.overlap?(@date_range3)).must_equal "overlap"
-      expect(@date_range.overlap?(@date_range4)).must_equal "overlap"
-      expect(@date_range.overlap?(@date_range5)).must_equal "overlap"
+      expect(@date_range.overlap?(@date_range2)).must_equal true
+      expect(@date_range.overlap?(@date_range3)).must_equal true
+      expect(@date_range.overlap?(@date_range4)).must_equal true
+      expect(@date_range.overlap?(@date_range5)).must_equal true
     end
 
     it "returns false if the date is not within the range" do
@@ -42,10 +42,10 @@ describe "DateRange" do
       @date_range3 = Hotel::DateRange.new(start_date: Date.new(2020, 3, 11), end_date: Date.new(2020, 3, 13))
       @date_range4 = Hotel::DateRange.new(start_date: Date.new(2020, 3, 2), end_date: Date.new(2020, 3, 3))
       @date_range5 = Hotel::DateRange.new(start_date: Date.new(2020, 2, 9), end_date: Date.new(2020, 2, 16))
-      expect(@date_range.overlap?(@date_range2)).must_equal "no overlap"
-      expect(@date_range.overlap?(@date_range3)).must_equal "no overlap"
-      expect(@date_range.overlap?(@date_range4)).must_equal "no overlap"
-      expect(@date_range.overlap?(@date_range5)).must_equal "no overlap"
+      expect(@date_range.overlap?(@date_range2)).must_equal false
+      expect(@date_range.overlap?(@date_range3)).must_equal false
+      expect(@date_range.overlap?(@date_range4)).must_equal false
+      expect(@date_range.overlap?(@date_range5)).must_equal false
     end
 
   end
