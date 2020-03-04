@@ -49,5 +49,16 @@ describe "DateRange" do
     end
 
   end
+
+  describe "nights" do
+    
+    start_date = Date.new(2020, 3, 4)
+    end_date = Date.new(2020, 3, 9)
+    date_range = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
+   
+    it "calculates the number of nights booked" do
+      expect(date_range.nights).must_equal 5
+    end
+  end
   
 end

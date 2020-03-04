@@ -15,9 +15,9 @@ module Hotel
 
     end
 
-    # def add_room_reservation(reservation)
-    #   @reservations << reservation
-    # end
+    def add_room_reservation(reservation)
+      @reservations << reservation
+    end
 
   end
 end

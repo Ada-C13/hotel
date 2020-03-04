@@ -18,17 +18,15 @@ module Hotel
       @date_range = []
     end
 
-    # def add_reservation(date_range)
-    #   id = (1..1000).to_a
-    #   @date_range << date_range
-    #   available_rooms = @rooms.select{|room| room.reservations.empty? == true} || @rooms.reject{|room| room.reservations.select{|reservation| reservation.date_range == date_range}}
-    #   #the above doesn't validate if a room is booked from 3/1/20-3/5/20 and someone wants to book same room for 3/2/20-3/4/20
-    #   chosen_room = available_rooms.shift
-    #   new_reservation = Hotel::Reservation.new(id: id.shift, date_range: date_range, room: chosen_room)
-    #   @reservations << new_reservation
-    #   #i need to come back and check finish writing this code and it's tests
-    #   chosen_room.add_room_reservation(new_reservation)
-    # end
+    def add_reservation(date_range)
+      id = (1..1000).to_a
+      @date_range << date_range
+      available_rooms = @rooms.select{|room| room.reservations.empty? == true} || @rooms.reject{|room| room.reservations.select{|reservation| reservation.date_range.overlap?(date_range)} == true}
+      chosen_room = available_rooms.shift
+      new_reservation = Hotel::Reservation.new(id: id.shift, date_range: date_range, room: chosen_room)
+      @reservations << new_reservation
+      chosen_room.add_room_reservation(new_reservation)
+    end
 
     def find_room(room_number)
       found_room = @rooms.select {|room| room.room_number == room_number}

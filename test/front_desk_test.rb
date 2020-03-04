@@ -1,5 +1,6 @@
 require_relative 'test_helper'
 require_relative '../lib/date_range'
+require 'date'
 
 describe "front desk" do
   before do
@@ -34,20 +35,29 @@ describe "front desk" do
     end
   end
 
-  # describe "add_reservation" do
-  #   before do
-  #     @dates = Hotel::DateRange.new(start_date: "3/4/2020", end_date: "3/7/2020")
-  #     @front_desk.add_reservation(@dates)
-  #   end
+  describe "add_reservation" do
+    before do
+      @dates = Hotel::DateRange.new(start_date: Date.new(2020, 3, 4), end_date: Date.new(2020, 3, 7))
+      @front_desk.add_reservation(@dates)
+    end
     
-  #   it "adds an id to the reservation" do
-  #     expect(@front_desk.reservations[0].id).must_be_instance_of Integer
-  #   end
+    it "adds an id to the reservation" do
+      expect(@front_desk.reservations[0].id).must_be_instance_of Integer
+    end
 
-  #   it "adds a an instance of the room class to the reservation" do
-  #     expect(@front_desk.reservations[0].room).must_be_instance_of Hotel::Room
-  #   end
-  # end
+    it "adds an instance of the room class to the reservation" do
+      expect(@front_desk.reservations[0].room).must_be_instance_of Hotel::Room
+    end
+
+    it "adds a reservation object to collection of reservations" do
+      expect(@front_desk.reservations[0]).must_be_instance_of Hotel::Reservation
+    end
+
+    it " adds the reservation to the room object" do
+      expect(@front_desk.reservations[0].room.reservations[0]).must_be_instance_of Hotel::Reservation
+    end
+
+  end
 
   # describe "find_reservation_with(date_range)" do
   #   before do

@@ -20,5 +20,10 @@ module Hotel
       
     end
 
+    def nights
+      return @range.count - 1
+    end
+
+
   end
 end
