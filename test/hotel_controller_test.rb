@@ -12,13 +12,13 @@ describe "HotelController class" do
 
   describe "Initializer" do
     it "is an instance of HotelController" do
-      expect(controller).must_be_kind_of Hotel::HotelController
+      expect(@controller).must_be_kind_of Hotel::HotelController
     end
 
     it "establishes the base data structures when instantiated" do
-      expect(controller.rooms).must_be_kind_of Array
-      expect(controller.rooms.length).must_equal 20
-      expect(controller.reservations).must_be_kind_of Array
+      expect(@controller.rooms).must_be_kind_of Array
+      expect(@controller.rooms.length).must_equal 20
+      expect(@controller.reservations).must_be_kind_of Array
     end
   end
   # tests for each method, with tests for ArgumentErrors/exceptions
@@ -28,3 +28,5 @@ describe "HotelController class" do
     end
   end
 end
+
+# The final project submission should have 95% code coverage using simplecov

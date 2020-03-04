@@ -18,15 +18,19 @@ module Hotel
     end
 
     # def find_by_date(reservations)
+      # call include? ?
     # end
 
     # def find_by_date(room, date_range)
+      # call include? ?
     # end
 
     # def find_available_rooms
+      # call overlap? ?
     # end
 
     # def show_all_rooms
+      # @rooms.each |room| do puts "room: " room end
     # end
 
     # show reservation cost (by what? how? reservation id?)

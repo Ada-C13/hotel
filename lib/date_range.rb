@@ -14,16 +14,27 @@ module Hotel
           raise ArgumentError, "Start date must be before end date"
         end
       end
-      @nights = (@check_out - @check_in).to_i
+      @nights = (@check_out - @check_in).to_i # change to array of each day with .length?
     end
   end
 
   # Wave 2:
 
-  # def overlap?(other)
-  # end
+  def self.overlap?(new_date_range) # for all schedule conflict cases
+    case new_date_range
+      # when new start date is inside range
+    when new_date_range.check_in >= self.check_in && new_date_range.check_in < self.check_out
+      return true
+      # when new end date is inside range
+    when new_date_range.check_out > self.check_in && new_date_range.check_out <= self.check_out
+      return true
+      # when new dates encompass range
+    when new_date_range.check_in < self.check_in && new_date_range > self.check_out
+      return true
+    end
+  end
 
-  # def include?(check_in, check_out)
+  # def include?(one_day) 
   # end
 end
 
