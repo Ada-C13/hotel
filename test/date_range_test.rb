@@ -2,33 +2,32 @@ require_relative "test_helper"
 
 describe Hotel::DateRange do
   before do
-    start_date = Date.new(2021, 01, 01)
-    end_date = start_date + 3
+    @start_date = Date.new(2021, 01, 01)
+    @end_date = @start_date + 3
 
-    range = Hotel::DateRange.new(start_date, end_date)
+    @range = Hotel::DateRange.new(@start_date, @end_date)
   end
-
   describe "constructor" do
+
+    it "is an instance of DateRange" do
+      expect(@range).must_be_kind_of Hotel::DateRange
+    end
+
     it "Can be initialized with two dates" do
-      
-      expect(range.start_date).must_equal start_date
-      expect(range.end_date).must_equal end_date
+      expect(@range.start_date).must_equal @start_date
+      expect(@range.end_date).must_equal @end_date
     end
 
-    xit "is an an error for negative-length ranges" do
+    it "raises an error if the end date is before the start date" do
+      expect { Hotel::DateRange.new(Date.new(2021, 01, 01),Date.new(2020, 12, 31)) }.must_raise ArgumentError
     end
 
-    xit "is an error to create a 0-length range" do
+    it "raises an error if the end date is the same as the start date" do
+      expect { Hotel::DateRange.new(Date.new(2021, 01, 01),Date.new(2021, 01, 01)) }.must_raise ArgumentError
     end
   end
 
-  describe "overlap?" do
-    before do
-      start_date = Date.new(2017, 01, 01)
-      end_date = start_date + 3
-
-      @range = Hotel::DateRange.new(start_date, end_date)
-    end
+  xdescribe "overlap?" do
 
     it "returns true for the same range" do
       start_date = @range.start_date
@@ -64,7 +63,7 @@ describe Hotel::DateRange do
   end
 
   xdescribe "include?" do
-    it "reutrns false if the date is clearly out" do
+    it "returns false if the date is clearly out" do
     end
 
     it "returns true for dates in the range" do
@@ -74,8 +73,9 @@ describe Hotel::DateRange do
     end
   end
 
-  xdescribe "nights" do
+  describe "nights" do
     it "returns the correct number of nights" do
+      expect(@range.nights).must_equal 3
     end
   end
 end
