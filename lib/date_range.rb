@@ -27,5 +27,19 @@ module Hotel
         raise ArgumentError.new("Invalid date provided: end_date must be prior to start_date")
       end
     end
+
+    def overlap?(date_range)
+      if (@range & date_range.range).any?
+        if (@range[-1] == date_range.range[0]) || (@range[0] == date_range.range[-1])
+          return false
+        else
+          return true
+        end
+      else
+        return false
+      end
+    end
+    
   end
+
 end
