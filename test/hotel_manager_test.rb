@@ -35,15 +35,18 @@ describe "HotelManager" do
   end
 
   describe "list_all_rooms" do
-    it "returns an array" do
-      @hotel_manager.rooms.push("this is a room")
-      rooms = @hotel_manager.list_all_rooms
+    before do
+      @rooms = @hotel_manager.list_all_rooms
+      room = Hotel::Room.new(1, 200)
+      @hotel_manager.rooms.push(room)
+    end
 
-      expect(rooms).must_be_kind_of Array
+    it "returns an array" do
+      expect(@rooms).must_be_kind_of Array
     end
 
     it "contains Room objects within the array" do
-      #TODO after Room class has been created
+      expect(@rooms[0]).must_be_kind_of Hotel::Room
     end
 
     it "returns empty array if there are no rooms" do
@@ -55,6 +58,10 @@ describe "HotelManager" do
   end
 
   describe "reserve_room" do
+    before do
+      @hotel_manager.initialize_rooms(20)
+    end
+
     let(:reservation) {
       date_range = Hotel::DateRange.new(Date.new(2020,5,10), Date.new(2020,5,14))
       reservation = @hotel_manager.reserve_room(date_range)
@@ -164,7 +171,16 @@ describe "HotelManager" do
 
         expect(@hotel_manager.list_reservations_by_date(date).length).must_equal 2
       end
+    end
 
-  end
+    describe "calculate_cost" do
+      it "returns correct cost for a reservation" do
+        date_range = Hotel::DateRange.new(Date.new(2020,5,25), Date.new(2020,5,26))
+
+        cost = @hotel_manager.calculate_cost(date_range, 1)
+        
+        expect(cost).must_equal 200
+      end
+    end
   end
 end

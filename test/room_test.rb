@@ -67,11 +67,4 @@ describe "Room" do
 
   end
 
-  describe "calculate_cost" do
-    it "returns correct cost for a reservation" do
-      @room.calculate_cost(@room.reservations[0])
-      
-      expect(@room.reservations[0].total_cost).must_equal 200
-    end
-  end
 end

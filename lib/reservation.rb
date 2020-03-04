@@ -8,7 +8,7 @@ module Hotel
 
     attr_accessor :total_cost
 
-    def initialize(date_range, id = "", room_number = "")
+    def initialize(date_range, id = 0, room_number = 0, total_cost = 0)
       @date_range = date_range
       @id = id
       @total_cost = total_cost
