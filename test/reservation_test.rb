@@ -5,7 +5,7 @@ describe "Reservation" do
     before do
       id = 1
       date_range = Hotel::DateRange.new("2020-3-13", "2020-3-15")
-      room_num = 1
+      room_num = 15
       @reservation = Hotel::Reservation.new(
         id, 
         date_range,
@@ -27,10 +27,15 @@ describe "Reservation" do
       expect(@reservation.date_range).must_be_kind_of Hotel::DateRange
     end
 
-    it "room_num must be integer between 1 to 20" do
-          room_num = -100
-          expect{Hotel::Reservation.new(@reservation)}.must_raise ArgumentError
+    it "Raise ArgumentError when room number isn't between 1 to 20" do
+      room_num = -100
+      expect{Hotel::Reservation.new(@reservation)}.must_raise ArgumentError
+      room_num = 25
+      expect{Hotel::Reservation.new(@reservation)}.must_raise ArgumentError
     end
 
+    it "room_num must be integer between 1 to 20" do
+      expect(@reservation.room_num).must_equal 15
+    end
   end
 end

@@ -4,30 +4,40 @@ require_relative "reservation"
 
 module Hotel
   class FrontDesk
-    attr_reader :reservations
+    attr_reader :rooms, :reservations
     
-    # Wave 1
-    # You might want to replace this method with an attr_reader
-    def rooms
-      rooms = []
-      20.times do |index|
-        rooms << index + 1
-      end
-      return rooms
+    def initialize
+      @rooms = (1..20).map {|num| num}
+      @reservations = []
     end
 
-    def reserve_room(start_date, end_date)
-      # start_date and end_date should be instances of class Date
-      # reserve = Hotel::DateRange(start_date, end_date)
-      
-      return Reservation.new(start_date, end_date, nil)
+    def reserve_room(start_date, end_date)  
+      # generate all the dates that are in the time frame of start_date and end_date
+      id = 1
+      date_range = Hotel::DateRange.new(start_date, end_date)
+      room_num = 1
+      reservation = Hotel::Reservation.new(
+        id = id, 
+        date_range = date_range, 
+        room_num = room_num
+      )
+      id += 1
+      room_num += 1
+      add_reservation(reservation)
+      return reservation
+      # TODO: loop through the list of reservations and check if there are still avaiable rooms in these dates
     end
 
-    # def reservations(date)
-    #   return []
-    # end
+    def add_reservation(reservation) # instance of Reservation class
+      @reservations << reservation
+    end
+
+
+    # check the reservation of a specific date
+    def check_reservations(date) #(string)
+      check_date = Date.parse(date)
+      return @reservations.select {|reservation| reservation.date_range.all_dates.include? check_date}
+    end
   end
 end
 
-a = Hotel::FrontDesk.new
-p a.rooms

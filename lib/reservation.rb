@@ -24,6 +24,8 @@ module Hotel
       return (@date_range.duration) * 200
     end
 
+    
+
 
   end
 end
