@@ -127,15 +127,15 @@ describe Hotel::DateRange do
   #   # end
   # end
 
-  # describe "nights" do
-  #   it "returns the correct number of nights" do
-  #     start_date = Date.today
-  #     end_date = start_date + 3
+  describe "calculate nights" do
+    it "returns the correct number of nights" do
+      start_date = Date.today
+      end_date = start_date + 3
 
-  #     range = Hotel::DateRange.new(start_date, end_date)
+      range = Hotel::DateRange.new(start_date, end_date)
 
-  #     expect(range.calculate_nights).must_equal 3
-  #     expect(range.calculate_nights).must_be_kind_of Integer
-  #   end
-  # end
+      expect(range.calculate_nights).must_equal 3
+      expect(range.calculate_nights).must_be_kind_of Integer
+    end
+  end
 end
