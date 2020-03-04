@@ -8,5 +8,18 @@ module Hotel
       end
       @number = number
     end
+
+    # Methods that help to compare 2 objects of Room class
+    def ==(other)
+      return number == other.number
+    end
+
+    def eql?(other)
+      self == other
+    end
+
+    def hash
+      return number.hash
+    end
   end
 end

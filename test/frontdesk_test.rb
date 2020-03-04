@@ -127,5 +127,33 @@ describe "FrontDesk class" do
       front_desk.add_reservation(reservation_2)
       expect(front_desk.get_room_bookings(1, "8th Apr 2020", "10th Apr 2020")).must_equal []
     end
+
+    describe "#get_available_rooms" do
+      it "returns an instance of a Room in a list" do
+        reservation = Hotel::Reservation.new(room: Hotel::Room.new(1), start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
+        front_desk = Hotel::FrontDesk.new
+        front_desk.add_reservation(reservation)
+        expect(front_desk.get_available_rooms("2nd Apr 2020", "4th Apr 2020").first).must_be_instance_of Hotel::Room
+      end
+
+      it "returns an array with length equal to the number of available rooms" do
+        front_desk = Hotel::FrontDesk.new
+        18.times do |i|
+          reservation = Hotel::Reservation.new(room: Hotel::Room.new(i+1), start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
+          front_desk.add_reservation(reservation)
+        end
+        expect(front_desk.get_available_rooms("1st Apr 2020", "3rd Apr 2020").length).must_equal 2
+      end
+
+      it "returns an array with length 20 if no reservations made" do
+        front_desk = Hotel::FrontDesk.new
+        expect(front_desk.get_available_rooms("1st Apr 2020", "3rd Apr 2020").length).must_equal 20
+      end
+
+      it "returns the first room if there is no reservation made for it" do
+        front_desk = Hotel::FrontDesk.new
+        expect(front_desk.get_available_rooms("1st Apr 2020", "3rd Apr 2020").first.number).must_equal 1
+      end
+    end  
   end
 end
