@@ -170,6 +170,7 @@ describe Hotel::SystemCoordinator do
 
       start_date = Date.today + 5
       end_date = Date.today + 10
+      @reservation_range = Hotel::DateRange.new(start_date, end_date)
       @new_rs = @coordinator01.make_reservation(start_date, end_date)
     end
 
@@ -178,10 +179,15 @@ describe Hotel::SystemCoordinator do
     end
 
     it "stores the room_id in the Reservation returned" do
-      puts @new_rs.room_id
       expect(@new_rs.room_id).must_be_instance_of Integer
     end
 
+    it "reserves a room that will not be part of any other reservation overlapping that date range" do
+      room_chosen = @coordinator01.find_room(@new_rs.room_id)
+      (room_chosen.bookings.length - 1).times do |reservation|
+        expect(reservation.date_range).wont_equal @new_rs.date_range
+      end
+    end
   end
 
   describe "#find_room" do

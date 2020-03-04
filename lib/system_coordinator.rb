@@ -15,14 +15,14 @@ module Hotel
       return @rooms
     end
 
-    # #method# track reservation by date to find list of reservations for a specific date
+    # method to find list of reservations for a specific date
     def find_reservations_by_date (date)
       # what returns if no match
       reservations_by_date = @reservations.select{|reservation|reservation.date_range.include_date(date)}
       return reservations_by_date
     end
 
-    # #method# access the list of reservations for a specified room and a given date range
+    # method to access list of reservations for a specified room and a given date range
     def find_reservations_room_date(room_id, date_range)
       # what returns if no match?!!!!
       reservations_room_date = @reservations.select{
@@ -40,7 +40,7 @@ module Hotel
       return reservations_range
     end
 
-    # [method] avail rooms for that day. I can view a list of rooms that are not reserved for a given date range
+    # method to view a list of rooms that are not reserved for a given date range
     def find_availabile_rooms(given_range)
       available_rooms = []
       unavailabes = find_reservations_range(given_range)
@@ -66,7 +66,13 @@ module Hotel
     def make_reservation(start_date, end_date)
       range_created = Hotel::DateRange.new(start_date,end_date)
       available_rooms = find_availabile_rooms(range_created)
+
       # what returns if no match?!!!!! rescue an raised exception????????
+      # I want an exception raised if I try to reserve a room during a date range when all rooms are reserved, 
+      # so that I cannot make two reservations for the same room that overlap by date
+      # I want exception raised when an invalid date range is provided, 
+      # so that I can't make a reservation for an invalid date range
+
       chosen_room_id = available_rooms[0].room_id
       chosen_room = find_room(chosen_room_id)
       new_reservation = Hotel::Reservation.new(range_created, chosen_room_id)
