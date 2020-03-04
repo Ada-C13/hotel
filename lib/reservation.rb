@@ -4,19 +4,18 @@ module Hotel
 
 	class Reservation
 
-		attr_reader :room, :cost, :start_date, :end_date, :length_of_stay
+		attr_reader :room, :cost, :range, :length_of_stay
 
-		def initialize(room, start_date, end_date)
+		def initialize(room, range)
 			@room = room
 
-			if end_date < start_date
+			if range.end_date < range.start_date
 				raise ArgumentError.new("End date cannot be earlier than start.")
 			else
-				@start_date = start_date
-				@end_date = end_date
+				@range = range
 			end
 
-			@length_of_stay = @end_date - @start_date
+			@length_of_stay = @range.end_date - @range.start_date
 			@cost = (@length_of_stay * PRICE)
 		end
 		
