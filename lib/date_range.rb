@@ -10,16 +10,25 @@ module Hotel
       @end_date = end_date
     end
 
-    def overlap?(other)
+    def overlap?(range)
+      self.nights.times do |day|
+        range.nights.times do |day_in_range|
+          return true if (range.start_date + day_in_range) == (@start_date + day)
+        end
+      end
       return false
     end
 
     def include?(date)
+      self.nights.times do |day|
+        return true if date == (@start_date + day)
+      end
       return false
     end
 
     def nights
-      return 3
+      date_diff = @end_date - start_date
+      return date_diff.to_i
     end
   end
 end
