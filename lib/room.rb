@@ -15,7 +15,7 @@ module Hotel
       else
         @reservations.each do |reservation|
           if (reservation.range[-1] == 
-            date_range.range[0])
+            date_range.range[0]) || (reservation.range[0] == date_range.range[-1])
             next
           elsif (reservation.range & date_range.range).any?
             return false
