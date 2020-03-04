@@ -54,13 +54,22 @@ module Hotel
       end
     end
 
-    def reservation_by_date(date)
+    def reservation_by_start_date(date)
       if !date.is_a? Date
         raise ArgumentError.new("Invalid argument #{date}. Should be of type Date.")
       end
 
       return @reservations.select do |reservation|
         reservation.date_range.start_date == date
+      end
+    end
+
+    def reservations_by_date_range(start_date, end_date)
+      asked_date_range = Hotel::DateRange.new(start_date, end_date)
+
+      return @reservations.select do |reservation|
+        reservation.date_range.start_date == asked_date_range.start_date &&
+        reservation.date_range.end_date == asked_date_range.end_date
       end
     end
 
