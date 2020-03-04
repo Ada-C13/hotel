@@ -74,4 +74,22 @@ describe "DateRange" do
       expect(@date_range.overlap?(date_range)).must_equal false
     end
   end
+
+  describe "include?" do
+    it "returns true if DateRange includes date" do
+      date = Date.new(2020,5,4)
+      expect(@date_range.include?(date)).must_equal true
+    end
+
+    it "returns false if DateRange does not include date" do
+      date = Date.new(2020,5,25)
+      expect(@date_range.include?(date)).must_equal false
+    end
+
+    # 
+    it "returns false if date provided is the checkout date of the DateRange" do
+      date = Date.new(2020,5,5)
+      expect(@date_range.include?(date)).must_equal false
+    end
+  end
 end

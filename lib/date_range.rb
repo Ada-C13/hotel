@@ -39,7 +39,19 @@ module Hotel
         return false
       end
     end
-    
+
+    def include?(date)
+      if @range.include?(date)
+        if date == @range[-1]
+          return false
+        else
+          return true
+        end
+      else
+        return false
+      end
+    end
+
   end
 
 end
