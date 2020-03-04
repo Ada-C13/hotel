@@ -69,6 +69,9 @@ module Hotel
       return cost*200
     end 
 
+    #hotel block pseudocode
+    #ability to create hotel block
+    #make reservation within block
 
     
   end 
