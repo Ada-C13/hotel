@@ -2,18 +2,12 @@ require 'date'
 
 module Hotel
   class Reservation
-    attr_reader :start_date, :end_date, :room, :id
+    attr_reader :date_range, :room, :id
 
-    def initialize(id:, start_date:, end_date:, room: nil)
+    def initialize(id:, date_range:, room: nil)
       @id = id
-      @start_date = Date.parse(start_date)
-      @end_date = Date.parse(end_date)
-
-      raise ArgumentError.new("End date must be after start date") if @end_date < @start_date
+      @date_range = date_range
       @room = room
     end
-
-    
-
   end
 end
