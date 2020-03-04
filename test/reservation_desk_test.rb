@@ -83,10 +83,9 @@ describe "ReservationDesk class" do
       expect(result[0]).must_be_kind_of Hotel::Reservation
     end
 
-    # TODO:
-    # it "returns all reservations if no arguments are provided" do
-      
-    # end
+    it "Returns nil if room ID doesn't exist" do
+      assert_nil @reservation_desk.find_reservations(room_id: 100000, start_date: "2020-3-1", end_date: "2020-3-17")
+    end
 
     it "returns reservations for a specific room if room ID is provided" do
       result = @reservation_desk.find_reservations(room_id: 1, start_date: "2020-3-1", end_date: "2020-3-30")
@@ -114,11 +113,14 @@ describe "ReservationDesk class" do
       expect(result.length).must_equal 0
     end
 
+    
+
+    # TODO:
+
     # it "Returns nil if room ID doesn't exist" do
     #   assert_nil @reservation_desk.find_reservations(room_id: 100000, start_date: "2020-3-1", end_date: "2020-3-17")
     # end
-
-    # TODO:
+    
     # it "if end_date is nil, returns all reservations from the start date onward" do
     # #TODO: wording
     #   result = @reservation_desk.find_reservations(room_id: 1, start_date: "2020-3-1")

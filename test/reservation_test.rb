@@ -13,8 +13,8 @@ describe "Reservation class" do
       expect(@reservation).must_be_kind_of Hotel::Reservation
     end
 
-    it "stores start and end dates as Date objects" do
-      expect(@reservation.start_date).must_be_kind_of Date
+    it "has date_range variable which holds an instance of DateRange" do
+      expect(@reservation.date_range).must_be_kind_of Hotel::DateRange
     end
 
   end

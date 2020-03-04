@@ -17,11 +17,10 @@ module Hotel
       room = rooms.find { |room| room.id == room_id}
       return nil if room == nil
 
-      start_date = Date.parse(start_date)
-      end_date = Date.parse(end_date)
+      date_range = DateRange.new(start_date: start_date, end_date: end_date)
       
       reservations = room.reservations.select { |reservation| 
-        start_date < reservation.end_date && end_date > reservation.start_date 
+        reservation.date_range.overlap? (date_range)
       }
     end
 
