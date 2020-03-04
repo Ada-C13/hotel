@@ -12,8 +12,9 @@ module Hotel
       @bookings = bookings || []
     end
 
-    # def add_reservation_to_room
-    # end
+    def add_booking_to_room(new_reservation)
+      @bookings << new_reservation
+    end
 
 
     # def self.all

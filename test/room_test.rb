@@ -32,8 +32,30 @@ describe Hotel::Room do
     # it "stores an @reservations array where each element is a Reservation instance " do
     #   expect(@room01.bookings[0]).must_be_instance_of Hotel::Reservation
     # end
+  
+  end
 
-    
+  describe "#add_booking_to_room" do
+    before do
+      date_range = Hotel::DateRange.new(Date.today + 5, Date.today + 10)
+      room_id = 10
+      @reservation01 = Hotel::Reservation.new(date_range, room_id)
+    end
+
+    it "returns an array of all the current bookings" do
+      expect(@room01.add_booking_to_room(@reservation01)).must_be_instance_of Array
+    end
+
+    it "includes the new booking into @bookings" do
+      expect(@room01.add_booking_to_room(@reservation01)).must_include @reservation01
+    end
+
+    it "increases @bookings size by 1" do
+      before_size = @room01.bookings.length
+      after_size = (@room01.add_booking_to_room(@reservation01)).length
+      expect(after_size).must_equal before_size + 1
+    end
+
   end
 
   # describe "self.all" do
