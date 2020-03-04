@@ -35,7 +35,8 @@ module Hotel
       reservation_list = []
       found_room = find_room(room)
       
-      found_room.reservations.each do |reservation|
+    # TODO: determine why hotel_manager_test > list_reservations_by_room > returns the correct reservations is failing
+    found_room.reservations.each do |reservation|
         if found_room.check_availability(date_range) == false
           reservation_list.push(reservation)
         end
@@ -43,5 +44,20 @@ module Hotel
 
       return reservation_list
     end
+
+    def list_reservations_by_date(date)
+      reservation_list = []
+
+      @rooms.each do |room|
+        room.reservations.each do |reservation|
+          if reservation.range.include?(date)
+            reservation_list.push(reservation)
+          end
+        end
+      end
+
+      return reservation_list
+    end
+
   end
 end
