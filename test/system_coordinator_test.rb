@@ -145,4 +145,30 @@ describe Hotel::SystemCoordinator do
     end
   end
 
+  describe "#make_reservation" do
+    before do
+      room01 = Hotel::Room.new(10)
+      date_range = Hotel::DateRange.new(Date.today + 5, Date.today + 10)
+      reservation01 = Hotel::Reservation.new(date_range, 10)
+      room01.add_booking_to_room(reservation01)
+      @coordinator01.reservations << reservation01
+      
+
+
+      start_date = Date.today + 5
+      end_date = Date.today + 10
+      @new_rs = @coordinator01.make_reservation(start_date, end_date)
+    end
+
+    it "returns a Reservation" do
+      expect(@new_rs).must_be_instance_of Hotel::Reservation
+    end
+
+    it "stores the room_id in the Reservation returned" do
+      puts @new_rs.room_id
+      expect(@new_rs.room_id).must_be_instance_of Integer
+    end
+
+  end
+
 end

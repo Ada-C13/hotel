@@ -1,5 +1,6 @@
 require_relative 'room'
 require_relative 'date_range'
+require_relative 'reservation'
 
 module Hotel
   class SystemCoordinator    
@@ -51,18 +52,22 @@ module Hotel
 
       return available_rooms
     end
+
+    # method to find room
+    # def find_room(room_id)
    
 
     # method to make reservation
-    # def make_reservation(start_date, end_date)
-    #   date_range = Hotel::DateRange.new(start_date,end_date)
-    #   room_id = 1
-    #   new_reservation = Hotel::Reservation.new(date_range, room_id)
-    #   @reservations << new_reservation
-    #  push new reservation into room reservation container 
-    #   return new_reservation
+    def make_reservation(start_date, end_date)
+      range_created = Hotel::DateRange.new(start_date,end_date)
+      available_rooms = find_availabile_rooms(range_created)
+      chosen_room_id = available_rooms[0].room_id
 
-    # end
+      new_reservation = Hotel::Reservation.new(range_created, chosen_room_id)
+      @reservations << new_reservation
+      #push new reservation into room reservation container 
+      return new_reservation
+    end
 
     
 
