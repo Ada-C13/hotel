@@ -13,7 +13,15 @@ describe Hotel::DateRange do
       expect(@range).must_be_kind_of Hotel::DateRange
     end
 
-    it "Can be initialized with two dates" do
+    it "start_date is a Date" do
+      expect(@start_date).must_be_kind_of Date
+    end
+
+    it "end_date is a Date" do
+      expect(@end_date).must_be_kind_of Date
+    end
+
+    it "can be initialized with two dates" do
       expect(@range.start_date).must_equal @start_date
       expect(@range.end_date).must_equal @end_date
     end
