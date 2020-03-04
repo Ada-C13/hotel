@@ -109,22 +109,40 @@ describe Hotel::SystemCoordinator do
     end
   end
 
-  # describe "#find_availabile_rooms" do
-  #   before do
-  #     @room_id = 10
-  #     @room01 = Hotel::Room.new(@room_id)
+  describe "#find_availabile_rooms" do
+    before do
+      @room_id = 10
+      @room01 = Hotel::Room.new(@room_id)
       
-  #     @date_range = Hotel::DateRange.new(Date.today + 5, Date.today + 10)
-  #     @reservation01 = Hotel::Reservation.new(@date_range, @room_id)
-  #     @coordinator01.reservations << @reservation01
-  #     @room01.add_booking_to_room(@reservation01)
+      @date_range = Hotel::DateRange.new(Date.today + 5, Date.today + 10)
+      @reservation01 = Hotel::Reservation.new(@date_range, @room_id)
+      @coordinator01.reservations << @reservation01
+      @room01.add_booking_to_room(@reservation01)
       
-  #     @reservation_list = @coordinator01.find_reservations_room_date(@room_id, @date_range)
-  #   end
+      @available_rooms = @coordinator01.find_availabile_rooms(@date_range)
+    end
 
-  #   it "returns an array" do
-  #     expect(@coordinator01.find_availabile_rooms(@date_range)).must_be_instance_of Array
-  #   end
-  # end
+    it "returns an array" do
+      expect(@available_rooms).must_be_instance_of Array
+    end
+
+    it "stores Room instances in the array" do
+      @available_rooms.each do |room|
+        expect(room).must_be_instance_of Hotel::Room
+      end
+    end
+
+    it "represents number of rooms as the size of the array" do
+      expect(@available_rooms.length).must_equal 19
+    end
+
+    it "should not include rooms that have reservations in the given date_range" do
+      @available_rooms.each do |room|
+        room.bookings.each do |booking|
+          expect(booking.date_range.overlapping(@date_range)).must_equal false
+        end
+      end
+    end
+  end
 
 end

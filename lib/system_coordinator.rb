@@ -30,10 +30,27 @@ module Hotel
       # reservations_room_date = selected_room.bookings.select{|reservation|reservation.date_range.overlapping(date_range)}
     end
 
-    # [method] avail rooms for that day. I can view a list of rooms that are not reserved for a given date range
-    # def find_availabile_rooms(date_range)
+    def find_reservations_range(given_range)
+      # what returns if no match
+      reservations_range = @reservations.select{|reservation|reservation.date_range.overlapping(given_range)}
+      return reservations_range
+    end
 
-    # end
+    # [method] avail rooms for that day. I can view a list of rooms that are not reserved for a given date range
+    def find_availabile_rooms(given_range)
+      available_rooms = []
+      unavailabes = find_reservations_range(given_range)
+      # unavailabes = @reservations.select{|reservation|reservation.date_range.overlapping(given_range)}
+      unavailable_room_ids = unavailabes.map do |reservation|
+        reservation.room_id
+      end
+
+      unavailable_room_ids.each do |id|
+        available_rooms = @rooms.reject{|room|room.room_id == id}
+      end
+
+      return available_rooms
+    end
    
 
     # method to make reservation
@@ -62,3 +79,18 @@ module Hotel
 
   end
 end
+
+
+# def find_availabile_rooms(given_range)
+# @rooms.each do |room|
+#   room.bookings.find{|reservation|reservation.date_range.overlapping(given_range)}
+
+
+#   room.bookings.each do |reservation|
+#     if reservation.date_range.overlapping(given_range)
+#       #not available
+#       #break
+#     end
+#   end
+#   available_rooms << room
+# end
