@@ -33,26 +33,25 @@ module Hotel
       return available_rooms
     end
 
-    start_date = Date.new(2020,3,1)
-    end_date = Date.new(2020,3,4)
-    dates = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
-    front_desk = Hotel::FrontDesk.new
-
     def find_room(room_number)
       found_room = @rooms.select {|room| room.room_number == room_number}
       return found_room[0]
     end
 
-    # def find_reservation_with(date_range)
-    #   res_w_given_date = @reservations.select {|reservation| reservation.date_range == date_range}
-    #   return res_w_given_date 
-    # end
+    def find_reservation_with(room, date_range)
+      res_w_given_date = @reservations.select {|reservation| reservation.date_range == date_range && reservation.room == room}
+      return res_w_given_date 
+    end
 
+  #   start_date = Date.new(2020,3,1)
+  #   end_date = Date.new(2020,3,4)
+  #   dates = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
+  #   front_desk = Hotel::FrontDesk.new
+  #   room = front_desk.rooms[0]
 
-    # def self.reservations
-    #   @reservations = [] 
-    #   return @reservations
-    # end
+  #   front_desk.add_reservation(dates)
+  #  p front_desk.find_reservation_with(room, dates)
+    
 
 
   end

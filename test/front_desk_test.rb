@@ -63,16 +63,44 @@ describe "front desk" do
 
   end
 
-  # describe "find_reservation_with(date_range)" do
-  #   before do
-  #     @dates = Hotel::DateRange.new(start_date: "3/4/2020", end_date: "3/7/2020")
-  #   end
+  describe "available_rooms" do
+    before do
+      @dates = Hotel::DateRange.new(start_date: Date.new(2020, 3, 4), end_date: Date.new(2020, 3, 7))
+      @front_desk.add_reservation(@dates)
+    end
 
-  #   it "returns an array of reservations that match the date" do
-  #     expect(@front_desk.find_reservation_with(@date)).must_be_instance_of Array
-  #     expect(@front_desk.find_reservation_with(@date).sample).must_be_instance_of (Hotel::Reservation || nil) 
-  #     #make a test where one array will be empty so I can check nil, and another where it will have a reservation
-  #   end
+    it "returns an array of all available rooms given a date range" do
+      expect(@front_desk.available_rooms(@dates)).must_be_instance_of Array
+    end
 
-  # end
+    it "has room objects contained in the array" do
+      expect(@front_desk.available_rooms(@dates).sample).must_be_instance_of Hotel::Room
+    end
+
+    it "returns array of rooms that doesn't include any rooms that are booked for same date range" do
+      expect(@front_desk.available_rooms(@dates).count).must_equal 19
+      expect(@front_desk.available_rooms(@dates)[0].room_number).must_equal 2
+    end
+  end
+
+  describe "find_reservation_with(date_range)" do
+    before do
+      @dates = Hotel::DateRange.new(start_date: Date.new(2020, 3, 4), end_date: Date.new(2020, 3, 7))
+      @room = @front_desk.rooms[0]
+    end
+
+    it "returns an array of reservations that match the date" do
+      expect(@front_desk.find_reservation_with(@room, @dates)).must_be_instance_of Array
+    end
+
+    it "returns an empty array if there are no reservations" do
+      expect(@front_desk.find_reservation_with(@room, @dates).sample).must_equal nil
+    end
+
+    it "returns reservations if there are reservations for given room and date range" do
+      @front_desk.add_reservation(@dates)
+      expect(@front_desk.find_reservation_with(@room, @dates).sample).must_be_instance_of  Hotel::Reservation 
+    end
+
+  end
 end
