@@ -1,6 +1,6 @@
 require_relative 'test_helper'
 
-describe "reservation class" do 
+xdescribe "reservation class" do 
   describe "initiative method" do 
     before do 
       @reservation = Hotel::Reservation.new(

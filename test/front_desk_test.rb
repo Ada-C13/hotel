@@ -30,11 +30,13 @@ describe "front_desk" do
     it "return a list of all reservations" do 
       manager = hotel_manager
       reservation_1 = Hotel::Reservation.new(
+        reservation_id:1234,
         date_range: Hotel::DateRange.new(
           start_date:[2020,3,2],end_date:[2020,3,5]
         )
       )
       reservation_2 = Hotel::Reservation.new(
+        reservation_id:1235,
         date_range: Hotel::DateRange.new(
           start_date:[2020,4,1],end_date:[2020,4,8]
         )
@@ -46,28 +48,35 @@ describe "front_desk" do
       expect(result).must_match (/2020-03-05/)
       expect(result).must_match (/2020-04-01/)
       expect(result).must_match (/2020-04-08/)
+      expect(result).wont_match (/1999-04-08/)
+      expect(result).must_match (/1234/)
+      expect(result).must_match (/1235/)
     end 
   end
   
   describe "#check_date_reservations" do 
-    it "return a list of all reservations under a specific date" do 
+    it "return a list of all reservations under a specific date 2020-03-05" do 
       manager = hotel_manager
       reservation_1 = Hotel::Reservation.new(
+        reservation_id:1234,
         date_range: Hotel::DateRange.new(
           start_date:[2020,3,2],end_date:[2020,3,10]
         )
       )
       reservation_2 = Hotel::Reservation.new(
+        reservation_id:1000,
         date_range: Hotel::DateRange.new(
           start_date:[2020,4,1],end_date:[2020,4,8]
         )
       )
       reservation_3 = Hotel::Reservation.new(
+        reservation_id:1001,
         date_range: Hotel::DateRange.new(
           start_date:[2020,3,3],end_date:[2020,3,7]
         )
       )
       reservation_4 = Hotel::Reservation.new(
+        reservation_id:2000,
         date_range: Hotel::DateRange.new(
           start_date:[2020,3,4],end_date:[2020,3,5]
         )
@@ -84,37 +93,45 @@ describe "front_desk" do
       expect(result).must_match (/2020-03-10/)
       expect(result).must_match (/2020-03-03/)
       expect(result).must_match (/2020-03-07/)
+      expect(result).must_match (/1234/)
+      expect(result).must_match (/1001/)
       expect(result).wont_match (/2020-03-04/)
       expect(result).wont_match (/2020-03-05/)
       expect(result).wont_match (/2020-04-01/)
       expect(result).wont_match (/2020-04-08/)
+      expect(result).wont_match (/1000/)
+      expect(result).wont_match (/2000/)
 
     end 
   end 
   
   describe "#room_reservations_and_date" do 
     
-    it "return a list of reservations under a room and within date_range" do 
+    it "return a list of reservations under a room and within date_range Room 2 between 03/4 to 03/20" do 
       manager = hotel_manager
       reservation_1 = Hotel::Reservation.new(
+        reservation_id:1000,
         date_range: Hotel::DateRange.new(
           start_date:[2020,3,2],end_date:[2020,3,10]
         ),
         room_num:1
       )
       reservation_2 = Hotel::Reservation.new(
+        reservation_id:1111,
         date_range: Hotel::DateRange.new(
           start_date:[2020,4,1],end_date:[2020,4,8]
         ),
         room_num:2
       )
       reservation_3 = Hotel::Reservation.new(
+        reservation_id:2121,
         date_range: Hotel::DateRange.new(
           start_date:[2020,3,3],end_date:[2020,3,7]
         ),
         room_num:2
       )
       reservation_4 = Hotel::Reservation.new(
+        reservation_id:3000,
         date_range: Hotel::DateRange.new(
           start_date:[2020,3,7],end_date:[2020,3,9]
         ),
@@ -133,9 +150,14 @@ describe "front_desk" do
       expect(result).must_match (/2020-03-07/)
       expect(result).must_match (/2020-03-07/)
       expect(result).must_match (/2020-03-09/)
+      expect(result).must_match (/2121/)
+      expect(result).must_match (/3000/)
+
       expect(result).wont_match (/2020-04-01/)
       expect(result).wont_match (/2020-04-08/)
       expect(result).wont_match (/2020-03-10/)
+      expect(result).wont_match (/1000/)
+      expect(result).wont_match (/1111/)
     end 
   end
   describe "#request_reservation_wave1" do
