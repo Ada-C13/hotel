@@ -36,4 +36,22 @@ describe 'DateRange class' do
       expect(Hotel::DateRange.get_all_dates(@dates.arrive, @dates.arrive)).must_equal one_date
     end
   end
+
+  describe 'overlap? method' do
+    it 'should return true if given dates are included in reservaton dates' do
+      expect(@dates.overlap?(Date.new(1993, 2, 24), Date.new(1993, 2, 26))).must_equal true
+      expect(@dates.overlap?(Date.new(1993, 2, 22), Date.new(1993, 2, 28))).must_equal true
+      expect(@dates.overlap?(Date.new(1993, 2, 22), Date.new(1993, 2, 26))).must_equal true
+      expect(@dates.overlap?(Date.new(1993, 2, 25), Date.new(1993, 2, 26))).must_equal true
+      expect(@dates.overlap?(Date.new(1993, 2, 25), Date.new(1993, 2, 28))).must_equal true
+
+    end
+
+    it 'should return false if given dates are not included in reservation dates' do
+      expect(@dates.overlap?(Date.new(1993, 2, 22), Date.new(1993, 2, 23))).must_equal false
+      expect(@dates.overlap?(Date.new(1993, 2, 22), Date.new(1993, 2, 24))).must_equal false
+      expect(@dates.overlap?(Date.new(1993, 2, 26), Date.new(1993, 2, 28))).must_equal false
+      expect(@dates.overlap?(Date.new(1993, 2, 27), Date.new(1993, 2, 28))).must_equal false
+    end
+  end
 end
