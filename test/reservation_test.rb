@@ -27,3 +27,15 @@ describe "initialize" do
     expect(@reservation.date_range).must_be_instance_of Hotel::DateRange
   end
 end
+
+describe "cost method" do
+  before do
+    room = Hotel::Room.new(1, 200)
+    @reservation = Hotel::Reservation.new([2020, 1, 28], [2020, 1, 30], room)
+  end
+
+  it "can calculate correct cost" do
+    expect(@reservation.cost).must_be_instance_of Integer
+    expect(@reservation.cost).must_equal 400
+  end
+end

@@ -114,7 +114,7 @@ describe "hotel reception" do
       expect(@reception.reservations_by_room_date(room2, date2)).must_be_instance_of Hotel::Reservation
     end
     
-    it "will return the correct reservation" do
+    it "will return the correct reservation object" do
       date = Date.new(2020, 2, 14)
       room = 2
       my_reservation = @reception.reservations[1]

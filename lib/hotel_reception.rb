@@ -36,7 +36,7 @@ module Hotel
       reservations.each do |res|
         unavail_rooms << res.room_id if res.date_range.overlap?(dates)
       end
-      return rooms.difference(unavail_rooms)               
+      return rooms.difference(unavail_rooms)
     end
 
     def make_reservation(check_in_time, check_out_time)
