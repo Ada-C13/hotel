@@ -44,6 +44,26 @@ module Hotel
       @reservations << Hotel::Reservation.new(date_range, selected_room)
     end
 
+    def reservation_by_room(room)
+      if !room.is_a? Integer
+        raise ArgumentError.new("Invalid argument #{rooms}. Should be of type Integer.")
+      end
+
+      return @reservations.select do |reservation|
+        reservation.room == room
+      end
+    end
+
+    def reservation_by_date(date)
+      if !date.is_a? Date
+        raise ArgumentError.new("Invalid argument #{date}. Should be of type Date.")
+      end
+
+      return @reservations.select do |reservation|
+        reservation.date_range.start_date == date
+      end
+    end
+
 
 
 
