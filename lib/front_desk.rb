@@ -87,9 +87,11 @@ module Hotel
       num_of_rooms.times do 
         new_block = self.request_reservation(start_date,end_date)
         new_block.room_rate = room_rate
+        new_block.block_tag = "block-available"
         self.reservations << new_block
         block_array << new_block
       end 
+      p block_array
       return block_array
       
 

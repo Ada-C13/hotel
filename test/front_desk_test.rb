@@ -223,26 +223,9 @@ describe "front_desk" do
     end 
     it "will not randomly assign same room same dates" do
       manager = hotel_manager
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
-      manager.request_reservation([2020,4,9],[2020,4,10])
+      20.times do 
+        manager.request_reservation([2020,4,9],[2020,4,10])
+      end
       room_num_array = manager.reservations.map {|bookings|bookings.room_num.to_i}
       expect(room_num_array.sum).must_equal 210
     end 
@@ -289,8 +272,26 @@ describe "front_desk" do
         expect(a_block).must_be_kind_of Array
         expect(a_block.length).must_equal 2 
         expect(manager.reservations[0].room_rate).must_equal 180
-
+        expect(manager.reservations[0].block_tag).must_equal "block-available"
       end 
+      it "raise ArgumentError if try block more than 5 rooms" do 
+        manager = hotel_manager
+        start_date = [2020,3,2]
+        end_date = [2020,3,4]
+        expect{ manager.create_block(start_date,end_date,6,180)}.must_raise ArgumentError
+      end 
+      it "raise ArgumentError if no rooms available for block" do 
+        manager = hotel_manager
+        start_date = [2020,4,9]
+        end_date = [2020,4,10]
+
+        16.times do 
+          manager.request_reservation([2020,4,9],[2020,4,10])
+        end 
+
+        expect{ manager.create_block(start_date,end_date,6,180)}.must_raise ArgumentError
+      end 
+
     end 
   end 
 
