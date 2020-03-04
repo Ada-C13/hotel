@@ -83,23 +83,28 @@ describe "front desk" do
     end
   end
 
-  describe "find_reservation_with(date_range)" do
+  describe "find_reservation_with" do
     before do
       @dates = Hotel::DateRange.new(start_date: Date.new(2020, 3, 4), end_date: Date.new(2020, 3, 7))
       @room = @front_desk.rooms[0]
     end
 
     it "returns an array of reservations that match the date" do
-      expect(@front_desk.find_reservation_with(@room, @dates)).must_be_instance_of Array
+      expect(@front_desk.find_reservation_with(room: @room, date_range: @dates)).must_be_instance_of Array
     end
 
     it "returns an empty array if there are no reservations" do
-      expect(@front_desk.find_reservation_with(@room, @dates).sample).must_equal nil
+      expect(@front_desk.find_reservation_with(room: @room, date_range: @dates).sample).must_equal nil
     end
 
     it "returns reservations if there are reservations for given room and date range" do
       @front_desk.add_reservation(@dates)
-      expect(@front_desk.find_reservation_with(@room, @dates).sample).must_be_instance_of  Hotel::Reservation 
+      expect(@front_desk.find_reservation_with(room: @room, date_range: @dates).sample).must_be_instance_of  Hotel::Reservation 
+    end
+
+    it "returns reservations if there are reservations for given date range" do
+      @front_desk.add_reservation(@dates)
+      expect(@front_desk.find_reservation_with(date_range: @dates).sample).must_be_instance_of  Hotel::Reservation 
     end
 
   end

@@ -38,9 +38,12 @@ module Hotel
       return found_room[0]
     end
 
-    def find_reservation_with(room, date_range)
-      res_w_given_date = @reservations.select {|reservation| reservation.date_range == date_range && reservation.room == room}
+    def find_reservation_with(room: nil, date_range:)
+      res_w_given_date = @reservations.select {|reservation| (reservation.date_range == date_range && reservation.room == room) || reservation.date_range == date_range }
       return res_w_given_date 
+    end
+
+    def total_cost(Reservation)
     end
 
   #   start_date = Date.new(2020,3,1)
@@ -50,7 +53,9 @@ module Hotel
   #   room = front_desk.rooms[0]
 
   #   front_desk.add_reservation(dates)
-  #  p front_desk.find_reservation_with(room, dates)
+  #  p front_desk.find_reservation_with( date_range: dates)
+  #  puts "\n"
+  #  p front_desk.find_reservation_with( room: room, date_range: dates)
     
 
 
