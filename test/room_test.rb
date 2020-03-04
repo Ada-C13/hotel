@@ -4,10 +4,7 @@ describe Hotel::Room do
   describe "initialize" do
     before do
       @room_id = 5
-      @cost = 200
-      # @rez_1 = Hotel::Reservation.new(3, @date_range, room_id, cost)
-      @rez_list = []
-      @room = Hotel::Room.new(@room_id, @cost, @rez_list)
+      @room = Hotel::Room.new(@room_id)
     end
 
     it "is an instance of Room" do
@@ -26,9 +23,10 @@ describe Hotel::Room do
       end
     end
 
-    it "stores a room_cost" do
-      expect(@room.cost).must_equal @cost
-    end
+    # don't think I need this anymore
+    # it "stores a room_cost" do
+    #   expect(@room.cost).must_equal @cost
+    # end
 
     # will need to adjust this test if room cost can vary in future waves
     it "has a fixed cost of 200" do

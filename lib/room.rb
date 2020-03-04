@@ -12,13 +12,14 @@
 
 module Hotel
   class Room
-    attr_reader :room_id, :cost, :rez_list
+    attr_reader :room_id, :cost
+    attr_accessor :rez_list
     # is the Room Class able to change its own rez_list, or just the controller?
-    def initialize(room_id, cost, rez_list)
+    def initialize(room_id)
       @room_id = room_id
-      @cost = cost
+      @cost = 200
       @rez_list = []
-      
+
       raise ArgumentError if room_id <= 0 || room_id > 20
     end
 

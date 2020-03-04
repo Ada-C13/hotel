@@ -3,7 +3,8 @@ require_relative 'date_range'
 module Hotel
   class Reservation
 
-    def initialize(id,date_range,room_id,cost)
+    attr_reader :id, :date_range, :room_id
+    def initialize(id,date_range,room_id)
       @id = id
       if id < 1
         raise ArgumentError
@@ -17,8 +18,6 @@ module Hotel
         raise ArgumentError
       end
 
-      @cost = cost
-      raise ArgumentError if cost <= 0
     end
 
   end

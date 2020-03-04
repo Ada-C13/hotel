@@ -10,8 +10,7 @@ describe Hotel::Reservation do
       id = 1
       @date_range = Hotel::DateRange.new(start_date, end_date)
       room_id = 2
-      cost = 200
-      @reservation = Hotel::Reservation.new(id, @date_range, room_id, cost)
+      @reservation = Hotel::Reservation.new(id, @date_range, room_id)
     end
 
     # add must_respond_to tests?
@@ -24,7 +23,7 @@ describe Hotel::Reservation do
     it "throws an argument error with a bad ID value" do
       [-1, 0, 0.25, nil, false, "hello"].each do |num|
         expect do
-          Hotel::Reservation.new(id:num, date_range:@date_range, room_id:2, cost:200)
+          Hotel::Reservation.new(id:num, date_range:@date_range, room_id:2)
         end.must_raise ArgumentError
       end
     end
@@ -32,15 +31,7 @@ describe Hotel::Reservation do
     it "throws an argument error if given an invalid room_ID value" do
       [-1, 0, 21, nil, true, "hello"].each do |num|
         expect do
-          Hotel::Reservation.new(id:1, date_range:@date_range, room_id:num, cost:200)
-        end.must_raise ArgumentError
-      end
-    end
-
-    it "throws an argument error if given an invalid cost" do
-      [-1, 0, "string", false, nil].each do |num|
-        expect do
-          Hotel::Reservation.new(id:1, date_range:@date_range, room_id:2, cost:num)
+          Hotel::Reservation.new(id:1, date_range:@date_range, room_id:num)
         end.must_raise ArgumentError
       end
     end
