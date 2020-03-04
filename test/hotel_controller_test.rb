@@ -3,15 +3,28 @@ require_relative "test_helper"
 describe Hotel::HotelController do
   before do
     @hotel_controller = Hotel::HotelController.new
-    @date = Date.parse("2020-08-04")
+    @date = Date.parse("2020-03-04")
   end
+
   describe "wave 1" do
     describe "rooms" do
       it "returns a list" do
-        rooms = @hotel_controller.rooms
+        rooms = @hotel_controller.list_rooms
         expect(rooms).must_be_kind_of Array
       end
     end
+
+    describe "reserve_room" do
+      it "takes two Date objects and returns a Reservation" do
+        start_date = @date
+        end_date = start_date + 3
+
+        reservation = @hotel_controller.reserve_room(start_date, end_date)
+
+        expect(reservation).must_be_kind_of Hotel::Reservation
+      end
+    end
+
     describe "reservations" do
       before do
         @hotel_controller.reserve_room(Date.new(2020,01,01), Date.new(2020,01,05))
@@ -28,17 +41,12 @@ describe Hotel::HotelController do
           res.must_be_kind_of Hotel::Reservation
         end
       end
-    end
 
-    describe "reservations" do
-      it "takes a Date and returns a list of Reservations" do
-        reservation_list = @hotel_controller.reservations(@date)
-
-        expect(reservation_list).must_be_kind_of Array
-        reservation_list.each do |res|
-          res.must_be_kind_of Reservation
-        end
+      it "returns an accurate list of reservations" do
+        expect(@reservation_list.length).must_equal 3
       end
+    
+
     end
   end
 
