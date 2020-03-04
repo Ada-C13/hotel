@@ -2,7 +2,13 @@ require_relative "test_helper"
 
 describe Hotel::Reservation do
   before do
-    @reservation = Hotel::Reservation.new(start_date = Date.new(2021, 01, 01), end_date = start_date + 3, room = 2, cost = 200)
+    @reservation = Hotel::Reservation.new(
+      id = 3,
+      start_date = Date.new(2021, 01, 01),
+      end_date = start_date + 3,
+      room = 2,
+      cost = 200
+    )
   end
 
   describe "initialize" do
@@ -13,10 +19,7 @@ describe Hotel::Reservation do
 
   describe "cost" do
     it "returns a number" do
-      start_date = Date.new(2017, 01, 01)
-      end_date = start_date + 3
-      reservation = Hotel::Reservation.new(start_date, end_date, nil)
-      expect(reservation.cost).must_be_kind_of Numeric
+      expect(@reservation.cost).must_be_kind_of Numeric
     end
   end
 end

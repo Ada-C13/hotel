@@ -3,6 +3,7 @@ module Hotel
     attr_accessor :start_date, :end_date
 
     def initialize(start_date, end_date)
+      @start_date = start_date
     end
 
     def overlap?(other)
@@ -13,6 +14,7 @@ module Hotel
       return false
     end
 
+    # calculate the number of nights for a reservation (end date is not a night)
     def nights
       return 3
     end

@@ -1,18 +1,21 @@
 require_relative "test_helper"
 
 describe Hotel::DateRange do
-  describe "consructor" do
+  before do
+    start_date = Date.new(2021, 01, 01)
+    end_date = start_date + 3
+
+    range = Hotel::DateRange.new(start_date, end_date)
+  end
+
+  describe "constructor" do
     it "Can be initialized with two dates" do
-      start_date = Date.new(2017, 01, 01)
-      end_date = start_date + 3
-
-      range = Hotel::DateRange.new(start_date, end_date)
-
+      
       expect(range.start_date).must_equal start_date
       expect(range.end_date).must_equal end_date
     end
 
-    xit "is an an error for negative-lenght ranges" do
+    xit "is an an error for negative-length ranges" do
     end
 
     xit "is an error to create a 0-length range" do
