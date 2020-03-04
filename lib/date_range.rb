@@ -16,6 +16,16 @@ module Hotel
       end
     end
 
+    def create_days_array
+      days = []
+      days_in_range = @check_in_time.clone
+      until days_in_range === @check_out_time.next
+        days << days_in_range
+        days_in_range = days_in_range.next
+      end
+      return days
+    end
+
     def include?(date)
       return self.create_days_array.include?(date)
     end
@@ -30,16 +40,6 @@ module Hotel
 
     def nights
       return self.create_days_array.length - 1
-    end
-
-    def create_days_array
-      days = []
-      days_in_range = @check_in_time.clone
-        until days_in_range === @check_out_time.next
-          days << days_in_range
-          days_in_range = days_in_range.next
-        end
-      return days
     end
   end
 end

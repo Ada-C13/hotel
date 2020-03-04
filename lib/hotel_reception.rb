@@ -7,12 +7,12 @@ module Hotel
       @reservations = []
       20.times do |i|
         i += 1
-        @rooms << i
+        @rooms << Hotel::Room.new(i, 200)
       end
     end
 
-    def reservations_by_room_date(room, date)
-      my_reservations = reservations.select { |res| res.room_id == room }
+    def reservations_by_room_date(room_id, date)
+      my_reservations = reservations.select { |res| res.room.id == room_id }
       return my_reservations.difference(self.reservations_by_date(date))
     end
 
@@ -26,22 +26,16 @@ module Hotel
     end
 
     def available_rooms(check_in_time, check_out_time)
-      #returns an array of room numbers that are available on a given date
       dates = Hotel::DateRange.new(check_in_time, check_out_time)
 
-      # unavail_rooms = reservations.map { |res| res.room_id if res.date_range.overlap?(dates) }
-
       unavail_rooms = []
-      #for this day, do they overlap?
-      reservations.each do |res|
-        unavail_rooms << res.room_id if res.date_range.overlap?(dates)
-      end
+      unavail_rooms = reservations.select { |res| res.date_range.overlap?(dates) }
       return rooms.difference(unavail_rooms)
     end
 
     def make_reservation(check_in_time, check_out_time)
-      room_id = available_rooms(check_in_time, check_out_time).first
-      @reservations << Hotel::Reservation.new(check_in_time, check_out_time, room_id)
+      room = available_rooms(check_in_time, check_out_time).first
+      @reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
       return reservations.last
     end
   end

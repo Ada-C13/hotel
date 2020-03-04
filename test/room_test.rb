@@ -12,4 +12,17 @@ describe "initialize" do
     expect(my_room.cost).must_be_instance_of Integer
   end
 
+  it "will throw an error if you give non-integer arguments" do
+    expect{
+      Hotel::Room.new(1, "this")
+    }.must_raise ArgumentError
+
+    expect{
+      Hotel::Room.new("that", 200)
+    }.must_raise ArgumentError
+
+    expect{
+      Hotel::Room.new("this", "that")
+    }.must_raise ArgumentError
+  end
 end

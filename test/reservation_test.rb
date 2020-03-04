@@ -2,7 +2,10 @@ require_relative 'test_helper'
 
 describe "initialize" do
   before do
-    @reservation = Hotel::Reservation.new([2020, 1, 28], [2020, 1, 30], 1)
+    check_in_time = [2020, 1, 28]
+    check_out_time = [2020, 1, 30]
+    room = Hotel::Room.new(1, 200)
+    @reservation = Hotel::Reservation.new(check_in_time, check_out_time, room)
   end
 
   it "can be called" do
@@ -11,27 +14,27 @@ describe "initialize" do
   
   it "will have the appropriate readable attributes" do
     expect(@reservation).must_respond_to :id
-    expect(@reservation).must_respond_to :room_id
+    expect(@reservation.id.to_s).must_match /\d{6}/
+    expect{@reservation.id = 5}.must_raise NoMethodError
+
+    expect(@reservation).must_respond_to :room
+    expect(@reservation.room).must_be_instance_of Hotel::Room
+    expect(@reservation.room.id).must_equal 1
+    expect{@reservation.room.id = 5}.must_raise NoMethodError
+
     expect(@reservation).must_respond_to :date_range
-  end
-
-  it "will have a unique reservation id" do
-    
-  end
-
-  it "will find a room that didn't have a reservation on it previously" do
-
-  end
-
-  it "will have a DateRange object" do
     expect(@reservation.date_range).must_be_instance_of Hotel::DateRange
+    expect(@reservation.date_range.check_in_time.mday).must_equal 28
+    expect{@reservation.date_range.check_in_time = 42}.must_raise NoMethodError
   end
 end
 
 describe "cost method" do
   before do
+    check_in_time = [2020, 1, 28]
+    check_out_time = [2020, 1, 30]
     room = Hotel::Room.new(1, 200)
-    @reservation = Hotel::Reservation.new([2020, 1, 28], [2020, 1, 30], room)
+    @reservation = Hotel::Reservation.new(check_in_time, check_out_time, room)
   end
 
   it "can calculate correct cost" do

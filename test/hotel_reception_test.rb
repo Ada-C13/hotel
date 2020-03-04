@@ -12,9 +12,10 @@ describe "hotel reception" do
       expect(@reception).must_respond_to :reservations
     end
 
-    it "has an array of rooms as an attribute" do
+    it "has an array of Room objects" do
       expect(@reception.rooms).must_be_instance_of Array
       expect(@reception.rooms).wont_be_empty
+      expect(@reception.rooms[0]).must_be_instance_of Hotel::Room
       expect(@reception.rooms.length).must_equal 20
     end
 
@@ -42,10 +43,11 @@ describe "hotel reception" do
     it "will reserve the first room available" do
       check_in_time = [2020, 2, 1]
       check_out_time = [2020, 2, 3]
-      my_reservation = Hotel::Reservation.new(check_in_time, check_out_time, 1)
+      my_room = Hotel::Room.new(1, 200)
+      my_reservation = Hotel::Reservation.new(check_in_time, check_out_time, my_room)
       @reception.make_reservation(check_in_time, check_out_time)
 
-      expect(@reception.reservations[0].room_id).must_equal my_reservation.room_id
+      expect(@reception.reservations[0].room.id).must_equal my_reservation.room.id
     end
   end
 
@@ -53,21 +55,24 @@ describe "hotel reception" do
     before do
       check_in_time = [2020, 2, 1]
       check_out_time = [2020, 2, 3]
-      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, 1)
+      room = Hotel::Room.new(1, 200)
+      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
 
       check_in_time = [2020, 2, 14]
       check_out_time = [2020, 2, 15]
-      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, 2)
+      room = Hotel::Room.new(2, 200)
+      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
     end
 
     it "will list an array of the available rooms for a given date" do
       check_in_time = [2020, 2, 1]
       check_out_time = [2020, 2, 2]
       my_rooms = @reception.available_rooms(check_in_time, check_out_time)
+      my_room_ids = my_rooms.map { |room| room.id }
 
       expect(my_rooms).must_be_instance_of Array
-      expect(my_rooms).wont_include 1
-      expect(my_rooms).must_include 2
+      expect(my_room_ids).wont_include 1
+      expect(my_room_ids).must_include 2
     end
   end
 
@@ -75,11 +80,13 @@ describe "hotel reception" do
     before do
       check_in_time = [2020, 2, 1]
       check_out_time = [2020, 2, 3]
-      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, 1)
+      room = Hotel::Room.new(1, 200)
+      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
 
       check_in_time = [2020, 2, 14]
       check_out_time = [2020, 2, 15]
-      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, 2)
+      room = Hotel::Room.new(2, 200)
+      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
     end
 
     it "will return the reservation with the id given" do
@@ -87,7 +94,7 @@ describe "hotel reception" do
       my_reservation = @reception.find_reservation(my_reservation_id)
 
       expect(my_reservation).must_be_instance_of Hotel::Reservation
-      expect(my_reservation.room_id).must_equal 2
+      expect(my_reservation.room.id).must_equal 2
     end
   end
 
@@ -95,36 +102,45 @@ describe "hotel reception" do
     before do
       check_in_time = [2020, 2, 1]
       check_out_time = [2020, 2, 3]
-      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, 1)
+      room = Hotel::Room.new(1, 200)
+      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
 
       check_in_time = [2020, 2, 14]
       check_out_time = [2020, 2, 15]
-      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, 2)
+      room = Hotel::Room.new(2, 200)
+      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
     end
 
-    it "will return an array of reservation objects" do
-      room = 2
-      date = Date.new(2020, 2, 14)
-    
-      room2 = 1
-      date2 = Date.new(2020, 2, 2)
+    it "will return an array of Reservation objects" do
+      room_id = Hotel::Room.new(1, 200).id
+      date = Date.new(2020, 2, 2)
 
-      expect(@reception.reservations_by_room_date(room, date)).must_be_instance_of Array
-      expect(@reception.reservations_by_room_date(room, date)[0]).must_be_instance_of Hotel::Reservation
-      expect(@reception.reservations_by_room_date(room2, date2)).must_be_instance_of Hotel::Reservation
+      room_id2 = Hotel::Room.new(2, 200).id
+      date2 = Date.new(2020, 2, 14)
+
+      expect(@reception.reservations_by_room_date(room_id, date)).must_be_instance_of Array
+      expect(@reception.reservations_by_room_date(room_id, date)).wont_be_empty
+      expect(@reception.reservations_by_room_date(room_id, date)[0]).must_be_instance_of Hotel::Reservation
+
+      expect(@reception.reservations_by_room_date(room_id2, date2)).wont_be_empty
+      expect(@reception.reservations_by_room_date(room_id2, date2)[0]).must_be_instance_of Hotel::Reservation
     end
     
-    it "will return the correct reservation object" do
+    it "will return the correct reservation objects" do
       date = Date.new(2020, 2, 14)
-      room = 2
-      my_reservation = @reception.reservations[1]
+      room_id = 1
+      my_reservations = @reception.reservations_by_room_date(room_id, date)
 
-      expect(@reception.reservations_by_room_date(room, date)).must_equal my_reservation
+
+      expect(my_reservations).must_be_instance_of Array
+      expect(my_reservations[0]).must_be_instance_of Hotel::Reservation
+      expect(my_reservations[0].room.id).must_equal 1
     end
 
     it "will return empty array if there are no reservations with that criteria" do
       date = Date.new(2020, 1, 2)
-      expect(@reception.reservations_by_room_date(5, date)).must_be_empty
+      room_id = 5
+      expect(@reception.reservations_by_room_date(room_id, date)).must_be_empty
     end
   end
 
@@ -132,11 +148,13 @@ describe "hotel reception" do
     before do
       check_in_time = [2020, 2, 1]
       check_out_time = [2020, 2, 3]
-      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, 1)
+      room = Hotel::Room.new(1, 200)
+      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
 
       check_in_time = [2020, 2, 14]
-      check_out_time = [2020, 2, 15]
-      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, 2)
+      check_out_time = [2020, 2, 16]
+      room = Hotel::Room.new(2, 200)
+      @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
     end
 
     it "will return an array of reservation objects" do
