@@ -24,12 +24,17 @@ describe Hotel::Reservation do
     end
     
   end
+
   describe "cost" do
+
     it "returns a number" do
-      start_date = Date.new(2017, 01, 01)
-      end_date = start_date + 3
-      reservation = Hotel::Reservation.new(start_date, end_date, nil)
-      expect(reservation.cost).must_be_kind_of Numeric
+      expect(@reservation.cost).must_be_kind_of Numeric
     end
+
+    it "calculates the correct cost of a reservation" do
+      expect(@reservation.cost).must_equal 1350
+    end
+
   end
+
 end
