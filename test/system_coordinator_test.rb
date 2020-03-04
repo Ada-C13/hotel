@@ -171,4 +171,14 @@ describe Hotel::SystemCoordinator do
 
   end
 
+  describe "#find_room" do
+    it "returns an instance of Room" do
+      expect(@coordinator01.find_room(10)).must_be_instance_of Hotel::Room
+    end
+
+    it "returns nil??? if an invalid room_id is passed in" do
+      expect(@coordinator01.find_room(999)).must_be_nil
+    end
+  end
+
 end

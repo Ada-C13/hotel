@@ -54,7 +54,10 @@ module Hotel
     end
 
     # method to find room
-    # def find_room(room_id)
+    def find_room(given_room_id)
+      room_found = @rooms.find{|room|room.room_id == given_room_id}
+      return room_found
+    end
    
 
     # method to make reservation
