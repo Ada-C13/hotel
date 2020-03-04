@@ -40,6 +40,10 @@ describe "front desk" do
       @dates = Hotel::DateRange.new(start_date: Date.new(2020, 3, 4), end_date: Date.new(2020, 3, 7))
       @front_desk.add_reservation(@dates)
     end
+
+    it "adds date range to front desk date range instance variable array" do
+      expect(@front_desk.date_ranges[0]).must_be_instance_of Hotel::DateRange
+    end
     
     it "adds an id to the reservation" do
       expect(@front_desk.reservations[0].id).must_be_instance_of Integer

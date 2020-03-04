@@ -5,7 +5,7 @@ require_relative 'reservations'
 
 module Hotel
   class FrontDesk
-    attr_accessor :rooms, :reservations, :date_range
+    attr_accessor :rooms, :reservations, :date_ranges
 
     def initialize
       @rooms = []
@@ -15,18 +15,28 @@ module Hotel
         @rooms << new_room
       end
       @reservations = []
-      @date_range = []
+      @date_ranges = []
     end
 
     def add_reservation(date_range)
       id = (1..1000).to_a
-      @date_range << date_range
+      @date_ranges << date_range
       available_rooms = @rooms.select{|room| room.reservations.empty? == true} || @rooms.reject{|room| room.reservations.select{|reservation| reservation.date_range.overlap?(date_range)} == true}
       chosen_room = available_rooms.shift
       new_reservation = Hotel::Reservation.new(id: id.shift, date_range: date_range, room: chosen_room)
       @reservations << new_reservation
       chosen_room.add_room_reservation(new_reservation)
     end
+
+    def available_rooms(date_range)
+      available_rooms = @rooms.select{|room| room.reservations.empty? == true} || @rooms.reject{|room| room.reservations.select{|reservation| reservation.date_range.overlap?(date_range)} == true}
+      return available_rooms
+    end
+
+    start_date = Date.new(2020,3,1)
+    end_date = Date.new(2020,3,4)
+    dates = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
+    front_desk = Hotel::FrontDesk.new
 
     def find_room(room_number)
       found_room = @rooms.select {|room| room.room_number == room_number}
