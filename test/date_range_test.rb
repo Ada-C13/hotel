@@ -44,8 +44,8 @@ describe Hotel::DateRange do
 
   describe "overlap?" do
     before do
-      start_date = Date.new(2017, 01, 01)
-      end_date = start_date + 3
+      start_date = Date.today + 3
+      end_date = start_date + 8
 
       @range = Hotel::DateRange.new(start_date, end_date)
     end
@@ -58,21 +58,18 @@ describe Hotel::DateRange do
       expect(@range.overlap?(test_range)).must_equal true
     end
 
-    # it "returns true for a contained range" do
-    #   start_date = @range.start_date
-    #   end_date = @range.end_date
-    #   test_range = Hotel::DateRange.new(start_date, end_date)
+    it "returns true for a contained range" do
+      start_date = Date.today +5
+      end_date = start_date + 2
+      test_range = Hotel::DateRange.new(start_date, end_date)
 
-    #   expect(@range.overlap?(@range)).must_equal true
-    # end
+      expect(@range.overlap?(test_range)).must_equal true
+    end
 
     # xit "returns true for a range that overlaps in front" do
     # end
 
     # xit "returns true for a range that overlaps in the back" do
-    # end
-
-    # xit "returns true for a containing range" do
     # end
 
     # xit "returns false for a range starting on the end_date date" do
@@ -88,26 +85,26 @@ describe Hotel::DateRange do
     # end
   end
 
-  describe "include?" do
-    # it "reutrns false if the date is clearly out" do
-    # end
+  # describe "include?" do
+  #   # it "reutrns false if the date is clearly out" do
+  #   # end
 
-    # it "returns true for dates in the range" do
-    # end
+  #   # it "returns true for dates in the range" do
+  #   # end
 
-    # it "returns false for the end_date date" do
-    # end
-  end
+  #   # it "returns false for the end_date date" do
+  #   # end
+  # end
 
-  describe "nights" do
-    it "returns the correct number of nights" do
-      start_date = Date.today
-      end_date = start_date + 3
+  # describe "nights" do
+  #   it "returns the correct number of nights" do
+  #     start_date = Date.today
+  #     end_date = start_date + 3
 
-      range = Hotel::DateRange.new(start_date, end_date)
+  #     range = Hotel::DateRange.new(start_date, end_date)
 
-      expect(range.calculate_nights).must_equal 3
-      expect(range.calculate_nights).must_be_kind_of Integer
-    end
-  end
+  #     expect(range.calculate_nights).must_equal 3
+  #     expect(range.calculate_nights).must_be_kind_of Integer
+  #   end
+  # end
 end

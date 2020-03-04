@@ -3,24 +3,22 @@ module Hotel
   class Reservation
    
     # Feel free to change this method signature as needed. Make sure to update the tests!
-    def initialize(id, date, room_nr)
+    attr_reader :id, :date_range, :room
+    def initialize(id, start_date, end_date, room)
       @id = id
-      @date = Hotel::DateRange.new(start_date, end_date)
-      @room_nr = Hotel::DateRange.room_nr
-      # initialize(id, date, room, )
-      # @start_date = start_date
-      # @end_date = end_date
-      # @room = room
-      # @status = status
-      # @date = Hotel::DateRange.new(start_date, end_date)
-      # room = Hotel::Room.new(room_nr, cost)
-
-
+      @date_range = Hotel::DateRange.new(start_date, end_date)
+      @room = room
+    end
+    
+    def ==(other)
+      id == other.id 
     end
 
-    def cost
-      return 200
-    end
+
+    # def cost
+    #   total = date_range.calculate_nights * 200.00
+    #   return total
+    # end
     
     #cost DateRange.calculate_nights * 200
   end
