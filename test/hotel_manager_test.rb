@@ -113,9 +113,8 @@ describe "HotelManager" do
       end
   
       it "returns the correct reservations" do
-        date_range = Hotel::DateRange.new(Date.new(2020,5,25), Date.new(2020,5,29))
+        date_range = Hotel::DateRange.new(Date.new(2020,5,26), Date.new(2020,5,29))
 
-        # TODO: determine why this is failing
         expect(@hotel_manager.list_reservations_by_room(1, date_range).length).must_equal 1
       end
 

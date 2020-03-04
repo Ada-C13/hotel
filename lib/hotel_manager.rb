@@ -35,9 +35,8 @@ module Hotel
       reservation_list = []
       found_room = find_room(room)
       
-    # TODO: determine why hotel_manager_test > list_reservations_by_room > returns the correct reservations is failing
-    found_room.reservations.each do |reservation|
-        if found_room.check_availability(date_range) == false
+      found_room.reservations.each do |reservation|
+        if reservation.date_range.overlap?(date_range) == true
           reservation_list.push(reservation)
         end
       end
@@ -50,7 +49,7 @@ module Hotel
 
       @rooms.each do |room|
         room.reservations.each do |reservation|
-          if reservation.range.include?(date)
+          if reservation.date_range.range.include?(date)
             reservation_list.push(reservation)
           end
         end
