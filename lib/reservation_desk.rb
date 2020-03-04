@@ -15,8 +15,32 @@ module Hotel
 
     def find_reservations(room_id: , start_date: nil, end_date: nil)
       room = rooms.find { |room| room.id == room_id}
+      return nil if room == nil
+
       return room.reservations if (start_date == nil && end_date == nil)
-      #TODO: add logic here
+
+      if end_date == nil
+        start_date = Date.parse(start_date)
+        reservations = room.reservations.select { |reservation| 
+          start_date < reservation.end_date
+        }
+      elsif start_date == nil
+        end_date = Date.parse(end_date)
+        reservations = room.reservations.select { |reservation| 
+          end_date > reservation.start_date 
+        }
+      else
+        start_date = Date.parse(start_date)
+        end_date = Date.parse(end_date)
+        # date_range = (start_date..end_date)
+        reservations = room.reservations.select { |reservation| 
+          start_date < reservation.end_date && end_date > reservation.start_date 
+        }
+      end
+      return reservations
+      
+    
+      #TODO: add date_range class and refactor
     end
 
     def new_reservation(room_id: , start_date: , end_date: )
