@@ -29,9 +29,22 @@ describe "Room" do
 
     it "Reservations is an empty array" do
       room = Hotel::Room.new(1)
-
       expect(room.reservations).must_be_kind_of Array
       expect(room.reservations).must_equal []
     end   
+  end
+  describe "self.all" do
+    it "Returns an array of 20 room objects" do
+      all_rooms = Hotel::Room.all
+      expect(all_rooms).must_be_kind_of Array
+      expect(all_rooms.length).must_equal 20
+
+      all_rooms.each do |room|
+        expect(room).must_be_kind_of Hotel::Room
+      end
+
+      expect(all_rooms.first.id).must_equal 1
+      expect(all_rooms.last.id).must_equal 20      
+    end
   end
 end
