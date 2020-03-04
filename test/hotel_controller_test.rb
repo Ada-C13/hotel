@@ -1,6 +1,8 @@
 require_relative "test_helper"
+require "awesome_print"
 
 describe "Hotel::HotelController" do
+
   before do
     @hotel = Hotel::HotelController.new
     def test_date(day)
@@ -31,7 +33,7 @@ describe "Hotel::HotelController" do
         expect(reservation).must_be_kind_of Hotel::Reservation
       end
 
-      it "adds to the list of reservations" do # ****
+      it "adds to the list of reservations" do 
         reservation1 = @hotel.reserve_room(test_date(1), test_date(4))
         expect(@hotel.reservations.size).must_equal 1
         reservation2 = @hotel.reserve_room(test_date(1), test_date(4))
@@ -40,23 +42,36 @@ describe "Hotel::HotelController" do
 
       it "selects the first available room" do
         # reserve a room, than check if the reservation room equals to 1
-        # reserve another room, than check if the reservationn room equals 2
+        reservation1 = @hotel.reserve_room(test_date(1), test_date(4))
+        expect(reservation1.room).must_equal 1
+        expect(@hotel.reservations.last.room).must_equal 1
+        # reserve another room, than check if the reservation room equals 2
+        reservation2 = @hotel.reserve_room(test_date(1), test_date(4))
+        expect(reservation2.room).must_equal 2
+        expect(@hotel.reservations.last.room).must_equal 2
       end
 
-      it "returns error if no rooms are available" do
+      it "returns error if no rooms are available" do #
         # reserve 20 rooms (20.times). The 21st should return an error.
+        (1..20).each do |reservation|
+          reservation = @hotel.reserve_room(test_date(1), test_date(4))
+        end
+        # expect(@hotel.reservations.size).must_equal 20
+        expect{ @hotel.reserve_room(test_date(1), test_date(4)) }.must_raise ArgumentError
       end
 
-      it "does not accept the same date for start and end" do
+      it "does not accept the same date for start and end" do #
         # create a reservation from 2020/01/05 to 2020/01/05. It should raise an exception
+        expect{ @hotel.reserve_room(test_date(1), test_date(1)) }.must_raise ArgumentError
       end
 
-      it "does not accept a start date after the end date" do
+      it "does not accept a start date after the end date" do #
         # create a reservation from 2020/01/05 to 2020/01/01. It should raise an exception
+        expect{ @hotel.reserve_room(test_date(5), test_date(1)) }.must_raise ArgumentError
       end
     end
 
-  # access the list of reservations for a specific date, so that I can track reservations by date
+    # access the list of reservations for a specific date, so that I can track reservations by date
     describe "reservations_by_date" do
       it "takes a Date and returns a list of Reservations" do
         reservation1 = @hotel.reserve_room(test_date(1), test_date(4))
@@ -73,11 +88,20 @@ describe "Hotel::HotelController" do
       end
 
       it "returns the reservation when you ask for the start date" do
+        # create a reservation from 2020/01/01 to 2020/01/04, than get a list of reservations for 2020/01/01, should return 1
         reservation1 = @hotel.reserve_room(test_date(1), test_date(4))
         reservations_ondate = @hotel.reservations_by_date(test_date(1))
-        expect(reservations_ondate.size).must_equal 1 # ****
-        # create another reservation from 2020/01/01 to 2020/01/05, than get a list of reservations for 2020/01/01. It should return 2
-        # create another reservation from 2020/01/05 to 2020/01/10, than get a list of reservations for 2020/01/01. It should return 2
+        expect(reservations_ondate.size).must_equal 1 #
+        # create another reservation from 2020/01/01 to 2020/01/05, than get a list of reservations for 2020/01/01, should return 2
+        reservation2 = @hotel.reserve_room(test_date(1), test_date(5))
+        reservations_ondate = @hotel.reservations_by_date(test_date(1))
+        expect(reservations_ondate.size).must_equal 2 #
+        # create another reservation from 2020/01/05 to 2020/01/10, than get a list of reservations for 2020/01/05, should return 2
+        reservation3 = @hotel.reserve_room(test_date(5), test_date(10))
+        ap @hotel.reservations
+        reservations_ondate = @hotel.reservations_by_date(test_date(5))
+        ap reservations_ondate
+        expect(reservations_ondate.size).must_equal 2 #
       end
 
       it "returns the reservation when you ask for a date in the middle" do
@@ -122,4 +146,5 @@ describe "Hotel::HotelController" do
 
     end
   end
+
 end

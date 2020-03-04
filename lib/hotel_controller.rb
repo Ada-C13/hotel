@@ -15,7 +15,11 @@ module Hotel
     def reserve_room(start_date, end_date)
       room = available_rooms(start_date, end_date).first
       reservation = Hotel::Reservation.new(start_date, end_date, room)
-      @reservations << reservation
+      if @reservations.size >= 20
+        raise ArgumentError, "No Vacancy"
+      else
+        @reservations << reservation
+      end
       return reservation
     end
 
