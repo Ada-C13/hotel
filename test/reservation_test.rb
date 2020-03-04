@@ -24,13 +24,7 @@ describe Hotel::Reservation do
       reservation.must_respond_to :date_range
       reservation.date_range.must_equal date_range
     end
-    
-    # it "Keeps track of date" do
-    #   # cost = 200
-    #   # room = Hotel::Room.new(1, cost)
-    #   # room.must_respond_to :cost
-    #   # room.cost.must_equal cost
-    # end
+
   end
 
 
