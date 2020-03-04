@@ -51,7 +51,15 @@ describe Hotel::HotelController do
         reservation_list = @hotel_controller.reservations("2020-08-04")
 
         expect(reservation_list).must_be_kind_of Array
-        #expect(reservation_list(0)).must_equal ["2020-08-04", "2020-08-10"]
+        expect(reservation_list[0].start_date).must_be_kind_of Date
+        expect(reservation_list[0].start_date).must_equal Date.parse("2020-08-04")
+        expect(reservation_list[0].end_date).must_equal Date.parse("2020-08-10")
+        expect(reservation_list[1].start_date).must_equal Date.parse("2020-08-04")
+        expect(reservation_list[1].end_date).must_equal Date.parse("2020-08-08")
+        
+        reservation_list1 = @hotel_controller.reservations("2020-08-11")
+        expect(reservation_list1[0].start_date).must_equal Date.parse("2020-08-09")
+        expect(reservation_list1[0].end_date).must_equal Date.parse("2020-08-12")
         end
     end
   end
