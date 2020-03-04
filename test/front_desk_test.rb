@@ -54,10 +54,6 @@ describe "front desk" do
       expect{@front_desk.add_reservation(@dates)}.must_raise NoAvailableRoomError 
       
     end
-    
-    it "adds an id to the reservation" do
-      expect(@front_desk.reservations[0].id).must_be_instance_of Integer
-    end
 
     it "adds an instance of the room class to the reservation" do
       expect(@front_desk.reservations[0].room).must_be_instance_of Hotel::Room
@@ -71,21 +67,6 @@ describe "front desk" do
       expect(@front_desk.reservations[0].room.reservations[0]).must_be_instance_of Hotel::Reservation
     end
 
-  end
-
-  describe "add_block_reservation" do
-
-    it "reserves the correct number of rooms" do
-    
-    end
-
-    it "raises exception if block_count is not greater than 1 or less than 6" do
-      
-    end
-
-    it " raises exception if there aren't enough rooms to fill block" do
-      
-    end
   end
 
   describe "available_rooms" do
@@ -136,7 +117,7 @@ describe "front desk" do
 
   describe " total_cost" do
     before do
-      @new_reservation = Hotel::Reservation.new( id: 1, date_range: Hotel::DateRange.new(start_date: Date.new(2020, 3, 1), end_date: Date.new(2020, 3, 4)), room: Hotel::Room.new(room_number: 1, cost: 200))
+      @new_reservation = Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date: Date.new(2020, 3, 1), end_date: Date.new(2020, 3, 4)), room: Hotel::Room.new(room_number: 1, cost: 200))
     end
 
     it "calculates total cost of the reservation " do

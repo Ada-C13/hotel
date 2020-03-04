@@ -2,7 +2,7 @@ require 'date'
 require_relative 'room'
 require_relative 'date_range'
 require_relative 'reservations'
-
+require_relative 'hotel_block'
 module Hotel
   class FrontDesk
     attr_accessor :rooms, :reservations, :date_ranges
@@ -19,19 +19,15 @@ module Hotel
     end
 
     def add_reservation(date_range)
-      id = (1..1000).to_a
       @date_ranges << date_range
       available_rooms = @rooms.select{|room| room.reservations.empty? == true} || @rooms.reject{|room| room.reservations.select{|reservation| reservation.date_range.overlap?(date_range)} == true}
       raise NoAvailableRoomError.new("there are no available rooms for that date")if available_rooms.empty? == true
 
       chosen_room = available_rooms.shift
-      new_reservation = Hotel::Reservation.new(id: id.shift, date_range: date_range, room: chosen_room)
+      new_reservation = Hotel::Reservation.new(date_range: date_range, room: chosen_room)
       @reservations << new_reservation
       chosen_room.add_room_reservation(new_reservation)
     end
-
-    # def add_block_reservation(block_count:, date_range:, discount_cost:)
-    # end
 
     def available_rooms(date_range)
       available_rooms = @rooms.select{|room| room.reservations.empty? == true} || @rooms.reject{|room| room.reservations.select{|reservation| reservation.date_range.overlap?(date_range)} == true}
