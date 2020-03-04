@@ -18,11 +18,6 @@ module Hotel
     def list_rooms
       return @rooms
     end
-    
-    def rooms
-      # You might want to replace this method with an attr_reader
-      return []
-    end
 
     def reserve_room(start_date, end_date)
       # start_date and end_date should be instances of class Date
