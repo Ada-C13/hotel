@@ -44,8 +44,8 @@ describe Hotel::DateRange do
 
   describe "overlap?" do
     before do
-      start_date = Date.today + 3
-      end_date = start_date + 8
+      start_date = Date.today + 2
+      end_date = start_date + 10
 
       @range = Hotel::DateRange.new(start_date, end_date)
     end
@@ -59,30 +59,61 @@ describe Hotel::DateRange do
     end
 
     it "returns true for a contained range" do
-      start_date = Date.today +5
+      start_date = Date.today +4
       end_date = start_date + 2
       test_range = Hotel::DateRange.new(start_date, end_date)
 
       expect(@range.overlap?(test_range)).must_equal true
     end
 
-    # xit "returns true for a range that overlaps in front" do
-    # end
+    it "returns true for a range that overlaps in front" do
+      start_date = Date.today +1
+      end_date = start_date +5
+      test_range = Hotel::DateRange.new(start_date, end_date)
 
-    # xit "returns true for a range that overlaps in the back" do
-    # end
+      expect(@range.overlap?(test_range)).must_equal true
 
-    # xit "returns false for a range starting on the end_date date" do
-    # end
+    end
 
-    # xit "returns false for a range ending on the start_date date" do
-    # end
+    it "returns true for a range that overlaps in the back" do
+      start_date = Date.today +3
+      end_date = start_date + 11
+      test_range = Hotel::DateRange.new(start_date, end_date)
 
-    # xit "returns false for a range completely before" do
-    # end
+      expect(@range.overlap?(test_range)).must_equal true
+    end
 
-    # xit "returns false for a date completely after" do
-    # end
+    it "returns false for a range starting on the end_date date" do
+      start_date = Date.today +12
+      end_date = start_date + 1
+      test_range = Hotel::DateRange.new(start_date, end_date)
+
+      expect(@range.overlap?(test_range)).must_equal false
+    end
+
+    it "returns false for a range ending on the start_date date" do
+      start_date = Date.today 
+      end_date = start_date + 1
+      test_range = Hotel::DateRange.new(start_date, end_date)
+
+      expect(@range.overlap?(test_range)).must_equal false
+    end
+
+    it "returns false for a range completely before" do
+      start_date = Date.today 
+      end_date = start_date + 1
+      test_range = Hotel::DateRange.new(start_date, end_date)
+
+      expect(@range.overlap?(test_range)).must_equal false
+    end
+
+    it "returns false for a date completely after" do
+      start_date = Date.today +14
+      end_date = start_date +1 
+      test_range = Hotel::DateRange.new(start_date, end_date)
+
+      expect(@range.overlap?(test_range)).must_equal false
+    end
   end
 
   # describe "include?" do

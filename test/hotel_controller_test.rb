@@ -11,8 +11,6 @@ describe Hotel::HotelController do
       it "Creates an instance of hotel controler" do
         @hotel_controller.must_be_kind_of Hotel::HotelController
       end
-      #make one more test for initializer
-
 
       it "create the rooms" do
         rooms = @hotel_controller.rooms
