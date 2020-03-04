@@ -32,7 +32,12 @@ module Hotel
     end
 
     def reservations(date)
-      return []
+      reservations_to_return = []
+      @reservations.each do |reservation|
+        reservations_to_return.push(reservation) if reservation.date_range_for_reservation.include?(date)
+      end
+
+      return reservations_to_return
     end
 
     # Wave 2
