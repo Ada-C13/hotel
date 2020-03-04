@@ -1,6 +1,7 @@
 require 'date'
 module Hotel
-  class InvalidDateRange < StandardError
+  class InvalidDateRangeError < StandardError
+
   end
   class DateRange
     attr_reader :start_date, :end_date, :nights
@@ -14,7 +15,7 @@ module Hotel
         @end_date = end_date
       end
       if @end_date - @start_date <= 0
-        raise InvalidDateRange.new("End date must be after start date.")
+        raise InvalidDateRangeError.new("End date must be after start date.")
       end
       @nights = Array.new((@end_date - @start_date).to_i)
       @nights[0] = @start_date
@@ -28,7 +29,23 @@ module Hotel
     end
   
     def overlap?(other)
-      return self.nights.include? other.start_date
+      if self.nights.include?(other.start_date) || 
+        self.nights.include?(other.nights.last)
+        return true
+      elsif other.nights.include?(self.start_date) ||
+        other.nights.include?(self.nights.last)
+        return true
+      else
+        return false
+      end
+    end
+
+    def include?(date)
+      return nights.include? date
+    end
+
+    def num_nights
+      return nights.length
     end
 
   end
