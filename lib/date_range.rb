@@ -1,16 +1,22 @@
-require 'Date'
+require 'date'
 
 module Hotel
   class DateRange
-    attr_reader :start_date, :end_date
+    attr_reader :arrive, :depart
     
-    def initialize(start_date, end_date)
-      @start_date = start_date
-      @end_date = end_date
+    # parameters must be objects of class Date
+    def initialize(arrive, depart)
+      @arrive = arrive
+      @depart = depart
     end
 
     def nights
-      @end_date - @start_date
+      @depart - @arrive
+    end
+
+    def self.get_all_dates(arrive, depart)
+      return [arrive] if arrive == depart
+      return (arrive..depart).map { |date| date }
     end
   end
 end
