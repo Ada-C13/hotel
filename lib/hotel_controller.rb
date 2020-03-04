@@ -1,14 +1,39 @@
 # I need a hotel_controller to be able to:
-# create 20 rooms
+# x create 20 rooms
 # control the business logic of adding/ finding reservations
+# create Date_Range
+# validate Date_Range
+# get_reservations(date)
+# find_available_room
+
+# From class with Chris:
+# For checking available rooms:
+# - What if there are no reservations? (it should return a list of all the rooms - All are available. )
+# - Do reservations that don't overlap the date range affect the list?
+#   Feb 3 - Feb 10 , we can ignore reservations that don't overlap.
+# - Boundaries as an overlap - What about a reservation that ends on the checkin date, or starts on the checkout date?
+#   1. Consider a date range as a list of dates
+#     Compare to see if they have the same dates in the list (O(n) for each reservation)
+#   2. Consider a date range as a line with start and end dates
+#     Compare the start and end dates
+#     If start_1 is greater than start_2 and less than end_2
+#             OR 
+#     If end_1 is greater than start_2 and less than end_2
+# - What if there are no vacancies - Return empty array. Or Exception could be raised. Rescue to say put in new date range?
+# - What if your date range spans several small reservations? Remove those smaller spans from the list of available rooms
+
+# - Take the date range of potential reservation, check collection of one room's reservations, if available 
+# - if empty, raise Exception. 
+
 # setting the costs/ discounts for rooms
+
 
 module Hotel
   class Hotel::Controller
     attr_accessor :all_reservations
     attr_reader :rooms
     # hotel_controller needs to have a list of all its reservations,
-    # initialized with nil to begin
+    # initialized as empty array to begin
     def initialize
       create_rooms
       @all_reservations = []

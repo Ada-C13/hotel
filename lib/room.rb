@@ -6,9 +6,9 @@
 # its list of reservations (can be empty to begin)
 
 # Be able to:
-# find/show its list of reservations
-# tell whether it is available (interfaces with rez methods)
-# find reservation for given date range
+# access its list of reservations
+# find reservation for given date range 
+# tell whether it is available for a given date range
 
 module Hotel
   class Room
@@ -22,6 +22,12 @@ module Hotel
 
       raise ArgumentError if room_id <= 0 || room_id > 20
     end
+
+    # method to add reservation to room's rez_list
+    def add_room_reservation(reservation_to_add)
+      @rez_list << reservation_to_add
+    end
+
 
 
   end

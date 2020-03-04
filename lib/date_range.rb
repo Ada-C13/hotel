@@ -12,5 +12,12 @@ module Hotel
       # raise ArgumentError if start_date.class != Date || end_date.class != Date
     end
 
+    def overlap?(comparison_range)
+      # if comparison_range.start_date 
+      #   # is at least one of the dates inside start or end?
+
+      #   || comparison_range.end_date 
+    end
+
   end
 end

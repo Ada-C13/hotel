@@ -5,6 +5,12 @@ describe Hotel::Room do
     before do
       @room_id = 5
       @room = Hotel::Room.new(@room_id)
+      
+
+      @start_date = Date.new(2020, 1, 1)
+      @end_date = Date.new(2020, 1, 2)
+      @date_range_1 = Hotel::DateRange.new(@start_date, @end_date)
+      @reservation_1 = Hotel::Reservation.new(@date_range_1, @room_id)
     end
 
     it "is an instance of Room" do
@@ -37,10 +43,41 @@ describe Hotel::Room do
       expect(@room.rez_list).must_be_kind_of Array
     end
 
-    it "stores an array of the right number of Reservations" do
+    it "stores an empty aray of Reservations upon initializing" do
       expect(@room.rez_list.length).must_equal 0
     end
 
+  end
+
+  describe "add_room_reservation" do
+    before do
+      @room_id = 5
+      @room = Hotel::Room.new(@room_id)
+      
+
+      @start_date = Date.new(2020, 1, 1)
+      @end_date = Date.new(2020, 1, 2)
+      @date_range_1 = Hotel::DateRange.new(@start_date, @end_date)
+      @reservation_to_add = Hotel::Reservation.new(@date_range_1, @room_id)
+    end
+
+    it "correctly adds a reservation to the room's reservation list" do
+      @date_range_2 = Hotel::DateRange.new(@start_date+1, @end_date+1)
+      @reservation_to_add_2 = Hotel::Reservation.new(@date_range_2, @room_id)
+      
+      @room.add_room_reservation(@reservation_to_add)
+      expect(@room.rez_list.length).must_equal 1
+
+      @room.add_room_reservation(@reservation_to_add_2)
+      expect(@room.rez_list.length).must_equal 2
+    end
+
+    # not sure if I need this test in this class?
+    # it "throws an argument error if given an invalid reservation" do
+    #   @room.add_room_reservation("invalid reservation")
+    #   expect { @room.add_room_reservation("invalid reservation") }.must_raise ArgumentError
+    #   expect(@room.rez_list.length).must_equal 0
+    # end
 
   end
 end
