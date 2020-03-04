@@ -106,8 +106,14 @@ describe "Hotel::HotelController" do
 
       it "returns the reservation when you ask for a date in the middle" do
         # create a reservation from 2020/01/01 to 2020/01/10, than get a list of reservations for 2020/01/05. It should return 1
+        reservation1 = @hotel.reserve_room(test_date(1), test_date(10))
+        expect(@hotel.reservations_by_date(test_date(5)).size).must_equal 1
         # create a reservation from 2020/01/02 to 2020/01/15, than get a list of reservations for 2020/01/05. It should return 2
+        reservation2 = @hotel.reserve_room(test_date(2), test_date(15))
+        expect(@hotel.reservations_by_date(test_date(5)).size).must_equal 2
         # create a reservation from 2020/01/10 to 2020/01/15, than get a list of reservations for 2020/01/05. It should return 2
+        reservation3 = @hotel.reserve_room(test_date(10), test_date(15))
+        expect(@hotel.reservations_by_date(test_date(5)).size).must_equal 2
       end
 
       it "does not return a reservation when you ask for the end date" do
