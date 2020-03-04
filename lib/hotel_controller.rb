@@ -74,7 +74,7 @@ module Hotel
         end
       end
 
-      if rooms_available_for_range
+      if rooms_available_for_range.length > 0
        return rooms_available_for_range
       else 
       raise ArgumentError, "There are no room available for that date range :("
