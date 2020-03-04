@@ -1,5 +1,12 @@
+require 'date'
+
+require_relative 'date_range.rb'
+require_relative 'room.rb'
+
 module Hotel
   class Reservation
+    attr_reader :start_date, :end_date, :room, :date_range
+    
     def initialize(start_date, end_date, room)
       # raise ArgumentError.new("room must be an instance of room") if room.class != Hotel::Room
       @start_date = start_date
@@ -9,7 +16,12 @@ module Hotel
     end
 
     def cost
-      return 3
+      return Hotel::DateRange.new(@start_date, @end_date).nights * @room.cost
     end
+
+    def date_range_for_reservation
+      return Hotel::DateRange.new(@start_date,@end_date)
+    end
+
   end
 end
