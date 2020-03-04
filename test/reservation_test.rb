@@ -5,6 +5,7 @@ describe "Reservation class" do
     before do
       start_date= "March 1, 2019"
       end_date = "March 5, 2019"
+
       room = Hotel::Room.new(
         room_num: 13,
         date_range: [start_date, end_date], 
@@ -16,6 +17,7 @@ describe "Reservation class" do
           start_date: start_date,
           end_date: end_date,
           room: room
+          
         
       )
       
@@ -37,11 +39,21 @@ describe "Reservation class" do
       expect(@res_data.room).must_be_kind_of Hotel::Room
     end
 
+    it "calculates res_duration in days - minus checkout day" do
+      expect(@res_data.res_duration).must_equal 3
+    end
+
+    it "calculates total cost of reservation" do
+      expect(@res_data.find_total_cost).must_equal 600
+    end
+
 
   end #Describe initialize end
 
 
 end #Reservation class describe block end
+
+
 
 
 # DATE constants which are arrays of month names and day names

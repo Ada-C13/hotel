@@ -15,8 +15,7 @@ module Hotel
       # these are instance variables
       @res_id = res_id
       @room = room
-      # @res_duration
-      @total_cost
+      
 
 
 
@@ -30,18 +29,23 @@ module Hotel
       end
       @end_date = end_date
 
+      @total_cost = find_total_cost
+
+
     end #initialize end
 
     
     
     def res_duration
-      @res_duration = @end_date - @start_date
-      return @res_duration  
+      res_duration = @end_date - @start_date
+      return res_duration -1  
     end
 
-    # def find_total_cost
-    #    @total_cost = @res_duration * @room.cost
-    #    return @total_cost
+    def find_total_cost
+       @total_cost = res_duration * @room.cost
+       return @total_cost
+    end
+
 
 
 
