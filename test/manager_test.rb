@@ -8,13 +8,24 @@ SimpleCov.start do
 end
 
 describe "manager" do 
-  it "contains infromation" do 
-    STEPHANIE.must_equal 1
+  it "creates an instance of Manager" do 
+    manager = Hotel::Manager.new
+    manager.must_be_kind_of Hotel::Manager
   end 
 
-  it "calls creates_rooms" do 
-    all_rooms = Hotel::Manager.new
-    expect(@all_rooms.length).must_equal 20
+  it "creates the correct number of rooms" do 
+    all_rooms = Hotel::Manager.create_rooms(20)
+    expect(all_rooms.length).must_equal 20
+  end
+  
+
+  it "can make a reservation" do 
+  
   end 
+
+  it "can check availability by room" do 
+
+  end 
+  
 
 end

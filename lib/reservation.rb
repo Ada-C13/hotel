@@ -1,30 +1,48 @@
 require 'time'
 require 'date'
+require 'securerandom'
 require_relative 'manager'
 require_relative 'room'
 
 module Hotel
   class Reservation
-    attr_reader :start_date, :end_date, :rm_num, :cost_per_day
+    attr_reader :start_date, :end_date, :rm_num, :cost_per_day, :total_cost, :recloc
     attr_writer
     attr_accessor
 
     
-    def initialize(start_date:, end_date:, rm_num: nil, cost_per_day: 200)
+    def initialize(start_date:, 
+      end_date:, 
+      rm_num: nil, 
+      cost_per_day: 200, 
+      total_cost: nil, 
+      recloc: nil)
      
-      # start_date = start_date.to_s 
-      # end_date = end_date.to_s
-      @start_date = Date.parse"#{start_date}"
-      @end_date = Date.parse"#{end_date}"
+      @start_date = Date.parse "#{start_date}"
+      @end_date = Date.parse "#{end_date}"
+      @cost_per_day = cost_per_day
       @rm_num = rm_num
-      res_length = (@end_date - @start_date).to_i
+      res_length = (Date.parse("#{end_date}") - Date.parse("#{start_date}")).to_i
       @total_cost = cost_per_day * res_length
+      @recloc = SecureRandom.alphanumeric(6)
       
-      # nn to make recloc # and store trip in manager 
       ## make date class?
       ## make date methods w/in res?
     end
 
+ 
+
+    def conflict(start_date, end_date)
+      #turn into range
+      #loop through every date in the range:
+        # if date < end_date and date > start_date
+        #   return true
+        # else
+        #   return false
+      # 
+    end
+
+  
     
     ## nn to build method to check if inputed rm num is avail
       ## if the inputed room is unavailable - suggest different room or error?
@@ -35,4 +53,3 @@ module Hotel
   end
 end
 
-TIFFANY = 1

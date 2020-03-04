@@ -43,11 +43,11 @@ describe "room" do
     
   end 
 
-  describe "create_rooms" do 
-    it "creates the correct number of rooms" do 
-      all_rooms = Hotel::Room.create_rooms(20)
-      expect(all_rooms.length).must_equal 20
-    end
-  end
+  # describe "create_rooms" do 
+  #   it "creates the correct number of rooms" do 
+  #     all_rooms = Hotel::Room.create_rooms(20)
+  #     expect(all_rooms.length).must_equal 20
+  #   end
+  # end
 
 end
