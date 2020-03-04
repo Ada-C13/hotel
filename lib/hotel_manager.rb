@@ -31,7 +31,7 @@ module Hotel
       return @rooms.find { |room| room.number == id }
     end
 
-    def list_reservations(room, date_range)
+    def list_reservations_by_room(room, date_range)
       reservation_list = []
       found_room = find_room(room)
       
