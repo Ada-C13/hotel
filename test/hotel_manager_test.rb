@@ -71,6 +71,11 @@ describe "HotelManager" do
       expect(@hotel_manager.total_reservations).must_equal current_reservations + 1
     end
 
+    it "adds room number to the Reservation" do
+      expect(reservation.room_number).must_be :>=, 1
+      expect(reservation.room_number).must_be :<=, 20
+    end
+
     it "raises ArgumentError if invalid date is provided" do
       expect{(
         @hotel_manager.reserve_room(

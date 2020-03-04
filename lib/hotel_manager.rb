@@ -24,7 +24,7 @@ module Hotel
 
     def reserve_room(date_range)
       @total_reservations += 1
-      return Reservation.new(date_range)
+      return Reservation.new(date_range, id = @total_reservations, room_number = rand(1..20))
     end
 
     def find_room(id)
