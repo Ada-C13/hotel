@@ -1,11 +1,12 @@
+require_relative 'hotel_controller'
+
 module Hotel
-  attr_reader :room_id, :rate, :reservations
-  
+  attr_reader :room_num, :rate
+
   class Room
-    def initialize(room_id)
-      @room_id = room_id
+    def initialize(room_num)
+      @room_num = room_num
       @rate = 200
-      @reservations = []
     end
 
   end
