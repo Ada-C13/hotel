@@ -18,7 +18,7 @@ describe Hotel::SystemCoordinator do
 
     it "stores the correct room ids from 1 ~20" do
       @coordinator01.rooms.each_with_index do |room,i|
-        expect(room.id).must_equal (i+1)
+        expect(room.room_id).must_equal (i+1)
       end
     end
 

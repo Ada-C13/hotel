@@ -12,7 +12,7 @@ describe Hotel::Room do
     end
 
     it "stores a room_id as id" do
-      expect(@room01.id).must_equal @room_id
+      expect(@room01.room_id).must_equal @room_id
     end
 
     it "raises ArgumentError if the room_id is not a positive integer" do
@@ -24,6 +24,16 @@ describe Hotel::Room do
       expect(@room01.cost).must_be_instance_of Float
       expect(@room01.cost).must_equal 200.00
     end
+
+    it "stores an instance variable @reservations that is an array" do
+      expect(@room01.bookings).must_be_instance_of Array
+    end
+
+    # it "stores an @reservations array where each element is a Reservation instance " do
+    #   expect(@room01.bookings[0]).must_be_instance_of Hotel::Reservation
+    # end
+
+    
   end
 
   # describe "self.all" do
