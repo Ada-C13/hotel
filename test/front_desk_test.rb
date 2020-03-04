@@ -131,8 +131,74 @@ describe "FrontDesk" do
       puts "after length = #{reservations_after}"
       expect(reservations_after).must_equal (reservations_before + 1)
     end
+  end
+
+  describe "#reservation_by_room" do
+    it "returns reservation(s) for a particular room" do
+      front_desk = Hotel::FrontDesk.new
+      front_desk.make_reservation(Date.new(2020, 3, 1), Date.new(2020, 3, 5))
+      front_desk.make_reservation(Date.new(2020, 3, 5), Date.new(2020, 3, 8))
+      front_desk.make_reservation(Date.new(2020, 3, 9), Date.new(2020, 3, 12))
+
+      room_reservations = front_desk.reservation_by_room(1)
+      expect(room_reservations).must_be_kind_of Array
+      expect(room_reservations.length).must_equal 3
+      room_reservations.each do |reservation|
+        expect(reservation).must_be_kind_of Hotel::Reservation
+        expect(reservation.room).must_equal 1
+      end
+    end
+
+    it "returns an empty array if no reservations made for a room" do
+      front_desk = Hotel::FrontDesk.new
+      room_reservations = front_desk.reservation_by_room(1)
+      expect(room_reservations).must_be_kind_of Array
+      expect(room_reservations.length).must_equal 0
+    end
+
+    it "raises ArgumnetError for passing an invalid argument" do
+      front_desk = Hotel::FrontDesk.new
+      expect{
+        front_desk.reservation_by_room("five")
+      }.must_raise ArgumentError
+    end
+  end
+
+  describe "#reservation_by_date" do
+    it "returns reservations for a particular date" do
+      front_desk = Hotel::FrontDesk.new
+      front_desk.make_reservation(Date.new(2020, 3, 10), Date.new(2020, 3, 14))
+      front_desk.make_reservation(Date.new(2020, 3, 10), Date.new(2020, 3, 12))
+      front_desk.make_reservation(Date.new(2020, 3, 10), Date.new(2020, 3, 15))
+      front_desk.make_reservation(Date.new(2020, 3, 10), Date.new(2020, 3, 11))
+
+      date_reservations = front_desk.reservation_by_date(Date.new(2020, 3, 10))
+      expect(date_reservations).must_be_kind_of Array
+      expect(date_reservations.length).must_equal 4
+      date_reservations.each do |reservation|
+        expect(reservation).must_be_kind_of Hotel::Reservation
+        expect(reservation.date_range.start_date).must_equal Date.new(2020, 3, 10)
+      end
+    end
+
+    it "returns an empty array if no reservations made for that date" do
+      front_desk = Hotel::FrontDesk.new
+      front_desk.make_reservation(Date.new(2020, 3, 10), Date.new(2020, 3, 14))
+      front_desk.make_reservation(Date.new(2020, 3, 10), Date.new(2020, 3, 12))
+      date_reservations = front_desk.reservation_by_date(Date.new(2020, 3, 13))
+      expect(date_reservations).must_be_kind_of Array
+      expect(date_reservations.length).must_equal 0
+    end
+
+    it "raises ArgumentError for passing an invalid argument" do
+      front_desk = Hotel::FrontDesk.new
+      expect{
+        front_desk.reservation_by_date("2020, 3, 4")
+      }.must_raise ArgumentError
+    end
 
   end
+
 end
 
 
