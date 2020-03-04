@@ -44,10 +44,16 @@ module Hotel
       date_range = Hotel::DateRange.new(start_date:start_date,end_date:end_date)
       # check if date_range overlap with other existing reservations
       times_overlap = @reservations.count{|bookings|bookings.date_range.overlap(date_range)}
+      rooms_not_available_res = @reservations.select{|bookings|bookings.date_range.overlap(date_range)}
+      rooms_num_not_available = rooms_not_available_res.map{|bookings|bookings.room_num}
+      available_rooms = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20] - rooms_num_not_available
+
       unless times_overlap < 20
         raise ArgumentError, "cannot reserve room since all rooms are booked"
       end 
-      new_reservation = Hotel::Reservation.new(date_range:date_range)
+      
+      assign_room = available_rooms[0]
+      new_reservation = Hotel::Reservation.new(date_range:date_range,room_num:assign_room)
       @reservations << new_reservation
       return new_reservation 
     end 
