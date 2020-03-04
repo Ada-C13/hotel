@@ -3,6 +3,7 @@ module Hotel
     # Wave 1
     def rooms
       # You might want to replace this method with an attr_reader
+      # array of hashes for rooms
       return []
     end
 
