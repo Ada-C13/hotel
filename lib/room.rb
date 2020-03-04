@@ -3,7 +3,7 @@
 require_relative 'reservation'
 
 class Room
-  attr_accessor :reservations, :room_num
+  attr_accessor :reservations, :room_num, 
   def initialize(room_num)
     @room_num = room_num
     @reservations = []
@@ -16,6 +16,7 @@ class Room
      @reservations << new_res
      return new_res
   end
+
 
   def find_all_resevations
     reservation_array = Reservation.all

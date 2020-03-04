@@ -1,6 +1,5 @@
-
-require "hotel_dispatcher"
 require_relative "test_helper"
+require 'hotel_dispatcher'
 
 describe "HotelDispatcher class" do
   def build_test_dispatcher

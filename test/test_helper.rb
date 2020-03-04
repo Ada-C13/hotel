@@ -1,4 +1,4 @@
-# Add simplecov
+# require 'simple_cov'
 require "minitest"
 require "minitest/autorun"
 require "minitest/reporters"
