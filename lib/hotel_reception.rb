@@ -21,6 +21,17 @@ module Hotel
       return reservations.select { |res| res.date_range.include?(date) }
     end
 
+    def list_reservations(date:, room_id: nil)
+      date = Date.new(date[0], date[1], date[2]) unless date.class == Date
+      res_by_date = reservations.select { |res| res.date_range.include?(date) }
+      if room_id
+        res_by_room = reservations.select { |res| res.room.id == room_id }
+        return res_by_date.difference(res_by_room)
+      else
+        return res_by_date
+      end
+    end
+
     def find_reservation(id)
       return reservations.find { |res| res.id == id }
     end
