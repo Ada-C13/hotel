@@ -12,4 +12,9 @@ describe "manager" do
     STEPHANIE.must_equal 1
   end 
 
+  it "calls creates_rooms" do 
+    all_rooms = Hotel::Manager.new
+    expect(@all_rooms.length).must_equal 20
+  end 
+
 end
