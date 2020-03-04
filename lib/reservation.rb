@@ -3,7 +3,7 @@ require 'date'
 
 module Hotel 
   class Reservation
-    attr_reader :reservation_id, :date_range, :room_num, :block_tag, :room_rate
+    attr_accessor :reservation_id, :date_range, :room_num, :block_tag, :room_rate
     def initialize(reservation_id:nil, date_range:, room_num:nil,block_tag:nil, room_rate:nil)
 
       @reservation_id = reservation_id

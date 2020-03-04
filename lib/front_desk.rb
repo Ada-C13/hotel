@@ -70,7 +70,29 @@ module Hotel
     end 
 
     #create_block method 
-    def create_block(date_range,num_of_rooms,room_rate)
+    def create_block(start_date,end_date,num_of_rooms,room_rate)
+      date_range = Hotel::DateRange.new(start_date:start_date,end_date:end_date)
+      rooms_available = self.room_available(date_range)
+
+      if num_of_rooms > 5 
+        raise ArgumentError, "max is 5 for Number of Rooms"
+      end 
+
+      unless rooms_available.length >= num_of_rooms
+        raise ArgumentError, "Not Enough Rooms"
+      end 
+
+      block_array = []
+
+      num_of_rooms.times do 
+        new_block = self.request_reservation(start_date,end_date)
+        new_block.room_rate = room_rate
+        self.reservations << new_block
+        block_array << new_block
+      end 
+      return block_array
+      
+
     end 
 
 

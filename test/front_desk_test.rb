@@ -278,5 +278,20 @@ describe "front_desk" do
     end 
   end 
 
+  describe "Hotel Block" do 
+    describe "#create_block" do 
+      it "create an array of reservations with block_tag = block-available" do 
+        manager = hotel_manager
+        start_date = [2020,3,2]
+        end_date = [2020,3,4]
+        a_block = manager.create_block(start_date,end_date,2,180)
+
+        expect(a_block).must_be_kind_of Array
+        expect(a_block.length).must_equal 2 
+        expect(manager.reservations[0].room_rate).must_equal 180
+
+      end 
+    end 
+  end 
 
 end 
