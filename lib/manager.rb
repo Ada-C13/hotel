@@ -5,15 +5,19 @@ require_relative 'reservation'
 
 module Hotel
   class Manager
-    attr_reader
+    attr_reader :num
     attr_writer
     attr_accessor
 
-    # def initialize 
-
-    # end
-
+    def initialize
+      @all_rooms = Room.create_rooms(20)
+      return @all_rooms
+    end
+    
+    
   end
 end
+
+
 
 STEPHANIE = 1
