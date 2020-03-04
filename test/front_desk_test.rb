@@ -3,7 +3,7 @@ describe "front_desk" do
   def hotel_manager 
     return Hotel::FrontDesk.new()
   end 
-  describe "reservation_cost method" do 
+  describe "#reservation_cost" do 
     it "calculate cost for a reservation" do 
       manager = hotel_manager
       reservation_1 = Hotel::Reservation.new(
@@ -26,7 +26,7 @@ describe "front_desk" do
     end
   end  
 
-  describe "list_all" do
+  describe "#list_all" do
     it "return a list of all reservations" do 
       manager = hotel_manager
       reservation_1 = Hotel::Reservation.new(
@@ -49,7 +49,7 @@ describe "front_desk" do
     end 
   end
   
-  describe "check_date_reservations method" do 
+  describe "#check_date_reservations" do 
     it "return a list of all reservations under a specific date" do 
       manager = hotel_manager
       reservation_1 = Hotel::Reservation.new(
@@ -92,7 +92,7 @@ describe "front_desk" do
     end 
   end 
   
-  describe "room_reservations_and_date method" do 
+  describe "#room_reservations_and_date" do 
     
     it "return a list of reservations under a room and within date_range" do 
       manager = hotel_manager
@@ -224,7 +224,21 @@ describe "front_desk" do
       room_num_array = manager.reservations.map {|bookings|bookings.room_num.to_i}
       expect(room_num_array.sum).must_equal 210
     end 
+  end 
 
+  describe "#room_available" do 
+    it "will show rooms that are availabe for a given date range" do 
+      manager = hotel_manager
+      manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,10]),room_num:1)
+      manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,10]),room_num:2)
+      manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,10]),room_num:3)
+      manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,10]),room_num:4)
+      manager.reservations << Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date:[2020,3,2],end_date:[2020,3,10]),room_num:5)
+      
+      room_availabe = [6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+      date_range = Hotel::DateRange.new(start_date:[2020,3,7],end_date:[2020,3,8])
+      expect(manager.room_available(date_range)).must_equal room_availabe
+    end 
   end 
 
 

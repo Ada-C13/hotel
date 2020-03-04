@@ -58,6 +58,14 @@ module Hotel
       return new_reservation 
     end 
 
+    #room_available method - list rooms that are available for a given date range
+    def room_available(date_range)
+      rooms_not_available_res = @reservations.select{|bookings|bookings.date_range.overlap(date_range)}
+      rooms_num_not_available = rooms_not_available_res.map{|bookings|bookings.room_num}
+      available_rooms = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20] - rooms_num_not_available
+      return available_rooms.sort!
+    end 
+
     #reservation_cost method 
     def reservation_cost(reservation)
       looked_up_reservation = @reservations.select {|bookings| reservation==bookings}
