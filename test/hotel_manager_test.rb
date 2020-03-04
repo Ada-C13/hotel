@@ -97,9 +97,10 @@ describe "HotelManager" do
     before do
       @hotel_manager.initialize_rooms(20)
       date_range1 = Hotel::DateRange.new(Date.new(2020,5,10), Date.new(2020,5,14))
-      date_range2 = Hotel::DateRange.new(Date.new(2020,5,25), Date.new(2020,5,29))
+      date_range2 = Hotel::DateRange.new(Date.new(2020,5,25), Date.new(2020,5,27))
+      date_range3 = Hotel::DateRange.new(Date.new(2020,5,28), Date.new(2020,5,29))
 
-      @hotel_manager.find_room(1).reservations.push(Hotel::Reservation.new(date_range1), Hotel::Reservation.new(date_range2))
+      @hotel_manager.find_room(1).reservations.push(Hotel::Reservation.new(date_range1), Hotel::Reservation.new(date_range2), Hotel::Reservation.new(date_range3))
     end
 
     describe "list_reservations_by_room" do
@@ -115,7 +116,7 @@ describe "HotelManager" do
       it "returns the correct reservations" do
         date_range = Hotel::DateRange.new(Date.new(2020,5,26), Date.new(2020,5,29))
 
-        expect(@hotel_manager.list_reservations_by_room(1, date_range).length).must_equal 1
+        expect(@hotel_manager.list_reservations_by_room(1, date_range).length).must_equal 2
       end
 
       it "returns an empty Array if there are no reservations during the date range" do
@@ -147,6 +148,18 @@ describe "HotelManager" do
   
         expect(@hotel_manager.list_reservations_by_date(date)).must_equal []
       end
+
+      it "returns the correct reservations" do
+        date_range1 = Hotel::DateRange.new(Date.new(2020,5,25), Date.new(2020,5,27))
+        date_range2 = Hotel::DateRange.new(Date.new(2020,5,28), Date.new(2020,5,29))
+  
+        @hotel_manager.find_room(2).reservations.push(Hotel::Reservation.new(date_range1), Hotel::Reservation.new(date_range2))
+  
+        date = Date.new(2020,5,26)
+
+        expect(@hotel_manager.list_reservations_by_date(date).length).must_equal 2
+      end
+
   end
   end
 end
