@@ -9,6 +9,11 @@ module Hotel
       @start_date = Date.parse(start_date)
       @end_date = Date.parse(end_date)
     end
+
+    def total_cost
+      nights = start_date - end_date
+      return (nights * room.nightly_rate)
+    end
   end
   
 end

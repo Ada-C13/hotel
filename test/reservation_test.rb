@@ -34,5 +34,14 @@ describe "Reservation" do
       expect(reservation).must_respond_to :end_date
       expect(reservation.end_date).must_equal Date.parse("March 5, 2020")
     end
-  end  
+  end
+
+  describe "total_cost" do
+    it "Returns total cost for reservation" do
+      room = Hotel::Room.new(3)
+      reservation = Hotel::Reservation.new(1, room, "March 3, 2020", "March 5, 2020")
+      # Assert
+      expect(reservation.total_cost).must_equal 400
+    end
+  end
 end
