@@ -32,7 +32,11 @@ module Hotel
       end
       return all_rooms
     end
-  
+
+    # nn to make all_rooms array that contains hashes with date: recloc
+    # {date: date, reservation: res #} -or-
+    # {date: reservation #}
+    # room1 = [{3/14/2020: HFHTJY}, {3/15/2020: HFHTJY}]
     
 
   end
