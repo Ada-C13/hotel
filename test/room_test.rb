@@ -57,16 +57,4 @@ describe Hotel::Room do
     end
 
   end
-
-  # describe "self.all" do
-  #   it "returns an array of all the rooms" do
-      
-  #   end
-  # end
-
-  # describe "self.find(id)" do
-  #   it "returns the room instance via room_id" do
-      
-  #   end
-  # end
 end

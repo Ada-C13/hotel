@@ -15,13 +15,6 @@ module Hotel
     def add_booking_to_room(new_reservation)
       @bookings << new_reservation
     end
-
-
-    # def self.all
-
-
-    # def find(date_range)
   
-
   end
 end

@@ -11,11 +11,29 @@ module Hotel
       @reservations = []
     end
 
-        # [method] track reservation by date to find list of reservations for a specific date
-    def find_reservation_by_date (date)
-      found_reservations = @reservations.select{|reservation|reservation.date_range.include_date(date)}
-      return found_reservations
+    # #method# track reservation by date to find list of reservations for a specific date
+    def find_reservations_by_date (date)
+      # what returns if no match
+      reservations_by_date = @reservations.select{|reservation|reservation.date_range.include_date(date)}
+      return reservations_by_date
     end
+
+    # #method# access the list of reservations for a specified room and a given date range
+    def find_reservations_room_date(room_id, date_range)
+      # what returns if no match
+      reservations_room_date = @reservations.select{
+        |reservation|reservation.room_id == room_id && reservation.date_range.overlapping(date_range)
+      }
+      return reservations_room_date
+      # alternatively, we can search through the collection of rooms
+      # selected_room = @rooms.find{|room|room.room_id == room_id}
+      # reservations_room_date = selected_room.bookings.select{|reservation|reservation.date_range.overlapping(date_range)}
+    end
+
+    # [method] avail rooms for that day. I can view a list of rooms that are not reserved for a given date range
+    # def find_availabile_rooms(date_range)
+
+    # end
    
 
     # method to make reservation
@@ -35,14 +53,6 @@ module Hotel
     # # method to make reservation
     # def make_reservation(start_date, end_date)
 
-    # # [method] track reservation by date to find list of reservations by date
-    # def find_reservation_by_date (date)
-    #   def find_reservation_date (start_date, end_date)
-    #   can access the list of reservations for a specific date
-
-
-    # [method] access the list of reservations for a specified room and a given date range
-    # def find_reservation_room_date(room_id, date_range)
     
     # [method] avail rooms for that day. I can view a list of rooms that are not reserved for a given date range
     # def find_availabile_rooms(date_range)
