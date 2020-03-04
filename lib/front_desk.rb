@@ -43,7 +43,8 @@ module Hotel
       return res_w_given_date 
     end
 
-    def total_cost(Reservation)
+    def total_cost(reservation)
+      total_cost = reservation.date_range.nights * reservation.room.cost
     end
 
   #   start_date = Date.new(2020,3,1)

@@ -9,5 +9,6 @@ module Hotel
       @date_range = date_range
       @room = room
     end
+
   end
 end

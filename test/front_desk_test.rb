@@ -108,4 +108,14 @@ describe "front desk" do
     end
 
   end
+
+  describe " total_cost" do
+    before do
+      @new_reservation = Hotel::Reservation.new( id: 1, date_range: Hotel::DateRange.new(start_date: Date.new(2020, 3, 1), end_date: Date.new(2020, 3, 4)), room: Hotel::Room.new(room_number: 1, cost: 200))
+    end
+
+    it "calculates total cost of the reservation " do
+      expect(@front_desk.total_cost(@new_reservation)).must_equal 600
+    end
+  end
 end
