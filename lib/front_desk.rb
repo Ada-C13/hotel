@@ -66,12 +66,18 @@ module Hotel
     def reservation_cost(reservation)
       looked_up_reservation = @reservations.select {|bookings| reservation==bookings}
       cost = looked_up_reservation[0].date_range.duration
-      return cost*200
+      return cost* (looked_up_reservation[0].room_rate)
     end 
 
+    #create_block method 
+    def create_block(date_range,num_of_rooms,room_rate)
+    end 
+
+
     #hotel block pseudocode
-    #ability to create hotel block
-    #make reservation within block
+    #ability to create hotel block, this will mark as normal reservation 
+        #but tag with block-available and assign reservation id with B0 to B9
+    #make reservation within block method change tag to block-booked
 
     
   end 
