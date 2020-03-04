@@ -58,6 +58,19 @@ describe Hotel::SystemCoordinator do
     end
   end
 
+  describe "#list_rooms" do
+    it "returns an Array with size of 20" do
+      expect(@coordinator01.list_rooms).must_be_instance_of Array
+      expect(@coordinator01.list_rooms.length).must_equal 20
+    end
+
+    it "stores Room instance in each array element" do
+      @coordinator01.list_rooms.each do |room|
+        expect(room).must_be_instance_of Hotel::Room
+      end
+    end
+  end
+
   describe "#find_reservations_by_date" do
     before do
       date_range = Hotel::DateRange.new(Date.today + 5, Date.today + 10)
