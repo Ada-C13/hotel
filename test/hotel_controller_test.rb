@@ -3,7 +3,6 @@ require_relative 'test_helper'
 describe "Hotel Controller" do
   def build_hotel_controller
     return Hotel::HotelController.new
-      #reservation_list = {1 => {start_date: Date.parse("2020-01-01"), end_date: Date.parse("2020-01-05")} }
   end
   
   describe "Initalizer" do

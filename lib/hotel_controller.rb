@@ -5,7 +5,7 @@ require_relative 'date_range'
 
 module Hotel
   class HotelController
-    attr_reader  :reservation_list,  :room_list
+    attr_reader  :reservation_list,  :room_list, :specific_date_reservation
     # Wave 1
     def initialize
     @reservation_list = Hash.new
@@ -20,8 +20,13 @@ module Hotel
       reservation_list[reservation_list.length + 1] = new_reservation
     end
   
-    def reservations(date)
-      return []
+    def reservations(date) 
+      #@reservation_list.each_value do |reservation|
+      #if date.between?(reservation.date_range.start_date, reservation.date_range.end_date)
+      #  @specific_date_reservation << reservation
+      #end
+      #end
+    return @specific_date_reservation
     end
 
     # Wave 2

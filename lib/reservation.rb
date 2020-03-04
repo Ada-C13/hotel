@@ -10,13 +10,13 @@ module Hotel
     def initialize(date_range, room_num)
       @date_range = date_range
       @room_num  =  room_num
-      @status = :active
+      @status = :comfirmed
 
       raise ArgumentError.new("Please enter a valid room number. There are only 20 rooms in this hotel") if @room_num > 20 || @room_num <= 0
     end
 
     def cost
-      # how many night times 200 per nightß
+      # how many night times 200 per night
       return (@date_range.duration)* 200 
     end
   end

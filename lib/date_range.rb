@@ -11,13 +11,23 @@ module Hotel
     end
 
     def overlap?(other)
-      return false
+      # check to see if the date range itself is overlapping with "other"?
+      if self.start_date.between?(other.start_date, other.end_date - 1) || other.start_date.between?(self.start_date, self.end_date - 1)
+        return true
+      else
+        return false
+      end
     end
 
     def include?(date)
-      return false
-    end
-
+      # see if the date provided is in between the date range
+      if date.between?(self.start_date, self.end_date - 1)
+        return true
+      else
+        return false
+      end 
+    end  
+  
     def duration  
       return @end_date - @start_date
     end
