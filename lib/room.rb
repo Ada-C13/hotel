@@ -1,9 +1,8 @@
-# frozen_string_literal: true
 
 require_relative 'reservation'
 
 class Room
-  attr_accessor :reservations, :room_num, 
+  attr_accessor :reservations, :room_num
   def initialize(room_num)
     @room_num = room_num
     @reservations = []

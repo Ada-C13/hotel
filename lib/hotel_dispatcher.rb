@@ -14,7 +14,7 @@ class HotelDispatcher
     (1..20).each do |room_num|
       room_array << Room.new(room_num)
     end
-    p room_array
+    return room_array
   end
 
   # - When reserving a room, the user provides only the start and end dates - the library should determine which room to use for the reservation
