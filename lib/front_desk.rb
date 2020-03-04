@@ -42,12 +42,21 @@ module Hotel
       reserved_rooms = range_bookings.map do |reservation|
         reservation.room
       end
+      return reserved_rooms
     end
 
     def get_available_rooms(start, finish)
       reserved_rooms = get_reserved_rooms(start, finish)
       available_rooms = @rooms - reserved_rooms
       return available_rooms
+    end
+
+    def reserve_room(start, finish)
+      available_rooms = get_available_rooms(start, finish)
+      raise ArgumentError, "No available rooms for this date range" if available_rooms.empty?
+      new_reservation = Reservation.new(room: available_rooms.first, start_date: start, end_date: finish)
+      add_reservation(new_reservation)
+      return new_reservation
     end
   end
 end

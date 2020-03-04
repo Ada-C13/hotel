@@ -154,6 +154,45 @@ describe "FrontDesk class" do
         front_desk = Hotel::FrontDesk.new
         expect(front_desk.get_available_rooms("1st Apr 2020", "3rd Apr 2020").first.number).must_equal 1
       end
-    end  
+    end
+
+    describe "#reserve_room" do
+      it "returns an instance of a new Reservation" do
+        front_desk = Hotel::FrontDesk.new
+        expect(front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020")).must_be_instance_of Hotel::Reservation
+      end
+
+      it "returns a new Reservation" do
+        check_in = Date.parse("3rd Mar 2020")
+        check_out = Date.parse("5th Mar 2020")  
+        front_desk = Hotel::FrontDesk.new
+        expect(front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020").room.number).must_equal 1
+        expect(front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020").room).must_be_instance_of Hotel::Room
+        expect(front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020").start_date).must_equal check_in
+        expect(front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020").end_date).must_equal check_out
+        expect(front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020").cost).must_equal 400
+      end
+
+      it "adds a new Reservation to the list of reservations" do
+        check_in = Date.parse("3rd Mar 2020")
+        check_out = Date.parse("5th Mar 2020")  
+        front_desk = Hotel::FrontDesk.new
+        front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020")
+        expect(front_desk.reservations.size).must_equal 1
+        expect(front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020").room.number).must_equal 2
+        expect(front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020").room).must_be_instance_of Hotel::Room
+        expect(front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020").start_date).must_equal check_in
+        expect(front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020").end_date).must_equal check_out
+        expect(front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020").cost).must_equal 400
+      end
+
+      it "raises and Argument Error if there are no available rooms for provided dates" do
+        front_desk = Hotel::FrontDesk.new
+        20.times do
+          front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020")
+        end
+        expect{front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020")}.must_raise ArgumentError
+      end
+    end
   end
 end
