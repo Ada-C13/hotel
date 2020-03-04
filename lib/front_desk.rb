@@ -22,6 +22,8 @@ module Hotel
       id = (1..1000).to_a
       @date_ranges << date_range
       available_rooms = @rooms.select{|room| room.reservations.empty? == true} || @rooms.reject{|room| room.reservations.select{|reservation| reservation.date_range.overlap?(date_range)} == true}
+      raise NoAvailableRoomError.new("there are no available rooms for that date")if available_rooms.empty? == true
+
       chosen_room = available_rooms.shift
       new_reservation = Hotel::Reservation.new(id: id.shift, date_range: date_range, room: chosen_room)
       @reservations << new_reservation
