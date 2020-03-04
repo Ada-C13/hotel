@@ -4,9 +4,11 @@ require_relative 'hotel_manager'
 
 module Hotel
   class Reservation
-    attr_reader :date_range, :id, :total_cost, :room_number, :nights
+    attr_reader :date_range, :id, :room_number, :nights
 
-    def initialize(date_range)
+    attr_accessor :total_cost
+
+    def initialize(date_range, id = "", room_number = "")
       @date_range = date_range
       @id = id
       @total_cost = total_cost
