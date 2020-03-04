@@ -12,16 +12,20 @@ describe Hotel::DateRange do
       expect(range.end_date).must_equal end_date
     end
 
+    it "raises error for arguments that are not instances of Date" do 
+      expect{Hotel::DateRange.new("3rd Feb 2017", "4th Feb 2017")}.must_raise Hotel::InvalidDateError
+    end
+
     it "is an an error for negative-length ranges" do
       start_date = Date.new(2017, 01, 01)
       end_date = start_date - 3
-      expect{Hotel::DateRange.new(start_date, end_date)}.must_raise Hotel::InvalidDateRangeError
+      expect{Hotel::DateRange.new(start_date, end_date)}.must_raise Hotel::InvalidDateError
     end
 
     it "is an error to create a 0-length range" do
       start_date = Date.new(2017, 01, 01)
       end_date = start_date
-      expect{Hotel::DateRange.new(start_date, end_date)}.must_raise Hotel::InvalidDateRangeError
+      expect{Hotel::DateRange.new(start_date, end_date)}.must_raise Hotel::InvalidDateError
     end
   end
 
