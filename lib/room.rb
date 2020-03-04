@@ -26,5 +26,9 @@ module Hotel
       end
     end
 
+    def calculate_cost(reservation)
+      reservation.total_cost = reservation.nights * cost
+    end
+
   end
 end
