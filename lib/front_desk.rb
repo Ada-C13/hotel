@@ -4,6 +4,7 @@ require 'reservation'
 module Hotel
   class FrontDesk
     attr_accessor :reservations
+  
 
     def initialize(reservations:nil )
       @reservations = reservations || []

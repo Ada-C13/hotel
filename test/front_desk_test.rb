@@ -291,6 +291,7 @@ describe "front_desk" do
 
         expect{ manager.create_block(start_date,end_date,6,180)}.must_raise ArgumentError
       end 
+      
 
     end 
   end 
