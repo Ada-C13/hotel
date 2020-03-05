@@ -10,10 +10,18 @@ module Hotel
       reservations:
     )
 
-      rooms = (1..20).map { |i| i }
+      
       @rooms = rooms
       @reservations = reservations || []
     end
+
+    def all_rooms
+      rooms = (1..20).map { |i| i }
+      return rooms
+    end
+
+
+    # User: I can access the list of all of the rooms in the hotel
 
     # Wave 1
 
@@ -31,11 +39,13 @@ module Hotel
 
     # User: I can access the list of reservations for a specific date, so that I can track reservations by date
     def reservations(date)
+      @reservations.each do |res|
+
+      end
       return []
     end
 
     # User: I access the list of reservations for a specified room and a given date range
-    # User: I can access the list of all of the rooms in the hotel
 
     # Wave 2
     def available_rooms(start_date, end_date)

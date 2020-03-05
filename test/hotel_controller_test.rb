@@ -17,13 +17,18 @@ describe Hotel::HotelController do
     it "rooms is a type of array" do
       expect(@hotel_controller.rooms).must_be_kind_of Array
     end
-
-    it "rooms array has 20 items" do
-      expect(@hotel_controller.rooms.length).must_equal 20
-    end
   end  
 
+
+ 
+
   describe "wave 1" do
+    describe "all_rooms" do
+      it "rooms array has 20 items" do
+        expect(@hotel_controller.rooms.length).must_equal 20
+      end
+    end
+
     describe "reserve_room" do
       it "takes two Date objects and returns a Reservation" do
         start_date = @date
