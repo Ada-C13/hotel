@@ -10,28 +10,24 @@ module Hotel
       reservations:
     )
 
-      
+      rooms = (1..20).map { |i| i }
       @rooms = rooms
       @reservations = reservations || []
     end
 
-    def all_rooms
-      rooms = (1..20).map { |i| i }
-      return rooms
-    end
+
 
 
     # User: I can access the list of all of the rooms in the hotel
 
     # Wave 1
 
-    def reserve_room(start_date, end_date)
+    def reserve_room(date_range)
       # start_date and end_date should be instances of class Date
-      book_room = available_rooms(start_date, end_date).first
-      new_reservation = Reservation.new(
-        start_date: start_date, 
-        end_date: end_date, 
-        room: book_room,
+      book_room = available_rooms(date_range).first
+      new_reservation = Hotel::Reservation.new(
+        room: book_room, 
+        date_range: date_range,
       )
       @reservations.push(new_reservation)
       return new_reservation

@@ -1,22 +1,21 @@
+require_relative "date_range"
+
 module Hotel
   class Reservation
-    attr_reader :room
-    attr_accessor :start_date, :end_date
+    attr_reader :room, :date_range
 
-    def initialize(start_date:, end_date:, room:)
+    def initialize(date_range:, room: nil)
       @room = room
-      @start_date = start_date
-      @end_date = end_date
+      @date_range = date_range
   
     end
 
 
-
+    # ! TODO How to get nights from date_range ?
     # User: I can get the total cost for a given reservation
-    def cost
-      nights = (end_date - start_date).to_i
+    def cost(reservation)
       room_rate = 200
-      cost = nights * room_rate
+      cost = reservation.date_range.nights * room_rate
       return cost
     end
   end

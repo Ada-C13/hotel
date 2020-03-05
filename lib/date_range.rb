@@ -24,8 +24,7 @@ module Hotel
 
     # calculate the number of nights for a reservation (end date is not a night)
     def nights
-      @nights_booked = (@end_date - @start_date).to_i
-      return @nights_booked
+      return @date_range.length - 1
     end
 
   end
