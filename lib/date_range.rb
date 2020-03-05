@@ -24,6 +24,10 @@ module Hotel
       start_date < date_range.end_date && end_date > date_range.start_date
     end
 
+    def nights
+      (end_date - start_date).to_i
+    end
+
   end
 end
 

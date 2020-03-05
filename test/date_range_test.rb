@@ -63,4 +63,14 @@ describe "DateRange class" do
     # end
   end
 
+  describe "nights" do
+    it "calculates the number of nights for the date range" do
+      date_range = Hotel::DateRange.new(start_date: "2020-3-1", end_date: "2020-3-10")
+      expect(date_range.nights).must_equal 9
+
+      date_range = Hotel::DateRange.new(start_date: "2020-3-1", end_date: "2020-3-2")
+      expect(date_range.nights).must_equal 1
+    end
+  end
+
 end
