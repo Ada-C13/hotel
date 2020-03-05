@@ -9,10 +9,8 @@ describe "DateRange" do
     it "creates an instance of DateRange" do
       expect(@date_range).must_be_kind_of Hotel::DateRange
       expect(@date_range).must_respond_to :start_date
-    end
-
-    it "start_date must be instance of Date" do
-      expect(@date_range.start_date).must_be_kind_of Date
+      expect(@date_range).must_respond_to :end_date
+      expect(@date_range).must_respond_to :range
     end
   end
 
@@ -52,25 +50,21 @@ describe "DateRange" do
   describe "overlap?" do
     it "should return true if dates overlap" do
       date_range = Hotel::DateRange.new(Date.new(2020,5,4), Date.new(2020,5,6))
-
       expect(@date_range.overlap?(date_range)).must_equal true
     end
 
     it "should return false if dates do not overlap" do
       date_range = Hotel::DateRange.new(Date.new(2020,5,7), Date.new(2020,5,9))
-
       expect(@date_range.overlap?(date_range)).must_equal false
     end
 
     it "returns false when check-out day of reservation is same as check-in day of new reservation" do
       date_range = Hotel::DateRange.new(Date.new(2020,5,5), Date.new(2020,5,9))
-
       expect(@date_range.overlap?(date_range)).must_equal false
     end
 
     it "returns false when check-in day of reservation is same as check-out day of new reservation" do
       date_range = Hotel::DateRange.new(Date.new(2020,5,1), Date.new(2020,5,3))
-
       expect(@date_range.overlap?(date_range)).must_equal false
     end
   end

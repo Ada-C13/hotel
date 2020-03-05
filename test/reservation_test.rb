@@ -21,7 +21,7 @@ describe "Reservation" do
       expect(@reservation.nights).must_equal 2
     end
 
-    it "can access start date" do
+    it "can access start_date" do
       expect(@reservation.date_range.start_date).must_equal Date.new(2020,5,3)
     end
 
