@@ -1,6 +1,6 @@
 require_relative 'test_helper'
 
-xdescribe "DateRange class" do 
+describe "DateRange class" do 
 
   describe "initilize" do 
     before do
