@@ -173,9 +173,8 @@ describe "hotel reception" do
       check_in_time = [2020, 2, 14]
       check_out_time = [2020, 2, 15]
       20.times do |i|
-        room = my_reception.rooms[i + 1]
+        room = my_reception.rooms[i]
         my_reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
-        i += 1
       end
 
       expect(my_reception.reservations.length).must_equal 20
