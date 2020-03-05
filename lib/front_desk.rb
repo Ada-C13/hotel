@@ -94,7 +94,9 @@ module Hotel
         block_array << new_block
       end 
       puts block_array[0].reservation_id.to_s[0..4]
+     
       return block_array
+
     end 
 
     #book_room_of_block (assume manager know unique block_id BXXXX)
