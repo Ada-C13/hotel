@@ -20,16 +20,10 @@ module Hotel
 
   def overlap?(new_date_range)
     # when new start date is inside range
-    if new_date_range.check_in >= self.check_in && new_date_range.check_in < self.check_out
+    if new_date_range.check_in >= self.check_out || new_date_range.check_out <= self.check_in
+      return false
+    else
       return true
-      # when new end date is inside range
-    elsif new_date_range.check_out > self.check_in && new_date_range.check_out <= self.check_out
-      return true
-      # when new dates encompass range
-    elsif new_date_range.check_in < self.check_in && new_date_range > self.check_out
-      return true
-    end
-    return false
   end
 
   # def include?(one_day)
