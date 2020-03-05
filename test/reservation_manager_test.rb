@@ -1,13 +1,11 @@
 require_relative 'test_helper'
 
 describe "ReservationManager class" do
+  before do 
+    @reservation_manager = Hotel::ReservationManager.new(20)
+  end
   
   describe "Initializer" do
-
-    before do 
-      @reservation_manager = Hotel::ReservationManager.new(20)
-    end
-
     it "is an instance of ReservationManager" do
       expect(@reservation_manager).must_be_kind_of Hotel::ReservationManager
     end
@@ -29,19 +27,39 @@ describe "ReservationManager class" do
       expect(reservation_manager.rooms.length).must_equal 0
 
     end
-    
   end
 
   describe "create reservation" do
     before do
+      @room = Hotel::Room.new(100)
+      @occupancy = [{:room => @room, :guest => "Picchu"}]
       @date = Hotel::DateRange.new(Date.new, Date.new + 2)
-      @occupancy = {:room => Hotel::Room.new(12), :guest => "Picchu"}
-      @reservation = Hotel::Reservation.new("single", @date, @occupancy)
+      @reservation = @reservation_manager.create_reservation(:SINGLE, @date, @occupancy)
     end
 
     it "creates an instance of Reservation object" do
       expect(@reservation).must_be_kind_of Hotel::Reservation
     end
 
+    it "creates valid objects inside of a Reservation" do
+      expect(@reservation.occupancy).must_be_kind_of Array
+    end
+
+  end
+
+  describe "find_reservations_by_date" do
+    before do
+      room = Hotel::Room.new(200)
+      occupancy = [{:room => @room, :guest => "Elvy"}]
+      date = Hotel::DateRange.new(Date.new, Date.new + 2)
+      @reservation_manager.create_reservation(:SINGLE, date, occupancy)
+    end
+
+    it "finds all reservations for a date" do
+      results = @reservation_manager.find_reservations_by_date(Date.new)
+      expect(results).must_be_kind_of Array
+      expect(results[0]).must_be_kind_of Hotel::Reservation
+      expect(results[0].occupancy[0][:room].id).must_be_kind_of String
+    end
   end
 end

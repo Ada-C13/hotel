@@ -13,8 +13,18 @@ module Hotel
     end
 
     def create_reservation(type, range, guest)
-      range = DateRange.new(Date.new, Date.new+2)
-      @reservations << Reservation.new("single", range, [{:room => @rooms.sample, :guest => guest}])
+      raise ArgumentError.new("Invalid reservation type (given #{type}, must be :SINGLE or :BLOCK)") unless 
+        type == :SINGLE || type == :BLOCK
+
+        occupancy = [{:room => @rooms.sample, :guest => guest}]
+
+      new_reservation = Reservation.new(type, range, occupancy)
+      @reservations << new_reservation
+      return new_reservation
+    end
+
+    def find_reservations_by_date(date)
+      by_date = @reservations.select { |reservation| reservation.dates.collide?(date,date)}
     end
 
     private 
