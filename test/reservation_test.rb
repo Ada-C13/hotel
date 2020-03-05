@@ -5,7 +5,7 @@ describe "Reservation class" do
   describe "#initialize" do
     it "creates an instance of Reservation class" do
       booking = Hotel::Reservation.new(
-        room: Hotel::Room.new(1), 
+        room: Hotel::Room.new(1),
         start_date: "3rd Mar 2020", 
         end_date: "5th Mar 2020")
       expect(booking).must_be_instance_of Hotel::Reservation
@@ -39,14 +39,14 @@ describe "Reservation class" do
 
     it "saves correct dates for check-in and check-out" do
       check_in = Date.parse("3rd Mar 2020")
-      check_out = Date.parse("4th Mar 2020")
+      check_out = Date.parse("5th Mar 2020")
 
       reservation = Hotel::Reservation.new(
         room: Hotel::Room.new(1), 
         start_date: "3rd Mar 2020", 
         end_date: "5th Mar 2020")
-      expect(reservation.start_date).must_equal check_in
-      expect(reservation.end_date).must_equal check_out
+      expect(reservation.date_range.start_date).must_equal check_in
+      expect(reservation.date_range.end_date).must_equal check_out
     end
   end
 end

@@ -44,4 +44,11 @@ describe "Date Range" do
       expect(range1.overlap?(range2)).must_equal false
     end
   end
+
+  describe "#days" do
+    it "calculates days of a date range" do
+      range = Hotel::DateRange.new(start_date: "3 Mar", end_date: "5 Mar")
+      expect(range.days).must_equal 2
+    end
+  end
 end
