@@ -1,6 +1,7 @@
 module Hotel
   class HotelController
     # Wave 1
+    attr_reader :rooms
     def rooms
       # You might want to replace this method with an attr_reader
       # array of hashes for rooms
@@ -11,12 +12,12 @@ module Hotel
         room_base << ("room#{i+1}").to_sym
       end
 
-      rooms = []
-      rooms << room_base.each_with_object({}) do
+      @rooms = []
+      @rooms << room_base.each_with_object({}) do
           |key, h| h[key] = {:date => [], :reservation => []} 
       end
 
-      return rooms
+      return @rooms
     end
 
     def reserve_room(start_date, end_date)
