@@ -4,7 +4,19 @@ module Hotel
     def rooms
       # You might want to replace this method with an attr_reader
       # array of hashes for rooms
-      return []
+      rooms = []
+
+      room_base = []
+      20.times do |i|
+        room_base << ("room#{i+1}").to_sym
+      end
+
+      rooms = []
+      rooms << room_base.each_with_object({}) do
+          |key, h| h[key] = {:date => [], :reservation => []} 
+      end
+
+      return rooms
     end
 
     def reserve_room(start_date, end_date)
