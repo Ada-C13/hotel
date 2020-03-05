@@ -90,11 +90,8 @@ module Hotel
         new_block.room_rate = room_rate
         new_block.block_tag = "block-available"
         new_block.reservation_id = "B" + random_block_id.to_s + "-" + new_block.reservation_id.to_s
-        self.reservations << new_block
         block_array << new_block
       end 
-      puts block_array[0].reservation_id.to_s[0..4]
-     
       return block_array
 
     end 

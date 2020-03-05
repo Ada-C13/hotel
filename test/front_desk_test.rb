@@ -271,6 +271,7 @@ describe "front_desk" do
 
         expect(a_block).must_be_kind_of Array
         expect(a_block.length).must_equal 2 
+        expect(manager.reservations.length).must_equal 2
         expect(manager.reservations[0].room_rate).must_equal 180
         expect(manager.reservations[0].block_tag).must_equal "block-available"
       end 
@@ -298,9 +299,11 @@ describe "front_desk" do
         end_date = [2020,4,15]
         block_id = manager.create_block(start_date,end_date,5,180)[0].reservation_id.to_s[0..4]
         manager.book_room_of_block(block_id)
+        num_reservations = manager.reservations.length
         count_rooms_booked = manager.reservations.count{|room|room.block_tag == "block-booked"}
         count_rooms_available = manager.reservations.count{|room|room.block_tag == "block-available"}
 
+        expect(num_reservations).must_equal 5
         expect(count_rooms_booked).must_equal 1
         expect(count_rooms_available).must_equal 4
       end 
