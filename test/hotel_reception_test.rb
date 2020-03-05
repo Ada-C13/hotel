@@ -42,16 +42,23 @@ describe "hotel reception" do
       @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
     end
 
-    it "will list an array of the available rooms for a given date" do
+    it "will list an array of the available rooms for a given dates" do
       check_in_time = [2020, 2, 1]
       check_out_time = [2020, 2, 2]
       my_rooms = @reception.available_rooms(check_in_time, check_out_time)
+      my_room_ids = my_rooms.map { |room| room.id }
 
       expect(my_rooms).must_be_instance_of Array
-      expect(my_rooms.last.id).must_equal 19
       expect(my_rooms.first).must_be_instance_of Hotel::Room
-      expect(my_rooms.first.id).wont_equal 1
+      expect(my_rooms.length).must_equal 19
+      expect(my_room_ids.include?(@reception.rooms[0].id)).must_equal false
     end
+
+    it "will list an empty array if there are no avail rooms for dates" do
+      # TODO
+    end
+
+    it "will"
   end
 
   describe "find reservation" do
@@ -63,7 +70,7 @@ describe "hotel reception" do
 
       check_in_time = [2020, 2, 14]
       check_out_time = [2020, 2, 15]
-      rroom = @reception.rooms[1]
+      room = @reception.rooms[1]
       @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
     end
 
@@ -141,14 +148,10 @@ describe "hotel reception" do
       check_in_time = [2020, 2, 1]
       check_out_time = [2020, 2, 3]
       @reception.make_reservation(check_in_time, check_out_time)
-
-      check_in_time = [2020, 2, 14]
-      check_out_time = [2020, 2, 15]
-      @reception.make_reservation(check_in_time, check_out_time)
     end
     it "edits the reservations array" do
       expect(@reception.reservations).wont_be_empty
-      expect(@reception.reservations.length).must_equal 2
+      expect(@reception.reservations.length).must_equal 1
       expect(@reception.reservations.first).must_be_instance_of Hotel::Reservation
     end
 
@@ -158,10 +161,27 @@ describe "hotel reception" do
       @reception.make_reservation(check_in_time, check_out_time)
       my_reservations = @reception.reservations
 
-      expect(my_reservations.length).must_equal 3
+      expect(my_reservations.length).must_equal 2
       expect(my_reservations.last.id).wont_equal @reception.reservations.first.id
       expect(my_reservations.last.date_range.overlap?(my_reservations.first.date_range)).must_equal true
       expect(my_reservations.last.room.id).wont_equal @reception.reservations.first.room.id
+    end
+
+    it "will raise an exception if there are no rooms available" do
+      my_reception = Hotel::HotelReception.new
+
+      check_in_time = [2020, 2, 14]
+      check_out_time = [2020, 2, 15]
+      20.times do |i|
+        room = my_reception.rooms[i + 1]
+        my_reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
+        i += 1
+      end
+
+      expect(my_reception.reservations.length).must_equal 20
+      expect{
+        my_reception.make_reservation(check_in_time, check_out_time)
+      }.must_raise ArgumentError
     end
   end
 end

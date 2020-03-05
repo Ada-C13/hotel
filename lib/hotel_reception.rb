@@ -17,10 +17,13 @@ module Hotel
 
     def available_rooms(check_in_time, check_out_time)
       dates = Hotel::DateRange.new(check_in_time, check_out_time)
-      
-      unavail_rooms = []
-      unavail_rooms = reservations.map { |res| res.room if res.date_range.overlap?(dates) }
-      return @rooms.difference(unavail_rooms)
+      #find the reservations that overlap with my date range
+      unavail = reservations.select { |res| res.date_range.overlap?(dates) }
+      #alter the array so that it is made up of the rooms that are unavailable
+      unavail.map! { |res| res.room }
+      #return an array of the rooms that are left when the reserved rooms are subtracted
+      return rooms.difference(unavail)
+      # reservations.reject { |res| res.date_range.overlap?(dates) }
     end
     
     def list_reservations(date:, room_id: nil)
@@ -37,8 +40,12 @@ module Hotel
 
     def make_reservation(check_in_time, check_out_time)
       room = available_rooms(check_in_time, check_out_time).first
-      @reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
-      return reservations.last
+      if room
+        @reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
+        return reservations.last
+      else
+        raise ArgumentError, "There are no rooms available on that date."
+      end
     end
   end
 end
