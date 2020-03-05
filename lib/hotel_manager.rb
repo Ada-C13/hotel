@@ -22,14 +22,16 @@ module Hotel
       return @rooms
     end
 
-    def reserve_room(date_range)
+    def reserve_room(date_range, room = nil)
       @total_reservations += 1
-      return Reservation.new(
+      reservation = Reservation.new(
         date_range, 
         id = @total_reservations, 
-        room_number = rand(1..20),
+        room_number = room || rand(1..20),
         total_cost = calculate_cost(date_range, room_number)
       )
+      find_room(reservation.room_number).reservations << reservation
+      return reservation
     end
 
     def calculate_cost(date_range, room)
