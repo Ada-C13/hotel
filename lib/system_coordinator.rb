@@ -6,11 +6,11 @@ module Hotel
   class SystemCoordinator    
     attr_reader :rooms
 
-    def initialize
-      @rooms = build_rooms(20) #access the list of all of the rooms in the hotel
-      
+    def initialize(room_quantity = 20)
+      @rooms = build_rooms(room_quantity)
     end
 
+    
     def build_rooms(quantity)
       Array.new(quantity){|i| Hotel::Room.new(i+1)}
     end
@@ -87,13 +87,8 @@ module Hotel
 end
 
 
-
-  #   # handle/ rescue exceptions 
-  #   # edge cases
-  # end
-# end
-
-
+      # handle/ rescue exceptions 
+      # edge cases i.e. what happens if no match?
 
       # what returns if no match?!!!!! rescue an raised exception????????
       # I want an exception raised if I try to reserve a room during a date range when all rooms are reserved, 

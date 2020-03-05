@@ -36,6 +36,21 @@ describe Hotel::SystemCoordinator do
     end
   end
 
+  describe "#build_rooms" do
+    it "returns an array" do
+      quantity = 5
+      expect(@coordinator01.build_rooms(quantity)).must_be_instance_of Array
+      expect(@coordinator01.build_rooms(quantity).length).must_equal quantity
+    end
+
+    it "stores Room instance in each element" do
+      built01 = @coordinator01.build_rooms(5)
+      built01.each do |room|
+        expect(room).must_be_instance_of Hotel::Room
+      end
+    end
+  end
+
   describe "#list_rooms" do
     it "returns an Array with size of 20" do
       expect(@coordinator01.list_rooms).must_be_instance_of Array
