@@ -9,7 +9,7 @@ module Hotel
       @number = number
     end
 
-    # Methods that help to compare 2 objects of Room class
+    # Methods that will help to compare 2 arrays of Room instances
     def ==(other)
       return number == other.number
     end
