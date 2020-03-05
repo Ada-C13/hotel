@@ -70,25 +70,44 @@ describe Hotel::Room do
     end
   end
 
-  # describe "create_room_reservation" do
-  #   before do
-  #     @room_id = 5
-  #     @room = Hotel::Room.new(@room_id)
+  describe "create_room_reservation" do
+    before do
+      @room_id = 5
+      @room = Hotel::Room.new(@room_id)
       
-  #     @start_date = Date.new(2020, 1, 1)
-  #     @end_date = Date.new(2020, 1, 2)
-  #     @date_range_1 = Hotel::DateRange.new(@start_date, @end_date)
-  #     @reservation_to_add = Hotel::Reservation.new(@date_range_1, @room_id)
-  #   end
+      @start_date = Date.new(2020, 1, 1)
+      @end_date = Date.new(2020, 1, 2)
+      @date_range_1 = Hotel::DateRange.new(@start_date, @end_date)
+      @date_range_2 = Hotel::DateRange.new(@start_date+1, @end_date+1)
+      @reservation_to_add = Hotel::Reservation.new(@date_range_1, @room_id)
+    end
 
-  #   it "creates a new reservation" do
-  #     created_rez = @room.create_room_reservation(@date_range_1)
-  #     expect(created_rez).must_be_kind_of Hotel::Reservation
-  #   end
+    it "returns false if input range conflicts with existing room reservations" do
+      @room.create_room_reservation(@date_range_1)
+      conflicting_date_range = Hotel::DateRange.new(@start_date, @end_date)
+      expect(@room.create_room_reservation(conflicting_date_range)).must_equal false
+    end
+    
+    it "creates a new Reservation if no range conflicts exist" do
+      @room.create_room_reservation(@date_range_1)
+      expect(@room.rez_list[0]).must_be_kind_of Hotel::Reservation
 
-    # add more tests here?
+      expect(@room.rez_list[0].room_id).must_equal 5
+      expect(@room.rez_list[0].date_range).must_equal @date_range_1
+    end
 
-  # end
+    it "adds the newly created Reservation to rez_list" do
+      expect(@room.rez_list.length).must_equal 0
+
+      @room.create_room_reservation(@date_range_2)
+      expect(@room.rez_list.length).must_equal 1
+    end
+
+    it "returns true if a new Reservation is created" do
+      result = @room.create_room_reservation(@date_range_2)
+      expect(result).must_equal true
+    end
+  end
 
   describe "add_room_reservation" do
     before do

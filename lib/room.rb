@@ -27,15 +27,15 @@ module Hotel
     end
 
     # method to create a new reservation
-    # def create_room_reservation(input_range)
-      # call helper method below with one line invocation:
-      # check to make sure input range doesn't conflict with existing room reservations
-      # if so, return false
-      # else, create rez and add to rez list
-      # then return true
-      # created_rez = Hotel::Reservation.new(input_range, self.room_id)
-      # @rez_list << created_rez
-    # end
+    def create_room_reservation(input_range)
+      if self.conflict?(input_range) == true
+        return false
+      else 
+        # there are no conflicts, so create and add to rez_list
+        @rez_list << Hotel::Reservation.new(input_range, self.room_id)
+        return true
+      end
+    end
 
     # method to add reservation to room's rez_list
     def add_room_reservation(reservation_to_add)
