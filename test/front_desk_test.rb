@@ -24,19 +24,18 @@ describe "front_desk" do
       cost2 = manager.reservation_cost(reservation_2)
       expect(cost2).must_equal 1400
     end
-    # it "calculate cost for block individual room as well" do 
-    #   manager = hotel_manager
-    #   start_date = [2020,4,9]
-    #   end_date = [2020,4,11]
-    #   manager.create_block(start_date,end_date,5,180)
-    #   block_id = manager.reservations[0].reservation_id.to_s[0..4]
-    #   manager.book_room_of_block(block_id)
+    it "calculate cost for block individual room as well" do 
+      manager = hotel_manager
+      start_date = [2020,4,9]
+      end_date = [2020,4,11]
+      manager.create_block(start_date,end_date,5,180)
+      block_id = manager.reservations[0].reservation_id.to_s[0..4]
+      reservation = manager.book_room_of_block(block_id)
 
-    #   cost_of_block_room = manager.reservation_cost(reservation_2)
+      cost_of_block_room = manager.reservation_cost(reservation)
+      expect(cost_of_block_room).must_equal 360
+    end 
 
-
-        
-    # end 
   end  
 
   describe "#list_all" do
@@ -64,7 +63,24 @@ describe "front_desk" do
       expect(result).wont_match (/1999-04-08/)
       expect(result).must_match (/1234/)
       expect(result).must_match (/1235/)
-    end 
+    end
+    it "will return block reservations as well" do 
+      manager = hotel_manager
+      start_date = [2020,3,1]
+      end_date = [2020,3,9]
+      manager.create_block(start_date,end_date,3,180)
+      block_id = manager.reservations[0].reservation_id.to_s[0..4]
+      reservation = manager.book_room_of_block(block_id)
+      manager.request_reservation([2020,4,9],[2020,4,10])
+
+      result = manager.list_all
+      expect(result).must_match (/2020-03-01/)
+      expect(result).must_match (/2020-03-09/)
+      expect(result).must_match (/2020-04-09/)
+      expect(result).must_match (/2020-04-10/)
+      expect(result).wont_match (/2020-04-11/)
+
+    end  
   end
   
   describe "#check_date_reservations" do 
@@ -115,6 +131,24 @@ describe "front_desk" do
       expect(result).wont_match (/1000/)
       expect(result).wont_match (/2000/)
 
+    end 
+    it "return list including block reservations under a date" do 
+      manager = hotel_manager
+      start_date = [2020,2,1]
+      end_date = [2020,2,9]
+      manager.create_block(start_date,end_date,3,180)
+      block_id = manager.reservations[0].reservation_id.to_s[0..4]
+      reservation = manager.book_room_of_block(block_id)
+      manager.request_reservation([2020,2,7],[2020,2,11])
+      date_to_check = [2020,2,8]
+      result = manager.check_date_reservations(date_to_check)
+
+      expect(result).must_match (/2020-02-01/)
+      expect(result).must_match (/2020-02-09/)
+      expect(result).must_match (/2020-02-07/)
+      expect(result).must_match (/2020-02-11/)
+      expect(result).wont_match (/2020-03-11/)
+      
     end 
   end 
   
@@ -189,7 +223,7 @@ describe "front_desk" do
       expect(@new_reservation.room_num).must_be :<, 21
     end 
     it "return reservation_id" do 
-      expect(@new_reservation.reservation_id).must_be_kind_of Integer
+      expect(@new_reservation.reservation_id).must_be_kind_of String
     end 
     it "return correct start/end date" do 
       expect(@new_reservation.date_range.start_date).must_equal Date.new(2020,3,4)

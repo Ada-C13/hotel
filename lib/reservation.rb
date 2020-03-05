@@ -17,7 +17,7 @@ module Hotel
       end 
 
       if @reservation_id == nil
-        @reservation_id = rand(1000..9999)
+        @reservation_id = rand(1000..9999).to_s
       end
 
       if @room_rate == nil
