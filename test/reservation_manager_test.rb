@@ -24,6 +24,24 @@ describe "ReservationManager" do
       expect(manager.all_reservations).must_equal []
     end  
   end
+
+  describe "available_rooms method" do
+    it "When no rooms have been booked return 20 available rooms" do
+      manager = Hotel::ReservationManager.new
+      rooms = manager.available_rooms("March 3, 2020", "March 5, 2020")
+      # Assert
+      expect(rooms.length).must_equal 20
+    end
+
+    it "When one room has been booked return 19 available rooms" do
+      manager = Hotel::ReservationManager.new
+      manager.make_reservation("March 3, 2020", "March 5, 2020")
+      rooms = manager.available_rooms("March 3, 2020", "March 5, 2020")
+      # Assert
+      expect(rooms.length).must_equal 19
+    end    
+  end
+
   describe "make_reservation" do
     it "Creates a new reservation" do
       manager = Hotel::ReservationManager.new
@@ -32,10 +50,10 @@ describe "ReservationManager" do
       expect(reservation).must_be_kind_of Hotel::Reservation
     end
   end
+
   describe "find_reservation" do
     it "Finds reservations for a specific date" do
       manager = Hotel::ReservationManager.new
-
       manager.make_reservation("March 1, 2020", "March 3, 2020") 
       manager.make_reservation("March 1, 2020", "March 8, 2020")
       manager.make_reservation("March 3, 2020", "March 6, 2020") 
@@ -53,6 +71,5 @@ describe "ReservationManager" do
         #_(reservation.start_date).must_equal Date.parse(date)
       end
     end  
-
   end
 end
