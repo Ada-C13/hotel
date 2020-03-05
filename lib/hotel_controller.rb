@@ -11,13 +11,26 @@ module Hotel
     end
 
 
-    
 
     #I can access the list of reservations for a specific date, so that I can track reservations by date
-    def reserve_room(start_date, end_date)
-      # start_date and end_date should be instances of class Date
-      # return Reservation.new(id, start_date, end_date, room)
+
+    
+    def reservation(date)
+      result = []
+      @reservations.each do |reservation|
+        if reservation.date_range.include?(date)
+          result << reservation
+        end
+      end
+      return result
     end
+
+
+
+    # def reserve_room(start_date, end_date)
+    #   # start_date and end_date should be instances of class Date
+    #   # return Reservation.new(id, start_date, end_date, room)
+    # end
 
     
     #I access the list of reservations for a specified room and a given date range
@@ -36,5 +49,11 @@ module Hotel
       # start_date and end_date should be instances of class Date
       return []
     end
+
+
+    # def reserve_room(start_date, end_date)
+    #   # start_date and end_date should be instances of class Date
+    #   # return Reservation.new(id, start_date, end_date, room)
+    # end
   end
 end

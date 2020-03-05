@@ -15,10 +15,10 @@ module Hotel
     end
 
 
-    # def cost
-    #   total = date_range.calculate_nights * 200.00
-    #   return total
-    # end
+    def cost
+      total = date_range.calculate_nights * 200.00
+      return total
+    end
     
     #cost DateRange.calculate_nights * 200
   end
