@@ -1,37 +1,58 @@
 require_relative 'room'
 require_relative 'reservation'
 
-
 module HotelBooking
   class FrontDesk
     attr_reader :rooms, :reservations
     def initialize
-    @rooms = []
+    @rooms = self.create_rooms
     @reservations = []
-    # @date_range = nil - not sure if we need this yet
-    # I want exception raised when an invalid date range is provided, so that I can't make a reservation for an invalid date range
     end
 
-    # I can access the list of all of the rooms in the hotel
-  
-    # I access the list of reservations for a specified room and a given date range
-
-    def reserve_room(start_date, end_date)
-      # start_date and end_date should be instances of class Date
-      return Reservation.new(start_date, end_date, nil)
-        # I want exception raised when an invalid date range is provided, so that I can't make a reservation for an invalid date range
+    def create_rooms
+      created_room = []
+      (1..20).each do |x| 
+        created_room << Room.new(number: x)
+      end 
+      return created_room
     end
 
-    # I can access the list of reservations for a specific date, so that I can track reservations by date
-    # def reservations(date)
+    # def available_rooms(start_date, end_date)
+    #   # start_date and end_date should be instances of class Date
     #   return []
     # end
-  
 
-    def available_rooms(start_date, end_date)
-      # start_date and end_date should be instances of class Date
-      return []
+    def make_reservation(date_range)
+      #does this need to be self.all_rooms[1]
+      available_room = @rooms[1]
+      reservation = Reservation.new(date_range: date_range, room: available_room)
+      @reservations << reservation
+      return reservation
     end
+  
+    def room_reservations(room, test_range)
+      # self.all_rooms
+      room_reservations = []
+      @reservations.each do |reservation|
+        if reservation.room == room 
+          if reservation.date_range.overlap?(test_range)
+            room_reservations << reservation
+          end
+        end
+      end
+      return room_reservations
+    end
+
+    def date_reservations(date)
+      date_reservations = []
+      @reservations.each do |reservation|
+        if reservation.date_range.include?(date)
+            date_reservations << reservation
+          end
+      end
+      return date_reservations
+    end
+   
   end
 
 end

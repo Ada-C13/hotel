@@ -1,33 +1,45 @@
 require_relative 'test_helper'
 
 describe "reservation" do
-  let(:start_date) { Date.today }
-  let(:end_date) { start_date + 1 } 
-  let(:reservation) { HotelBooking::Reservation.new(id: 3, start_date: start_date, end_date: end_date) }
+  let(:date_range) { HotelBooking::DateRange.new(start_date: Date.today, end_date: (Date.today + 3)) }
+  let (:room) { HotelBooking::Room.new(number: 1) } 
+  let(:reservation) { HotelBooking::Reservation.new(date_range: date_range, room: room) }
 
   describe "initialization" do 
     it "creates a new instance of reservation" do 
       expect(reservation).must_be_instance_of HotelBooking::Reservation    
     end
 
-    it "keeps track of id" do
-      expect(reservation).must_respond_to :id
-      expect(reservation.id).must_equal 3
+    it "keeps track of date range" do
+      expect(reservation).must_respond_to :date_range
     end
 
-    it "requires a positive integer id" do
-      expect { HotelBooking::Reservation.new(id: "not and integer", start_date: Date.today, end_date: (Date.today + 1))}.must_raise ArgumentError
-      expect {HotelBooking::Reservation.new(id: -10, start_date: Date.today, end_date: (Date.today + 1))}.must_raise ArgumentError
+    it "date range is an instance of DateRange" do
+      expect(reservation.date_range).must_be_instance_of HotelBooking::DateRange  
     end
 
-    it "keeps track of check-in date" do
-      expect(reservation).must_respond_to :start_date
-      expect(reservation.start_date).must_equal start_date
+    it "keeps track of reserved room" do
+      expect(reservation).must_respond_to :room
     end
 
-    it "keeps track of check-out date" do
-      expect(reservation).must_respond_to :end_date
-      expect(reservation.end_date).must_equal end_date
+    it "room is an instane ot Room class" do
+      expect(reservation.room).must_be_instance_of HotelBooking::Room
+    end
+
+  end
+
+  describe "cost" do
+    it "returns a number" do
+      expect(reservation.cost).must_be_kind_of Numeric
+      expect(reservation.cost).must_equal 600
     end
   end
+
 end
+
+
+# make this test be for making a new reservation instead of a date range
+
+   
+
+
