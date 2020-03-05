@@ -16,10 +16,11 @@ module Hotel
     end
 
     def room_list
-      return []
+      return @rooms
     end
     
     def make_resevation(datarange,room)
+      
       return Reservation.new(datarange, nil)
     end
 
