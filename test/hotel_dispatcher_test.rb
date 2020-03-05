@@ -28,13 +28,33 @@ describe "HotelDispatcher class" do
     end
   end #make a new reservation end
 
-  describe "find all reservations by room num" do
-    it "finds all reservations for a room" do
+  describe "find all reservations by room num and date range" do
+
+    it "finds all reservations for a room given room_num and date range" do
       dispatcher = Hotel::HotelDispatcher.new()
       dispatcher.make_reservation("March 1, 2019", "March 5, 2019")
-      expect(dispatcher.find_all_res_for_room(1).length).must_equal 1
+      expect(dispatcher.find_all_res_for_room(1, "March 3, 2019", "March 7, 2019")).must_be_kind_of Array
     end
-  end
+
+    it "returns a reservation when the given start_date falls into the reservation date range" do 
+      dispatcher = Hotel::HotelDispatcher.new()
+      dispatcher.make_reservation("March 1, 2019", "March 5, 2019")
+      expect(dispatcher.find_all_res_for_room(1, "March 4, 2019", "March 10, 2019").length).must_equal 1
+    end
+
+    it "returns a reservation when the given end_date falls into the reservation date range" do 
+      dispatcher = Hotel::HotelDispatcher.new()
+      dispatcher.make_reservation("March 1, 2019", "March 5, 2019")
+      expect(dispatcher.find_all_res_for_room(1, "Feb 28, 2019", "March 4, 2019").length).must_equal 1
+    end
+
+    it "does NOT return a reservation when the given date_ranges do NOT overlap" do 
+      dispatcher = Hotel::HotelDispatcher.new()
+      dispatcher.make_reservation("March 1, 2019", "March 5, 2019")
+      expect(dispatcher.find_all_res_for_room(1, "March 7, 2019", "March 10, 2019")).must_be_empty
+    end
+
+  end # describ block end
   
   
 end #HotelDispatcher class end

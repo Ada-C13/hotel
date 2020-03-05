@@ -22,8 +22,8 @@ describe "Room class" do
       expect(@room.room_num).must_equal 10
     end
 
-    it 'has a date_range that is an array' do
-      expect(@room.date_range).must_be_kind_of Array
+    it 'has a reservations attribute that is an array' do
+      expect(@room.reservations).must_be_kind_of Array
     end
 
     describe "date_range" do
@@ -36,11 +36,11 @@ describe "Room class" do
         )
       end #before do end
 
-      it "expect date_range to NOT be empty" do
-        expect(@room.date_range.empty?).must_equal false
-      end
+      # it "expect date_range to NOT be empty" do
+      #   expect(@room.date_range.empty?).must_equal false
+      # end
       
-    end
+    end #describe block end
 
   end #describe initialize
 end #Room class describe end

@@ -1,21 +1,18 @@
 module Hotel
   class Room
     attr_reader :cost
-    attr_accessor :date_range, :room_num
+    attr_accessor :room_num, :reservations
 
     def initialize(
       room_num:, 
-      date_range: []
+      reservations: []
 
     )
 
       @room_num = room_num
       @cost = 200
+      @reservations = reservations
 
-
-      if date_range
-        @date_range = date_range
-      end
     end #initialize end
   end #class Room end
   

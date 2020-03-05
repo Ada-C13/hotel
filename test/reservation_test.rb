@@ -8,7 +8,7 @@ describe "Reservation class" do
 
       room = Hotel::Room.new(
         room_num: 13,
-        date_range: [start_date, end_date], 
+        # date_range: [start_date, end_date], 
       )
 
       @res_data = Hotel::Reservation.new(

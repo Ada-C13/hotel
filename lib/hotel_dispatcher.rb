@@ -12,7 +12,6 @@ module Hotel
 
     def create_rooms
       @rooms = []
-        
         (1..20).each do |room_num|
           room = Hotel::Room.new(room_num: 1)
           room.room_num = room_num
@@ -30,13 +29,19 @@ module Hotel
     end
 
 
-    def find_all_res_for_room(room_num)
+    def find_all_res_for_room(room_num, start_date, end_date)
+      start_date = Date.parse(start_date)
+      end_date = Date.parse(end_date)
       found_reservations = []
         @reservations.each  do |reservation| 
-           if reservation.room.room_num == room_num
-            found_reservations << reservation
-           end
+          next if reservation.room.room_num != room_num
+            if ((start_date > reservation.start_date && start_date < reservation.end_date) ||
+            (end_date > reservation.start_date && start_date < reservation.end_date)) || 
+            (reservation.start_date < start_date && reservation.end_date > end_date)
+              found_reservations << reservation
+            end
         end
+    
         return found_reservations
     end
 
