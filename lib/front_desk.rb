@@ -36,11 +36,6 @@ module Hotel
       return available_rooms
     end
 
-    # def find_room(room_number)
-    #   found_room = @rooms.select {|room| room.room_number == room_number}
-    #   return found_room[0]
-    # end
-
     def find_reservation_with(room: nil, date_range:)
       res_w_given_date = @reservations.select {|reservation| (reservation.date_range == date_range && reservation.room == room) || reservation.date_range == date_range }
       return res_w_given_date 

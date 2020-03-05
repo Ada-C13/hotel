@@ -2,7 +2,7 @@ require_relative 'test_helper'
 
 describe "reservations" do
   before do
-    @new_reservation = Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date: Date.new(2020, 3, 1), end_date: Date.new(2020, 3, 4)), room: Hotel::Room.new(room_number: 1, cost: 200))
+    @new_reservation = Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date: Date.today + 2, end_date: Date.today + 6), room: Hotel::Room.new(room_number: 1, cost: 200))
   end
 
   describe "initialize reservations" do

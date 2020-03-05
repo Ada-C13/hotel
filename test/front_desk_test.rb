@@ -22,20 +22,9 @@ describe "front desk" do
     end
   end
 
-  # describe "find_room" do
-  #   before do
-  #     @front_desk = Hotel::FrontDesk.new
-  #   end
-
-  #   it "finds an instance of a room given the room number" do
-  #     room_number = 4
-  #     expect(@front_desk.find_room(room_number)).must_be_instance_of Hotel::Room
-  #   end
-  # end
-
   describe "add_reservation" do
     before do
-      @dates = Hotel::DateRange.new(start_date: Date.new(2020, 3, 4), end_date: Date.new(2020, 3, 7))
+      @dates = Hotel::DateRange.new(start_date: Date.today + 2, end_date: Date.today + 6)
       @front_desk.add_reservation(@dates)
     end
 
@@ -64,7 +53,7 @@ describe "front desk" do
 
   describe "available_rooms" do
     before do
-      @dates = Hotel::DateRange.new(start_date: Date.new(2020, 3, 4), end_date: Date.new(2020, 3, 7))
+      @dates = Hotel::DateRange.new(start_date: Date.today + 2, end_date: Date.today + 6)
     end
 
     it "returns an array of all available rooms given a date range" do
@@ -90,13 +79,13 @@ describe "front desk" do
       expect(@front_desk.available_rooms(@dates).count).must_equal 18
       expect(@front_desk.available_rooms(@dates)[0].room_number).must_equal 3
 
-      new_dates = Hotel::DateRange.new(start_date: Date.new(2020, 3, 7), end_date: Date.new(2020, 3, 9))
+      new_dates = Hotel::DateRange.new(start_date: Date.today + 6, end_date: Date.today + 10)
       @front_desk.add_reservation(new_dates)
 
       expect(@front_desk.available_rooms(@dates).count).must_equal 18
       expect(@front_desk.available_rooms(@dates)[0].room_number).must_equal 3
 
-      test_dates = Hotel::DateRange.new(start_date: Date.new(2020, 2, 7), end_date: Date.new(2020, 2, 9))
+      test_dates = Hotel::DateRange.new(start_date: Date.today + 1, end_date: Date.today + 2)
       expect(@front_desk.available_rooms(test_dates).count).must_equal 20
       expect(@front_desk.available_rooms(test_dates)[0].room_number).must_equal 1
     end    
@@ -105,7 +94,7 @@ describe "front desk" do
 
   describe "find_reservation_with" do
     before do
-      @dates = Hotel::DateRange.new(start_date: Date.new(2020, 3, 4), end_date: Date.new(2020, 3, 7))
+      @dates = Hotel::DateRange.new(start_date: Date.today + 2, end_date: Date.today + 6)
       @room = @front_desk.rooms[0]
     end
 
@@ -131,7 +120,7 @@ describe "front desk" do
 
   describe " total_cost" do
     before do
-      @new_reservation = Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date: Date.new(2020, 3, 1), end_date: Date.new(2020, 3, 4)), room: Hotel::Room.new(room_number: 1, cost: 200))
+      @new_reservation = Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date: Date.today + 2, end_date: Date.today + 5), room: Hotel::Room.new(room_number: 1, cost: 200))
     end
 
     it "calculates total cost of the reservation " do
