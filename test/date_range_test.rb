@@ -1,4 +1,5 @@
 require_relative 'test_helper'
+
 describe "date_range class" do
   before do
     day1 = [2020, 1, 28]
@@ -50,12 +51,6 @@ describe "date_range class" do
       day = Date.new(2019, 1, 29)
       expect(@date.include?(day)).must_equal false
     end
-
-    it "will turn a given date into a Date object" do
-      day = [2020, 1, 29]
-      expect(@date.include?(day)).must_equal true
-
-    end
   end
 
   describe "overlap? method" do
@@ -76,6 +71,8 @@ describe "date_range class" do
       day1 = [2020, 1, 5]
       day2 = [2020, 1, 6]
       my_days = Hotel::DateRange.new(day1, day2)
+
+      expect(@date.overlap?(my_days)).must_equal false
     end
 
     it "will return false if the first/end days overlap" do

@@ -6,8 +6,7 @@ module Hotel
       @rooms = []
       @reservations = []
       20.times do |i|
-        i += 1
-        @rooms << Hotel::Room.new(i, 200)
+        @rooms << Hotel::Room.new(i + 1, 200)
       end
     end
 
@@ -17,13 +16,10 @@ module Hotel
 
     def available_rooms(check_in_time, check_out_time)
       dates = Hotel::DateRange.new(check_in_time, check_out_time)
-      #find the reservations that overlap with my date range
+
       unavail = reservations.select { |res| res.date_range.overlap?(dates) }
-      #alter the array so that it is made up of the rooms that are unavailable
       unavail.map! { |res| res.room }
-      #return an array of the rooms that are left when the reserved rooms are subtracted
       return rooms.difference(unavail)
-      # reservations.reject { |res| res.date_range.overlap?(dates) }
     end
     
     def list_reservations(date:, room_id: nil)

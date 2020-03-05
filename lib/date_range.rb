@@ -27,7 +27,6 @@ module Hotel
     end
 
     def include?(date)
-      date = Date.new(date[0], date[1], date[2]) unless date.class == Date
       return self.create_days_array.include?(date)
     end
 
@@ -35,8 +34,8 @@ module Hotel
       days = self.create_days_array
       other_days = other_date_range.create_days_array
     
-      return false if days.first == other_days.last || days.last == other_days.first
-      return true if days.difference(other_days) != days.length
+      return false if (days.first === other_days.last || days.last === other_days.first) || days.difference(other_days).length === days.length
+      return true
     end
 
     def nights
