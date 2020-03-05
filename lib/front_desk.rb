@@ -52,7 +52,7 @@ module Hotel
           available_rooms << room
           # look into "next"/"break"
         end
-
+        
         room.reservations.each do |current_reservation|
           if current_reservation.daterange.overlap?(new_range) == false
             available_rooms << room
@@ -63,20 +63,30 @@ module Hotel
       return available_rooms
     end
     
+
+    #TODO: Make tests
+    def find_room_for_reservation(start_date, end_date)
+      
+    end
+    
+    
     # TODO: Make some tests!
-    def reserve_room(check_in, check_out, room_number)
+    # Make room_number optional in reservation init
+    # call method to list_all_available_rooms, shovel reservaiton object to the first available room
+    
+    # change this to create_reservation
+    # call list_available_rooms
+    def create_reservation(check_in, check_out)
       date_range = Hotel::DateRange.new(check_in, check_out)
       
-      reservation = Hotel::Reservation.new(date_range, room_number) # <== change this room number here to the room object
-      # TODO:
-      # update this in reservation, tests
+      rooms_avail = list_available_rooms(check_in, check_out)
+
+      room_number = rooms_avail[0].room_number
+
+      reservation = Hotel::Reservation.new(date_range)
+      reservation.room_number = room_number
       
-      # get room object so you can add this to the collection of reservations
-      
-      # adds to collection of reservations
-      
-      # what to do with this reservation - add to room
-      
+      return reservation
     end
     
   end

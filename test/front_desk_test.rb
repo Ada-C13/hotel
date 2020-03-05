@@ -67,48 +67,85 @@ describe "given room number, return room object" do
   end
 end
 
-# describe "reserve a room" do
-#   front_desk = Hotel::FrontDesk.new(5)
-#   front_desk.reserve_room((Date.today), (Date.today + 3))
-#   front_desk.reserve_room((Date.today), (Date.today + 5))
+describe "create reservation" do
+  let (:front_desk) {
+    Hotel::FrontDesk.new(5)
+  }
 
+  it 'instantiates a reservation object' do
+    
+    reservation = front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
 
-# end
+    expect(reservation).must_be_instance_of Hotel::Reservation
+    # expect(reservation.room_number).must_equal 1
+  end
+end
 
 describe "list available rooms" do
   let (:front_desk) {
     Hotel::FrontDesk.new(5)
   } # there are only five rooms in this hotel!
   
-
   it "returns an array of 5 room objects if there are no reservations in a given daterange" do
-    front_desk.reserve_room(Date.new(2020,2,1), Date.new(2020,2,3), 1)
-    front_desk.reserve_room(Date.new(2020,2,4),Date.new(2020,2,6), 2)
-    front_desk.reserve_room(Date.new(2020,2,7), Date.new(2020,2,9), 3)
-    front_desk.reserve_room(Date.new(2020,2,10), Date.new(2020,2,12), 4)
-    front_desk.reserve_room(Date.new(2020,2,14), Date.new(2020,2,17), 5)
+    date_range1 = Hotel::DateRange.new(Date.new(2020,2,1), Date.new(2020,2,3))
+    date_range2 = Hotel::DateRange.new(Date.new(2020,2,4),Date.new(2020,2,6))
+    date_range3 = Hotel::DateRange.new(Date.new(2020,2,7), Date.new(2020,2,9))
+    date_range4 = Hotel::DateRange.new(Date.new(2020,2,10), Date.new(2020,2,12))
+    date_range5 = Hotel::DateRange.new(Date.new(2020,2,14), Date.new(2020,2,17))
+
+    res1 = Hotel::Reservation.new(date_range1)
+    res2 = Hotel::Reservation.new(date_range2)
+    res3 = Hotel::Reservation.new(date_range3)
+    res4 = Hotel::Reservation.new(date_range4)
+    res5 = Hotel::Reservation.new(date_range5)
 
     available_rooms = front_desk.list_available_rooms(Date.new(2020,1,1), Date.new(2020,1,4))
     
-    expect(available_rooms).must_be_instance_of Array
+    expect(available_rooms).must_be_kind_of Array
     expect(available_rooms[0]).must_be_instance_of Hotel::Room
     expect(available_rooms.length).must_equal 5
   end
   
   it "returns an array of many rooms if there are rooms with reservations in a given daterange" do
-    front_desk.reserve_room(Date.new(2020,2,1), Date.new(2020,2,3), 1)
-    front_desk.reserve_room(Date.new(2020,2,4),Date.new(2020,2,6), 2)
-    front_desk.reserve_room(Date.new(2020,2,7), Date.new(2020,2,9), 3)
-    front_desk.reserve_room(Date.new(2020,2,10), Date.new(2020,2,12), 4)
-    front_desk.reserve_room(Date.new(2020,2,14), Date.new(2020,2,17), 5)
+    date_range1 = Hotel::DateRange.new(Date.new(2020,2,1), Date.new(2020,2,3))
+    date_range2 = Hotel::DateRange.new(Date.new(2020,2,4),Date.new(2020,2,6))
+    date_range3 = Hotel::DateRange.new(Date.new(2020,2,7), Date.new(2020,2,9))
+    date_range4 = Hotel::DateRange.new(Date.new(2020,2,10), Date.new(2020,2,12))
+    date_range5 = Hotel::DateRange.new(Date.new(2020,2,14), Date.new(2020,2,17))
+
+    res1 = Hotel::Reservation.new(date_range1)
+    res2 = Hotel::Reservation.new(date_range2)
+    res3 = Hotel::Reservation.new(date_range3)
+    res4 = Hotel::Reservation.new(date_range4)
+    res5 = Hotel::Reservation.new(date_range5)
 
     available_rooms = front_desk.list_available_rooms(Date.new(2020,2,1), Date.new(2020,2,3))
 
+    expect(available_rooms).must_be_kind_of Array
+    expect(available_rooms[0]).must_be_instance_of Hotel::Room
+    expect(available_rooms.length).must_equal 4
+    expect(available_rooms[0].room_number).must_equal 3
   end
   
   it "returns an empty array if all rooms have reservations in a given daterange" do
+    date_range1 = Hotel::DateRange.new(Date.new(2020,2,1), Date.new(2020,2,5))
+    date_range2 = Hotel::DateRange.new(Date.new(2020,2,2),Date.new(2020,2,6))
+    date_range3 = Hotel::DateRange.new(Date.new(2020,2,2), Date.new(2020,2,9))
+    date_range4 = Hotel::DateRange.new(Date.new(2020,1,30), Date.new(2020,2,6))
+    date_range5 = Hotel::DateRange.new(Date.new(2020,2,3), Date.new(2020,2,5))
+
+    res1 = Hotel::Reservation.new(date_range1)
+    res2 = Hotel::Reservation.new(date_range2)
+    res3 = Hotel::Reservation.new(date_range3)
+    res4 = Hotel::Reservation.new(date_range4)
+    res5 = Hotel::Reservation.new(date_range5)
+
     # if all rooms have reservations for given range of dates
     # expect empty array
+    available_rooms = front_desk.list_available_rooms(Date.new(2020,2,1), Date.new(2020,2,4))
+
+    expect(available_rooms).must_be_kind_of Array
+    expect(available_rooms).must_be_empty
   end
 end
 

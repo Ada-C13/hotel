@@ -4,13 +4,12 @@ describe "Reservation Class" do
   date_range = Hotel::DateRange.new((Date.today), (Date.today + 3))
   
   let (:reservation) {
-    Hotel::Reservation.new(date_range, "3")
+    Hotel::Reservation.new(date_range,)
   }
   
   it "instantiates a reservation correctly" do
     expect(reservation).must_be_instance_of Hotel::Reservation
     expect(reservation.date_range).must_be_instance_of Hotel::DateRange
-    expect(reservation.room_number).must_equal "3"
     expect(reservation.total_cost).must_equal 600
   end
   
@@ -23,7 +22,7 @@ describe "total cost" do
 
     date_range = Hotel::DateRange.new((Date.today), (Date.today + 1))
 
-    reservation = Hotel::Reservation.new(date_range, "5")
+    reservation = Hotel::Reservation.new(date_range)
 
     expect(reservation.total_cost).must_equal 200
   end
@@ -32,7 +31,7 @@ describe "total cost" do
   it "calculates multi-night reservation costs" do
     date_range = Hotel::DateRange.new((Date.today), (Date.today + 3))
 
-    reservation = Hotel::Reservation.new(date_range, "5") 
+    reservation = Hotel::Reservation.new(date_range) 
 
     expect(reservation.total_cost).must_equal 600
   end

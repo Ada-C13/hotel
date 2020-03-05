@@ -3,10 +3,12 @@ require_relative 'date_range'
 
 module Hotel
   class Reservation
-    attr_reader :date_range, :room_number
+    attr_reader :date_range
+    attr_accessor :room_number
     
-    def initialize(date_range, room_number, price_per_night: 200, total_cost: nil)
-      @date_range = date_range
+    # make room_number optional?
+    def initialize(date_range, room_number: nil, price_per_night: 200, total_cost: nil)
+      @date_range = date_range || daterange
       @room_number = room_number # is a string
       # i think this should be the room object
       @price_per_night = price_per_night
