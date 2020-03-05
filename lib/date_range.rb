@@ -7,6 +7,7 @@ module Hotel
       @end_date = Date.parse(end_date)      
 
       raise ArgumentError.new("End date cannot be equal to or come before start date.") if @end_date <= @start_date
+      #TODO: validate dates' input
     end
 
     # def initialize(start_date: nil, end_date: nil)
