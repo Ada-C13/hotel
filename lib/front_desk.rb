@@ -113,8 +113,7 @@ module Hotel
           booking.block_tag = "block-booked"
         end 
       end 
-      
-      # ap self.reservations
+      return rooms_of_block_available[0]
     end 
 
 

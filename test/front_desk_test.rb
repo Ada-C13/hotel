@@ -24,6 +24,19 @@ describe "front_desk" do
       cost2 = manager.reservation_cost(reservation_2)
       expect(cost2).must_equal 1400
     end
+    # it "calculate cost for block individual room as well" do 
+    #   manager = hotel_manager
+    #   start_date = [2020,4,9]
+    #   end_date = [2020,4,11]
+    #   manager.create_block(start_date,end_date,5,180)
+    #   block_id = manager.reservations[0].reservation_id.to_s[0..4]
+    #   manager.book_room_of_block(block_id)
+
+    #   cost_of_block_room = manager.reservation_cost(reservation_2)
+
+
+        
+    # end 
   end  
 
   describe "#list_all" do
@@ -319,10 +332,6 @@ describe "front_desk" do
           manager.book_room_of_block(block_id)
         end 
         expect{manager.book_room_of_block(block_id)}.must_raise ArgumentError
-
-
-
-
       end 
 
     end 
