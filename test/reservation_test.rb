@@ -12,6 +12,7 @@ describe "Reservation" do
         room_num
       )
     end
+    
 
     it "id must be a positive integer" do
       expect(@reservation.id).must_be_kind_of Integer

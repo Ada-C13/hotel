@@ -22,6 +22,7 @@ module Hotel
         room_num = room_num
       )
       id += 1
+      # TODO: once the room num reach 20 on a date, you can no longer reserve a room
       room_num += 1
       add_reservation(reservation)
       return reservation
@@ -32,12 +33,12 @@ module Hotel
       @reservations << reservation
     end
 
-
     # check the reservation of a specific date
     def check_reservations(date) #(string)
       check_date = Date.parse(date)
-      return @reservations.select {|reservation| reservation.date_range.all_dates.include? check_date}
+      return @reservations.select {|reservation| reservation.date_range.dates_except_last.include? check_date}
     end
+ 
   end
 end
 

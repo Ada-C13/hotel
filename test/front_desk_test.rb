@@ -18,7 +18,7 @@ describe "FrontDesk" do
     expect(@reservation).must_be_kind_of Hotel::Reservation
   end
 
-  it "add reservation after reserved a room" do
+  it "add reservation to the array after reserved a room" do
     expect(@front_desk.reservations).wont_include @reservation
       previous = @front_desk.reservations.length
 
@@ -28,14 +28,14 @@ describe "FrontDesk" do
       expect(@front_desk.reservations.length).must_equal previous + 1
   end
 
-  it "using date to find the reservation" do
+  it "using date to find the reservation (return the associate reservations)" do
     @front_desk.add_reservation(@reservation)
     date = "2020-3-16"
     expect(@front_desk.check_reservations(date)).must_be_kind_of Array
     expect(@front_desk.check_reservations(date)).must_include @reservation
   end
 
-  it "" do
+  it "using date to find the reservation (none reservation on that day)" do
     @front_desk.add_reservation(@reservation)
     date = "2020-3-20"
     expect(@front_desk.check_reservations(date)).must_be_kind_of Array
