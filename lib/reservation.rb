@@ -5,16 +5,19 @@ require_relative 'room'
 
 module Hotel
   class Reservation
-    attr_reader :reservation_id, :dates, :occupancy 
+    attr_reader :id, :dates, :occupancy 
 
     def initialize(type, dates, occupancy)
-      @reservation_id = type[0] + dates.to_id + occupancy[:room].id
+      @id = type[0] + dates.to_id 
       @dates = dates
       @occupancy = occupancy
     end
 
     def total_price 
-      return @dates.nights_spent * @occupancy[:room].price
+      # if @occupancy.length > 1 #block
+        return @occupancy.sum { |occupancy| occupancy[:room].price * @dates.nights_spent }
+      # end
+      # return @dates.nights_spent * @occupancy[0][:room].price
     end
 
   end
