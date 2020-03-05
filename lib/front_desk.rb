@@ -30,29 +30,53 @@ module Hotel
         @rooms << room
         room_number += 1
       end
+      
     end
     
-
+    
     def find_room_by_number(room_number)
       room = @rooms.select { |room| room.room_number == room_number }
-
+      
       return room.first
     end
     
-    
-    def reserve_room(start_date, end_date) 
-      date_range = Hotel::DateRange.new(start_date, end_date)
+    # this method returns an array of rooms that are available by using the overlap? method
+    # if overlap check returns false, put that room in available
+    def list_available_rooms(check_in, check_out)
+      available_rooms = []
+      
+      new_range = Hotel::DateRange.new(check_in, check_out)
+      
+      @rooms.each do |room|
+        if room.reservations.empty?
+          available_rooms << room
+          # look into "next"/"break"
+        end
 
-      reservation = Hotel::Reservation.new(date_range, 1) # <== change this room number here to the room object
+        room.reservations.each do |current_reservation|
+          if current_reservation.daterange.overlap?(new_range) == false
+            available_rooms << room
+          end
+        end
+      end
+      
+      return available_rooms
+    end
+    
+    # TODO: Make some tests!
+    def reserve_room(check_in, check_out, room_number)
+      date_range = Hotel::DateRange.new(check_in, check_out)
+      
+      reservation = Hotel::Reservation.new(date_range, room_number) # <== change this room number here to the room object
       # TODO:
       # update this in reservation, tests
-
+      
       # get room object so you can add this to the collection of reservations
-
+      
       # adds to collection of reservations
       
       # what to do with this reservation - add to room
-
+      
     end
     
   end
@@ -64,7 +88,7 @@ end
 # def available_rooms_by_date_range(date_range)
 #   available_rooms = []
 #   unavailalbe_rooms = []
-  
+
 #   @rooms.each do |room|
 #     room.reservations.each do |reservation|
 #       if reservation.date_range.include?(date_range.start_date)

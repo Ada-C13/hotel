@@ -14,9 +14,6 @@ module Hotel
         raise ArgumentError, "Invalid Room Number"
       end
     end
-
-
-
   end
 end
 

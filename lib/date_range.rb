@@ -44,7 +44,8 @@ module Hotel
       end
     end 
     
-    # this method compares ANOTHER date range to the CURRENT daterange
+  
+    # Compare the new date range (e.g. the new potential reservation) to the current object's date range (the previous reservation)
     def overlap?(other_date_range)
       if other_date_range.check_in < @check_out && @check_in < other_date_range.check_out
         return true # there is an overlap - don't make a rez

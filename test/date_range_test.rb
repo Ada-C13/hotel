@@ -9,15 +9,15 @@ describe 'Date class' do
   it "instantiates a DateRange object" do
     expect(date_range).must_be_instance_of Hotel::DateRange
   end
-
+  
   it 'assigns check in correctly' do
     expect(date_range.check_in).must_equal Date.today
   end
-
+  
   it 'assigns check out correctly' do
     expect(date_range.check_out).must_equal Date.today + 3
   end
-
+  
   
 end
 
@@ -32,7 +32,7 @@ describe "Validate date objects" do
   it 'raises an argument error if check in is not a Date object' do
     expect{ Hotel::DateRange.new(("2020-03-03"), (Date.today + 1)) }
   end
-
+  
   it 'raises an argument error if check out is not a Date object' do
     expect{ Hotel::DateRange.new((Date.today), ("2020-03-31")) }
   end
@@ -42,18 +42,12 @@ end
 describe "Number of Nights" do
   
   it "Calculates 1 night" do
-    date1 = Date.today
-    date2 = Date.today + 1
-    
-    range = Hotel::DateRange.new(date1, date2)
+    range = Hotel::DateRange.new(Date.today, Date.today + 1)
     expect(range.num_nights).must_equal 1
   end
   
   it "Calculates many nights" do
-    date1 = Date.today
-    date2 = Date.today + 3
-    
-    range = Hotel::DateRange.new(date1, date2)
+    range = Hotel::DateRange.new(Date.today, Date.today + 3)
     expect(range.num_nights).must_equal 3
   end
   

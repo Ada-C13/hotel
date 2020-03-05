@@ -19,3 +19,19 @@ describe "Room Number Validation" do
     expect{ Hotel::Room.new("string")}.must_raise ArgumentError
   end
 end
+
+describe "Add reservation" do
+
+  it "instantiates a reservation object" do
+    
+  end
+
+  it "adds that object to the collection of reservations" do
+    
+  end
+
+  it "you can access that reservation's info and it is correct" do
+    
+  end
+
+end
