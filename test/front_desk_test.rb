@@ -72,35 +72,14 @@ describe "FrontDesk" do
     end
 
     it "raises an error when reserving a room during a date range when all rooms are reserved" do
-      # it works, checks on the rooms array of length 2. Need to retest when make reservation method is implemented.
+      front_desk = Hotel::FrontDesk.new
+      20.times do
+        front_desk.make_reservation(Date.new(2020, 4, 10), Date.new(2020, 4, 15))
+      end
 
-
-      # front_desk = Hotel::FrontDesk.new
-      # date_range = Hotel::DateRange.new(Date.new(2020, 3, 1), Date.new(2020, 3, 5))
-      # reservation_one = Hotel::Reservation.new(date_range, 1)
-      # front_desk.reservations << reservation_one
-      # puts "reservations: #{front_desk.reservations}"
-      # selected_room = front_desk.select_available_room(Date.new(2020, 3, 6), Date.new(2020, 3, 8))
-
-      # expect(selected_room).must_equal 1
-
-      # date_range_two = Hotel::DateRange.new(Date.new(2020, 3, 6), Date.new(2020, 3, 8))
-      # reservation_two = Hotel::Reservation.new(date_range_two, selected_room)
-      # front_desk.reservations << reservation_two
-      # puts "reservations = #{front_desk.reservations}"
-
-      # room_selected = front_desk.select_available_room(Date.new(2020, 3, 7), Date.new(2020, 3, 9))
-      # expect(room_selected).must_equal 2
-
-      # date_range_three = Hotel::DateRange.new(Date.new(2020, 3, 7), Date.new(2020, 3, 9))
-      # reservation_three = Hotel::Reservation.new(date_range_three, room_selected)
-      # front_desk.reservations << reservation_three
-      # puts "reservations = #{front_desk.reservations}"
-
-      # expect{
-      #   front_desk.select_available_room(Date.new(2020, 3, 4), Date.new(2020, 3, 8))
-      # }.must_raise ArgumentError
-      
+      expect{
+        front_desk.make_reservation(Date.new(2020, 4, 10), Date.new(2020, 4, 15))
+      }.must_raise ArgumentError 
     end
   end
 
@@ -221,6 +200,32 @@ describe "FrontDesk" do
     end
   end
 
+  describe "#reservations_by_room_and_date_range" do
+    it "returns reservations for a given room and date range" do
+      front_desk = Hotel::FrontDesk.new
+      front_desk.make_reservation(Date.new(2020, 3, 20), Date.new(2020, 3, 24))
+      front_desk.make_reservation(Date.new(2020, 3, 25), Date.new(2020, 3, 28))
+      front_desk.make_reservation(Date.new(2020, 3, 20), Date.new(2020, 3, 24))
+
+      reservations = front_desk.reservations_by_room_and_date_range(Date.new(2020, 3, 20), Date.new(2020, 3, 24), 1)
+      expect(reservations).must_be_kind_of Array
+      expect(reservations.length).must_equal 1
+      expect(reservations[0].date_range.start_date).must_equal Date.new(2020, 3, 20)
+      expect(reservations[0].date_range.end_date).must_equal Date.new(2020, 3, 24)
+      expect(reservations[0].room).must_equal 1
+    end
+
+    it "returns an empty array if no reservations match the criteria" do
+      front_desk = Hotel::FrontDesk.new
+      front_desk.make_reservation(Date.new(2020, 3, 20), Date.new(2020, 3, 24))
+      front_desk.make_reservation(Date.new(2020, 3, 25), Date.new(2020, 3, 28))
+
+      reservations = front_desk.reservations_by_room_and_date_range(Date.new(2020, 3, 25), Date.new(2020, 3, 28), 2)
+      expect(reservations).must_be_kind_of Array
+      expect(reservations.length).must_equal 0
+    end
+
+  end
 end
 
 
