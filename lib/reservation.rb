@@ -9,7 +9,7 @@ module Hotel
 
     def initialize(date_range, room)
       @date_range = date_range
-      @room = room
+      @room = room  #room_number TO DO
     end 
 
     def total_cost 
