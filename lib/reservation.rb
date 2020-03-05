@@ -8,6 +8,9 @@ module Hotel
       @date_range = DateRange.new(start_date: start_date, end_date: end_date)
       @room_id = room_id
     end
-  end
 
+    def cost
+      date_range.nights * 200
+    end
+  end
 end
