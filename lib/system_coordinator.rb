@@ -10,16 +10,13 @@ module Hotel
       @rooms = build_rooms(room_quantity)
     end
 
-    
     def build_rooms(quantity)
       Array.new(quantity){|i| Hotel::Room.new(i+1)}
     end
 
-
     def list_rooms
       return @rooms
     end
-
 
     def find_reservations_by_date(date)
       reservations_by_date = []
@@ -33,13 +30,11 @@ module Hotel
       return reservations_by_date
     end
 
-
     def find_reservations_room_date(room_id, date_range)
       selected_room = find_room(room_id)
       reservations_room_date = selected_room.bookings.select{|reservation|reservation.date_range.overlapping(date_range)}
       return reservations_room_date    #what returns if no match?
     end
-
 
     def find_reservations_range(given_range)
       reservations_range = []
@@ -53,10 +48,9 @@ module Hotel
       return reservations_range
     end
 
-
     def find_availabile_rooms(given_range)
       available_rooms = @rooms.reject do |room|
-        room.bookings.any? do |reservation|
+        room.bookings.any? do |reservation|   #returns true if there are overlapping reservations
           reservation.date_range.overlapping(given_range) == true
         end
       end
@@ -64,12 +58,10 @@ module Hotel
       return available_rooms
     end
 
-
     def find_room(given_room_id)
       room_found = @rooms.find{|room|room.room_id == given_room_id}
       return room_found
     end
-
    
     def make_reservation(start_date, end_date)
       range_created = Hotel::DateRange.new(start_date,end_date)

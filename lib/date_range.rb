@@ -40,6 +40,5 @@ module Hotel
         return false
       end
     end
-
   end
 end
