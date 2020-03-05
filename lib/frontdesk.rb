@@ -1,3 +1,5 @@
+require 'date'
+
 require_relative 'reservation.rb'
 
 module Hotel
@@ -17,7 +19,6 @@ module Hotel
         if reservation.conflict?(new_reservation.start_date, new_reservation.end_date) 
           taken_rooms << reservation.assigned_room
         end
-        #return taken_rooms
       end
       room_to_assign = (all_rooms - taken_rooms.flatten)
       return room_to_assign.sample(1)
@@ -26,6 +27,9 @@ module Hotel
     def add_reservation(start_date, end_date, num_rooms)
       new_reservation = Hotel::Reservation.new(start_date: start_date, end_date: end_date, num_rooms: num_rooms)
       new_reservation.assigned_room = assign_room(new_reservation)
+      if new_reservation.num_rooms > 1 
+        new_reservation.block = :BLOCK 
+      end
       @all_reservations << new_reservation
     end
 
@@ -37,14 +41,17 @@ module Hotel
       taken = []
       all_rooms = @rooms
       booked = @all_reservations.select {|reservation| reservation.contains(date)}
-      #puts booked
       booked.each do |reservation|
         taken << reservation.assigned_room
       end
-      #puts taken
-      #puts taken
       available_rooms = (all_rooms - taken.flatten)
-      #puts available_rooms
+    end
+
+    def reserve_from_block(date, block_key)
+      reservations_on_day = find_reservation_by_date(date)
+      in_block = reservations_on_day.select {|reservation| reservation.block_key == block_key}
+      return in_block
+      p in_block
     end
   end
 end
