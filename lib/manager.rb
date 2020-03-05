@@ -26,10 +26,20 @@ module Hotel
     end
 
     def book_res(start_date, end_date)
-      @reservation = Reservation.new(start_date: start_date, end_date: end_date)
-      # run availablity check in res
-      # once res is complete @reservation.push(all_res per room)
-      # @rm_reservations = []
+      #find available room - loop all rooms
+      room.rm_reservations.each do
+        if is_available == true
+          book_room
+          #call book method for available room 
+        end 
+        break
+        # driver = @drivers.select {|driver| driver.status == :AVAILABLE}.first
+      end
+
+     
+
+      
+    
     end
 
   end

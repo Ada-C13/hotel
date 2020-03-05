@@ -18,13 +18,20 @@ module Hotel
       end
     end
 
-    
-    ## each object of room will have an array of reservation object 
+     
     ## in order to check availablity, will call each room 
       #do they have reservations? no - book, yes, loop through resses
       #loop through each res to check for date conflict 
 
+    # def is available 
+        #loop through itselfs reservations for conflicts 
+        #return true false
     
+    # def book_room 
+      #makes new Reservation 
+      # Reservation.new(start_date: start_date, end_date: end_date, rm_num: @rm_num)
+      #adds to itself's  reservations 
+
     # room1 = [res_obj1, res_obj2]
 
   

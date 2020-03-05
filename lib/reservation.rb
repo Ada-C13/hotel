@@ -27,7 +27,9 @@ module Hotel
       @recloc = SecureRandom.alphanumeric(6)
 
       # if rm_num has a value 
+      if @rm_num != nil
         #check that room for availablity 
+        @room.rm_num.
         #if rm_reservations == empty
           #book room
         #else loop through instances of res for date
@@ -58,11 +60,7 @@ module Hotel
     end
 
     
-    
-    ## nn to build method to check if inputed rm num is avail
-      ## if the inputed room is unavailable - suggest different room or error?
-    ## nn to build method, if rm_num is nill, then to search rooms for availablity then assign 
-    ## nn add in initalize to make array of booked dates to go back to room?
+  
 
 
   end
