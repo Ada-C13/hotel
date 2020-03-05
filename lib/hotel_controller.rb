@@ -15,22 +15,49 @@ module Hotel
       return @rooms
     end
 
+    def find_available_rooms(start_date, leave_date)
+      available_rooms = @rooms.reject do |room|
+        room.reservations.any? do |res|
+          res.overlap?(start_date, leave_date)
+        end
+      end
+      return available_rooms
+    end
+    
     def reserve_room(arrive, depart)
       raise ArgumentError, "End date must be after start date" if depart < arrive || depart == arrive
-      @reservations << Hotel::Reservation.new(arrive, depart)
-      return Hotel::Reservation.new(arrive, depart)
+      raise ArgumentError, "Arrival must be today or after today's date" if arrive < Date.today
+
+      rooms = find_available_rooms(arrive, depart)
+      raise ArgumentError, "Reservation can't be made, no available rooms" if rooms.empty?
+      found_room = rooms.first
+      found_room.reservations << Hotel::Reservation.new(arrive, depart, found_room)
+
+      @reservations << Hotel::Reservation.new(arrive, depart, found_room)
+    
+      return Hotel::Reservation.new(arrive, depart, found_room)
     end
 
-    def list_reservations(given_date:, second_date: given_date, room: nil)
-      range_of_dates = Hotel::DateRange.get_all_dates(given_date, second_date)
-      if !room.nil?
-        # checks room number with 
-        return @reservations.select{ |res| res.room_num == room && res.arrive == given_date}
-      elsif given_date == second_date
-        # Checks if the date range of any reservations includes the given_date
-        return @reservations.select{ |res| range_of_dates.include?(res.arrive)}
+    def reservations_by_date(given_date, second_date =given_date)
+      if given_date == second_date
+        return @reservations.select { |res| (res.arrive..res.depart).include?(given_date) }
       else
-        return @reservations.select{ |res| range_of_dates.include?(res.arrive)}
+        return @reservations.select{ |res| res.overlap?(given_date, second_date) }
+      end
+    end
+
+    def reservations_by_room_and_dates(given_room, *dates)
+      raise ArgumentError,"Too many dates given for range" if dates.length > 2
+      selected_room = @rooms.select do |room|
+          room.room_num == given_room
+      end
+
+      if dates.empty?
+        return selected_room[0].reservations
+      elsif dates.length == 1
+        selected_room[0].reservations
+      else
+
       end
     end
   end
