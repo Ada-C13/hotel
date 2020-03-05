@@ -3,10 +3,10 @@ require_relative "test_helper"
 describe Hotel::HotelController do
   before do
     @hotel_controller = Hotel::HotelController.new(
-      reservations: 3,
+      reservations: [],
       rooms: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
     )
-    @date = Date.parse("2020-08-04")
+    @date = Date.new(2020, 8, 4)
   end
 
   describe "initialize" do

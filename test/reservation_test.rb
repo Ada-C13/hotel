@@ -5,8 +5,7 @@ describe Hotel::Reservation do
     @reservation = Hotel::Reservation.new(
       start_date: Date.new(2021, 01, 01),
       end_date: Date.new(2021, 01, 04),
-      room: 2,
-      cost: 200
+      room: 2
     )
   end
 
@@ -15,20 +14,26 @@ describe Hotel::Reservation do
       expect(@reservation).must_be_kind_of Hotel::Reservation
     end
 
-    it "raises an error if the end date is the same as the start date" do
-      expect { Hotel::DateRange.new(Date.new(2021, 01, 01),Date.new(2021, 01, 01)) }.must_raise ArgumentError
+    it "raises an error if the end date is before the start date" do
+      expect { Hotel::Reservation.new(
+        start_date: Date.new(2021, 01, 01),
+        end_date: Date.new(2020, 12, 31)
+        ) }.must_raise ArgumentError
     end
-  end
 
-  describe "cost" do
-    it "returns a number" do
-      expect(@reservation.cost).must_be_kind_of Numeric
+    it "raises an error if the end date is the same as the start date" do
+      expect { Hotel::Reservation.new(start_date: Date.new(2021, 01, 01),
+        end_date: Date.new(2021, 01, 01)
+        ) }.must_raise ArgumentError
     end
+
+    # TODO add test for start_date or end_date is nil, raise argument error
+
   end
 
   describe "total_cost method" do
     it "returns a number" do
-      expect(@reservation.total_cost).must_be_kind_of Numeric
+      expect(@reservation.cost).must_be_kind_of Numeric
     end
   end
 end

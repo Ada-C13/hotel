@@ -15,11 +15,11 @@ describe Hotel::DateRange do
     end
 
     it "start_date is a Date" do
-      expect(@start_date).must_be_kind_of Date
+      expect(@range.start_date).must_be_kind_of Date
     end
 
     it "end_date is a Date" do
-      expect(@end_date).must_be_kind_of Date
+      expect(@range.end_date).must_be_kind_of Date
     end
 
     it "can be initialized with two dates" do
@@ -27,15 +27,6 @@ describe Hotel::DateRange do
       expect(@range.end_date).must_equal @end_date
     end
 
-    it "raises an error if the end date is before the start date" do
-      expect { Hotel::DateRange.new(Date.new(2021, 01, 01),Date.new(2020, 12, 31)) }.must_raise ArgumentError
-    end
-
-    it "raises an error if the end date is the same as the start date" do
-      expect { Hotel::DateRange.new(Date.new(2021, 01, 01),Date.new(2021, 01, 01)) }.must_raise ArgumentError
-    end
-
-    # TODO add test for start_date or end_date is nil, raise argument error
   end
 
   xdescribe "overlap?" do

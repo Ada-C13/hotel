@@ -3,8 +3,7 @@ require_relative 'date_range'
 
 module Hotel
   class HotelController
-    attr_reader :rooms 
-    attr_accessor :reservations
+    attr_accessor :reservations, :rooms 
 
     def initialize(
       rooms:,
@@ -21,12 +20,13 @@ module Hotel
     def reserve_room(start_date, end_date)
       # start_date and end_date should be instances of class Date
       book_room = available_rooms(start_date, end_date).first
-      return Reservation.new(
+      new_reservation = Reservation.new(
         start_date: start_date, 
         end_date: end_date, 
-        room: book_room, 
-        cost: nil,
+        room: book_room,
       )
+      @reservations.push(new_reservation)
+      return new_reservation
     end
 
     # User: I can access the list of reservations for a specific date, so that I can track reservations by date
