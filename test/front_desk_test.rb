@@ -69,8 +69,8 @@ end
 
 describe "reserve a room" do
   front_desk = Hotel::FrontDesk.new(5)
-  front_desk.reserve_room(("2020-02-03"), ("2020-02-04"))
-  front_desk.reserve_room(("2020-02-03"), ("2020-02-04"))
+  front_desk.reserve_room((Date.today), (Date.today + 3))
+  front_desk.reserve_room((Date.today), (Date.today + 5))
 
 end
 
@@ -79,9 +79,7 @@ end
 #   let (:front_desk) {
 #     Hotel::FrontDesk.new(5)
 #   }
-#   reserve_room(Hotel::DateRange.new(("2020-03-03"),("2020-03-06")))
-#   reserve_room(Hotel::DateRange.new(("2020-04-03"),("2020-04-07")))
-#   reserve_room(Hotel::DateRange.new(("2020-05-07"),("2020-05-12")))
+
   
   
 #   it "returns an array of room objects" do

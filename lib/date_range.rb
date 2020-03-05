@@ -8,7 +8,8 @@ module Hotel
       @check_in = check_in
       @check_out = check_out
       
-      validate_date_range 
+      validate_date_range
+      validate_date_object
     end
     
     
@@ -19,6 +20,13 @@ module Hotel
     end
     
     
+    def validate_date_object
+      unless @check_in.class == Date && @check_out.class == Date
+        raise ArgumentError, "Please enter a valid date!"
+      end
+    end    
+    
+
     def num_nights
       num_nights = (@check_out - @check_in).to_i
       return num_nights
@@ -27,11 +35,9 @@ module Hotel
     
     # User story: I can access the list of reservations for a specific date, so that I can track reservations by date
     def date_in_range?(date)
-      range = @check_in..@check_out
- 
-      if date == @check_out
-        return false # there are no existing reservations for tonight
-      elsif range.include?(date)
+      range = @check_in...@check_out
+      
+      if range.include?(date)
         return true # there is an existing reservation for tonight
       else
         return false # there are no existing reservations for tonight

@@ -19,9 +19,5 @@ module Hotel
       
       return total_reservation_cost
     end
-    
-    
-
-    
   end
 end
