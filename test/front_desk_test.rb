@@ -67,7 +67,6 @@ describe "given room number, return room object" do
   end
 end
 
-
 describe "list available rooms" do
   let (:front_desk) {
     Hotel::FrontDesk.new(5)
@@ -126,41 +125,36 @@ describe "create reservation" do
     
     expect(reservation).must_be_instance_of Hotel::Reservation
     expect(reservation.room_number).must_equal "1"
-  end
-  
-  # it 'correctly assigns room numbers' do
-  #   res1 =front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,5))
-  #   res2 = front_desk.create_reservation(Date.new(2020,2,2),Date.new(2020,2,6))
-  #   res3 = front_desk.create_reservation(Date.new(2020,2,2), Date.new(2020,2,9))
-  #   res4 = front_desk.create_reservation(Date.new(2020,1,30), Date.new(2020,2,6))
-  #   res5 = front_desk.create_reservation(Date.new(2020,2,3), Date.new(2020,2,5))
-  
-  #   front_desk.create_reservation(Date.new(2020,2,6), Date.new(2020,2,8))
-  
-  #   front_desk.create_reservation(Date.new(2020,2,6), Date.new(2020,2,8))
-  
-  # end
-  
-  
+  end  
 end
 
 
+describe "reservations on a single date" do
+  
+  before do 
+    @front_desk = Hotel::FrontDesk.new(5)
+    @front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,4))
+    @front_desk.create_reservation(Date.new(2020,2,2),Date.new(2020,2,6))
+    @front_desk.create_reservation(Date.new(2020,2,7), Date.new(2020,2,9))
+    @front_desk.create_reservation(Date.new(2020,2,8), Date.new(2020,2,12))
+    @front_desk.create_reservation(Date.new(2020,2,14), Date.new(2020,2,17))
+  end
+  
+  
+  it 'returns empty array on dates without reservations' do
+    expect(@front_desk.reservations_by_date(Date.new(2020,2,18))).must_be_kind_of Array
+    expect(@front_desk.reservations_by_date(Date.new(2020,2,18))).must_be_empty
+  end  
+  
+  it 'returns one reservation on dates with 1 reservation' do
+    expect(@front_desk.reservations_by_date(Date.new(2020,2,16)).length).must_equal 1
+    # expect(@front_desk.reservations_by_date(Date.new(2020,2,16))[0].room_number).must_equal "2"
+  end
+  
+  it 'returns correct number of reservations on dates with many reservations' do
+    expect(@front_desk.reservations_by_date(Date.new(2020,2,3)).length).must_equal 2
 
-# describe "reservations on a single date" do
-
-#   it 'returns zero reservations on dates without reservations' do
-#     # if i call frontdesk.reservations_on_date and pass a single date, I expect an empty array
-#   end  
-
-#   it 'returns one reservation on dates with 1 reservation' do
-#     # if i call frontdesk.reservations_on_date and pass a single date, I expect an array of 1 reservation (length = 1)
-#     # I also expect that I can get the room id of that reservation (reservation.room_number, reservation.date_range)
-#   end
-
-#   it 'returns many reservations on dates with many reservations' do
-#     # if i call frontdesk.reservations_on_date and pass a single date, I expect an array of multiple reservations (length equal to the number of reservations on that date)
-#     # i can access the first res and last res information
-#   end
-
-# end
+  end
+  
+end
 

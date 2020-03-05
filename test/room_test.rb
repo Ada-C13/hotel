@@ -19,18 +19,3 @@ describe "Room Number Validation" do
     expect{ Hotel::Room.new("string")}.must_raise ArgumentError
   end
 end
-
-# describe "Add to Reservation Collection" do
-# before do
-#   @room = Hotel::Room.new("3")
-# end
-
-#   it "adds reservation object to the collection of reservations" do
-#     range = Hotel::DateRange.new(Date.new(2020,3,3), Date.new(2020,3,6))
-#     reservation = Hotel::Reservation.new(range)
-#     add_to = @room.add_to_reservation_collection(reservation)
-
-#     expect(@room.reservations.last).must_equal reservation
-#     expect(@room.reservations.last.room_number).must_equal "3"
-#   end
-# end

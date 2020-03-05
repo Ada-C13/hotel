@@ -15,14 +15,5 @@ module Hotel
       end
     end
 
-    def add_to_reservation_collection(reservation)
-      # @room.add_to_reservation_collection
-
-      # expect to see the reservation object(which in this case is the parameter of the method) added to the room's collection of rooms
-
-      # to test, instantiate a reservation
-      # set its room_number to a room
-      # add that to the collection of reservations for that room
-    end
   end
 end

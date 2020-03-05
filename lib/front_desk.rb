@@ -40,7 +40,6 @@ module Hotel
       return room.first
     end
     
-    
     # This method is created and used in multi-hour collaboration and conversation with Cathy (and Nikki-by-proxy)
     def list_available_rooms(check_in, check_out)
       available_rooms = []
@@ -75,5 +74,22 @@ module Hotel
       
       return reservation
     end  
+    
+    # i give you a date
+    # you look at each reservation in @rooms and select the ones where that date is included
+    def reservations_by_date(date)
+      reservations_on_date = []
+      
+      @rooms.each do |room|
+        room.reservations.each do |reservation|
+          if reservation.date_range.date_in_range?(date)
+            reservations_on_date << room
+          end
+        end
+      end
+      
+      return reservations_on_date
+    end
+    
   end
 end
