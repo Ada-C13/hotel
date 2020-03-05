@@ -7,7 +7,7 @@ module Hotel
     attr_reader :start_date, :end_date, :nights
 
     def initialize(start_date, end_date)
-      if !(start_date.instance_of? Date || end_date.instance_of? Date)
+      if !(start_date.instance_of?(Date) || end_date.instance_of?(Date))
         raise InvalidDateError.new("End and start dates must be instances of Date.")
       else
         @start_date = start_date
