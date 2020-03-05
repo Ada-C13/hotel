@@ -12,19 +12,12 @@ module Hotel
     end
 
     def check_availability(date_range)
-      if @reservations.empty?
-        return true
-      else
-        @reservations.each do |reservation|
-          if reservation.date_range.overlap?(date_range)
-            return false
-          else
-            next
-          end
-        end
-        return true
+      return true if @reservations.empty?
+      @reservations.each do |reservation|
+        # return false if dates overlap, else continue
+        reservation.date_range.overlap?(date_range) ? (return false) : next
       end
+      return true
     end
-
   end
 end

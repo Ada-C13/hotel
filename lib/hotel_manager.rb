@@ -37,7 +37,8 @@ module Hotel
     end
 
     def find_room(id)
-      return @rooms.find { |room| room.number == id }
+      found_room = @rooms.find { |room| room.number == id }
+      return found_room
     end
 
     def list_reservations_by_room(room, date_range)
@@ -46,7 +47,7 @@ module Hotel
       
       found_room.reservations.each do |reservation|
         if reservation.date_range.overlap?(date_range) == true
-          reservation_list.push(reservation)
+          reservation_list << reservation
         end
       end
 
@@ -59,7 +60,7 @@ module Hotel
       @rooms.each do |room|
         room.reservations.each do |reservation|
           if reservation.date_range.range.include?(date)
-            reservation_list.push(reservation)
+            reservation_list << reservation
           end
         end
       end

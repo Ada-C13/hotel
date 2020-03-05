@@ -17,7 +17,7 @@ module Hotel
     end
 
     def validate_date()
-      if (!@start_date.is_a? Date) || (!@end_date.is_a? Date)
+      unless (@start_date.is_a? Date) && (@end_date.is_a? Date)
         raise ArgumentError.new("Invalid date provided: must be instance of Date")
       end
 
@@ -29,15 +29,11 @@ module Hotel
     end
 
     def overlap?(date_range)
-      if (@range & date_range.range).any?
-        if (@range[-1] == date_range.range[0]) || (@range[0] == date_range.range[-1])
-          return false
-        else
-          return true
-        end
-      else
-        return false
-      end
+      # if check-out date of one matches check-in date of the other, dates do not overlap
+      return false if (@range[-1] == date_range.range[0]) || (@range[0] == date_range.range[-1])
+
+      # if any dates are in both ranges, dates overlap
+      return (@range & date_range.range).any? ? true : false
     end
     
   end
