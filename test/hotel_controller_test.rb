@@ -24,7 +24,6 @@ describe 'HotelController class' do
     end
 
     it 'lists all rooms in hotel' do
-      p @new_hotel.list_of_all_rooms
       expect(@new_hotel.list_of_all_rooms).must_be_same_as @new_hotel.rooms
     end
   end
@@ -95,13 +94,12 @@ describe 'HotelController class' do
 
   describe 'HotelController listing reservations by a room number' do
     it "gives an array of all reservations specific to room number" do
-      #TODO Ask what to do about this test
-      expect(@new_hotel.reservations_by_room_and_dates(1)).must_equal @new_hotel.reservations
+      expect(@new_hotel.reservations_by_room_and_dates(1).first.room_num).must_equal 1
     end
 
     it "gives an array of all reservations specific to room num and date or range" do
-      expect(@new_hotel.reservations_by_room_and_dates(1, @start_date)).must_equal @new_hotel.reservations
-      expect(@new_hotel.reservations_by_room_and_dates(1, @start_date, @end_date)).must_equal @new_hotel.reservations
+      expect(@new_hotel.reservations_by_room_and_dates(1, @start_date).first.room_num).must_equal 1
+      expect(@new_hotel.reservations_by_room_and_dates(1, @start_date, @end_date).first.room_num).must_equal 1
     end
 
     it 'returns an empty array if no reservations are found' do

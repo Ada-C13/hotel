@@ -48,16 +48,16 @@ module Hotel
 
     def reservations_by_room_and_dates(given_room, *dates)
       raise ArgumentError,"Too many dates given for range" if dates.length > 2
-      selected_room = @rooms.select do |room|
+      selected_room = @rooms.find do |room|
           room.room_num == given_room
       end
 
       if dates.empty?
-        return selected_room[0].reservations
+        return selected_room.reservations
       elsif dates.length == 1
-        selected_room[0].reservations
+        return selected_room.reservations.select { |res| (res.arrive..res.depart).include?(dates[0]) }
       else
-
+        return selected_room.reservations.select{ |res| res.overlap?(dates[0], dates[1]) }
       end
     end
   end
