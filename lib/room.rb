@@ -1,7 +1,7 @@
 module Hotel
   class Room
-    attr_reader :room_num, :cost
-    attr_accessor :date_range
+    attr_reader :cost
+    attr_accessor :date_range, :room_num
 
     def initialize(
       room_num:, 

@@ -13,7 +13,6 @@ describe "Reservation class" do
 
       @res_data = Hotel::Reservation.new(
 
-          res_id: 1337,
           start_date: start_date,
           end_date: end_date,
           room: room

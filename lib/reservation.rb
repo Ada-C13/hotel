@@ -2,18 +2,16 @@ require 'date'
 
 module Hotel
   class Reservation
-    attr_reader :res_id, :start_date, :end_date, :room
+    attr_reader :start_date, :end_date, :room
 
     def initialize(
-      # these are mandatory parameters for Reservation.new
-      res_id:, 
+      # these are mandatory parameters - keyword arguments - for Reservation.new 
       start_date:, 
       end_date:,
       room:
       
     )
       # these are instance variables
-      @res_id = res_id
       @room = room
       
 
@@ -38,7 +36,7 @@ module Hotel
     
     def res_duration
       res_duration = @end_date - @start_date
-      return res_duration -1  
+      return res_duration -1  # (-1) accounts for the checkout day - no charge
     end
 
     def find_total_cost
@@ -55,15 +53,13 @@ module Hotel
 
   end #class Reservation end
   
-end #HotelController end
+end #Hotel end
 
 
 
 
 
 
-# make method to calculate total cost of reservation. cost * nights
 
-# i need total num of nights. so subtract start date from end date  and (subtract one) for the checkout day. 
 
 # create loop to 
