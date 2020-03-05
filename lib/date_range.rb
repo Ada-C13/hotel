@@ -17,5 +17,10 @@ module Hotel
     def overlap?(range)
       return self.start_date < range.end_date && self.end_date > range.start_date 
     end
+
+    def includes?(date)
+      check_date = Date.parse(date)
+      return self.start_date <= check_date && self.end_date > check_date 
+    end
   end
 end

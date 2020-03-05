@@ -1,5 +1,6 @@
 require_relative 'room'
 require_relative 'reservation'
+require_relative 'date_range'
 
 module Hotel
   class FrontDesk
@@ -20,8 +21,7 @@ module Hotel
     def get_bookings(date)
       check_date = Date.parse(date)
       return @reservations.find_all{ |reservation| 
-      reservation.date_range.start_date <= check_date && 
-      reservation.date_range.end_date >= check_date}
+      reservation.date_range.includes?(date)}
     end
 
     def get_range_bookings(range)
@@ -51,7 +51,7 @@ module Hotel
     def reserve_room(range)
       available_rooms = get_available_rooms(range)
       raise ArgumentError, "No available rooms for this date range" if available_rooms.empty?
-      new_reservation = Reservation.new(room: available_rooms.first, start_date: start, end_date: finish)
+      new_reservation = Reservation.new(room: available_rooms.first, date_range: range)
       add_reservation(new_reservation)
       return new_reservation
     end
