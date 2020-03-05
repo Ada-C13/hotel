@@ -1,5 +1,6 @@
 require 'date_range'
 require 'reservation'
+require 'ap'
 
 module Hotel
   class FrontDesk
@@ -98,14 +99,14 @@ module Hotel
 
     #book_room_of_block (assume manager know unique block_id BXXXX)
     def book_room_of_block(block_id)
-      look_up_block = @reservations.select{|booking|booking.reservation_id.to_s[0..4] == block_id }
-      rooms_available = look_up_block.count{|room|room.block_tag == "block-available"}
+      rooms_of_block_available = @reservations.select{|booking|booking.reservation_id.to_s[0..4] == block_id && booking.block_tag == "block-available"}
+      num_available = rooms_of_block_available.length
 
-      unless rooms_available > 0
+      unless num_available > 0
         raise ArgumentError, "All rooms in this block are booked!"
       end 
 
-      reservation_id_to_change = look_up_block[0].reservation_id
+      reservation_id_to_change = rooms_of_block_available[0].reservation_id
 
       @reservations.each do |booking|
         if booking.reservation_id.to_s == reservation_id_to_change.to_s
@@ -113,7 +114,7 @@ module Hotel
         end 
       end 
       
-
+      # ap self.reservations
     end 
 
 

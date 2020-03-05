@@ -297,8 +297,10 @@ describe "front_desk" do
         manager = hotel_manager
         start_date = [2020,4,9]
         end_date = [2020,4,15]
-        block_id = manager.create_block(start_date,end_date,5,180)[0].reservation_id.to_s[0..4]
+        manager.create_block(start_date,end_date,5,180)
+        block_id = manager.reservations[0].reservation_id.to_s[0..4]
         manager.book_room_of_block(block_id)
+        
         num_reservations = manager.reservations.length
         count_rooms_booked = manager.reservations.count{|room|room.block_tag == "block-booked"}
         count_rooms_available = manager.reservations.count{|room|room.block_tag == "block-available"}
@@ -307,6 +309,22 @@ describe "front_desk" do
         expect(count_rooms_booked).must_equal 1
         expect(count_rooms_available).must_equal 4
       end 
+      it "will raise ArgumentError if all rooms within block are booked" do 
+        manager = hotel_manager
+        start_date = [2020,4,9]
+        end_date = [2020,4,10]
+        manager.create_block(start_date,end_date,5,180)
+        block_id = manager.reservations[0].reservation_id.to_s[0..4]
+        5.times do 
+          manager.book_room_of_block(block_id)
+        end 
+        expect{manager.book_room_of_block(block_id)}.must_raise ArgumentError
+
+
+
+
+      end 
+
     end 
 
   end 
