@@ -18,12 +18,6 @@ describe 'DateRange class' do
     end
   end
 
-  describe 'nights method' do 
-    it 'counts the number of nights a guest is staying' do
-      expect(@dates.nights).must_equal 2
-    end
-  end
-
   describe 'get_all_dates method' do
     it 'takes in an arrive and depart dates' do
       expect(Hotel::DateRange.get_all_dates(@dates.arrive, @dates.depart)).must_be_kind_of Array
@@ -44,7 +38,6 @@ describe 'DateRange class' do
       expect(@dates.overlap?(Date.new(2021, 2, 22), Date.new(2021, 2, 26))).must_equal true
       expect(@dates.overlap?(Date.new(2021, 2, 25), Date.new(2021, 2, 26))).must_equal true
       expect(@dates.overlap?(Date.new(2021, 2, 25), Date.new(2021, 2, 28))).must_equal true
-
     end
 
     it 'should return false if given dates are not included in reservation dates' do

@@ -10,17 +10,14 @@ module Hotel
       @depart = depart
     end
 
-    def nights
-      @depart - @arrive
-    end
-
     def self.get_all_dates(arrive, depart)
       return [arrive] if arrive == depart
       return (arrive..depart).map { |date| date }
     end
 
     def overlap?(start_date, leave_date)
-      (self.arrive > start_date && self.arrive < leave_date) || (self.depart > start_date && self.depart <= leave_date)
+      (self.arrive > start_date && self.arrive < leave_date) || 
+      (self.depart > start_date && self.depart <= leave_date)
     end
   end
 end
