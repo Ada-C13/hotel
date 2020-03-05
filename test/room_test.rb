@@ -19,5 +19,17 @@ describe 'Room class' do
       expect(@hotel.rooms).must_be_kind_of Array
       expect(@hotel.rooms.length).must_equal 20
     end
+
+    it "has a rate of 200 a night" do
+      expect(@hotel.rooms[0].rate).must_equal 200
+    end
+
+    it "has an integer as a room number" do
+      expect(@hotel.rooms[0].room_num).must_be_kind_of Integer
+    end
+
+    it "must have an empty array of reservations" do
+      expect(@hotel.rooms[0].reservations).must_equal []
+    end
   end
 end
