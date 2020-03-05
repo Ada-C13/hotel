@@ -1,14 +1,28 @@
-require 'test_helper'
+require_relative 'test_helper'
 require 'date'
 
 describe "Reservations class" do
 
   describe "Initializer" do
-    it "is an instance of Reservations" do
-        check_in = Date.today
-        check_out = check_in + 3
-      reservation = Hotel::Reservations.new(id: 423234 , date_in: check_in, date_out: check_out , room_id:324)
-        expect(reservation).must_be_kind_of Hotel::Reservations
+    before do
+        @check_in = Date.today
+        @check_out = @check_in + 3
+        @check_in1 = Date.today + 5
+        @check_out1 = Date.today
+        @hotel = Hotel::HotelManager.new(rooms: Hotel::Room.list_of_rooms)
+        @reservation = Hotel::Reservations.new(date_in: @check_in, date_out: @check_out , room_id:1, room: @hotel.rooms[0])
+      end
+
+    it "is an instance of Reservations" do      
+        expect(@reservation).must_be_kind_of Hotel::Reservations
+    end
+
+    it "correctly calcutates total numbers of nights spent at hotel per reservation" do
+       expect(@reservation.total_number_of_nights_per_reservation).must_equal 3
+    end
+
+    it "raises and Argument Error if date out is before date in" do 
+        expect{Hotel::Reservations.new(date_in: @check_in1, date_out: @check_out1 , room_id:2)}.must_raise ArgumentError
     end
     
 
