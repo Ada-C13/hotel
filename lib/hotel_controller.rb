@@ -1,7 +1,7 @@
 require 'Date'
 module Hotel
   class HotelController
-
+    
     def initialize
       @reservation_array = []
     end
@@ -48,7 +48,12 @@ module Hotel
       return room_res_array
     end
 
-    def available_rooms(start_date, end_date)
+    # def can_reserve_at_date(in_date_range)
+    #   return @available_rooms(in_date_range.start_date, in_date_range.end_date)
+    # end
+
+
+    def available_rooms(start_date, end_date) #putting in dates gives you all available rooms
       start_date = DateRange.new(start_date, end_date).start_date
       end_date = DateRange.new(start_date, end_date).end_date
 

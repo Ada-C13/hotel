@@ -25,8 +25,28 @@ module Hotel
 
     end
 
-    def overlap?(other)
-      return false
+    def overlap?(test_range)
+      if @start_date >= test_range.start_date && 
+         @end_date < test_range.end_date #contained range(@range inside test),same
+        return true
+      elsif @start_date == test_range.end_date #range ending on start date
+        return false
+      elsif test_range.start_date < @end_date #back overlap
+        return true
+      elsif @end_date == test_range.start_date #test range starts on end date
+        return false
+      elsif @start_date <= test_range.start_date && 
+        @end_date > test_range.end_date #containing range
+        return true
+      elsif @start_date > test_range.start_date && 
+        @end_date > test_range.end_date #front overlap
+        return true
+      elsif @start_date == test_range.start_date && 
+        @end_date == test_range.end_date #same range
+        return true
+      else
+        return false
+      end
     end
 
     def include?(date)
