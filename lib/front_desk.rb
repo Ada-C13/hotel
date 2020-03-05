@@ -30,7 +30,9 @@ module Hotel
     end
 
     def available_rooms(date_range)
-      available_rooms = @rooms.select{|room| room.reservations.empty? == true} || @rooms.select{|room| room.reservations.select{|reservation| reservation.date_range.overlap?(date_range)} == false}
+      available_rooms = @rooms.reject do |room|
+        room.reservations.any?{|reservation| reservation.date_range.overlap?(date_range) == true}
+      end
       return available_rooms
     end
 
@@ -46,6 +48,7 @@ module Hotel
 
     def total_cost(reservation)
       total_cost = reservation.date_range.nights * reservation.room.cost
+      return total_cost
     end
 
   #   start_date = Date.new(2020,3,1)

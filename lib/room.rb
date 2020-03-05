@@ -3,7 +3,7 @@ require 'date'
 module Hotel
   class Room
     attr_reader :room_number
-    attr_accessor :cost, :reservations, :block_status, :availability
+    attr_accessor :cost, :reservations, :block_status, :availability_in_block
     
     def initialize(room_number:, cost:, reservations: nil)
       @room_number = room_number
@@ -12,8 +12,8 @@ module Hotel
 
       @cost = 200
       @reservations = reservations || []
-      @block_status = :in_block || :not_in_block
-      @availability = :available || :unavailable
+      @block_status = :not_in_block || :in_block  
+      @availability_in_block = :available || :unavailable
 
     end
 

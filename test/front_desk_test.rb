@@ -65,7 +65,6 @@ describe "front desk" do
   describe "available_rooms" do
     before do
       @dates = Hotel::DateRange.new(start_date: Date.new(2020, 3, 4), end_date: Date.new(2020, 3, 7))
-      @front_desk.add_reservation(@dates)
     end
 
     it "returns an array of all available rooms given a date range" do
@@ -76,10 +75,32 @@ describe "front desk" do
       expect(@front_desk.available_rooms(@dates).sample).must_be_instance_of Hotel::Room
     end
 
-    it "returns array of rooms that doesn't include any rooms that are booked for same date range" do
+    it "returns array of all rooms for a given date range if no reservations exist for any room" do
+      expect(@front_desk.available_rooms(@dates).count).must_equal 20
+      expect(@front_desk.available_rooms(@dates)[0].room_number).must_equal 1
+    end
+
+    it "returns array of all rooms for a given date range that don't overlap the date range" do
+      @front_desk.add_reservation(@dates)
       expect(@front_desk.available_rooms(@dates).count).must_equal 19
       expect(@front_desk.available_rooms(@dates)[0].room_number).must_equal 2
-    end
+
+      @front_desk.add_reservation(@dates)
+
+      expect(@front_desk.available_rooms(@dates).count).must_equal 18
+      expect(@front_desk.available_rooms(@dates)[0].room_number).must_equal 3
+
+      new_dates = Hotel::DateRange.new(start_date: Date.new(2020, 3, 7), end_date: Date.new(2020, 3, 9))
+      @front_desk.add_reservation(new_dates)
+
+      expect(@front_desk.available_rooms(@dates).count).must_equal 18
+      expect(@front_desk.available_rooms(@dates)[0].room_number).must_equal 3
+
+      test_dates = Hotel::DateRange.new(start_date: Date.new(2020, 2, 7), end_date: Date.new(2020, 2, 9))
+      expect(@front_desk.available_rooms(test_dates).count).must_equal 20
+      expect(@front_desk.available_rooms(test_dates)[0].room_number).must_equal 1
+    end    
+
   end
 
   describe "find_reservation_with" do
