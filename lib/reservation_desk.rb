@@ -29,7 +29,7 @@ module Hotel
           reservations += room_reservations
         end
       end
-      
+
       return reservations
     end
 
@@ -61,6 +61,25 @@ module Hotel
       
     #   #TODO: add date_range class and refactor
     # end
+
+    def find_available_room(start_date: , end_date:)
+      #TODO: efficient date checking
+
+      date_range = DateRange.new(start_date: start_date, end_date: end_date)
+      
+      rooms.each do |room|
+        switch = 0
+        room.reservations.each do |reservation|
+          if reservation.date_range.overlap?(date_range)
+            switch = 1
+            break
+          end
+        end
+        return room if switch == 0
+      end
+
+      return nil
+    end
 
     def new_reservation(room_id: , start_date: , end_date: )
       raise ArgumentError.new("Invalid room ID.") unless rooms.find {|room| room.id == room_id}
