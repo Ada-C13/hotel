@@ -11,6 +11,7 @@ module Hotel
 
     def initialize(rm_num:)
       @rm_num = rm_num
+      @rm_reservations = []
      
       if rm_num.nil? || rm_num <= 0 
         raise ArgumentError, 'Room number cannot be blank or less than one.'
@@ -18,20 +19,18 @@ module Hotel
     end
 
     
+    ## each object of room will have an array of reservation object 
+    ## in order to check availablity, will call each room 
+      #do they have reservations? no - book, yes, loop through resses
+      #loop through each res to check for date conflict 
 
-
-    # nn to make all_rooms array that contains hashes with date: recloc
-    # {date: date, reservation: res #} -or-
-    # {date: reservation #}
-    # room1 = [{3/14/2020: HFHTJY}, {3/15/2020: HFHTJY}, {3/16/2020: HFHTJY} {3/17/2020: HFSDDY}]
+    
     # room1 = [res_obj1, res_obj2]
 
-    #   def book(startdate, end)
-    #       newRes = new res(start, end)
-    #       @resses.push(newRes)
-
+  
 
     #     HFHTJY.conflict(3/14/2020)
+    
 
   end 
 end

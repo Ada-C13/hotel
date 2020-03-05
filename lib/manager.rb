@@ -25,9 +25,11 @@ module Hotel
       return all_rooms
     end
 
-    def reserve_room(start_date, end_date)
-      @reservation = Reservation.new(start_date, end_date)
-
+    def book_res(start_date, end_date)
+      @reservation = Reservation.new(start_date: start_date, end_date: end_date)
+      # run availablity check in res
+      # once res is complete @reservation.push(all_res per room)
+      # @rm_reservations = []
     end
 
   end

@@ -25,24 +25,39 @@ module Hotel
       res_length = (Date.parse("#{end_date}") - Date.parse("#{start_date}")).to_i
       @total_cost = cost_per_day * res_length
       @recloc = SecureRandom.alphanumeric(6)
-      
-      ## make date class?
-      ## make date methods w/in res?
-    end
 
- 
+      # if rm_num has a value 
+        #check that room for availablity 
+        #if rm_reservations == empty
+          #book room
+        #else loop through instances of res for date
+          # if date == no conflict 
+          #   book room 
+          # if date has conflict
+            #return error
+
+
+      # if rm_num == nil 
+        # then cycle through rm numbers to find availablity 
+
+      
+      # (@rm_reservations = array of res instances)
+
+      # if conflict == true
+      #   raise ArgurmentError
+      # end
+    end
 
     def conflict(start_date, end_date)
-      #turn into range
-      #loop through every date in the range:
-        # if date < end_date and date > start_date
-        #   return true
-        # else
-        #   return false
-      # 
+      reservation_dates = (start_date..end_date).each {|date| 
+        if date < end_date and date > start_date
+          return true
+        else
+          return false
+        end}
     end
 
-  
+    
     
     ## nn to build method to check if inputed rm num is avail
       ## if the inputed room is unavailable - suggest different room or error?
