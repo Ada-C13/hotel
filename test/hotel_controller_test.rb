@@ -9,6 +9,7 @@ describe "HotelController class" do
     @controller.make_reservation(a, b)
     @reservations = @controller.reservations
     @list_available_rooms = @controller.find_available_rooms(Date.new(2020, 2, 24), Date.new(2020, 2, 25))
+    @all_rooms = @controller.show_all_rooms
   end
 
   describe "Initializer" do
@@ -34,6 +35,13 @@ describe "HotelController class" do
       expect(@list_available_rooms.length).must_equal 20 # change
     end
   end
+  describe "show_all_rooms" do
+    it "returns array of all rooms" do
+      expect(@all_rooms).must_be_kind_of Array
+      expect(@all_rooms.length).must_equal 20
+    end
+  end
+  # tests for find_by_date method(s)
 end
 
 # The final project submission should have 95% code coverage using simplecov

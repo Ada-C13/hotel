@@ -14,4 +14,6 @@ describe "DateRange class" do
     # tests for validating each parameter: check_in:, check_out:
     # check for ArgumentError
   end
+  # test for overlap?
+  # test for include?
 end
