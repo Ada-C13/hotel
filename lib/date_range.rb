@@ -27,6 +27,7 @@ module Hotel
     end
 
     def include?(date)
+      date = Date.new(date[0], date[1], date[2]) unless date.class == Date
       return self.create_days_array.include?(date)
     end
 

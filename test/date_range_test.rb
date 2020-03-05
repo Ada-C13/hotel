@@ -50,6 +50,12 @@ describe "date_range class" do
       day = Date.new(2019, 1, 29)
       expect(@date.include?(day)).must_equal false
     end
+
+    it "will turn a given date into a Date object" do
+      day = [2020, 1, 29]
+      expect(@date.include?(day)).must_equal true
+
+    end
   end
 
   describe "overlap? method" do
