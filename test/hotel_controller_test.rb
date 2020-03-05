@@ -34,9 +34,9 @@ describe "Hotel::HotelController" do
       end
 
       it "adds to the list of reservations" do 
-        reservation1 = @hotel.reserve_room(test_date(1), test_date(4))
+        @hotel.reserve_room(test_date(1), test_date(4))
         expect(@hotel.reservations.size).must_equal 1
-        reservation2 = @hotel.reserve_room(test_date(1), test_date(4))
+        @hotel.reserve_room(test_date(1), test_date(4))
         expect(@hotel.reservations.size).must_equal 2
       end
 
@@ -51,21 +51,24 @@ describe "Hotel::HotelController" do
         expect(@hotel.reservations.last.room).must_equal 2
       end
 
-      it "returns error if no rooms are available" do #
+      it "returns error if no rooms are available" do
         # reserve 20 rooms (20.times). The 21st should return an error.
-        (1..20).each do |reservation|
-          reservation = @hotel.reserve_room(test_date(1), test_date(4))
+        (1..20).each do
+          @hotel.reserve_room(test_date(1), test_date(4))
         end
-        # expect(@hotel.reservations.size).must_equal 20
+        expect(@hotel.reservations.size).must_equal 20
         expect{ @hotel.reserve_room(test_date(1), test_date(4)) }.must_raise ArgumentError
+        # it's ok to create more reservations in other date ranges
+        @hotel.reserve_room(test_date(15), test_date(20))
+        expect(@hotel.reservations.size).must_equal 21
       end
 
-      it "does not accept the same date for start and end" do #
+      it "does not accept the same date for start and end" do
         # create a reservation from 2020/01/05 to 2020/01/05. It should raise an exception
-        expect{ @hotel.reserve_room(test_date(1), test_date(1)) }.must_raise ArgumentError
+        expect{ @hotel.reserve_room(test_date(5), test_date(5)) }.must_raise ArgumentError
       end
 
-      it "does not accept a start date after the end date" do #
+      it "does not accept a start date after the end date" do
         # create a reservation from 2020/01/05 to 2020/01/01. It should raise an exception
         expect{ @hotel.reserve_room(test_date(5), test_date(1)) }.must_raise ArgumentError
       end
@@ -74,9 +77,8 @@ describe "Hotel::HotelController" do
     # access the list of reservations for a specific date, so that I can track reservations by date
     describe "reservations_by_date" do
       it "takes a Date and returns a list of Reservations" do
-        reservation1 = @hotel.reserve_room(test_date(1), test_date(4))
-        reservation2 = @hotel.reserve_room(test_date(1), test_date(4))
-
+        @hotel.reserve_room(test_date(1), test_date(4))
+        @hotel.reserve_room(test_date(1), test_date(4))
         reservations_ondate = @hotel.reservations_by_date(test_date(1))
 
         expect(reservations_ondate).must_be_kind_of Array
@@ -89,39 +91,37 @@ describe "Hotel::HotelController" do
 
       it "returns the reservation when you ask for the start date" do
         # create a reservation from 2020/01/01 to 2020/01/04, than get a list of reservations for 2020/01/01, should return 1
-        reservation1 = @hotel.reserve_room(test_date(1), test_date(4))
+        @hotel.reserve_room(test_date(1), test_date(4))
         reservations_ondate = @hotel.reservations_by_date(test_date(1))
-        expect(reservations_ondate.size).must_equal 1 #
+        expect(reservations_ondate.size).must_equal 1
         # create another reservation from 2020/01/01 to 2020/01/05, than get a list of reservations for 2020/01/01, should return 2
-        reservation2 = @hotel.reserve_room(test_date(1), test_date(5))
+        @hotel.reserve_room(test_date(1), test_date(5))
         reservations_ondate = @hotel.reservations_by_date(test_date(1))
-        expect(reservations_ondate.size).must_equal 2 #
-        # create another reservation from 2020/01/05 to 2020/01/10, than get a list of reservations for 2020/01/05, should return 2
-        reservation3 = @hotel.reserve_room(test_date(5), test_date(10))
-        ap @hotel.reservations
+        expect(reservations_ondate.size).must_equal 2
+        # create another reservation from 2020/01/05 to 2020/01/10, than get a list of reservations for 2020/01/05, should return 1
+        @hotel.reserve_room(test_date(5), test_date(10))
         reservations_ondate = @hotel.reservations_by_date(test_date(5))
-        ap reservations_ondate
-        expect(reservations_ondate.size).must_equal 1 # one instead of two!
+        expect(reservations_ondate.size).must_equal 1
       end
 
       it "returns the reservation when you ask for a date in the middle" do
         # create a reservation from 2020/01/01 to 2020/01/10, than get a list of reservations for 2020/01/05. It should return 1
-        reservation1 = @hotel.reserve_room(test_date(1), test_date(10))
+        @hotel.reserve_room(test_date(1), test_date(10))
         expect(@hotel.reservations_by_date(test_date(5)).size).must_equal 1
         # create a reservation from 2020/01/02 to 2020/01/15, than get a list of reservations for 2020/01/05. It should return 2
-        reservation2 = @hotel.reserve_room(test_date(2), test_date(15))
+        @hotel.reserve_room(test_date(2), test_date(15))
         expect(@hotel.reservations_by_date(test_date(5)).size).must_equal 2
         # create a reservation from 2020/01/10 to 2020/01/15, than get a list of reservations for 2020/01/05. It should return 2
-        reservation3 = @hotel.reserve_room(test_date(10), test_date(15))
+        @hotel.reserve_room(test_date(10), test_date(15))
         expect(@hotel.reservations_by_date(test_date(5)).size).must_equal 2
       end
 
       it "does not return a reservation when you ask for the end date" do
         # create a reservation from 2020/01/01 to 2020/01/10, than get a list of reservations for 2020/01/10. It should return 0
-        reservation1 = @hotel.reserve_room(test_date(1), test_date(10))
+        @hotel.reserve_room(test_date(1), test_date(10))
         expect(@hotel.reservations_by_date(test_date(10)).size).must_equal 0
         # create a reservation from 2020/01/05 to 2020/01/10, than get a list of reservations for 2020/01/10. It should return 0
-        reservation2 = @hotel.reserve_room(test_date(5), test_date(10))
+        @hotel.reserve_room(test_date(5), test_date(10))
         expect(@hotel.reservations_by_date(test_date(10)).size).must_equal 0
       end
 
@@ -137,29 +137,33 @@ describe "Hotel::HotelController" do
       end
 
       it "removes a room after it is reserved" do
-        reservation1 = @hotel.reserve_room(test_date(1), test_date(5))
+        @hotel.reserve_room(test_date(1), test_date(5))
         expect(@hotel.available_rooms(test_date(1), test_date(5)).size).must_equal 19
-        reservation1 = @hotel.reserve_room(test_date(1), test_date(5))
+        @hotel.reserve_room(test_date(1), test_date(5))
         expect(@hotel.available_rooms(test_date(1), test_date(5)).size).must_equal 18
       end
 
       it "does not show the room available if there is an overlaping reservation" do
         # create a reservation from 2020/01/05 to 2020/01/15.
-        reservation1 = @hotel.reserve_room(test_date(5), test_date(15))
-        # Check if the list of available rooms from 2020/01/10 to 2020/01/20 has 19 rooms
+        @hotel.reserve_room(test_date(5), test_date(15))
+        # Check overlap with same range
+        expect(@hotel.available_rooms(test_date(5), test_date(15)).size).must_equal 19
+        # Check overlap in the back
         expect(@hotel.available_rooms(test_date(10), test_date(20)).size).must_equal 19
-        # Check if the list of available rooms from 2020/01/01 to 2020/01/10 has 19 rooms
+        # Check overlap at the front
         expect(@hotel.available_rooms(test_date(1), test_date(10)).size).must_equal 19
-        # Check if the list of available rooms from 2020/01/07 to 2020/01/12 has 19 rooms
+        # Check overlap fully contained
         expect(@hotel.available_rooms(test_date(7), test_date(12)).size).must_equal 19
-        # Check if the list of available rooms from 2020/01/01 to 2020/01/20 has 19 rooms
+        # Check overlap fully containing
         expect(@hotel.available_rooms(test_date(1), test_date(20)).size).must_equal 19
-        # Check if the list of available rooms from 2020/01/01 to 2020/01/03 has 20 rooms
+        # Check no overlap fully before
         expect(@hotel.available_rooms(test_date(1), test_date(3)).size).must_equal 20
-        # Check if the list of available rooms from 2020/01/17 to 2020/01/20 has 20 rooms
+        # Check no overlap fully after
         expect(@hotel.available_rooms(test_date(17), test_date(20)).size).must_equal 20
-        # Check if the list of available rooms from 2020/01/15 to 2020/01/20 has 20 rooms
+        # Check no overlap on checkout date after
         expect(@hotel.available_rooms(test_date(15), test_date(20)).size).must_equal 20
+        # Check no overlap on checkout date before
+        expect(@hotel.available_rooms(test_date(1), test_date(5)).size).must_equal 20
       end
 
     end
