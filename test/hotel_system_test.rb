@@ -147,7 +147,7 @@ describe Hotel::HotelSystem do
 		end
 
 		it "returns array length of 2" do
-			searching = Hotel::DateRange.new(Date.new(2019, 11, 27), Date.new(2019, 12, 5))
+			searching = Hotel::DateRange.new(Date.new(2019, 11, 26), Date.new(2019, 12, 5))
 			found_reservations = @hotel.get_reservations_by_room(@hotel.rooms[0], searching)
 
 			expect(found_reservations.length).must_equal 2

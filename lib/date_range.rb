@@ -15,8 +15,6 @@ module Hotel
 				return (incoming_range.start_date >= self.start_date) && (incoming_range.end_date < self.end_date)
 			elsif token == :searching 
 				return (incoming_range.start_date >= self.start_date) && (incoming_range.end_date <= self.end_date)
-			else
-				return false
 			end
 		end
 
