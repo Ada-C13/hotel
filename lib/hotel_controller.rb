@@ -1,10 +1,10 @@
 # I need a hotel_controller to be able to:
 # x create 20 rooms
 # control the business logic of adding/ finding reservations
-# create Date_Range
-# validate Date_Range
-# get_reservations(date)
+# send start/end dates to create instance of DateRanges
+# find_reservations(date)
 # find_available_room
+# room.check_is_available for all rooms
 
 # From class with Chris:
 # For checking available rooms:
@@ -44,20 +44,24 @@ module Hotel
       # preliminary fulfillment of basic functionality with no conflict-checking or available room searching
       available_room_id = 5
       new_reservation = Hotel::Reservation.new(input_range, available_room_id)
-      @all_reservations << new_reservation
+      # instead of adding the new reservation to the hotel controller class,
+      # I want to add it to the room class only. Because I'll only ever care about making
+      # a new reservation in a specific room.
+      # @all_reservations << new_reservation
       return new_reservation
     end
 
     # Wave 1, US 3: "I can access the list of reservations for a specific date, so that I can track reservations by date"
-    def find_by_date(input_range)
-      reservations_by_date = []
-      @all_reservations.each do |reservation|
-        if input_range == reservation.date_range
-          reservations_by_date << reservation
-        end
-      end
-      return reservations_by_date
-    end
+    # will need to refactor this to search through each room's reservations instead of all_reservations in hotel controller
+    # def find_by_date(input_range)
+    #   reservations_by_date = []
+    #   @all_reservations.each do |reservation|
+    #     if input_range == reservation.date_range
+    #       reservations_by_date << reservation
+    #     end
+    #   end
+    #   return reservations_by_date
+    # end
 
 
     private

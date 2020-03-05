@@ -5,7 +5,6 @@ describe Hotel::Room do
     before do
       @room_id = 5
       @room = Hotel::Room.new(@room_id)
-      
 
       @start_date = Date.new(2020, 1, 1)
       @end_date = Date.new(2020, 1, 2)
@@ -22,14 +21,14 @@ describe Hotel::Room do
     end
 
     it "has a room_id between 1-20" do
-      [0, 21].each do |num|
+      [-1, 0, 21].each do |num|
         expect do
           Hotel::Room.new(num, 200, [])
         end.must_raise ArgumentError
       end
     end
 
-    # don't think I need this anymore
+    # don't think I need this anymore?
     # it "stores a room_cost" do
     #   expect(@room.cost).must_equal @cost
     # end
@@ -49,12 +48,53 @@ describe Hotel::Room do
 
   end
 
+  describe "conflict?" do
+    before do
+      @room_id = 5
+      @room = Hotel::Room.new(@room_id)
+      @start_date = Date.new(2020, 1, 1)
+      @end_date = Date.new(2020, 1, 2)
+      @date_range_1 = Hotel::DateRange.new(@start_date, @end_date)
+      @reservation_to_add = Hotel::Reservation.new(@date_range_1, @room_id)
+      @room.add_room_reservation(@reservation_to_add)
+    end
+
+    it "returns true if the input range conflicts with the current reservation range" do
+      date_range_2 = Hotel::DateRange.new(@start_date, @end_date)
+      expect(@room.conflict?(date_range_2)).must_equal true
+    end
+
+    it "returns false if the input range does not conflict with the current reservation range" do
+      date_range_3 = Hotel::DateRange.new(@start_date+3, @end_date+3)
+      expect(@room.conflict?(date_range_3)).must_equal false
+    end
+  end
+
+  # describe "create_room_reservation" do
+  #   before do
+  #     @room_id = 5
+  #     @room = Hotel::Room.new(@room_id)
+      
+  #     @start_date = Date.new(2020, 1, 1)
+  #     @end_date = Date.new(2020, 1, 2)
+  #     @date_range_1 = Hotel::DateRange.new(@start_date, @end_date)
+  #     @reservation_to_add = Hotel::Reservation.new(@date_range_1, @room_id)
+  #   end
+
+  #   it "creates a new reservation" do
+  #     created_rez = @room.create_room_reservation(@date_range_1)
+  #     expect(created_rez).must_be_kind_of Hotel::Reservation
+  #   end
+
+    # add more tests here?
+
+  # end
+
   describe "add_room_reservation" do
     before do
       @room_id = 5
       @room = Hotel::Room.new(@room_id)
       
-
       @start_date = Date.new(2020, 1, 1)
       @end_date = Date.new(2020, 1, 2)
       @date_range_1 = Hotel::DateRange.new(@start_date, @end_date)

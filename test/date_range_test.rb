@@ -28,7 +28,6 @@ describe Hotel::DateRange do
     #   end.must_raise ArgumentError
     # end
 
-
     describe "overlap?" do
       before do
         # 1 - 2 - 3
@@ -50,6 +49,11 @@ describe Hotel::DateRange do
         expect(@date_range_1.overlap?(comparison_range_2)).must_equal true
       end
 
+      it "returns true if the comparison range is inside of the current range" do
+        comparison_range_10 = Hotel::DateRange.new(@start_date, @end_date-1)
+        expect(@date_range_1.overlap?(comparison_range_10)).must_equal true
+      end
+
       it "returns true if the comparison range encompasses or equals all of the current range" do
         comparison_range_3 = Hotel::DateRange.new(@start_date-1, @end_date+1)
         expect(@date_range_1.overlap?(comparison_range_3)).must_equal true
@@ -65,10 +69,10 @@ describe Hotel::DateRange do
       end
 
       it "returns false if the comparison range does not overlap with the current range" do
-        comparison_range_7 = Hotel::DateRange.new(@start_date-3, @end_date-3)
+        comparison_range_7 = Hotel::DateRange.new(@start_date-4, @end_date-4)
         expect(@date_range_1.overlap?(comparison_range_7)).must_equal false
       
-        comparison_range_8 = Hotel::DateRange.new(@start_date+3, @end_date+3)
+        comparison_range_8 = Hotel::DateRange.new(@start_date+4, @end_date+4)
         expect(@date_range_1.overlap?(comparison_range_8)).must_equal false
       end
 
@@ -78,5 +82,4 @@ describe Hotel::DateRange do
       end
     end
 
-    
 end

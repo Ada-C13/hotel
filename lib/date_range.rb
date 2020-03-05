@@ -18,8 +18,6 @@ module Hotel
         return true
       elsif comparison_range.end_date <= self.end_date && comparison_range.end_date > self.start_date
         return true
-      # elsif comparison_range.start_date >= self.start_date && comparison_range.end_date < self.end_date
-        return true
       elsif comparison_range.start_date <= self.start_date && comparison_range.end_date >= self.end_date
         return true
       else
