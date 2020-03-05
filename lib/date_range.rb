@@ -14,6 +14,9 @@ module Hotel
       return (@check_in.year.to_s + @check_in.mon.to_s + @check_in.mday.to_s)
     end
 
+    def collide? (other_check_in, other_check_out)
+      return ((@check_in..@check_out).cover? (other_check_in)) || ((@check_in-1...@check_out).cover? (other_check_out))
+    end
 
   end
 end
