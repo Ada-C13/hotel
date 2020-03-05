@@ -58,12 +58,18 @@ describe "FrontDesk class" do
       expect(front_desk.get_bookings("2nd Apr 2020").first).must_equal reservation
     end
 
-    it "gives a correct Reservation if a specified date coinsides with a check-in or check-out date" do
+    it "gives a correct Reservation if a specified date coinsides with a check-in date" do
       reservation = Hotel::Reservation.new(room: Hotel::Room.new(1), start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
       front_desk = Hotel::FrontDesk.new
       front_desk.add_reservation(reservation)
       expect(front_desk.get_bookings("1st Apr 2020").first).must_equal reservation
-      expect(front_desk.get_bookings("3rd Apr 2020").first).must_equal reservation
+    end
+
+    it "gives nil if a specified date coinsides with a check-out date" do
+      reservation = Hotel::Reservation.new(room: Hotel::Room.new(1), start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
+      front_desk = Hotel::FrontDesk.new
+      front_desk.add_reservation(reservation)
+      expect(front_desk.get_bookings("3rd Apr 2020").first).must_be_nil
     end
 
     it "returns an empty array if no reservations are found" do
@@ -164,7 +170,7 @@ describe "FrontDesk class" do
 
       it "returns a new Reservation" do
         check_in = Date.parse("3rd Mar 2020")
-        check_out = Date.parse("5th Mar 2020")  
+        check_out = Date.parse("5th Mar 2020") - 1
         front_desk = Hotel::FrontDesk.new
         expect(front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020").room.number).must_equal 1
         expect(front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020").room).must_be_instance_of Hotel::Room
@@ -175,7 +181,7 @@ describe "FrontDesk class" do
 
       it "adds a new Reservation to the list of reservations" do
         check_in = Date.parse("3rd Mar 2020")
-        check_out = Date.parse("5th Mar 2020")  
+        check_out = Date.parse("4th Mar 2020")
         front_desk = Hotel::FrontDesk.new
         front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020")
         expect(front_desk.reservations.size).must_equal 1
@@ -192,6 +198,22 @@ describe "FrontDesk class" do
           front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020")
         end
         expect{front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020")}.must_raise ArgumentError
+      end
+
+      it "does not let reserve a room if there is dates overlapping for 2 reservations" do
+        front_desk = Hotel::FrontDesk.new
+        20.times do
+          front_desk.reserve_room("3rd Mar 2020", "5th Mar 2020")
+        end
+        expect{front_desk.reserve_room("4th Mar 2020", "7th Mar 2020")}.must_raise ArgumentError
+      end
+
+      it "reserves a room if check_in and check-out are the same dates for 2 reservations" do
+        front_desk = Hotel::FrontDesk.new
+        20.times do
+          front_desk.reserve_room("3rd Apr 2020", "5th Apr 2020")
+        end
+        expect(front_desk.reserve_room("5th Apr 2020", "7th Apr 2020")).must_be_instance_of Hotel::Reservation
       end
     end
   end

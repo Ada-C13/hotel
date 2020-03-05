@@ -39,7 +39,7 @@ describe "Reservation class" do
 
     it "saves correct dates for check-in and check-out" do
       check_in = Date.parse("3rd Mar 2020")
-      check_out = Date.parse("5th Mar 2020")
+      check_out = Date.parse("4th Mar 2020")
 
       reservation = Hotel::Reservation.new(
         room: Hotel::Room.new(1), 
