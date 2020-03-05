@@ -14,28 +14,24 @@ module Hotel
           raise ArgumentError, "Start date must be before end date"
         end
       end
-      @nights = (@check_out - @check_in).to_i # change to array of each day with .length?
+      @nights = (@check_out - @check_in).to_i
     end
   end
 
-  # Wave 2:
-
-  def self.overlap?(new_date_range) # for all schedule conflict cases
-    case new_date_range
-      # when new start date is inside range
-    when new_date_range.check_in >= self.check_in && new_date_range.check_in < self.check_out
+  def overlap?(new_date_range)
+    # when new start date is inside range
+    if new_date_range.check_in >= self.check_in && new_date_range.check_in < self.check_out
       return true
       # when new end date is inside range
-    when new_date_range.check_out > self.check_in && new_date_range.check_out <= self.check_out
+    elsif new_date_range.check_out > self.check_in && new_date_range.check_out <= self.check_out
       return true
       # when new dates encompass range
-    when new_date_range.check_in < self.check_in && new_date_range > self.check_out
+    elsif new_date_range.check_in < self.check_in && new_date_range > self.check_out
       return true
     end
+    return false
   end
 
-  # def include?(one_day) 
+  # def include?(one_day)
   # end
 end
-
-# research dates affordances - should I handle @nights differently? Generate an array of dates within daterange? what methods can I call on @nights to check for overlap and include?

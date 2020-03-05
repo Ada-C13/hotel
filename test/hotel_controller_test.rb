@@ -6,8 +6,9 @@ describe "HotelController class" do
     @controller = Hotel::HotelController.new(rooms: (1..20).to_a, reservations: [])
     a = Date.new(2020, 2, 24)
     b = Date.new(2020, 2, 25)
-    @controller.make_reservation(check_in: a, check_out: b)
+    @controller.make_reservation(a, b)
     @reservations = @controller.reservations
+    @list_available_rooms = @controller.find_available_rooms(Date.new(2020, 2, 24), Date.new(2020, 2, 25))
   end
 
   describe "Initializer" do
@@ -25,6 +26,12 @@ describe "HotelController class" do
   describe "make_reservation" do
     it "creates instance of Reservation" do
       expect(@reservations[0]).must_be_kind_of Hotel::Reservation
+    end
+  end
+  describe "find_available_rooms" do
+    it "returns array of available rooms" do
+      expect(@list_available_rooms).must_be_kind_of Array
+      expect(@list_available_rooms.length).must_equal 20 # change
     end
   end
 end
