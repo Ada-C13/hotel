@@ -1,6 +1,5 @@
 require 'date_range'
 require 'reservation'
-require 'ap'
 
 module Hotel
   class FrontDesk
@@ -67,7 +66,7 @@ module Hotel
     def reservation_cost(reservation)
       looked_up_reservation = @reservations.select {|bookings| reservation==bookings}
       cost = looked_up_reservation[0].date_range.duration
-      return cost* (looked_up_reservation[0].room_rate)
+      return cost * (looked_up_reservation[0].room_rate)
     end 
 
     #create_block method 
@@ -79,27 +78,27 @@ module Hotel
         raise ArgumentError, "max is 5 for Number of Rooms"
       end 
 
-      unless rooms_available.length >= num_of_rooms
-        raise ArgumentError, "Not Enough Rooms"
-      end 
+      # unless rooms_available.length >= num_of_rooms
+      #   raise ArgumentError, "Not Enough Rooms"
+      # end 
 
       block_array = []
-      random_block_id = rand(1000..9999)
+      random_block_id = rand(1000..9999).to_s
 
       num_of_rooms.times do 
         new_block = self.request_reservation(start_date,end_date)
         new_block.room_rate = room_rate
         new_block.block_tag = "block-available"
-        new_block.reservation_id = "B" + random_block_id.to_s + "-" + new_block.reservation_id.to_s
+        new_block.reservation_id = "B" + random_block_id + "-" + new_block.reservation_id
         block_array << new_block
       end 
-      return block_array
 
+      return block_array
     end 
 
     #book_room_of_block (assume manager know unique block_id BXXXX)
     def book_room_of_block(block_id)
-      rooms_of_block_available = @reservations.select{|booking|booking.reservation_id.to_s[0..4] == block_id && booking.block_tag == "block-available"}
+      rooms_of_block_available = @reservations.select{|booking|booking.reservation_id[0..4] == block_id && booking.block_tag == "block-available"}
       num_available = rooms_of_block_available.length
 
       unless num_available > 0
@@ -109,19 +108,13 @@ module Hotel
       reservation_id_to_change = rooms_of_block_available[0].reservation_id
 
       @reservations.each do |booking|
-        if booking.reservation_id.to_s == reservation_id_to_change.to_s
+        if booking.reservation_id == reservation_id_to_change
           booking.block_tag = "block-booked"
         end 
       end 
+
       return rooms_of_block_available[0]
     end 
 
-
-    #hotel block pseudocode
-    #ability to create hotel block, this will mark as normal reservation 
-        #but tag with block-available and assign reservation id with B0 to B9
-    #make reservation within block method change tag to block-booked
-
-    
   end 
 end

@@ -232,7 +232,6 @@ describe "front_desk" do
 
   describe "#request_reservation for wave 2 Check if room added to reservations pool" do 
     it "new reservation is an instance of reservation" do 
-      skip 
       manager = hotel_manager
       reservation_2 = manager.request_reservation([2020,3,6],[2020,3,8])
       expect(reservation_2).must_be_kind_of Hotel::Reservation
