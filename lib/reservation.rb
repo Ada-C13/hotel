@@ -8,12 +8,19 @@ module Hotel
       @room = room
       @start_date = Date.parse(start_date)
       @end_date = Date.parse(end_date)
-    end
 
+      # Check end date is after start date
+      #make unit test for edge case of 3/1/2020 - 3/12/2020
+      if start_date >= end_date
+        raise ArgumentError.new("The end date cannot be before the start date")
+      end
+    end
+   
+
+    # Calculate total reservation cost based on nightly rate
     def total_cost
-      nights = start_date - end_date
+      nights = (end_date - start_date).to_i
       return (nights * room.nightly_rate)
     end
   end
-  
 end

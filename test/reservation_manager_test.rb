@@ -37,11 +37,10 @@ describe "ReservationManager" do
       manager = Hotel::ReservationManager.new
 
       manager.make_reservation("March 1, 2020", "March 3, 2020") 
-      manager.make_reservation("March 3, 2020", "March 12, 2020")
-      manager.make_reservation("March 2, 2020", "March 6, 2020") 
+      manager.make_reservation("March 1, 2020", "March 8, 2020")
+      manager.make_reservation("March 3, 2020", "March 6, 2020") 
       manager.make_reservation("March 3, 2020", "March 5, 2020")
       manager.make_reservation("March 15, 2020", "March 18, 2020")
-
 
       date = "March 3, 2020"
       specific_reservation = manager.find_reservation(date)

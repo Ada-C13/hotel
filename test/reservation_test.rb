@@ -1,7 +1,7 @@
 require_relative "test_helper"
 
 describe "Reservation" do
-  describe "Initialize" do
+  describe "initialize" do
     it "Create an instance of Reservation" do
       reservation = Hotel::Reservation.new(1, 3, "March 3, 2020", "March 5, 2020")
       # Assert
@@ -33,6 +33,13 @@ describe "Reservation" do
       # Assert
       expect(reservation).must_respond_to :end_date
       expect(reservation.end_date).must_equal Date.parse("March 5, 2020")
+    end
+
+    it "Throws error if end date is before start date" do
+      start_date = "March 5, 2020"
+      end_date = "March 3, 2020"
+      # Assert
+      expect{ Hotel::Reservation.new(1, 3, start_date, end_date) }.must_raise ArgumentError
     end
   end
 
