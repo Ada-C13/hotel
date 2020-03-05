@@ -28,17 +28,28 @@ module Hotel
     end
   
     def overlap?(other)
-      if self.nights.include?(other.start_date) || 
-        self.nights.include?(other.nights.last)
-        return true
-      elsif other.nights.include?(self.start_date) ||
-        other.nights.include?(self.nights.last)
-        return true
-      else
-        return false
+      # TO DO: get help comparing the complexity
+      #  of these two different solutions
+
+      # if self.nights.include?(other.start_date) || 
+      #   self.nights.include?(other.nights.last)
+      #   return true
+      # elsif other.nights.include?(self.start_date) ||
+      #   other.nights.include?(self.nights.last)
+      #   return true
+      # else
+      #   return false
+      # end
+      other.nights.each do |night|
+        # this uses #include? not ruby enumerable
+        if self.include? night
+          return true
+        end
       end
+      return false
     end
 
+    # TO DO: is this redundant, or is this good encapsulation?
     def include?(date)
       return nights.include? date
     end

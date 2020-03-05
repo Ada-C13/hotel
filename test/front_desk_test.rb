@@ -13,13 +13,14 @@ describe Hotel::FrontDesk do
       end
     end
     describe "reserve_room" do
-      it "takes two Date objects and returns a Reservation" do
+      it "takes two Date objects and returns a Reservation, adds reservation to room" do
         start_date = @date
         end_date = start_date + 3
 
         reservation = @front_desk.reserve_room(start_date, end_date)
-
         expect(reservation).must_be_kind_of Hotel::Reservation
+        room = @front_desk.rooms.find {|room| room.reservations.length > 0}
+        expect(room.reservations.include? reservation).must_equal true
       end
     end
 
