@@ -1,23 +1,13 @@
 module Hotel
   class FrontDesk 
-    attr_reader :reservations
+    attr_reader :rooms, :reservations
     def initialize
-        @rooms = {
-          
-        }
+        @rooms = []
         @reservations = []
-    end
-
-    def rooms
-      return @rooms.keys
     end
 
     def reserve_room(start_date, end_date)
       new_reserv = nil
-    end
-
-    private
-    def find_room()
     end
 
   end
