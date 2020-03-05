@@ -2,7 +2,7 @@ require_relative 'date_range'
 
 module Hotel
   class Reservation
-    attr_reader :id, :start_date, :end_date, :date_range, :room_id, :hotel_block_id
+    attr_reader :id, :start_date, :end_date, :date_range, :room_id
 
     @@next_id = 1
 
@@ -19,14 +19,6 @@ module Hotel
 
       # @hotel_block_id = -1
     end
-
-    def  get_price
-      price = date_range.count_nights * 200.00 #should require relative room and take room.cost
-      return price
-    end
-
-    # def self.find(date_range)
-
   end
 end
 
@@ -47,4 +39,9 @@ end
 #   @id = @@next_id
 #   @@next_id += 1
 #   # @hotel_block_id
+# end
+
+# def  get_price
+#   price = date_range.count_nights * 200.00 #should require relative room and take room.cost
+#   return price
 # end
