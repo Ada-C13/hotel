@@ -40,6 +40,27 @@ describe Hotel::HotelController do
       end
     end
 
+    # xdescribe " " do
+    #   it "takes a date_range for special date a list of Reservations" do
+    #     today = Date.today
+    #     room_one = Hotel::Room.new(1)
+    #     room_two = Hotel::Room.new(2)
+
+    #     reservation = Hotel::Reservation.new(3, today + 6, today + 9, room_one)
+
+    #     @hotel_controller.reservations = [
+    #       Hotel::Reservation.new(1, today + 1, today + 2, room_one),
+    #       Hotel::Reservation.new(2, today + 6, today + 9, room_two),
+    #       reservation,
+    #       Hotel::Reservation.new(4, today + 10, today + 13, room_one)
+    #     ]
+
+    #     reservation_list = @hotel_controller.reservations_for(Hotel::DateRange.new(today + 5, today + 9), room_one)
+    #     expect(reservation_list).must_be_kind_of Array
+    #      expect(reservation_list).must_equal [reservation]   
+    #   end
+    # end
+
     describe "reservations_for" do
       it "takes a date_range and room returns a list of Reservations" do
         today = Date.today
