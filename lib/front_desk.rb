@@ -1,5 +1,5 @@
-require 'date_range'
-require 'reservation'
+require_relative 'date_range'
+require_relative 'reservation'
 
 module Hotel
   class FrontDesk
