@@ -43,17 +43,4 @@ describe "Reservation" do
       expect(@reservation.total_cost).must_be_kind_of Float
     end
   end
-
-  # describe "available?" do
-  #   before do
-  #     @reservation_1 = Hotel::Reservation.new(start_date: "2020-5-1", end_date: "2020-5-4", num_rooms: 1)
-  #     @reservation_2 = Hotel::Reservation.new(start_date: "2020-5-1", end_date: "2020-5-4", num_rooms: 1)
-  #   end
-
-  #     it "returns false if the dates overlap" do
-        
-  #     end
-  #   end
-  # end
-
 end

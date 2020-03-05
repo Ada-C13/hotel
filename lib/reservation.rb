@@ -2,7 +2,7 @@ require 'time'
 
 module Hotel
   class Reservation
-    attr_accessor :start_date, :end_date, :num_rooms
+    attr_accessor :start_date, :end_date, :num_rooms, :assigned_room
     
     COST = 200
 
@@ -10,6 +10,7 @@ module Hotel
       @start_date = Time.parse(start_date)
       @end_date = Time.parse(end_date)
       @num_rooms = 1
+      @assigned_room = nil
 
       if @start_date > @end_date || @start_date == @end_date
         raise ArgumentError.new("Invalid times: #{@start_date} comes after #{@end_date}")
@@ -21,10 +22,20 @@ module Hotel
       return days
     end
 
-    # def self.available?
-    #   Hotel::Reservation.each do |booking|
-    #     return false if booking.start_date == reservation.start_date && booking.end_date == reservation.end_date
-    #   end
-    #end
+    def contains(date)
+      if date >= @start_date && date < @end_date
+        return true
+      else
+        return false
+      end
+    end
+
+    def conflict?(new_start, new_end)
+      if new_start >= @start_date && new_start < @end_date || new_end > @start_date
+        return false
+      elsif @end_date = new_start || new_start > @end_date || new_end < @start_date || new_end == @start_date
+        return true
+      end
+    end
   end
 end
