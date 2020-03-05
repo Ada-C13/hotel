@@ -21,6 +21,5 @@ module Hotel
       price = reservation.date_range.count_nights * cost
       return price
     end
-  
   end
 end
