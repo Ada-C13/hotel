@@ -288,12 +288,24 @@ describe "front_desk" do
         16.times do 
           manager.request_reservation([2020,4,9],[2020,4,10])
         end 
-
         expect{ manager.create_block(start_date,end_date,6,180)}.must_raise ArgumentError
       end 
-      
-
     end 
+    describe "#book_room_of_block" do 
+      it "will change one room's block_tag to block-booked" do 
+        manager = hotel_manager
+        start_date = [2020,4,9]
+        end_date = [2020,4,15]
+        block_id = manager.create_block(start_date,end_date,5,180)[0].reservation_id.to_s[0..4]
+        manager.book_room_of_block(block_id)
+        count_rooms_booked = manager.reservations.count{|room|room.block_tag == "block-booked"}
+        count_rooms_available = manager.reservations.count{|room|room.block_tag == "block-available"}
+
+        expect(count_rooms_booked).must_equal 1
+        expect(count_rooms_available).must_equal 4
+      end 
+    end 
+
   end 
 
 end 

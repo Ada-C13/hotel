@@ -95,6 +95,24 @@ module Hotel
       end 
       puts block_array[0].reservation_id.to_s[0..4]
       return block_array
+    end 
+
+    #book_room_of_block (assume manager know unique block_id BXXXX)
+    def book_room_of_block(block_id)
+      look_up_block = @reservations.select{|booking|booking.reservation_id.to_s[0..4] == block_id }
+      rooms_available = look_up_block.count{|room|room.block_tag == "block-available"}
+
+      unless rooms_available > 0
+        raise ArgumentError, "All rooms in this block are booked!"
+      end 
+
+      reservation_id_to_change = look_up_block[0].reservation_id
+
+      @reservations.each do |booking|
+        if booking.reservation_id.to_s == reservation_id_to_change.to_s
+          booking.block_tag = "block-booked"
+        end 
+      end 
       
 
     end 
