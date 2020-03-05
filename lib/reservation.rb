@@ -1,7 +1,7 @@
 require_relative 'date_range'
 
 module Hotel
-  class Reservation
+  class Reservation < DateRange
     # Feel free to change this method signature as needed. Make sure to update the tests!
     
     # need reservation id?
@@ -9,9 +9,19 @@ module Hotel
     attr_reader :start_date, :end_date, :room, :id
     def initialize(start_date, end_date, room, id: nil)
       # reservation has a DateRange - instantiate based on attributes
-      # Hotel::DateRange.new(start_date, end_date)
-      @start_date = start_date
-      @end_date = end_date
+
+
+      start_date = parse_start_date(start_date)
+      end_date = parse_end_date(end_date)
+      difference = end_date - start_date
+      if difference == 0
+        raise ArgumentError, "Cannot have 0 length date range"
+      elsif difference < 0
+        raise ArgumentError, "Cannot have negative length for a date range"
+      else
+        @start_date = start_date
+        @end_date = end_date
+      end
 
       # default room is first available room unless otherwise specified
       # error if room is unavailable - make into another method
@@ -22,7 +32,8 @@ module Hotel
     end
 
     def cost
-      return 200
+      cost = ((@end_date - @start_date) - 1) * 200
+      return cost
     end
   end
 end
