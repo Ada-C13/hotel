@@ -2,20 +2,16 @@ module Hotel
   class Reservation < DateRange
     attr_reader :room_num, :nights, :total_cost
 
-    def initialize(arrive, depart)
+    def initialize(arrive, depart, room)
       super(arrive, depart)
-      @room_num = 1
-      @nights = 2
-      @total_cost = 0
+      @room_num = room.room_num
+      @nights = nights
+      @total_cost = @nights * room.rate
     end
 
-
-    def find_available_room
-      return rand(1..20)
+    def nights
+      @depart - @arrive
     end
 
-    def self.total_cost
-
-    end
   end
 end
