@@ -73,6 +73,16 @@ module Hotel
       end
     end
 
+    def reservations_by_room_and_date_range(start_date, end_date, room)
+      asked_date_range = Hotel::DateRange.new(start_date, end_date)
+
+      return @reservations.select do |reservation|
+        reservation.date_range.start_date == asked_date_range.start_date &&
+        reservation.date_range.end_date == asked_date_range.end_date &&
+        reservation.room == room
+      end
+    end
+
 
 
 
