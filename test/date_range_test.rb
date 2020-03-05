@@ -91,10 +91,20 @@ describe Hotel::DateRange do
       expect(@range.overlap?(test_range)).must_equal false
     end
 
-    xit "returns false for a range completely before" do
+    it "returns false for a range completely before" do
+      start_date = @range.start_date - 10 #"2020-08-04"
+      end_date = @range.end_date - 10
+      test_range = Hotel::DateRange.new(start_date, end_date)
+
+      expect(@range.overlap?(test_range)).must_equal false
     end
 
-    xit "returns false for a date completely after" do
+    it "returns false for a date completely after" do
+      start_date = @range.start_date + 10 #"2020-08-04"
+      end_date = @range.end_date + 10
+      test_range = Hotel::DateRange.new(start_date, end_date)
+
+      expect(@range.overlap?(test_range)).must_equal false
     end
   end
 
