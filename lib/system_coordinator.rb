@@ -4,86 +4,99 @@ require_relative 'reservation'
 
 module Hotel
   class SystemCoordinator    
-    attr_reader :rooms, :reservations
+    attr_reader :rooms
 
     def initialize
-      @rooms = Array.new(20){|i| Hotel::Room.new(i+1)} #access the list of all of the rooms in the hotel
-      @reservations = []
+      @rooms = build_rooms(20) #access the list of all of the rooms in the hotel
+      
     end
+
+    def build_rooms(quantity)
+      Array.new(quantity){|i| Hotel::Room.new(i+1)}
+    end
+
 
     def list_rooms
       return @rooms
     end
 
-    # method to find list of reservations for a specific date
-    def find_reservations_by_date (date)
-      # what returns if no match
-      reservations_by_date = @reservations.select{|reservation|reservation.date_range.include_date(date)}
+
+    def find_reservations_by_date(date)
+      reservations_by_date = []
+
+      @rooms.each do |room|
+        room.bookings.each do |reservation|
+          reservations_by_date << reservation if reservation.date_range.include_date(date)
+        end
+      end
+
       return reservations_by_date
     end
 
-    # method to access list of reservations for a specified room and a given date range
+
     def find_reservations_room_date(room_id, date_range)
-      # what returns if no match?!!!!
-      reservations_room_date = @reservations.select{
-        |reservation|reservation.room_id == room_id && reservation.date_range.overlapping(date_range)
-      }
-      return reservations_room_date
-      # alternatively, we can search through the collection of rooms
-      # selected_room = @rooms.find{|room|room.room_id == room_id}
-      # reservations_room_date = selected_room.bookings.select{|reservation|reservation.date_range.overlapping(date_range)}
+      selected_room = find_room(room_id)
+      reservations_room_date = selected_room.bookings.select{|reservation|reservation.date_range.overlapping(date_range)}
+      return reservations_room_date    #what returns if no match?
     end
 
+
     def find_reservations_range(given_range)
-      # what returns if no match?!!!!!
-      reservations_range = @reservations.select{|reservation|reservation.date_range.overlapping(given_range)}
+      reservations_range = []
+
+      @rooms.each do |room|
+        room.bookings.each do |reservation|
+          reservations_range << reservation if reservation.date_range.overlapping(given_range)
+        end
+      end
+
       return reservations_range
     end
 
-    # method to view a list of rooms that are not reserved for a given date range
-    def find_availabile_rooms(given_range)
-      available_rooms = []
-      unavailabes = find_reservations_range(given_range)
-      # what returns if no match?!!!!! rescue an raised exception????????
-      unavailable_room_ids = unavailabes.map do |reservation|
-        reservation.room_id
-      end
 
-      unavailable_room_ids.each do |id|
-        available_rooms = @rooms.reject{|room|room.room_id == id}
+    def find_availabile_rooms(given_range)
+      available_rooms = @rooms.reject do |room|
+        room.bookings.any? do |reservation|
+          reservation.date_range.overlapping(given_range) == true
+        end
       end
 
       return available_rooms
     end
 
-    # method to find room
+
     def find_room(given_room_id)
       room_found = @rooms.find{|room|room.room_id == given_room_id}
       return room_found
     end
+
    
-    # method to make reservation
     def make_reservation(start_date, end_date)
       range_created = Hotel::DateRange.new(start_date,end_date)
       available_rooms = find_availabile_rooms(range_created)
+      raise ArgumentError if available_rooms == []
+      
+      chosen_room = available_rooms.shift
+      new_reservation = Hotel::Reservation.new(range_created, chosen_room.room_id)
+ 
+      chosen_room.add_booking_to_room(new_reservation)
+
+      return new_reservation
+    end
+  end
+end
+
+
+
+  #   # handle/ rescue exceptions 
+  #   # edge cases
+  # end
+# end
+
+
 
       # what returns if no match?!!!!! rescue an raised exception????????
       # I want an exception raised if I try to reserve a room during a date range when all rooms are reserved, 
       # so that I cannot make two reservations for the same room that overlap by date
       # I want exception raised when an invalid date range is provided, 
       # so that I can't make a reservation for an invalid date range
-
-      chosen_room_id = available_rooms[0].room_id
-      chosen_room = find_room(chosen_room_id)
-      new_reservation = Hotel::Reservation.new(range_created, chosen_room_id)
-      
-      @reservations << new_reservation
-      chosen_room.add_booking_to_room(new_reservation)
-
-      return new_reservation
-    end
-
-    # handle/ rescue exceptions 
-    # edge cases
-  end
-end

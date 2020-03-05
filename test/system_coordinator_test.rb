@@ -28,33 +28,11 @@ describe Hotel::SystemCoordinator do
         expect(room.cost).must_equal 200.00
       end
     end
-  end
 
-  describe "@reservations" do
-    before do
-      date_range = Hotel::DateRange.new(Date.today + 5, Date.today + 10)
-      @room_id = 10
-      @reservation01 = Hotel::Reservation.new(date_range, @room_id)
-      @coordinator01.reservations << @reservation01
-    end
-    # let (:reservation01) {
-    #   Hotel::Reservation.new(Hotel::DateRange.new(Date.today + 5, Date.today + 10), 10)
-    # }
-
-    it "returns an array of reservations that include that date" do
-      expect(@coordinator01.reservations).must_be_instance_of Array
-    end
-
-    it "stores Reservation instances in each element of @reservations" do
-      @coordinator01.reservations.each do |reservation|
-        expect(reservation).must_be_instance_of Hotel::Reservation
-        expect(reservation.date_range).must_be_instance_of Hotel::DateRange
-        expect(reservation.room_id).must_equal @room_id
+    it "stores an array of its reservations" do
+      @coordinator01.rooms.each do |room|
+        expect(room.bookings).must_be_instance_of Array
       end
-    end
-
-    it "stores the correct room_id in each of the Reservation instances" do
-      expect(@coordinator01.reservations[0].room_id).must_equal @room_id
     end
   end
 
@@ -71,86 +49,44 @@ describe Hotel::SystemCoordinator do
     end
   end
 
-  describe "#find_reservations_by_date" do
-    before do
-      date_range = Hotel::DateRange.new(Date.today + 5, Date.today + 10)
-      @room_id = 10
-      @reservation01 = Hotel::Reservation.new(date_range, @room_id)
-      @coordinator01.reservations << @reservation01
-
-      @found_reservations = @coordinator01.find_reservations_by_date(Date.today + 7)
-    end
-
-    it "returns an array" do
-      expect(@found_reservations).must_be_instance_of Array
-      # expect(@coordinator01.find_reservation_by_date(date10)).must_be_instance_of Array
-    end
-
-    it "returns what? when the date is not included" do
-      date11 = Date.today + 1
-      expect(@coordinator01.find_reservations_by_date(date11)).must_equal []
-    end
-
-    it "stores Reservation instances in the returned array" do
-      @found_reservations.each do |reservation|
-        expect(reservation).must_be_instance_of Hotel::Reservation
-      end
-    end
-  end
-
-  describe "#find_reservations_room_date" do
-    before do
-      @room_id = 10
-      @room01 = Hotel::Room.new(@room_id)
-      
-      @date_range = Hotel::DateRange.new(Date.today + 5, Date.today + 10)
-      @reservation01 = Hotel::Reservation.new(@date_range, @room_id)
-      @coordinator01.reservations << @reservation01
-      @room01.add_booking_to_room(@reservation01)
-      
-      @reservation_list = @coordinator01.find_reservations_room_date(@room_id, @date_range)
-    end
-
-    it "returns an array of reservations" do
-      expect(@reservation_list).must_be_instance_of Array
-    end
-
-    it "stores Reservation instances in each element of the array" do
-      @reservation_list.each do |reservation|
-        expect(reservation).must_be_instance_of Hotel::Reservation
-      end
-    end
-  end
 
   describe "#find_availabile_rooms" do
     before do
-      @room_id = 10
-      @room01 = Hotel::Room.new(@room_id)
-      
-      @date_range = Hotel::DateRange.new(Date.today + 5, Date.today + 10)
-      @reservation01 = Hotel::Reservation.new(@date_range, @room_id)
-      @coordinator01.reservations << @reservation01
-      @room01.add_booking_to_room(@reservation01)
-      
-      @available_rooms = @coordinator01.find_availabile_rooms(@date_range)
+      @start_date = Date.today + 5
+      @end_date = Date.today + 10
+      @date_range = Hotel::DateRange.new(@start_date,@end_date)
     end
 
     it "returns an array" do
-      expect(@available_rooms).must_be_instance_of Array
+      available_rooms = @coordinator01.find_availabile_rooms(@date_range)
+      expect(available_rooms).must_be_instance_of Array
     end
 
     it "stores Room instances in the array" do
-      @available_rooms.each do |room|
+      available_rooms = @coordinator01.find_availabile_rooms(@date_range)
+      available_rooms.each do |room|
         expect(room).must_be_instance_of Hotel::Room
       end
     end
 
-    it "represents number of rooms as the size of the array" do
-      expect(@available_rooms.length).must_equal 19
+    it "returns the correct number of available rooms when there are no reservations" do
+      available_rooms = @coordinator01.find_availabile_rooms(@date_range)
+      expect(available_rooms.length).must_equal 20
+    end
+
+    it "returns the correct number of available rooms when there are reservations" do
+      @coordinator01.make_reservation(@start_date, @end_date)
+      @coordinator01.make_reservation(@start_date, @end_date)
+      @coordinator01.make_reservation(Date.today + 10, Date.today + 12)
+      @coordinator01.make_reservation(Date.today + 1, Date.today + 2)
+      available_rooms = @coordinator01.find_availabile_rooms(@date_range)
+      expect(available_rooms.length).must_equal 18
     end
 
     it "should not include rooms that have reservations in the given date_range" do
-      @available_rooms.each do |room|
+      @coordinator01.make_reservation(@start_date, @end_date)
+      available_rooms = @coordinator01.find_availabile_rooms(@date_range)
+      available_rooms.each do |room|
         room.bookings.each do |booking|
           expect(booking.date_range.overlapping(@date_range)).must_equal false
         end
@@ -160,33 +96,19 @@ describe Hotel::SystemCoordinator do
 
   describe "#make_reservation" do
     before do
-      room01 = Hotel::Room.new(10)
-      date_range = Hotel::DateRange.new(Date.today + 5, Date.today + 10)
-      reservation01 = Hotel::Reservation.new(date_range, 10)
-      room01.add_booking_to_room(reservation01)
-      @coordinator01.reservations << reservation01
-      
-
-
-      start_date = Date.today + 5
-      end_date = Date.today + 10
-      @reservation_range = Hotel::DateRange.new(start_date, end_date)
-      @new_rs = @coordinator01.make_reservation(start_date, end_date)
+      @start_date = Date.today + 5
+      @end_date = Date.today + 10
+      @date_range = Hotel::DateRange.new(@start_date,@end_date)
     end
 
     it "returns a Reservation" do
-      expect(@new_rs).must_be_instance_of Hotel::Reservation
+      new_reservation = @coordinator01.make_reservation(@start_date, @end_date)
+      expect(new_reservation).must_be_instance_of Hotel::Reservation
     end
 
     it "stores the room_id in the Reservation returned" do
-      expect(@new_rs.room_id).must_be_instance_of Integer
-    end
-
-    it "reserves a room that will not be part of any other reservation overlapping that date range" do
-      room_chosen = @coordinator01.find_room(@new_rs.room_id)
-      (room_chosen.bookings.length - 1).times do |reservation|
-        expect(reservation.date_range).wont_equal @new_rs.date_range
-      end
+      new_reservation = @coordinator01.make_reservation(@start_date, @end_date)
+      expect(new_reservation.room_id).must_equal 1
     end
   end
 
@@ -200,4 +122,76 @@ describe Hotel::SystemCoordinator do
     end
   end
 
+  describe "#find_reservations_by_date" do
+    before do
+      start_date = Date.today + 5
+      end_date = Date.today + 10
+      @coordinator01.make_reservation(start_date, end_date)
+    end
+
+    it "returns an array" do
+      date10 = Date.today + 7
+      expect(@coordinator01.find_reservations_by_date(date10)).must_be_instance_of Array
+    end
+
+    it "returns empty array when the date is not included" do
+      date11 = Date.today + 1
+      expect(@coordinator01.find_reservations_by_date(date11)).must_equal []
+    end
+
+    it "stores Reservation instances in the returned array" do
+      date10 = Date.today + 7
+      found_reservations = @coordinator01.find_reservations_by_date(date10)
+      found_reservations.each do |reservation|
+        expect(reservation).must_be_instance_of Hotel::Reservation
+      end
+    end
+  end
+
+  describe "#find_reservations_room_date" do
+    before do
+      @start_date = Date.today + 5
+      @end_date = Date.today + 10
+      @date_range = Hotel::DateRange.new(@start_date,@end_date)
+      new_reservation = @coordinator01.make_reservation(@start_date, @end_date)
+      @room_id = new_reservation.room_id
+    end
+
+    it "returns an array of reservations" do
+      reservation_list = @coordinator01.find_reservations_room_date(@room_id,@date_range)
+      expect(reservation_list).must_be_instance_of Array
+    end
+
+    it "stores Reservation instances in each element of the array" do
+      reservation_list = @coordinator01.find_reservations_room_date(@room_id,@date_range)
+      reservation_list.each do |reservation|
+        expect(reservation).must_be_instance_of Hotel::Reservation
+      end
+    end
+  end
+
+  describe "#find_reservations_range" do
+    before do
+      @start_date = Date.today + 5
+      @end_date = Date.today + 10
+      @date_range = Hotel::DateRange.new(@start_date,@end_date)
+      @coordinator01.make_reservation(@start_date, @end_date)
+    end
+
+    it "returns an array of reservations" do
+      reservations_range = @coordinator01.find_reservations_range(@date_range)
+      expect(reservations_range).must_be_instance_of Array
+      expect(reservations_range.length).must_equal 1
+    end
+
+    it "returns the correct quantity of reservations" do
+      @coordinator01.make_reservation(Date.today + 5, Date.today + 6)
+      @coordinator01.make_reservation(Date.today + 8, Date.today + 18)
+      reservations_range = @coordinator01.find_reservations_range(@date_range)
+      expect(reservations_range).must_be_instance_of Array
+      expect(reservations_range.length).must_equal 3
+    end
+   end
 end
+
+
