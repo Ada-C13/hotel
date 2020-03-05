@@ -20,18 +20,17 @@ describe "Room Number Validation" do
   end
 end
 
-describe "Add reservation" do
+# describe "Add to Reservation Collection" do
+# before do
+#   @room = Hotel::Room.new("3")
+# end
 
-  it "instantiates a reservation object" do
-    
-  end
+#   it "adds reservation object to the collection of reservations" do
+#     range = Hotel::DateRange.new(Date.new(2020,3,3), Date.new(2020,3,6))
+#     reservation = Hotel::Reservation.new(range)
+#     add_to = @room.add_to_reservation_collection(reservation)
 
-  it "adds that object to the collection of reservations" do
-    
-  end
-
-  it "you can access that reservation's info and it is correct" do
-    
-  end
-
-end
+#     expect(@room.reservations.last).must_equal reservation
+#     expect(@room.reservations.last.room_number).must_equal "3"
+#   end
+# end

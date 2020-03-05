@@ -7,6 +7,7 @@ end
 # gem requirements
 require 'date'
 require "minitest"
+require 'pry'
 require "minitest/autorun"
 require "minitest/reporters"
 require "minitest/skip_dsl"
