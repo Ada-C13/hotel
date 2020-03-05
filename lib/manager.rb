@@ -26,20 +26,20 @@ module Hotel
     end
 
     def book_res(start_date, end_date)
-      #find available room - loop all rooms
-      room.rm_reservations.each do
-        if is_available == true
-          book_room
-          #call book method for available room 
-        end 
-        break
-        # driver = @drivers.select {|driver| driver.status == :AVAILABLE}.first
+      all_available = []
+      (start_date..end_date).each do |date| ## nn to parse 
+        room.rm_reservations.each { |date|
+          if room.is_available(date) == true #if room is availble call book method ## for every day thoooo
+            all_available << true
+          else 
+            all_available << false
+          end 
+        }
       end
-
-     
-
-      
-    
+      if all_available.include? false
+        # loop through next room 
+      else 
+        room.book_room(start_date, end_date)
     end
 
   end
