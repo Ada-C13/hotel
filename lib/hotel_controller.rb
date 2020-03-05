@@ -48,14 +48,11 @@ module Hotel
       return room_res_array
     end
 
-    # def can_reserve_at_date(in_date_range)
-    #   return @available_rooms(in_date_range.start_date, in_date_range.end_date)
-    # end
-
-
-    def available_rooms(start_date, end_date) #putting in dates gives you all available rooms
-      start_date = DateRange.new(start_date, end_date).start_date
-      end_date = DateRange.new(start_date, end_date).end_date
+    def available_rooms(range) #putting in dates gives you all available rooms
+      # start_date = DateRange.new(start_date, end_date).start_date     replaced individual dates with range
+      # end_date = DateRange.new(start_date, end_date).end_date
+      start_date = range.start_date
+      end_date = range.end_date
 
       range_length = (end_date - start_date) - 1
 
@@ -84,6 +81,12 @@ module Hotel
       else 
       raise ArgumentError, "There are no room available for that date range :("
       end
+    end
+
+    def res_with_valid_dates(range)
+      room = available_rooms(range)[0]
+      
+      reserve_room(range.start_date, range.end_date, room)
     end
   end
 end

@@ -96,7 +96,7 @@ describe Hotel::HotelController do
         start_date = @date
         end_date = start_date + 3
 
-        room_list = @hotel_controller.available_rooms(start_date, end_date)
+        room_list = @hotel_controller.available_rooms(DateRange.new(start_date, end_date))
 
         expect(room_list).must_be_kind_of Array
       end
@@ -105,7 +105,7 @@ describe Hotel::HotelController do
         start_date = @date
         end_date = start_date + 3
 
-        room_list = @hotel_controller.available_rooms(start_date, end_date)
+        room_list = @hotel_controller.available_rooms(DateRange.new(start_date, end_date))
 
         expect(room_list[0]).must_equal 1
       end
@@ -114,7 +114,7 @@ describe Hotel::HotelController do
         start_date = @date
         end_date = start_date + 3
 
-        room_list = @hotel_controller.available_rooms(start_date, end_date)
+        room_list = @hotel_controller.available_rooms(DateRange.new(start_date, end_date))
 
         expect(room_list.length).must_equal 20
       end
@@ -127,7 +127,7 @@ describe Hotel::HotelController do
         start_date = @date #2020-08-04
         end_date = start_date + 10
 
-        room_list = @hotel_controller.available_rooms(start_date, end_date)
+        room_list = @hotel_controller.available_rooms(DateRange.new(start_date, end_date))
 
         expect(room_list.length).must_equal 17
         expect(room_list).must_equal [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
@@ -139,7 +139,7 @@ describe Hotel::HotelController do
         start_date = @date #2020-08-04
         end_date = start_date - 10
 
-        expect{@hotel_controller.available_rooms(start_date, end_date)}.must_raise ArgumentError
+        expect{@hotel_controller.available_rooms(DateRange.new(start_date, end_date))}.must_raise ArgumentError
       end
 
       it "Returns Argument error for no rooms available" do
@@ -167,7 +167,35 @@ describe Hotel::HotelController do
         start_date = @date #2020-08-04
         end_date = start_date +3
 
-        expect{@hotel_controller.available_rooms(start_date, end_date)}.must_raise ArgumentError
+        expect{@hotel_controller.available_rooms(DateRange.new(start_date, end_date))}.must_raise ArgumentError
+      end
+    end
+    
+    describe "res_with_valid_dates" do
+      it "makes valid reservation with dates" do
+        start_date = @date   #"2020-08-04"
+        end_date = start_date + 3
+
+        reservation = @hotel_controller.res_with_valid_dates(DateRange.new(start_date, end_date))
+
+        expect(reservation).must_be_kind_of Hotel::Reservation
+        expect(reservation.room).must_equal 1     #valid room
+        expect(reservation.start_date).must_equal start_date
+        expect(reservation.end_date).must_equal end_date
+      end
+
+      it "accounts for other reservations" do
+        reservation1 = @hotel_controller.reserve_room("2020-08-04", "2020-08-10",1)
+        reservation2 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",2)
+        reservation3 = @hotel_controller.reserve_room("2020-08-09", "2020-08-12",3)
+
+        start_date = @date #2020-08-04
+        end_date = start_date + 3
+
+        reservation = @hotel_controller.res_with_valid_dates(DateRange.new(start_date, end_date))
+
+        expect(reservation.room).must_equal 3 
+        
       end
 
     end
