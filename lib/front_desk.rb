@@ -3,9 +3,10 @@ require_relative 'room'
 require_relative 'date_range'
 require_relative 'reservations'
 require_relative 'hotel_block'
+
 module Hotel
   class FrontDesk
-    attr_accessor :rooms, :reservations, :date_ranges
+    attr_accessor :rooms, :reservations, :hotel_blocks
 
     def initialize
       @rooms = []
@@ -15,12 +16,11 @@ module Hotel
         @rooms << new_room
       end
       @reservations = []
-      @date_ranges = []
+      @hotel_blocks = []
     end
 
     def add_reservation(date_range)
-      @date_ranges << date_range
-      available_rooms = @rooms.select{|room| room.reservations.empty? == true} || @rooms.reject{|room| room.reservations.select{|reservation| reservation.date_range.overlap?(date_range)} == true}
+      available_rooms = available_rooms(date_range)
       raise NoAvailableRoomError.new("there are no available rooms for that date")if available_rooms.empty? == true
 
       chosen_room = available_rooms.shift
@@ -30,14 +30,14 @@ module Hotel
     end
 
     def available_rooms(date_range)
-      available_rooms = @rooms.select{|room| room.reservations.empty? == true} || @rooms.reject{|room| room.reservations.select{|reservation| reservation.date_range.overlap?(date_range)} == true}
+      available_rooms = @rooms.select{|room| room.reservations.empty? == true} || @rooms.select{|room| room.reservations.select{|reservation| reservation.date_range.overlap?(date_range)} == false}
       return available_rooms
     end
 
-    def find_room(room_number)
-      found_room = @rooms.select {|room| room.room_number == room_number}
-      return found_room[0]
-    end
+    # def find_room(room_number)
+    #   found_room = @rooms.select {|room| room.room_number == room_number}
+    #   return found_room[0]
+    # end
 
     def find_reservation_with(room: nil, date_range:)
       res_w_given_date = @reservations.select {|reservation| (reservation.date_range == date_range && reservation.room == room) || reservation.date_range == date_range }

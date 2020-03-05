@@ -1,3 +1,5 @@
+require_relative 'test_helper'
+
 describe "HotelBlock" do
   describe "add_block" do
 

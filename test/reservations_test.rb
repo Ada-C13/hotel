@@ -1,5 +1,4 @@
 require_relative 'test_helper'
-require 'date'
 
 describe "reservations" do
   before do

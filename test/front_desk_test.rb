@@ -1,7 +1,4 @@
 require_relative 'test_helper'
-require_relative '../lib/date_range'
-require_relative '../lib/No_Available_Room_Error.rb'
-require 'date'
 
 describe "front desk" do
   before do
@@ -25,25 +22,21 @@ describe "front desk" do
     end
   end
 
-  describe "find_room" do
-    before do
-      @front_desk = Hotel::FrontDesk.new
-    end
+  # describe "find_room" do
+  #   before do
+  #     @front_desk = Hotel::FrontDesk.new
+  #   end
 
-    it "finds an instance of a room given the room number" do
-      room_number = 4
-      expect(@front_desk.find_room(room_number)).must_be_instance_of Hotel::Room
-    end
-  end
+  #   it "finds an instance of a room given the room number" do
+  #     room_number = 4
+  #     expect(@front_desk.find_room(room_number)).must_be_instance_of Hotel::Room
+  #   end
+  # end
 
   describe "add_reservation" do
     before do
       @dates = Hotel::DateRange.new(start_date: Date.new(2020, 3, 4), end_date: Date.new(2020, 3, 7))
       @front_desk.add_reservation(@dates)
-    end
-
-    it "adds date range to front desk date range instance variable array" do
-      expect(@front_desk.date_ranges[0]).must_be_instance_of Hotel::DateRange
     end
 
     it "raises exception when there are no available rooms for a given date range" do
