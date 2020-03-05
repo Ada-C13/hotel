@@ -105,7 +105,13 @@ describe "HotelManager" do
       date_range2 = Hotel::DateRange.new(Date.new(2020,5,25), Date.new(2020,5,27))
       date_range3 = Hotel::DateRange.new(Date.new(2020,5,28), Date.new(2020,5,29))
 
-      @hotel_manager.find_room(1).reservations.push(Hotel::Reservation.new(date_range1), Hotel::Reservation.new(date_range2), Hotel::Reservation.new(date_range3))
+      @hotel_manager.reserve_room(date_range1, 1)
+      @hotel_manager.reserve_room(date_range2, 1) 
+      @hotel_manager.reserve_room(date_range3, 1)
+      
+      @hotel_manager.reserve_room(date_range1, 2) 
+      @hotel_manager.reserve_room(date_range2, 2) 
+      @hotel_manager.reserve_room(date_range3, 2)
     end
 
     describe "list_reservations_by_room" do
@@ -147,23 +153,20 @@ describe "HotelManager" do
       end
 
       it "returns the correct reservations" do
-        date_range1 = Hotel::DateRange.new(Date.new(2020,5,25), Date.new(2020,5,27))
-        date_range2 = Hotel::DateRange.new(Date.new(2020,5,28), Date.new(2020,5,29))
-        @hotel_manager.reserve_room(date_range1, 2)
-        @hotel_manager.reserve_room(date_range2, 2)
         date = Date.new(2020,5,26)
 
         expect(@hotel_manager.list_reservations_by_date(date).length).must_equal 2
       end
     end
+  end
 
-    describe "calculate_cost" do
-      it "returns correct cost for a reservation" do
-        date_range = Hotel::DateRange.new(Date.new(2020,5,25), Date.new(2020,5,26))
-        cost = @hotel_manager.calculate_cost(date_range, 1)
-        
-        expect(cost).must_equal 200
-      end
+  describe "calculate_cost" do
+    it "returns correct cost for a reservation" do
+      date_range = Hotel::DateRange.new(Date.new(2020,5,25), Date.new(2020,5,26))
+      cost = @hotel_manager.calculate_cost(date_range, 1)
+      
+      expect(cost).must_equal 200
     end
   end
+
 end
