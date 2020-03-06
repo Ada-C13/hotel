@@ -33,6 +33,25 @@ module Hotel
       return reservations
     end
 
+    def check_availability(start_date: start_date, end_date: end_date)
+      #TODO: efficient date checking
+      date_range = DateRange.new(start_date: start_date, end_date: end_date)
+
+      available_rooms = []
+      rooms.each do |room|
+        switch = 0
+        room.reservations.each do |reservation|
+          if reservation.date_range.overlap?(date_range)
+            switch = 1
+            break
+          end
+        end
+        available_rooms << room if switch == 0
+      end
+
+      return available_rooms
+    end
+
     def find_available_room(start_date: , end_date:)
       #TODO: efficient date checking
 

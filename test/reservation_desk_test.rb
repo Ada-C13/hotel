@@ -63,7 +63,6 @@ describe "ReservationDesk class" do
 
   describe "find_reservations" do
     before do
-      # @room = @reservation_desk.rooms[0]
       @reservation_1 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-1", end_date: "2020-3-5")
       @reservation_2 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-10", end_date: "2020-3-15")
       @reservation_3 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-20", end_date: "2020-3-25")
@@ -152,12 +151,83 @@ describe "ReservationDesk class" do
     # end
   end
 
+  describe "check_availability" do
+    before do
+      @reservation_1 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-1", end_date: "2020-3-5")
+      @reservation_2 = @reservation_desk.new_reservation(room_id: 2, start_date: "2020-3-1", end_date: "2020-3-10")
+      @reservation_3 = @reservation_desk.new_reservation(room_id: 3, start_date: "2020-3-1", end_date: "2020-3-25")
+
+      @reservation_desk.add_reservation(@reservation_1)
+      @reservation_desk.add_reservation(@reservation_2)
+      @reservation_desk.add_reservation(@reservation_3)
+
+      @request = @reservation_desk.check_availability(start_date: "2020-2-27", end_date: "2020-4-2")
+    end
+
+    it "returns an Array" do
+      expect(@request).must_be_kind_of Array
+    end
+
+    it "returns an Array of Rooms" do
+      expect(@request[0]).must_be_kind_of Hotel::Room
+    end
+
+    it "returns an array of Rooms which don't have Reservations for requested dates" do
+      expect(@request.length).must_equal 17
+      expect(@request[0].id).must_equal 4
+    end
+  end
+
+  describe "find_available_room" do
+    before do
+      @reservation_1 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-1", end_date: "2020-3-5")
+      @reservation_2 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-10", end_date: "2020-3-15")
+      @reservation_3 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-20", end_date: "2020-3-25")
+      @reservation_4 = @reservation_desk.new_reservation(room_id: 2, start_date: "2020-3-20", end_date: "2020-3-25")
+
+      @reservation_desk.add_reservation(@reservation_1)
+      @reservation_desk.add_reservation(@reservation_2)
+      @reservation_desk.add_reservation(@reservation_3)
+      @reservation_desk.add_reservation(@reservation_4)
+
+    end
+
+    it "returns an instance of Room" do
+      search = @reservation_desk.find_available_room(start_date: "2020-3-5", end_date: "2020-3-6")
+      expect(search).must_be_kind_of Hotel::Room
+    end
+
+    it "returns a first room which is available for dates in question" do
+      search = @reservation_desk.find_available_room(start_date: "2020-3-5", end_date: "2020-3-6")
+      expect(search.id).must_equal 1
+
+      search_2 = @reservation_desk.find_available_room(start_date: "2020-3-2", end_date: "2020-3-4")
+      expect(search_2.id).must_equal 2
+
+      search_3 = @reservation_desk.find_available_room(start_date: "2020-3-21", end_date: "2020-3-24")
+      expect(search_3.id).must_equal 3
+    end
+
+    it "returns nil if no rooms are available for requested dates" do
+      20.times do |i|
+        reservation = @reservation_desk.new_reservation(room_id: (i + 1), start_date: "2020-6-1", end_date: "2020-6-30")
+        @reservation_desk.add_reservation(reservation)
+      end
+      search = @reservation_desk.find_available_room(start_date: "2020-6-5", end_date: "2020-6-10")
+      assert_nil search
+    end
+  end
+
   describe "new_reservation" do
+    before do
+      @room_id = 10
+      @start_date = "2020-4-1"
+      @end_date = "2020-4-5"
+      @new_reservation = @reservation_desk.new_reservation(room_id: @room_id, start_date: @start_date, end_date: @end_date)
+    end
+
     it "creates a new instanse of Reservation" do
-      room_id = 1
-      start_date = "2020-4-1"
-      end_date = "2020-4-5"
-      expect(@reservation_desk.new_reservation(room_id: room_id, start_date: start_date, end_date: end_date)).must_be_kind_of Hotel::Reservation
+      expect(@new_reservation).must_be_kind_of Hotel::Reservation
     end
 
     it "raises an error if room id is invalid" do
@@ -167,6 +237,20 @@ describe "ReservationDesk class" do
       expect {
         @reservation_desk.new_reservation(room_id, start_date, end_date)
       }.must_raise ArgumentError
+    end
+
+    it "reserves a room with a given ID" do
+      expect(@new_reservation.room_id).must_equal 10
+    end
+
+    it "raises ArgumentError if the requested room is occupied on requested dates" do
+      #possibly not needed
+    end
+
+    it "reserves the first available room down the list if no provided" do
+      reservation = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-1", end_date: "2020-3-10")
+      @reservation_desk.add_reservation(reservation)
+      expect(@reservation_desk.new_reservation(start_date: "2020-3-2", end_date: "2020-3-15").room_id).must_equal 2
     end
   end
 
@@ -187,4 +271,27 @@ describe "ReservationDesk class" do
     end
   end
 
+  describe "make_reservation" do
+    it "makes a new reservation and add it into the Room's reservations array" do
+      room_id = 1
+      start_date = "2020-4-1"
+      end_date = "2020-4-5"
+      reservation = @reservation_desk.new_reservation(room_id: room_id, start_date: start_date, end_date: end_date)
+      @reservation_desk.add_reservation(reservation)
+      
+      @reservation_desk.make_reservation(start_date: "2020-4-2", end_date: "2020-5-2")
+      expect(@reservation_desk.rooms[1].reservations.length).must_equal 1
+
+      @reservation_desk.make_reservation(start_date: "2020-4-20", end_date: "2020-5-1")
+      expect(@reservation_desk.rooms[0].reservations.length).must_equal 2
+    end
+
+    it "raises an Exception if no rooms are available for requested dates" do
+      20.times do |i|
+        reservation = @reservation_desk.new_reservation(room_id: (i + 1), start_date: "2020-6-1", end_date: "2020-6-30")
+        @reservation_desk.add_reservation(reservation)
+      end
+      expect {@reservation_desk.make_reservation(start_date: "2020-6-12", end_date: "2020-6-15")}.must_raise StandardError     
+    end
+  end
 end
