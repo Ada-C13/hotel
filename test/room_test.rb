@@ -55,41 +55,4 @@ describe "Room" do
     end
 
   end
-
-  describe "list_reservations" do
-    it "returns an array of reservations for given date_range" do
-      date_range = Hotel::DateRange.new(Date.new(2020,4,16), Date.new(2020,4,20))
-
-      expect(@room.list_reservations(date_range)).must_be_kind_of Array
-      expect(@room.list_reservations(date_range)[0]).must_be_kind_of Hotel::Reservation
-    end
-
-    it "returns an array of reservations for given date" do
-      date = Date.new(2020,4,12)
-
-      expect(@room.list_reservations(date)).must_be_kind_of Array
-      expect(@room.list_reservations(date)[0]).must_be_kind_of Hotel::Reservation
-    end
-
-    it "returns an empty array if there are no reservations during given date_range" do
-      date_range = Hotel::DateRange.new(Date.new(2020,7,12), Date.new(2020,7,13))
-      expect(@room.list_reservations(date_range)).must_equal []
-    end
-
-    it "returns an empty array if there are no reservations during given date" do
-      date = Date.new(2020,4,30)
-      expect(@room.list_reservations(date)).must_equal []
-    end
-
-    it "returns all reservations if no arguments are provided" do
-      expect(@room.list_reservations.length).must_equal 2
-    end
-
-    it "raises ArgumentError if Date or DateRange is not provided" do
-      date = "date"
-
-      expect{(@room.list_reservations(date))}.must_raise ArgumentError
-    end
-  end
-
 end
