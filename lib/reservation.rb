@@ -17,7 +17,7 @@ module Hotel
       @id = @@next_id
       @@next_id += 1
 
-      # @hotel_block_id = -1
+      # @block = -1
     end
   end
 end
