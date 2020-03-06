@@ -6,17 +6,19 @@ module Hotel
       @id = id
       @reservations = []
     end
-
-    def available?(reservation)
+    
+    def available?(date_range)
       if reservations.length == 0
         return true
       end
-      if reservations.none? {|r| !(r.overlap?(reservation))}
+      # TO DO make this more ready by using any? or all?
+      if reservations.any? {|r| r.overlap?(date_range)}
         return false
       else
         return true
       end
     end
+
     
     def add(reservation)
       # to do: is this check redundant, since front desk checks
