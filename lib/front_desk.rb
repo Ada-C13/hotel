@@ -30,15 +30,8 @@ module Hotel
     end
 
     def get_room_bookings(number, range)
-      room_bookings = []
       range_bookings = get_range_bookings(range)
-      range_bookings.each do |reservation|
-        rooms = reservation.rooms.find_all{ |room| room.number == number }
-        if rooms.length > 0
-        room_bookings << reservation
-        end
-      end
-      return room_bookings
+      return range_bookings.find_all{ |reservation| reservation.rooms.number == number }
     end
 
     def get_reserved_rooms(range)
@@ -46,7 +39,7 @@ module Hotel
       reserved_rooms = range_bookings.map do |reservation|
         reservation.rooms
       end
-      return reserved_rooms.flatten
+      return reserved_rooms
     end
 
     def get_available_rooms(range)
@@ -58,7 +51,7 @@ module Hotel
     def reserve_room(range)
       available_rooms = get_available_rooms(range)
       raise ArgumentError, "No available rooms for this date range" if available_rooms.empty?
-      new_reservation = Reservation.new(room: available_rooms.first, date_range: range)
+      new_reservation = Reservation.new(rooms: available_rooms.first, date_range: range)
       add_reservation(new_reservation)
       return new_reservation
     end
