@@ -91,11 +91,12 @@ describe Hotel::SystemCoordinator do
 
     it "returns the correct number of available rooms when there are reservations" do
       @coordinator01.make_reservation(@start_date, @end_date)
-      @coordinator01.make_reservation(@start_date, @end_date)
+      expect(@coordinator01.find_availabile_rooms(@date_range).length).must_equal 19
       @coordinator01.make_reservation(Date.today + 10, Date.today + 12)
       @coordinator01.make_reservation(Date.today + 1, Date.today + 2)
-      available_rooms = @coordinator01.find_availabile_rooms(@date_range)
-      expect(available_rooms.length).must_equal 18
+      expect(@coordinator01.find_availabile_rooms(@date_range).length).must_equal 19
+      @coordinator01.make_reservation(@start_date, @end_date)
+      expect(@coordinator01.find_availabile_rooms(@date_range).length).must_equal 18
     end
 
     it "should not include rooms that have reservations in the given date_range" do
@@ -106,6 +107,14 @@ describe Hotel::SystemCoordinator do
           expect(booking.date_range.overlapping(@date_range)).must_equal false
         end
       end
+    end
+
+    it "returns an empty array when there are no rooms available" do
+      20.times do 
+        @coordinator01.make_reservation(@start_date, @end_date)
+      end
+      available_rooms = @coordinator01.find_availabile_rooms(@date_range)
+      expect(available_rooms).must_equal []
     end
   end
 
@@ -124,6 +133,13 @@ describe Hotel::SystemCoordinator do
     it "stores the room_id in the Reservation returned" do
       new_reservation = @coordinator01.make_reservation(@start_date, @end_date)
       expect(new_reservation.room_id).must_equal 1
+    end
+
+    it "raises ArgumentError when there are no rooms available" do
+      20.times do 
+        @coordinator01.make_reservation(@start_date, @end_date)
+      end
+      expect{@coordinator01.make_reservation(@start_date, @end_date)}.must_raise ArgumentError
     end
   end
 

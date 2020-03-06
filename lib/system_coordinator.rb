@@ -18,6 +18,7 @@ module Hotel
       return @rooms
     end
 
+    # below method needs to also show me the reservations made from hotel block
     def find_reservations_by_date(date)
       reservations_by_date = []
 
