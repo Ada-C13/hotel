@@ -116,4 +116,21 @@ describe "DateRange Class" do
       expect(@range01.overlapping(range08)).must_equal false
     end
   end
+
+  describe "#exactly_matching" do
+    it "returns true if the date range exactly matches" do
+      range21 = Hotel::DateRange.new(Date.today + 5, Date.today + 10)
+      expect(@range01.exactly_matching(range21)).must_equal true
+    end
+
+    it "returns false if the date range is not an exact match" do
+      range03 = Hotel::DateRange.new(Date.today + 6, Date.today + 8)
+      expect(@range01.exactly_matching(range03)).must_equal false
+      range04 = Hotel::DateRange.new(Date.today + 5, Date.today + 6)
+      expect(@range01.exactly_matching(range04)).must_equal false
+      range05 = Hotel::DateRange.new(Date.today+8, Date.today+20)
+      expect(@range01.exactly_matching(range05)).must_equal false
+    end
+
+  end
 end

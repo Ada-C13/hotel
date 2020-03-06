@@ -40,5 +40,14 @@ module Hotel
         return false
       end
     end
+
+    def exactly_matching(other_range)
+      if @start_date == other_range.start_date && @end_date == other_range.end_date
+        return true
+      else
+        return false
+      end
+    end
+
   end
 end
