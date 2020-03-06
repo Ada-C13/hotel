@@ -2,7 +2,8 @@ require 'date'
 require_relative 'calendar'
 require_relative 'reservation'
 
-class Room << Calendar
+class Hotel
 
+  room_number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
 end

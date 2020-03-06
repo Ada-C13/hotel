@@ -2,9 +2,9 @@ require 'date'
 require 'securerandom'
 
 require_relative 'calendar'
-require_relative 'room'
+require_relative 'hotel'
 
-class Reservation << Calendar
+class Reservation
   attr_accessor :start_date, :end_date
 
   def initialize (start_date, end_date)
@@ -12,6 +12,7 @@ class Reservation << Calendar
     @end_date = end_date
   end
 
+  
   def reservation(start_date, end_date)
     {
       :id => (SecureRandom.alphanumeric).slice(0...7).upcase,
