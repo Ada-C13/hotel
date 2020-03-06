@@ -34,7 +34,11 @@ module Hotel
       new_reservation = Reservation.new(resevation_duration, customer_name)
       new_reservation.cost
       reservation_id = @reservation_list.length + 1
-      new_reservation.room_num = self.available_rooms(start_date, end_date)[0]
+      if self.available_rooms(start_date, end_date)[0] == nil
+        raise ArgumentError.new("Opps! There is no room availiable for this date range!")
+      else 
+        new_reservation.room_num = self.available_rooms(start_date, end_date)[0]
+      end
       @reservation_list[reservation_id] = new_reservation
     end
   
@@ -46,7 +50,7 @@ module Hotel
         end
       end
       if specific_date_reservation.empty?
-        return "There is no reservation for today!"
+        raise ArgumentError.new("There is no reservation on this day!")
       else
         return specific_date_reservation
       end  
@@ -57,7 +61,7 @@ module Hotel
       date_range_reservation_list = Array.new
       check_date_range = Hotel::DateRange.new(start_date, end_date)
       @reservation_list.each_value do |reservation|
-        if (reservation.date_range.overlap?(check_date_range) )&& (reservation.room_num == specific_room)
+        if (reservation.date_range.overlap?(check_date_range) ) && (reservation.room_num == specific_room)
           date_range_reservation_list << reservation
         end
       end
@@ -84,7 +88,12 @@ module Hotel
       if occupied_rooms_list.empty?
         return @room_list
       else
-        return @room_list - occupied_rooms_list
+        available_rooms_list = @room_list - occupied_rooms_list
+        if available_rooms_list.empty? 
+          raise ArgumentError.new("There is no more room for you!")
+        else
+          return available_rooms_list
+        end
       end
     end
   end
