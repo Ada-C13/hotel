@@ -1,19 +1,26 @@
-# require_relative 'room'
-# require_relative 'date_range'
-# require_relative 'reservation'
+require_relative 'room'
+require_relative 'date_range'
+require_relative 'reservation'
 
 
-# module Hotel
-#   class Block < Reservation
+module Hotel
+  class Block < Reservation
+    attr_reader :block
 
-#     def initialize(date_range, room_id, block)  
-#       super(date_range,room_id)
-  
-#       @block = block
-#     end
-#   end
-# end
+    def initialize(date_range, room_id, block = 0, cost = 200.00)  
+      
+      super(date_range, room_id, cost)
+      @block = block
+      
+    end
+  end
+end
     
+
+
+
+
+
 # Scenario 1:
 # Block < Reservation
 # Coordinator#find_available_rooms:
