@@ -8,26 +8,16 @@ module Hotel
     attr_reader :id, :date_in, :date_out, :room_id
     
     @@increment_id = 1
-    def initialize(date_in:, date_out:, room_id:, room:)
+    def initialize(date_in:, date_out:, room_id: , room: )
         @id = @@increment_id
         @@increment_id += 1
         @date_in = date_in
         @date_out = date_out
-        @room_id = nil
-        @room = nil
+        @room_id = room_id
+        @room = room
 
-        if room
-            @room = room
-            @room_id = room.id
-    
-          elsif room_id
-            @room_id = room_id
-
-        else
-            raise ArgumentError, 'room or room_id is required'
-          end
         
-        if room.test_overlap(date_in,date_out) == true
+        if room.test_overlap(date_in,date_out)
             raise ArgumentError
         end 
 

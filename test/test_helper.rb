@@ -19,3 +19,4 @@ Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 require_relative '../lib/hotel_manager'
 require_relative '../lib/reservations'
 require_relative '../lib/room'
+require_relative '../lib/hotel_block'

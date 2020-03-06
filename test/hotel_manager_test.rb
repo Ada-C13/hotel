@@ -82,5 +82,7 @@ describe "HotelManager class" do
     expect(@hotel.total_cost(@reservation3)).must_equal 400
     end
 
+    
+
   end  
 end
