@@ -1,6 +1,5 @@
 require 'date'
-require_relative 'calendar'
-require_relative 'reservation'
+
 
 class Hotel
 
