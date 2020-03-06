@@ -198,6 +198,45 @@ describe Hotel::HotelController do
         
       end
 
+      it "returns and error if all rooms are booked" do
+        reservation1 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",1)
+        reservation2 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",2)
+        reservation3 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",3)
+        reservation4 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",4)
+        reservation5 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",5)
+        reservation6 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",6)
+        reservation7 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",7)
+        reservation8 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",8)
+        reservation9 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",9)
+        reservation10 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",10)
+        reservation11 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",11)
+        reservation12 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",12)
+        reservation13 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",13)
+        reservation14 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",14)
+        reservation15 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",15)
+        reservation16 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",16)
+        reservation17 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",17)
+        reservation18 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",18)
+        reservation19 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",19)
+        reservation20 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",20)
+
+        start_date = @date #2020-08-04
+        end_date = start_date + 3
+
+        expect{@hotel_controller.res_with_valid_dates(DateRange.new(start_date, end_date))}.must_raise ArgumentError
+      end
+
     end
+    # describe "block_available" do
+    #   it "Will raise error if one room in block is unavailable " do
+    #     reservation1 = @hotel_controller.reserve_room("2020-08-04", "2020-08-10",1)
+  
+    #     date_range = DateRange.new(@date,(@date + 3))
+    #     collection_of_rooms = [1..5]
+    #     discount_rate = 150
+        
+    #     expect{Block.new(date_range, collection_of_rooms, discount_rate)}.must_raise ArgumentError
+    #   end
+    # end
   end
 end
