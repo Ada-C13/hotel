@@ -3,9 +3,6 @@ module Hotel
     attr_accessor :start_date, :end_date
 
     def initialize(start_date, end_date)
-      # allowing for string inputs for dates
-      start_date = parse_start_date(start_date)
-      end_date = parse_end_date(end_date)
 
       # verifying proper date range
       difference = end_date - start_date
@@ -22,22 +19,8 @@ module Hotel
       @end_date = end_date
     end
 
-    # methods to parse date
-    def parse_start_date(start_date)
-      if start_date.is_a?(String)
-        return start_date = Date.parse(start_date)
-      else
-        return start_date = start_date
-      end
-    end
 
-    def parse_end_date(end_date)
-      if end_date.is_a?(String)
-        return end_date = Date.parse(end_date)
-      else
-        return end_date = end_date
-      end
-    end
+    
 
     def overlap?(range)
 
