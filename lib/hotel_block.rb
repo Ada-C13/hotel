@@ -7,6 +7,7 @@ module Hotel
 
     def initialize(discounted_rate:, **args)
       super(**args)
+      raise ArgumentError, "5 rooms maximum for a hotel block" if @rooms.length > 5
       @cost = date_range.days * discounted_rate * @rooms.length
     end
   end

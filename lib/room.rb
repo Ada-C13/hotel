@@ -9,7 +9,7 @@ module Hotel
       @number = number
     end
 
-    # Methods that will help to compare 2 arrays of Room instances
+    # Kaida helped to implement methods that will help to subtract an array of Room instances
     def ==(other)
       return number == other.number
     end

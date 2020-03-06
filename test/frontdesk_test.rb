@@ -260,4 +260,20 @@ describe "FrontDesk class" do
       expect(front_desk.reserve_room(range2)).must_be_instance_of Hotel::Reservation
     end
   end
+
+  describe "#reserve_block" do
+    it "adds hotel block to reservations so that's they are no longer available" do
+      front_desk = Hotel::FrontDesk.new
+      range = Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
+      front_desk.reserve_block(range, 4, 150)
+      expect(front_desk.reservations.size).must_equal 4
+      expect(front_desk.reservations.first.rooms.number).must_equal 1
+    end
+
+    it "returns an instance of a new HotelBlock" do
+      front_desk = Hotel::FrontDesk.new
+      range = Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
+      expect(front_desk.reserve_block(range, 3, 150)).must_be_instance_of Hotel::HotelBlock
+    end
+  end
 end

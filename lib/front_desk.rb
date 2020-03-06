@@ -55,5 +55,21 @@ module Hotel
       add_reservation(new_reservation)
       return new_reservation
     end
+
+    def reserve_block(range, rooms_count, discounted_rate)
+      available_rooms = get_available_rooms(range)
+      raise ArgumentError, "No available rooms for this date range" if available_rooms.empty?
+      raise ArgumentError, "Not enough rooms available" if available_rooms.size < rooms_count
+      rooms = available_rooms[0..rooms_count]
+      new_block = HotelBlock.new(rooms: rooms, date_range: range, discounted_rate: discounted_rate)
+      add_block_to_reservations(new_block)
+      return new_block
+    end
+
+    def add_block_to_reservations(block)
+      (block.rooms.length - 1).times do |i|
+        @reservations << Reservation.new(rooms: block.rooms[i], date_range: block.date_range)
+      end
+    end
   end
 end
