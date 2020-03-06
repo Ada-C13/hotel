@@ -13,7 +13,7 @@ module Hotel
       else
         num.times do |i|
           room = Hotel::Room.new((i + 1), 200)
-          @rooms.push(room)
+          @rooms << room
         end
       end
     end
@@ -23,11 +23,15 @@ module Hotel
     end
 
     def reserve_room(date_range, room = nil)
+      available_rooms = list_available_rooms(date_range)
+      raise ArgumentError.new("No rooms available") if available_rooms == []
+      picked_room = available_rooms[0]
+
       @total_reservations += 1
       reservation = Reservation.new(
         date_range, 
         id = @total_reservations, 
-        room_number = room || rand(1..20),
+        room_number = picked_room.number,
         total_cost = calculate_cost(date_range, room_number)
       )
       find_room(reservation.room_number).reservations << reservation
@@ -68,6 +72,18 @@ module Hotel
       end
 
       return reservation_list
+    end
+
+    def list_available_rooms(date_range)
+      available_rooms = []
+
+      @rooms.length.times do |i|
+        room = find_room(i + 1)
+        available = room.check_availability(date_range)
+        available_rooms << room if available
+      end
+
+      return available_rooms
     end
 
   end

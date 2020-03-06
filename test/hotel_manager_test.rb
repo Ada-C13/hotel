@@ -81,6 +81,16 @@ describe "HotelManager" do
       expect(reservation.room_number).must_be :<=, 20
     end
 
+    it "raises ArgumentError if no rooms are available" do
+      date_range = Hotel::DateRange.new(Date.new(2020,5,10), Date.new(2020,5,14))
+
+      20.times do |i|
+        @hotel_manager.reserve_room(date_range, i + 1)
+      end
+
+      expect{@hotel_manager.reserve_room(date_range)}.must_raise ArgumentError
+    end
+
     it "raises ArgumentError if invalid date is provided" do
       expect{(
         @hotel_manager.reserve_room(
@@ -156,6 +166,29 @@ describe "HotelManager" do
         date = Date.new(2020,5,26)
 
         expect(@hotel_manager.list_reservations_by_date(date).length).must_equal 2
+      end
+    end
+
+    describe "list_available_rooms" do
+      before do
+        @date_range = Hotel::DateRange.new(Date.new(2020,5,10), Date.new(2020,5,14))
+      end
+
+      it "returns an array of Room instances" do
+        expect(@hotel_manager.list_available_rooms(@date_range)).must_be_kind_of Array
+      end
+
+      it "returns correct rooms" do
+        expect(@hotel_manager.list_available_rooms(@date_range).length).must_equal 18
+      end
+
+      it "returns an empty array if no rooms are available" do
+        # reserve the remaining rooms
+        (3..20).each do |i|
+          @hotel_manager.reserve_room(        @date_range, i)
+        end
+
+        expect(@hotel_manager.list_available_rooms(@date_range)).must_equal []
       end
     end
   end
