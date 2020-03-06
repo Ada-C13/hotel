@@ -1,10 +1,13 @@
 require_relative 'room'
 require_relative 'date_range'
 require_relative 'reservation'
+require_relative 'no_availability_error'
 
 module Hotel
   class SystemCoordinator    
     attr_reader :rooms
+
+    @@next_block = 1
 
     def initialize(room_quantity = 20)
       @rooms = build_rooms(room_quantity)
@@ -50,6 +53,30 @@ module Hotel
     end
 
     def find_availabile_rooms(given_range)
+      available_rooms = []
+      
+      @rooms.each do |room|
+        if room.bookings.empty?
+          available_rooms << room
+        else
+          status = true
+          room.bookings.each do |item|
+            if item.class == Hotel::Block 
+              status = false if item.date_range.overlapping(given_range) && item.date_range.exactly_matching(given_range)== false #it is not an exact match #method
+            elsif item.class == Hotel::Reservation
+              status = false if item.date_range.overlapping(given_range)
+            end
+          end
+          available_rooms << room if true == status
+        end
+      end
+
+      raise NoAvailabilityError.new "No Availability. Please try another date range." if available_rooms == []
+
+      return available_rooms
+    end
+
+    def find_block_rooms(given_range)
       available_rooms = @rooms.reject do |room|
         room.bookings.any? do |reservation|   #returns true if there are overlapping reservations
           reservation.date_range.overlapping(given_range) == true
@@ -64,10 +91,10 @@ module Hotel
       return room_found
     end
    
+    # yet: 
     def make_reservation(start_date, end_date)
       range_created = Hotel::DateRange.new(start_date,end_date)
       available_rooms = find_availabile_rooms(range_created)
-      raise ArgumentError if available_rooms == []
       
       chosen_room = available_rooms.shift
       new_reservation = Hotel::Reservation.new(range_created, chosen_room.room_id)
@@ -76,6 +103,27 @@ module Hotel
 
       return new_reservation
     end
+
+    def make_block(date_range, room_quantity, cost)
+      raise ArgumentError.new "Maximum 5 rooms for a hotel block." if room_quantity > 5
+      available_rooms = find_block_rooms(date_range)
+      raise NoAvailabilityError.new "No availability. Please try another date range." if available_rooms.length < room_quantity
+
+      rooms_in_block = []
+
+      room_quantity.times do |i|
+        chosen_room = available_rooms[i]
+        room_id = chosen_room.room_id
+        room_block = Hotel::Block.new(date_range,room_id, cost, @@next_block)
+        chosen_room.add_booking_to_room(room_block)
+        rooms_in_block << room_block
+      end
+
+      @@next_block += 1
+      
+      return rooms_in_block
+    end
+
   end
 end
 
