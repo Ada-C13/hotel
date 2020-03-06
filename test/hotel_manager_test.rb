@@ -1,9 +1,10 @@
 require 'test_helper.rb'
 
+
 describe Hotel::HotelController do
   before do
     @hotel_controller = Hotel::HotelController.new
-    @date = Date.parse("2020-08-04")
+    @date = Date.new(2020, 8, 4)
   end
   describe "wave 1" do
     describe "rooms" do
