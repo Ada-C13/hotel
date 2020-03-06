@@ -12,6 +12,7 @@ def print_options
   # f # check_date_reservations(date)
   "
 end 
+
 def hotel_manager 
   return Hotel::FrontDesk.new()
 end 
@@ -32,7 +33,7 @@ def choice
   elsif answer == "b"
     do_create_block
   elsif answer == "c"
-    puts "huh"
+    do_book_room_of_block
   elsif answer == "d"
     puts "huh"
   elsif answer == "e"
@@ -42,6 +43,7 @@ def choice
     puts "what"
   end 
 end 
+
 
 def do_request_reservation
   puts "Requesting a reservation for you..."
@@ -67,17 +69,25 @@ def do_create_block
   puts MANAGER.list_all
 end 
 
-def book_room_of_block
+def do_book_room_of_block
+  puts "booking a room from a block for you..."
+  puts MANAGER.list_all 
+  puts "Enter BXXXX block id to book a room"
+  block_id = get_user_input.to_s
+  MANAGER.book_room_of_block(block_id)
+  puts "One of the #{block_id} id blocks is now booked!"
+  puts MANAGER.list_all 
 end 
 
-def reservation_cost
+def do_reservation_cost
 end 
 
-def list_all
+def do_list_all
 end 
 
-def check_date_reservations
+def do_check_date_reservations
 end 
+
 
 def run_program
   puts "================================"
@@ -95,3 +105,13 @@ def run_program
 end 
 
 run_program
+
+# a
+# 2020/2/1
+# 2020/2/4
+# y
+# b
+# 2020/2/5
+# 2020/2/8
+# 5
+# 180

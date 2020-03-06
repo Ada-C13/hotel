@@ -13,7 +13,7 @@ module Hotel
     def list_all
       display = ""
       @reservations.map do |bookings| 
-        display += "Reservation_id = #{bookings.reservation_id} Start date = #{bookings.date_range.start_date} End_date =#{bookings.date_range.end_date} Room Number = #{bookings.room_num}\n"
+        display += "Reservation_id = #{bookings.reservation_id} Start date = #{bookings.date_range.start_date} End_date =#{bookings.date_range.end_date} Room Number = #{bookings.room_num} Block Tag = #{bookings.block_tag}, Room Rate = #{bookings.room_rate}\n"
       end 
       return display
     end 
