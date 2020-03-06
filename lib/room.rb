@@ -24,22 +24,21 @@ module Hotel
       return @reservations if !date
       raise ArgumentError.new("Only date or date_range should be provided, not both") if date.class != Date && date.class != Hotel::DateRange
 
-      reservations = []
-
-      @reservations.each do |reservation|
-        if date.class == Hotel::DateRange
-          if reservation.date_range.overlap?(date)
-            reservations << reservation
-          end
-        else
-          if reservation.date_range.range.include?(date)
-            reservations << reservation
-          end
-        end
-      end
-
-      return reservations
+      return find_reservations(date)
     end
 
+    # helper method for list_reservations
+    def find_reservations(date)
+      reservations = []
+      @reservations.each do |reservation|
+        if date.class == Hotel::DateRange
+          (reservations << reservation) if reservation.date_range.overlap?(date)
+        else
+          (reservations << reservation)if reservation.date_range.range.include?(date)
+        end
+      end
+      return reservations
+    end
+    
   end
 end
