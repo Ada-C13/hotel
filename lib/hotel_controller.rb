@@ -12,8 +12,7 @@ module Hotel
     def initialize(number_of_room)
     @reservation_list = Hash.new
     @room_list = Array.new
-    
-
+  
     n = 1
     number_of_room.times do
       @room_list << "Room #{n}"
@@ -34,8 +33,9 @@ module Hotel
       resevation_duration = DateRange.new(start_date, end_date)
       new_reservation = Reservation.new(resevation_duration, customer_name)
       new_reservation.cost
+      reservation_id = @reservation_list.length + 1
       new_reservation.room_num = self.available_rooms(start_date, end_date)[0]
-      @reservation_list[reservation_list.length + 1] = new_reservation
+      @reservation_list[reservation_id] = new_reservation
     end
   
     def reservations(date) 
@@ -50,6 +50,24 @@ module Hotel
       else
         return specific_date_reservation
       end  
+    end
+
+
+    def get_list_of_reservations(specific_room, start_date, end_date)
+      date_range_reservation_list = Array.new
+      check_date_range = Hotel::DateRange.new(start_date, end_date)
+      @reservation_list.each_value do |reservation|
+        if (reservation.date_range.overlap?(check_date_range) )&& (reservation.room_num == specific_room)
+          date_range_reservation_list << reservation
+        end
+      end
+      return date_range_reservation_list 
+    end
+
+
+
+    def get_reservation_cost(reservation_id)
+      return self.reservation_list[reservation_id].cost
     end
 
     # Wave 2
