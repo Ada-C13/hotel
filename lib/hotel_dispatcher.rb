@@ -43,37 +43,31 @@ module Hotel
         end
     
         return found_reservations
-    end
+    end # find_all_res_for_room end
 
 
+    def find_available_rooms(start_date, end_date)
+      start_date = Date.parse(start_date)
+      end_date = Date.parse(end_date)
+      found_rooms = []
+        @reservations.each do |reservation|
+          if (start_date >= reservation.end_date && end_date >= reservation.end_date) ||
+            (start_date < reservation.start_date && end_date <= reservation.start_date) ||
+            (start_date >= reservation.end_date && end_date > reservation.end_date)
+            found_rooms << reservation.room
+          else 
+            raise ArgumentError, "The dates you have entered are NOT available"
+          end
+        end
+        return found_rooms
+    end # find_available_rooms end
 
 
-    
-
-   
-
-    # def find_available_rooms(start_date, end_date)
-    #   @reservations.each do |reservation|
-
-    #   end
-    # return []
-    # end
+  # def all_reservations(date)
+  # all_reservations_by_date = []
+  # return all_reservations_by_date
+  # end
 
 
   end # class end
 end # module end
-
-
-
-# def all_reservations(date)
-# all_reservations_by_date = []
-# return all_reservations_by_date
-# end
-
-
-
-
-
-
-
-

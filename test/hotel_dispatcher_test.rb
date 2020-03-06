@@ -55,6 +55,40 @@ describe "HotelDispatcher class" do
     end
 
   end # describ block end
+
+  describe "find available rooms" do
+
+    it "finds available rooms when reservation end_date and requested new room start_date do not overlap" do
+      dispatcher = Hotel::HotelDispatcher.new()
+      dispatcher.make_reservation("March 1, 2019", "March 5, 2019")
+      expect(dispatcher.find_available_rooms("March 6, 2019", "March 10, 2019").length).must_equal 1
+    end
+
+    it "finds available rooms by open dates" do
+      dispatcher = Hotel::HotelDispatcher.new()
+      dispatcher.make_reservation("March 1, 2019", "March 5, 2019")
+      expect(dispatcher.find_available_rooms("February 27, 2019", "March 1, 2019").length).must_equal 1
+    end
+
+    it "finds available rooms by open dates" do
+      dispatcher = Hotel::HotelDispatcher.new()
+      dispatcher.make_reservation("March 1, 2019", "March 5, 2019")
+      expect(dispatcher.find_available_rooms("March 5, 2019", "March 10, 2019").length).must_equal 1
+    end
+
+    it "finds available rooms by open dates" do
+      dispatcher = Hotel::HotelDispatcher.new()
+      dispatcher.make_reservation("March 1, 2019", "March 5, 2019")
+      expect(dispatcher.find_available_rooms("February 27, 2019", "March 1, 2019").length).must_equal 1
+    end
+
+   
+
+
+  end # describe block end
+
+
+
   
   
 end #HotelDispatcher class end
