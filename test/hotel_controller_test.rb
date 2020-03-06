@@ -7,30 +7,63 @@ describe Hotel::Controller do
     it "is an instance of HotelController" do
       expect(hotel_controller).must_be_kind_of Hotel::Controller
     end
-
-    it "stores an array of all reservations (can be empty)" do
-      expect(hotel_controller.all_reservations).must_be_kind_of Array
-      expect(hotel_controller.all_reservations.length).must_equal 0
-    end
   end
+
+  # describe "find_available_rooms" do
+  #   let(:hotel_controller) {Hotel::Controller.new}
+  #   before do 
+  #     @start_date = Date.new(2020, 1, 1)
+  #     @end_date = Date.new(2020, 1, 2)
+  #     @input_range = Hotel::DateRange.new(@start_date, @end_date)
+  #     # add same rez to every room
+  #     hotel_controller.rooms.each do |room|
+  #       new_reservation = Hotel::Reservation.new(@input_range,room.room_id)
+  #       room.create_room_reservation(new_reservation)
+  #     end
+  #   end
+
+  #   it "returns an array" do
+  #     expect(hotel_controller.find_available_rooms(@input_range)).must_be_kind_of Array
+  #   end
+
+  #   # room objects or just reference to room id?
+  #   it "returns an array of Room objects" do
+  #     expect(hotel_controller.find_available_rooms(@input_range)[0]).must_be_kind_of Hotel::Room
+  #   end
+
+  #   it "returns an array of the correct number of Rooms that have availability" do
+  #     expect(hotel_controller.find_available_rooms(@input_range).length).must_equal 0
+  #   end
+  # end
 
   describe "reserve_with_range" do
     let(:hotel_controller) {Hotel::Controller.new}
     before do
       @start_date = Date.new(2020, 1, 1)
       @end_date = Date.new(2020, 1, 2)
-      @room_id = 5
+      @room_id = 1
       @input_range = Hotel::DateRange.new(@start_date, @end_date)
       @new_reservation = Hotel::Reservation.new(@input_range,@room_id)
     end
 
-    it "creates a new reservation" do
-      expect(hotel_controller.reserve_with_range(@input_range)).must_be_kind_of Hotel::Reservation
+    it "returns false if the input range cannot be accommodated in any room" do
+      
     end
 
+    it "returns true if the input range can be accommodated in a room" do
+    end
 
-# not adding new reservation to all reservations anymore, only to room's reservation list
-    # it "adds the new reservation to all reservations" do
+    it "ensures the new reservation was created and added to that room's rez list" do
+    end
+
+    it "correctly handles a conflict in one room by creating/adding the reservation in the next available room" do
+    end
+
+      # it "creates a new reservation" do
+    #   expect(hotel_controller.reserve_with_range(@input_range)).must_be_kind_of Hotel::Reservation
+    # end
+
+    # it "adds the new reservation to the correct room's rez list" do
     #   other_date_range = Hotel::DateRange.new(@start_date+1, @end_date+1)
     #   other_reservation = Hotel::Reservation.new(other_date_range,3)
 

@@ -48,6 +48,32 @@ describe Hotel::Room do
 
   end
 
+  describe "add_room_reservation" do
+    before do
+      @room_id = 5
+      @room = Hotel::Room.new(@room_id)
+      
+      @start_date = Date.new(2020, 1, 1)
+      @end_date = Date.new(2020, 1, 2)
+      @date_range_1 = Hotel::DateRange.new(@start_date, @end_date)
+      @reservation_to_add = Hotel::Reservation.new(@date_range_1, @room_id)
+    end
+
+    it "correctly adds a reservation to the room's reservation list" do
+      @date_range_2 = Hotel::DateRange.new(@start_date+1, @end_date+1)
+      @reservation_to_add_2 = Hotel::Reservation.new(@date_range_2, @room_id)
+      
+      @room.add_room_reservation(@reservation_to_add)
+      expect(@room.rez_list.length).must_equal 1
+
+      @room.add_room_reservation(@reservation_to_add_2)
+      expect(@room.rez_list.length).must_equal 2
+    end
+
+    # it "doesn't add invalid reservations" do
+    # end
+  end
+
   describe "conflict?" do
     before do
       @room_id = 5
@@ -109,26 +135,50 @@ describe Hotel::Room do
     end
   end
 
-  describe "add_room_reservation" do
+  describe "find_by_range" do
     before do
       @room_id = 5
       @room = Hotel::Room.new(@room_id)
       
+      # 1 - 2 - 3 - 4 - 5
+      #     2 - 3 - 4
       @start_date = Date.new(2020, 1, 1)
-      @end_date = Date.new(2020, 1, 2)
+      @end_date = Date.new(2020, 1, 5)
       @date_range_1 = Hotel::DateRange.new(@start_date, @end_date)
-      @reservation_to_add = Hotel::Reservation.new(@date_range_1, @room_id)
+      @date_range_2 = Hotel::DateRange.new(@start_date, @end_date-3)
+      @date_range_3 = Hotel::DateRange.new(@start_date+1, @end_date-1)
+      @date_range_4 = Hotel::DateRange.new(@start_date-3, @end_date-6)
+      @reservation_to_add = Hotel::Reservation.new(@date_range_2, @room_id)
+      @reservation_to_add_2 = Hotel::Reservation.new(@date_range_3, @room_id)
     end
 
-    it "correctly adds a reservation to the room's reservation list" do
-      @date_range_2 = Hotel::DateRange.new(@start_date+1, @end_date+1)
-      @reservation_to_add_2 = Hotel::Reservation.new(@date_range_2, @room_id)
-      
+    it "returns an array of Reservations" do
+      @room.create_room_reservation(@date_range_3)
+      expect(@room.find_by_range(@date_range_1)).must_be_kind_of Array
+      expect(@room.find_by_range(@date_range_1)[0]).must_be_kind_of Hotel::Reservation
+    end
+
+    it "returns an empty array if no reservations overlap the given range" do
+      @room.create_room_reservation(@date_range_1)
+      expect(@room.find_by_range(@date_range_4)).must_be_empty
+    end
+
+    it "includes any/all Reservations that overlap with the given range" do
       @room.add_room_reservation(@reservation_to_add)
-      expect(@room.rez_list.length).must_equal 1
+      expect(@room.find_by_range(@date_range_1)[0]).must_equal @reservation_to_add
+      expect(@room.find_by_range(@date_range_1).length).must_equal 1
 
       @room.add_room_reservation(@reservation_to_add_2)
-      expect(@room.rez_list.length).must_equal 2
+      expect(@room.find_by_range(@date_range_1)[1]).must_equal @reservation_to_add_2
+      expect(@room.find_by_range(@date_range_1).length).must_equal 2
+    end
+
+    it "excludes Reservations that don't overlap with the given range" do
+      @room.add_room_reservation(@reservation_to_add_2)
+      expect(@room.find_by_range(@date_range_1).length).must_equal 1
+
+      @room.create_room_reservation(@date_range_4)
+      expect(@room.find_by_range(@date_range_1).length).must_equal 1
     end
 
     # not sure if I need this test in this class?

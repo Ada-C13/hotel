@@ -30,36 +30,43 @@
 
 module Hotel
   class Hotel::Controller
-    attr_accessor :all_reservations
     attr_reader :rooms
-    # hotel_controller needs to have a list of all its reservations,
-    # initialized as empty array to begin
+
     def initialize
       create_rooms
-      @all_reservations = []
     end
+
+    # def find_available_rooms(input_range)
+        # check all rooms to see if they conflict with input range
+        # if not, the room is available
+        # add room id to available rooms array
+        # return array
+    # end
 
     # Wave 1, US 2: "I can reserve a room for a given date range, so that I can make a reservation"
     def reserve_with_range(input_range)
-      # preliminary fulfillment of basic functionality with no conflict-checking or available room searching
-      available_room_id = 5
-      new_reservation = Hotel::Reservation.new(input_range, available_room_id)
-      # instead of adding the new reservation to the hotel controller class,
-      # I want to add it to the room class only. Because I'll only ever care about making
-      # a new reservation in a specific room.
-      # @all_reservations << new_reservation
-      return new_reservation
+
+      @rooms.each do |room|
+        # loop through room rez_list 
+        # create_room_reservation(input_range)
+        # will return false if conflict in room, else will create and add to rez_list and return true
+        # return room.rood_id
+      end
     end
 
     # Wave 1, US 3: "I can access the list of reservations for a specific date, so that I can track reservations by date"
-    # will need to refactor this to search through each room's reservations instead of all_reservations in hotel controller
+#  creates an array of matching reservations
+
     # def find_by_date(input_range)
     #   reservations_by_date = []
-    #   @all_reservations.each do |reservation|
-    #     if input_range == reservation.date_range
-    #       reservations_by_date << reservation
+    #   @rooms.each do |room|
+    #     filtered_rez = room.find_by_range(input_range)
+    #     filtered_rez.each do |rez|
+  #         if rez.date_range == input_range
+  #           reservations_by_date << rez
+  #           break
+  #         end
     #     end
-    #   end
     #   return reservations_by_date
     # end
 
