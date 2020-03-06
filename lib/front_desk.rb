@@ -83,11 +83,20 @@ module Hotel
       end
     end
 
+    def not_reserved_rooms(date_range)
+      reservations_for_date_range = @reservations.select do |reservation|
+        date_range.overlap?(reservation.date_range)
+      end
 
+      if reservations_for_date_range.length == 0
+        return rooms
+      end
 
+      reserved_rooms = reservations_for_date_range.map do |reservation|
+        reservation.room
+      end
 
-
-
-
+      return @rooms - reserved_rooms
+    end
   end
 end
