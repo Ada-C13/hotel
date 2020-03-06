@@ -23,6 +23,22 @@ describe Hotel::FrontDesk do
       expect(room.reservations.include? reservation).must_equal true
     end
 
+    it "successfully reserves a room when all rooms have at least one reservation" do
+      (1..20).each do
+        @front_desk.reserve_room(Date.new(2020, 01,01), Date.new(2020,01,03))
+      end
+      reservation21 = @front_desk.reserve_room(Date.new(2020, 01,03), Date.new(2020,01,04))
+      room_with_21 = @front_desk.rooms.find {|room| room.reservations.length == 2}
+      expect(room_with_21.reservations[1]).must_equal reservation21
+    end
+
+    it "raises argument error when no rooms are available" do
+      (1..20).each do
+        @front_desk.reserve_room(Date.new(2020, 01,01), Date.new(2020,01,03))
+      end
+      expect{@front_desk.reserve_room(Date.new(2020, 01,01), Date.new(2020,01,03))}.must_raise ArgumentError
+    end
+
   end
 
   describe "get_avail_rooms" do
@@ -60,6 +76,7 @@ describe Hotel::FrontDesk do
 
   describe "get_reservations" do
     before do
+      @date = Date.new(2020, 01, 05)
       @fd = Hotel::FrontDesk.new
       @res1 = @fd.reserve_room(Date.new(2020, 01, 01), Date.new(2020, 01, 06))
       @res2 = @fd.reserve_room(Date.new(2020, 01, 02), Date.new(2020, 01, 07))
@@ -72,13 +89,13 @@ describe Hotel::FrontDesk do
       expect(reservation_list).must_be_kind_of Array
 
       reservation_list.each do |res|
-        res.must_be_kind_of Hotel::Reservation
+        expect(res).must_be_kind_of Hotel::Reservation
       end
     end
 
     it "includes reservations that include specified date" do
-      date = Date.new(2020, 01, 05)
-      reservation_list = @fd.get_reservations(date)
+      
+      reservation_list = @fd.get_reservations(@date)
       expect(reservation_list.include?(@res1)).must_equal true
       expect(reservation_list.include?(@res2)).must_equal true
       expect(reservation_list.include?(@res3)).must_equal true
