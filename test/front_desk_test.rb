@@ -127,4 +127,31 @@ describe "front desk" do
       expect(@front_desk.total_cost(@new_reservation)).must_equal 600
     end
   end
+
+  describe "request_block" do
+    before do
+      @block_count = 3
+    end
+
+    it "reserves the correct number of rooms for the hotel block for given date range" do
+      @front_desk.request_block( @block_count, @dates)
+
+      expect(@front_desk.hotel_blocks[0].rooms.count).must_equal 3
+      # expect(Hotel::HotelBlock.new(block_count: 2, date_range: @dates).rooms.count).must_equal 2
+      # expect(Hotel::HotelBlock.new(block_count: 4, date_range: @dates).rooms.count).must_equal 4
+      # expect(Hotel::HotelBlock.new(block_count: 5, date_range: @dates).rooms.count).must_equal 5
+    
+    end
+
+    it " raises exception if there aren't enough rooms to fill block for given date range" do
+      19.times do
+        @front_desk.add_reservation(@dates)
+      end
+
+      expect{@front_desk.request_block(@block_count, @dates)}.must_raise NoAvailableRoomError 
+
+    end
+  
+  end
+
 end
