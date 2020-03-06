@@ -26,21 +26,7 @@ module Hotel
     end
 
     def reservations(date)
-      # Purpose: takes a Date and returns a list of Reservations
-      
-      # input is date that is parsed
-      # loop through @rooms hash
-        # for each 
-       # using .between?
-          # date.between?(start_date, end_date)
-            # returng reservation.inspect
-      # .find/.detect to search through each array of @rooms and return the reservation
-      
-      #@rooms[each:roomkey][:reservations]
-
       reservation_list = []
-      # if date.between?(#list within rooms)
-      #   reservation_list <<
 
       @rooms.each do |room| # O(20)
         room.each_value do |reservation| # O(20)
@@ -52,10 +38,13 @@ module Hotel
         end
       end
 
-      # reservation_list = @rooms.map do {}
-
-      
       return reservation_list
+    end
+
+    # lookup reservations by room and date
+    def reservations_by_room(room, date)
+    # to lookup by room use key
+    # use reservations(date) method to get specific date range
     end
 
     # Wave 2
