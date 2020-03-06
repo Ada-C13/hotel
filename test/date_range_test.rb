@@ -137,8 +137,20 @@ describe Hotel::DateRange do
     end
   end
 
-  xdescribe "nights" do
+  describe "nights" do
     it "returns the correct number of nights" do
+      start_date = Date.new(2020, 03, 17)
+      end_date = start_date + 4
+
+      expect(Hotel::DateRange.new(start_date, end_date).nights).must_equal 4
     end
+
+    it "returns the correct number of nights for dates within 2 different months" do
+      start_date = Date.new(2020, 03, 17)
+      end_date = start_date + 25
+
+      expect(Hotel::DateRange.new(start_date, end_date).nights).must_equal 25
+    end
+
   end
 end
