@@ -7,7 +7,7 @@ module Hotel
   class Block < Reservation
     attr_reader :block
 
-    def initialize(date_range, room_id, block = 0, cost = 200.00)  
+    def initialize(date_range, room_id, cost = 200.00, block = 0)  
       
       super(date_range, room_id, cost)
       @block = block
