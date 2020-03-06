@@ -27,7 +27,6 @@
 
 # setting the costs/ discounts for rooms
 
-
 module Hotel
   class Hotel::Controller
     attr_reader :rooms
@@ -36,16 +35,19 @@ module Hotel
       create_rooms
     end
 
-    # def find_available_rooms(input_range)
-        # check all rooms to see if they conflict with input range
-        # if not, the room is available
-        # add room id to available rooms array
-        # return array
-    # end
+    def find_available_rooms(input_range)
+      available = []
+      @rooms.each do |room|
+        if room.conflict?(input_range) == false
+          available << room.room_id
+        end
+      end
+
+      return available
+    end
 
     # Wave 1, US 2: "I can reserve a room for a given date range, so that I can make a reservation"
     def reserve_with_range(input_range)
-
       @rooms.each do |room|
         # loop through room rez_list 
         # create_room_reservation(input_range)
@@ -69,7 +71,6 @@ module Hotel
     #     end
     #   return reservations_by_date
     # end
-
 
     private
 

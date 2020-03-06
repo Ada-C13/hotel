@@ -26,9 +26,7 @@ module Hotel
       raise ArgumentError if room_id <= 0 || room_id > 20
     end
 
-
     # method to add reservation to room's rez_list
-
     def add_room_reservation(reservation_to_add)
       @rez_list << reservation_to_add
     end
@@ -44,7 +42,6 @@ module Hotel
     end
 
     # method to find reservation for given date range
-   
     def find_by_range(input_range)
       overlapping = []
       @rez_list.each do |rez|
@@ -56,7 +53,6 @@ module Hotel
     end
 
     # method to create a new reservation
-
     def create_room_reservation(input_range)
       if self.conflict?(input_range) == true
         return false
@@ -67,7 +63,6 @@ module Hotel
         return true
       end
     end
-
 
   end
 end

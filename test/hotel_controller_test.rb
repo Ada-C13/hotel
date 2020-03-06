@@ -9,32 +9,48 @@ describe Hotel::Controller do
     end
   end
 
-  # describe "find_available_rooms" do
-  #   let(:hotel_controller) {Hotel::Controller.new}
-  #   before do 
-  #     @start_date = Date.new(2020, 1, 1)
-  #     @end_date = Date.new(2020, 1, 2)
-  #     @input_range = Hotel::DateRange.new(@start_date, @end_date)
-  #     # add same rez to every room
-  #     hotel_controller.rooms.each do |room|
-  #       new_reservation = Hotel::Reservation.new(@input_range,room.room_id)
-  #       room.create_room_reservation(new_reservation)
-  #     end
-  #   end
+  describe "find_available_rooms" do
+    let(:hotel_controller) {Hotel::Controller.new}
+    before do 
+      @start_date = Date.new(2020, 1, 1)
+      @end_date = Date.new(2020, 1, 2)
+      @booked_range = Hotel::DateRange.new(@start_date, @end_date)
+      @test_range = Hotel::DateRange.new(@start_date+5, @end_date+5)
+    end
 
-  #   it "returns an array" do
-  #     expect(hotel_controller.find_available_rooms(@input_range)).must_be_kind_of Array
-  #   end
+    it "returns an array" do
+      expect(hotel_controller.find_available_rooms(@booked_range)).must_be_kind_of Array
+    end
 
-  #   # room objects or just reference to room id?
-  #   it "returns an array of Room objects" do
-  #     expect(hotel_controller.find_available_rooms(@input_range)[0]).must_be_kind_of Hotel::Room
-  #   end
+    it "returns an array containing (a) room_id(s)" do
+      hotel_controller.rooms[11].create_room_reservation(@booked_range)
 
-  #   it "returns an array of the correct number of Rooms that have availability" do
-  #     expect(hotel_controller.find_available_rooms(@input_range).length).must_equal 0
-  #   end
-  # end
+      expect(hotel_controller.find_available_rooms(@booked_range)[0]).must_be_kind_of Integer
+      expect(hotel_controller.find_available_rooms(@booked_range).length).must_equal 19
+    end
+
+    it "returns an array of the correct number of Rooms that have availability" do
+      hotel_controller.rooms[11].create_room_reservation(@booked_range)
+      hotel_controller.rooms[12].create_room_reservation(@booked_range)
+
+      expect(hotel_controller.find_available_rooms(@booked_range).length).must_equal 18
+    end
+
+    it "returns only the correct room ids of the Rooms that have availability" do
+      # add rez to multiple rooms only if id is evenly divisible by 3
+      hotel_controller.rooms.each do |room|
+        if room.room_id % 3 == 0
+          new_reservation = Hotel::Reservation.new(@booked_range, room.room_id)
+          room.create_room_reservation(new_reservation)
+        end
+      end
+
+      expect(hotel_controller.find_available_rooms(@booked_range)[0]).must_equal 1
+      expect(hotel_controller.find_available_rooms(@booked_range)[1]).must_equal 2
+      expect(hotel_controller.find_available_rooms(@booked_range)[2]).must_equal 4
+      expect(hotel_controller.find_available_rooms(@booked_range)[3]).must_equal 5
+    end
+  end
 
   describe "reserve_with_range" do
     let(:hotel_controller) {Hotel::Controller.new}
