@@ -30,11 +30,11 @@ end
 
 describe "Validate date objects" do
   it 'raises an argument error if check in is not a Date object' do
-    expect{ Hotel::DateRange.new(("2020-03-03"), (Date.today + 1)) }
+    expect{ Hotel::DateRange.new(("a string"), (Date.today + 1)) }.must_raise ArgumentError
   end
   
   it 'raises an argument error if check out is not a Date object' do
-    expect{ Hotel::DateRange.new((Date.today), ("2020-03-31")) }
+    expect{ Hotel::DateRange.new((Date.today), ("a string")) }.must_raise ArgumentError
   end
 end
 

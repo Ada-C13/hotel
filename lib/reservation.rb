@@ -15,7 +15,7 @@ module Hotel
     end
     
     # TODO: Method for room number validation - if I try to pass a bad number as a room_number, what will happen
-    # TODO: What gets passed as room number when room is instantiated - that is wht should be passed to reservation
+    # TODO: What gets passed as room number when room is instantiated - that is what should be passed to reservation
     
     def total_cost
       total_reservation_cost = @price_per_night * (@date_range.num_nights)

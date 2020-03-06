@@ -67,10 +67,29 @@ describe "given room number, return room object" do
   end
 end
 
-describe "list available rooms" do
+describe "list reservations by room number" do
   let (:front_desk) {
     Hotel::FrontDesk.new(5)
-  } # there are only five rooms in this hotel!
+  }
+  
+  it "returns an array of many reservations" do
+    
+  end
+  
+  it "returns an array of 1 reservation" do
+    
+  end
+  
+  it "returns an array of 0 reservations" do
+    
+  end
+  
+end
+
+describe "list all available rooms" do
+  let (:front_desk) {
+    Hotel::FrontDesk.new(5)
+  }
   
   it "returns an array of all room objects if there are no reservations in a given daterange" do
     front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
@@ -115,6 +134,28 @@ describe "list available rooms" do
   end
 end
 
+describe "find single available room" do
+  let (:front_desk) {
+    Hotel::FrontDesk.new(5)
+  }
+  
+  it 'returns a single room object' do
+    room = front_desk.find_available_room(Date.new(2020,2,6),Date.new(2020,2,8))
+    
+    expect(room).must_be_instance_of Hotel::Room
+    expect(room.room_number).must_equal "1"
+  end
+  
+  it 'raises an argument error if no rooms are available on that date' do
+    5.times do
+      front_desk.create_reservation(Date.new(2020,2,6),Date.new(2020,2,8))
+    end
+   
+    expect { front_desk.find_available_room(Date.new(2020,2,6),Date.new(2020,2,8)) }.must_raise ArgumentError
+  end
+  
+end
+
 describe "create reservation" do
   let (:front_desk) {
     Hotel::FrontDesk.new(5)
@@ -123,14 +164,32 @@ describe "create reservation" do
   it 'instantiates a reservation object' do
     reservation = front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
     
+    
     expect(reservation).must_be_instance_of Hotel::Reservation
     expect(reservation.room_number).must_equal "1"
   end  
+  
+  it 'assigns room numbers correctly for overlapping reservations' do
+    reservation = front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
+    reservation = front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
+    
+    expect(reservation.room_number).must_equal "2"
+  end
+  
+  # it 'raises an argument error if reservation attempts to book over existing reservation' do
+  #   front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
+  #   front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
+  #   front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
+  #   front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
+  #   front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
+  
+  #   reservation = front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
+  
+  #   expect(reservation).must_raise ArgumentError
+  # end 
 end
 
-
 describe "reservations on a single date" do
-  
   before do 
     @front_desk = Hotel::FrontDesk.new(5)
     @front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,4))
@@ -153,7 +212,7 @@ describe "reservations on a single date" do
   
   it 'returns correct number of reservations on dates with many reservations' do
     expect(@front_desk.reservations_by_date(Date.new(2020,2,3)).length).must_equal 2
-
+    
   end
   
 end
