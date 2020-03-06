@@ -109,7 +109,6 @@ def do_check_date_reservations
 end 
 
 
-
 def run_program
   puts "================================"
   puts "Hello Manager of HOTEL BUDAPEST"

@@ -126,11 +126,6 @@ describe "DateRange class" do
       date = [2020,3,2]
       expect(@date_range.include_date(date)).must_equal true
     end
-
-
+    
   end 
-
-
-
-
 end 
