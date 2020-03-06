@@ -19,8 +19,8 @@ module Hotel
       return @rooms
     end
 
-    def reserve_room(start_date, end_date)
-      new_reservation = Reservation.new(start_date, end_date, nil)
+    def reserve_room(start_date, end_date, room=@rooms.sample)
+      new_reservation = Reservation.new(start_date, end_date, room)
       @reservations.push(new_reservation)
       return new_reservation
     end
@@ -38,21 +38,15 @@ module Hotel
       raise ArgumentError.new("start date has to be at least 1 day before end date") if (end_date - start_date).to_i < 1
 
       requested_range = Hotel::DateRange.new(start_date,end_date)
-
       avail_rooms = rooms.clone
-
-      # @reservations.each do |reservation|
-      #   if reservation.date_range.overlap?(requested_range)
-      #     avail_rooms.delete_if{|room| room == reservation.room}
-      #   end
-      # end
-
       overlapping_reservations = @reservations.select { |res| res.date_range.overlap?(requested_range) }
+
       overlapping_reservations.each do |res|
         avail_rooms.delete_if { |room| room == res.room }
       end
 
       return avail_rooms
     end
+
   end
 end

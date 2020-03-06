@@ -66,6 +66,18 @@ describe Hotel::HotelController do
         end_date = start_date - 3
         expect{@hotel_controller.available_rooms(start_date, end_date)}.must_raise ArgumentError
       end
+
+      it "correctly returns avail rooms after one room is reserved for a specific date range" do
+        new_res = @hotel_controller.reserve_room(Date.new(2020,03,06), Date.new(2020,03,10))
+        avail_rooms = @hotel_controller.available_rooms(Date.new(2020,03,05),Date.new(2020,03,07))
+
+        expect(avail_rooms).must_be_instance_of Array
+        expect(avail_rooms[0]).must_be_instance_of Hotel::Room
+        expect(avail_rooms.length).must_equal 19
+        expect(avail_rooms.include?(new_res.room)).must_equal false
+        
+      end
+
     end
   end
 end
