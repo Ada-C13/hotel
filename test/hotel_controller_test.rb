@@ -17,18 +17,26 @@ describe 'HotelController class' do
     @reservation = @new_hotel.reserve_room(@start_date, @end_date)
   end
 
-  describe 'HotelController adding and listing rooms' do 
+  describe 'HotelController add_room' do 
     it 'should have 20 rooms' do
       expect(@new_hotel.rooms).must_be_kind_of Array
       expect(@new_hotel.rooms.length).must_equal 20
     end
+  end
 
+  describe "HotelController list_all_rooms" do
     it 'lists all rooms in hotel' do
-      expect(@new_hotel.list_of_all_rooms).must_be_same_as @new_hotel.rooms
+      expect(@new_hotel.list_all_rooms).must_be_same_as @new_hotel.rooms
     end
   end
 
-  describe 'find_available_rooms' do
+  describe 'HotelController total_cost' do
+    it 'should return the total cost of a reservation' do
+      expect(@new_hotel.total_cost(@reservation)).must_equal 400
+    end
+  end
+
+  describe 'HotelController find_available_rooms' do
     it 'should return an instance of class Room' do 
       available_rooms = @new_hotel.find_available_rooms(@start_date, @end_date)
       expect(available_rooms.first).must_be_instance_of Hotel::Room
@@ -37,6 +45,10 @@ describe 'HotelController class' do
     it 'returns all rooms if there all avaliable with date range given' do
       expect(@new_hotel.find_available_rooms(@start_date, @end_date)).must_be_kind_of Array
       expect(@new_hotel.find_available_rooms(Date.new(2021, 5, 6), Date.new(2021, 5, 8))).must_equal @new_hotel.rooms
+    end
+
+    it 'should return available rooms for a specific date' do
+      expect(@new_hotel.find_available_rooms(@start_date).length).must_equal 19
     end
 
     it 'should return an array of all available rooms' do
