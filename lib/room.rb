@@ -5,10 +5,10 @@ module Hotel
     attr_reader :reservations, :number, :cost
     attr_writer :cost
 
-    def initialize(reservations = [], number, cost)
-      @reservations = []
+    def initialize(number, cost, reservations = [])
       @number = number
       @cost = cost
+      @reservations = []
     end
 
     def check_availability(date_range)
@@ -19,5 +19,27 @@ module Hotel
       end
       return true
     end
+
+    def list_reservations(date = nil)
+      return @reservations if !date
+      raise ArgumentError.new("Only date or date_range should be provided, not both") if date.class != Date && date.class != Hotel::DateRange
+
+      reservations = []
+
+      @reservations.each do |reservation|
+        if date.class == Hotel::DateRange
+          if reservation.date_range.overlap?(date)
+            reservations << reservation
+          end
+        else
+          if reservation.date_range.range.include?(date)
+            reservations << reservation
+          end
+        end
+      end
+
+      return reservations
+    end
+
   end
 end
