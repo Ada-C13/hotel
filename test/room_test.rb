@@ -1,7 +1,7 @@
 require_relative 'test_helper'
 
 
-describe 'Room class' do
+xdescribe 'Room class' do
   describe 'Initializer' do
     it 'is an instance of Room' do
     test_room = Room.new(1)
@@ -15,10 +15,13 @@ describe 'Room class' do
       expect(room.reservations).must_include reservation
     end
 
-    it 'can take in the dates from Room class' do
-      new_res = Reservation.new(Room.new(1),Date.today,Date.today + 3)
-      expect(new_res.total).must_equal 400
+    it 'can hold each reservation'do 
+     room = Room.new(1)
+     all_res = []
+      5.times do |index|
+        all_res << room.add_reservation(Date.today,Date.today + 3)
+      end
+      expect(all_res.length).must_equal 5
     end
   end
 end
-
