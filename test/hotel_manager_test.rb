@@ -51,9 +51,16 @@ describe "HotelManager" do
   end
 
   describe "reserve_room" do
-    let(:reservation) {
+    let(:date_range) {
       date_range = Hotel::DateRange.new(Date.new(2020,5,10), Date.new(2020,5,14))
+    }
+    let(:reservation) {
       @hotel_manager.reserve_room(date_range, 1)
+    }
+    let(:reserve_rooms) {
+      20.times do |i|
+        @hotel_manager.reserve_room(date_range, i + 1)
+      end
     }
 
     it "creates a Reservation instance" do
@@ -66,12 +73,10 @@ describe "HotelManager" do
       expect(@hotel_manager.total_reservations).must_equal current_reservations + 1
     end
 
-    it "adds reservation to associated room" do
-      found_room = @hotel_manager.find_room(reservation.room_number)
+    it "adds reservation to associated room" do      
+      found_room = @hotel_manager.find_room(1)
       current_reservations = found_room.reservations.length
-
-      date_range = Hotel::DateRange.new(Date.new(2020,5,15), Date.new(2020,5,17))
-      @hotel_manager.reserve_room(date_range, 1)
+      reservation
 
       expect(found_room.reservations.length).must_equal current_reservations + 1
     end
@@ -82,13 +87,15 @@ describe "HotelManager" do
     end
 
     it "raises ArgumentError if no rooms are available" do
-      date_range = Hotel::DateRange.new(Date.new(2020,5,10), Date.new(2020,5,14))
-
-      20.times do |i|
-        @hotel_manager.reserve_room(date_range, i + 1)
-      end
-
+      reserve_rooms
       expect{@hotel_manager.reserve_room(date_range)}.must_raise ArgumentError
+    end
+
+    it "makes a reservation if date_range provided starts on checkout day of existing reservations" do
+      reserve_rooms
+      date_range = Hotel::DateRange.new(Date.new(2020,5,14), Date.new(2020,5,15))
+
+      expect(@hotel_manager.reserve_room(date_range)).must_be_kind_of Hotel::Reservation
     end
 
     it "raises ArgumentError if invalid date is provided" do
@@ -167,6 +174,50 @@ describe "HotelManager" do
 
         expect(@hotel_manager.list_reservations_by_date(date).length).must_equal 2
       end
+    end
+
+    describe "list_reservations" do
+      it "returns an Array of Reservations" do
+        date = Date.new(2020,5,25)
+        expect(@hotel_manager.list_reservations_by_date(date)).must_be_kind_of Array
+  
+        @hotel_manager.list_reservations_by_date(date).each do |reservation|
+          expect(reservation).must_be_kind_of Hotel::Reservation
+        end
+      end
+
+      it "returns an Array of Reservations" do
+        date_range = Hotel::DateRange.new(Date.new(2020,5,25), Date.new(2020,5,29))
+        expect(@hotel_manager.list_reservations_by_room(1, date_range)).must_be_kind_of Array
+  
+        @hotel_manager.list_reservations_by_room(1, date_range).each do |reservation|
+          expect(reservation).must_be_kind_of Hotel::Reservation
+        end
+      end
+  
+      it "returns an empty Array if no reservations include the date" do
+        date = Date.new(2020,6,1)
+        expect(@hotel_manager.list_reservations_by_date(date)).must_equal []
+      end
+
+      it "returns the correct reservations" do
+        date = Date.new(2020,5,26)
+
+        expect(@hotel_manager.list_reservations_by_date(date).length).must_equal 2
+      end
+  
+      it "returns the correct reservations" do
+        date_range = Hotel::DateRange.new(Date.new(2020,5,26), Date.new(2020,5,29))
+
+        expect(@hotel_manager.list_reservations_by_room(1, date_range).length).must_equal 2
+      end
+
+      it "returns an empty Array if there are no reservations during the date range" do
+        date_range = Hotel::DateRange.new(Date.new(2020,6,1), Date.new(2020,6,5))
+  
+        expect(@hotel_manager.list_reservations_by_room(1, date_range)).must_equal []
+      end
+
     end
 
     describe "list_available_rooms" do
