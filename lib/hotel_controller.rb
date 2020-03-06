@@ -6,9 +6,9 @@ module Hotel
   class HotelController
     attr_reader :rooms, :reservations
 
-    def initialize(rooms:, reservations: [])
-      @rooms = (1..20).to_a
-      @reservations = reservations || []
+    def initialize(rooms: (1..20).to_a, reservations: [])
+      @rooms = rooms
+      @reservations = reservations
     end
 
     def make_reservation(check_in, check_out)

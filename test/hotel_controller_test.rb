@@ -1,14 +1,15 @@
 require "date"
 require_relative "test_helper"
+require "pry"
 
 describe "HotelController class" do
   before do
     @controller = Hotel::HotelController.new(rooms: (1..20).to_a, reservations: [])
-    a = Date.new(2020, 2, 24)
-    b = Date.new(2020, 2, 25)
-    @controller.make_reservation(a, b)
+    @a = Date.new(2020, 2, 24)
+    @b = Date.new(2020, 2, 25)
+    @controller.make_reservation(@a, @b)
     @reservations = @controller.reservations
-    @list_available_rooms = @controller.find_available_rooms(Date.new(2020, 2, 24), Date.new(2020, 2, 25))
+    @list_available_rooms = @controller.find_available_rooms(@a, @b)
     @all_rooms = @controller.show_all_rooms
   end
 
@@ -32,7 +33,13 @@ describe "HotelController class" do
   describe "find_available_rooms" do
     it "returns array of available rooms" do
       expect(@list_available_rooms).must_be_kind_of Array
-      expect(@list_available_rooms.length).must_equal 20 # change
+      expect(@list_available_rooms.length).must_equal 19 # Because one reservation was made for given range
+    end
+    it "Raises exception if there are no available rooms" do
+      @controller2 = Hotel::HotelController.new(rooms: [1], reservations: [])
+      # binding.pry
+      @controller2.make_reservation(@a, @b)
+      expect { @controller2.make_reservation(@a, @b) }.must_raise StandardError
     end
   end
   describe "show_all_rooms" do
