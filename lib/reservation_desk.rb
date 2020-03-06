@@ -49,30 +49,13 @@ module Hotel
         available_rooms << room if switch == 0
       end
 
-      return available_rooms
+      return available_rooms.empty? ? nil : available_rooms
     end
 
-    def find_available_room(start_date: , end_date:)
-      #TODO: efficient date checking
-
-      date_range = DateRange.new(start_date: start_date, end_date: end_date)
-      
-      rooms.each do |room|
-        switch = 0
-        room.reservations.each do |reservation|
-          if reservation.date_range.overlap?(date_range)
-            switch = 1
-            break
-          end
-        end
-        return room if switch == 0
-      end
-      return nil
-    end
 
     def make_reservation(start_date:, end_date:)
       # Create a date range here and use it moing forward?
-      room = find_available_room(start_date: start_date, end_date: end_date)
+      room = check_availability(start_date: start_date, end_date: end_date)[0]
       raise StandardError.new("No rooms available for these dates.") if room == nil
       reservation = new_reservation(room_id: room.id, start_date: start_date, end_date: end_date)
       add_reservation(reservation)
@@ -85,7 +68,7 @@ module Hotel
       #TODO: Check availability or possibly remove?
 
       if room_id == nil
-        room_id = find_available_room(start_date: start_date, end_date: end_date).id
+        room_id = check_availability(start_date: start_date, end_date: end_date).first.id
       end
       Reservation.new(room_id: room_id, start_date: start_date, end_date: end_date)
     end
@@ -137,4 +120,23 @@ end
     #   return reservations
       
     #   #TODO: add date_range class and refactor
+    # end
+
+
+       # def find_available_room(start_date: , end_date:)
+    #   #TODO: efficient date checking
+
+    #   date_range = DateRange.new(start_date: start_date, end_date: end_date)
+      
+    #   rooms.each do |room|
+    #     switch = 0
+    #     room.reservations.each do |reservation|
+    #       if reservation.date_range.overlap?(date_range)
+    #         switch = 1
+    #         break
+    #       end
+    #     end
+    #     return room if switch == 0
+    #   end
+    #   return nil
     # end

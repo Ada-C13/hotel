@@ -176,47 +176,56 @@ describe "ReservationDesk class" do
       expect(@request.length).must_equal 17
       expect(@request[0].id).must_equal 4
     end
-  end
 
-  describe "find_available_room" do
-    before do
-      @reservation_1 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-1", end_date: "2020-3-5")
-      @reservation_2 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-10", end_date: "2020-3-15")
-      @reservation_3 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-20", end_date: "2020-3-25")
-      @reservation_4 = @reservation_desk.new_reservation(room_id: 2, start_date: "2020-3-20", end_date: "2020-3-25")
-
-      @reservation_desk.add_reservation(@reservation_1)
-      @reservation_desk.add_reservation(@reservation_2)
-      @reservation_desk.add_reservation(@reservation_3)
-      @reservation_desk.add_reservation(@reservation_4)
-
-    end
-
-    it "returns an instance of Room" do
-      search = @reservation_desk.find_available_room(start_date: "2020-3-5", end_date: "2020-3-6")
-      expect(search).must_be_kind_of Hotel::Room
-    end
-
-    it "returns a first room which is available for dates in question" do
-      search = @reservation_desk.find_available_room(start_date: "2020-3-5", end_date: "2020-3-6")
-      expect(search.id).must_equal 1
-
-      search_2 = @reservation_desk.find_available_room(start_date: "2020-3-2", end_date: "2020-3-4")
-      expect(search_2.id).must_equal 2
-
-      search_3 = @reservation_desk.find_available_room(start_date: "2020-3-21", end_date: "2020-3-24")
-      expect(search_3.id).must_equal 3
-    end
-
-    it "returns nil if no rooms are available for requested dates" do
+    it "returns nil if there are no Rooms available for requested dates" do
       20.times do |i|
         reservation = @reservation_desk.new_reservation(room_id: (i + 1), start_date: "2020-6-1", end_date: "2020-6-30")
         @reservation_desk.add_reservation(reservation)
       end
-      search = @reservation_desk.find_available_room(start_date: "2020-6-5", end_date: "2020-6-10")
+      search = @reservation_desk.check_availability(start_date: "2020-6-5", end_date: "2020-6-10")
       assert_nil search
     end
   end
+
+  # describe "find_available_room" do
+  #   before do
+  #     @reservation_1 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-1", end_date: "2020-3-5")
+  #     @reservation_2 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-10", end_date: "2020-3-15")
+  #     @reservation_3 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-20", end_date: "2020-3-25")
+  #     @reservation_4 = @reservation_desk.new_reservation(room_id: 2, start_date: "2020-3-20", end_date: "2020-3-25")
+
+  #     @reservation_desk.add_reservation(@reservation_1)
+  #     @reservation_desk.add_reservation(@reservation_2)
+  #     @reservation_desk.add_reservation(@reservation_3)
+  #     @reservation_desk.add_reservation(@reservation_4)
+
+  #   end
+
+  #   it "returns an instance of Room" do
+  #     search = @reservation_desk.find_available_room(start_date: "2020-3-5", end_date: "2020-3-6")
+  #     expect(search).must_be_kind_of Hotel::Room
+  #   end
+
+  #   it "returns a first room which is available for dates in question" do
+  #     search = @reservation_desk.find_available_room(start_date: "2020-3-5", end_date: "2020-3-6")
+  #     expect(search.id).must_equal 1
+
+  #     search_2 = @reservation_desk.find_available_room(start_date: "2020-3-2", end_date: "2020-3-4")
+  #     expect(search_2.id).must_equal 2
+
+  #     search_3 = @reservation_desk.find_available_room(start_date: "2020-3-21", end_date: "2020-3-24")
+  #     expect(search_3.id).must_equal 3
+  #   end
+
+  #   it "returns nil if no rooms are available for requested dates" do
+  #     20.times do |i|
+  #       reservation = @reservation_desk.new_reservation(room_id: (i + 1), start_date: "2020-6-1", end_date: "2020-6-30")
+  #       @reservation_desk.add_reservation(reservation)
+  #     end
+  #     search = @reservation_desk.find_available_room(start_date: "2020-6-5", end_date: "2020-6-10")
+  #     assert_nil search
+  #   end
+  # end
 
   describe "new_reservation" do
     before do
