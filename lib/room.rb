@@ -9,4 +9,8 @@ module Hotel
 
     #Create one method that knows about the reservation
   end
+
+  def ==(other)
+    room_nr == other.room_nr
+   end
 end

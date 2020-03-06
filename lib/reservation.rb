@@ -4,16 +4,14 @@ module Hotel
    
     # Feel free to change this method signature as needed. Make sure to update the tests!
     attr_reader :id, :date_range, :room
-    def initialize(id, start_date, end_date, room)
-      @id = id
+    def initialize(start_date, end_date, room)
       @date_range = Hotel::DateRange.new(start_date, end_date)
       @room = room
     end
     
-    def ==(other)
-      id == other.id 
-    end
-
+    # def ==(other)
+    #   id == other.id 
+    # end
 
     def cost
       total = date_range.calculate_nights * 200.00
