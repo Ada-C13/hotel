@@ -11,12 +11,21 @@ module Hotel
       @rooms << room
     end
 
-    def list_of_all_rooms
+    def list_all_rooms
       return @rooms
     end
 
-    def find_available_rooms(start_date, leave_date)
-      unavailable_rooms = @reservations.select { |res| res.overlap?(start_date, leave_date)}
+    def total_cost(reservation)
+      return reservation.total_cost
+    end
+
+    def find_available_rooms(given_date, leave_date = given_date)
+      if leave_date == given_date
+        unavailable_rooms = @reservations.select { |res| (res.arrive..res.depart).include?(given_date) }
+      else
+        unavailable_rooms = @reservations.select { |res| res.overlap?(given_date, leave_date) }
+      end
+      
       unavailable_room_nums = unavailable_rooms.map{ |res| res.room_num }
       available_rooms = @rooms.reject{ |room| unavailable_room_nums.include?(room.room_num)}
       return available_rooms
@@ -28,11 +37,12 @@ module Hotel
 
       rooms = find_available_rooms(arrive, depart)
       raise ArgumentError, "Reservation can't be made, no available rooms" if rooms.empty?
-      found_room = rooms.first
 
-      @reservations << Hotel::Reservation.new(arrive, depart, found_room)
-    
-      return Hotel::Reservation.new(arrive, depart, found_room)
+
+      new_reservation = Hotel::Reservation.new(arrive, depart, rooms.first)
+      @reservations << new_reservation
+  
+      return new_reservation
     end
 
     def reservations_by_date(given_date, second_date =given_date)
