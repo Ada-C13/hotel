@@ -39,9 +39,6 @@ module Hotel
       create_rooms
     end
 
-    # associations, has many, belongs to
-    # iterm 2 for multiple panes of terminals
-
     def find_available_rooms(input_range)
       available = []
       @rooms.each do |room|
@@ -56,11 +53,11 @@ module Hotel
     # Wave 1, US 2: "I can reserve a room for a given date range, so that I can make a reservation"
     def reserve_with_range(input_range)
       @rooms.each do |room|
-        # loop through room rez_list 
-        # create_room_reservation(input_range)
-        # will return false if conflict in room, else will create and add to rez_list and return true
-        # return room.rood_id
+          # will return false if can't create rez, otherwise will create and add to rez_list and return true
+        return room.room_id if room.create_room_reservation(input_range)
       end
+
+      return false
     end
 
     # Wave 1, US 3: "I can access the list of reservations for a specific date, so that I can track reservations by date"

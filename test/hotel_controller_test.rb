@@ -4,7 +4,7 @@ describe Hotel::Controller do
   describe "initialize" do
     let(:hotel_controller) {Hotel::Controller.new}
 
-    it "is an instance of HotelController" do
+    it "is an instance of Controller" do
       expect(hotel_controller).must_be_kind_of Hotel::Controller
     end
   end
@@ -47,7 +47,7 @@ describe Hotel::Controller do
       expect(hotel_controller.find_available_rooms(@booked_range)[0]).must_equal 1
       expect(hotel_controller.find_available_rooms(@booked_range)[1]).must_equal 2
       expect(hotel_controller.find_available_rooms(@booked_range)[2]).must_equal 4
-      expect(hotel_controller.find_available_rooms(@booked_range)[3]).must_equal 5
+      expect(hotel_controller.find_available_rooms(@booked_range)[4]).must_equal 7
     end
   end
 
@@ -57,22 +57,33 @@ describe Hotel::Controller do
       @start_date = Date.new(2020, 1, 1)
       @end_date = Date.new(2020, 1, 2)
       @room_id = 1
-      @input_range = Hotel::DateRange.new(@start_date, @end_date)
+      @booked_range = Hotel::DateRange.new(@start_date, @end_date)
       @new_reservation = Hotel::Reservation.new(@input_range,@room_id)
     end
 
     it "returns false if the input range cannot be accommodated in any room" do
-      
+      hotel_controller.rooms.each do |room|
+        room.create_room_reservation(@booked_range)
+      end
+
+      expect(hotel_controller.reserve_with_range(@booked_range)).must_equal false
     end
 
-    it "returns true if the input range can be accommodated in a room" do
+    it "returns the room_id of the first room that can accommodate the input range" do
+      # Room 1 is booked during range
+      hotel_controller.rooms[0].create_room_reservation(@booked_range)
+
+      expect(hotel_controller.reserve_with_range(@booked_range)).must_equal 2
     end
 
-    it "ensures the new reservation was created and added to that room's rez list" do
+    it "ensures the new reservation was created and added to correct room's rez list" do
+      hotel_controller.reserve_with_range(@booked_range)
+
+      # rez should have been made in the first room, therefore check rez list of room[0]
+      expect(hotel_controller.rooms[0].rez_list.length).must_equal 1
+      expect(hotel_controller.rooms[0].rez_list[0].date_range).must_equal @booked_range
     end
 
-    it "correctly handles a conflict in one room by creating/adding the reservation in the next available room" do
-    end
 
       # it "creates a new reservation" do
     #   expect(hotel_controller.reserve_with_range(@input_range)).must_be_kind_of Hotel::Reservation

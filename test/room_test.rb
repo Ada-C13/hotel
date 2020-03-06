@@ -163,7 +163,7 @@ describe Hotel::Room do
       expect(@room.find_by_range(@date_range_4)).must_be_empty
     end
 
-    it "includes any/all Reservations that overlap with the given range" do
+    it "finds any/all Reservations that overlap with the given range" do
       @room.add_room_reservation(@reservation_to_add)
       expect(@room.find_by_range(@date_range_1)[0]).must_equal @reservation_to_add
       expect(@room.find_by_range(@date_range_1).length).must_equal 1
@@ -179,6 +179,11 @@ describe Hotel::Room do
 
       @room.create_room_reservation(@date_range_4)
       expect(@room.find_by_range(@date_range_1).length).must_equal 1
+
+      # is this okay to add?
+      @room.add_room_reservation(@reservation_to_add_2)
+      expect(@room.find_by_range(@date_range_1)[1]).must_equal @reservation_to_add_2
+      expect(@room.find_by_range(@date_range_1).length).must_equal 2
     end
 
     # not sure if I need this test in this class?

@@ -66,6 +66,3 @@ module Hotel
 
   end
 end
-
-
-# in my tests, I'm creating a reservation as an instance var that I think is a date range
