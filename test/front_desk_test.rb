@@ -68,23 +68,29 @@ describe "given room number, return room object" do
 end
 
 describe "list reservations by room number" do
-  let (:front_desk) {
-    Hotel::FrontDesk.new(5)
-  }
+  before do 
+    @front_desk = Hotel::FrontDesk.new(5)
+    @front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,4))
+    @front_desk.create_reservation(Date.new(2020,2,2),Date.new(2020,2,6))
+    @front_desk.create_reservation(Date.new(2020,2,7), Date.new(2020,2,9))
+    
+    @front_desk.create_reservation(Date.new(2020,2,14), Date.new(2020,2,17))
+  end
   
   it "returns an array of many reservations" do
-    
+    expect(@front_desk.find_reservations_by_room("1").length).must_equal 3
   end
   
   it "returns an array of 1 reservation" do
-    
+    expect(@front_desk.find_reservations_by_room("2").length).must_equal 1
   end
   
-  it "returns an array of 0 reservations" do
-    
+  it "returns nil if there are no reservations" do
+    expect(@front_desk.find_reservations_by_room("3")).must_be_nil
   end
   
-end
+end 
+
 
 describe "list all available rooms" do
   let (:front_desk) {
@@ -150,7 +156,7 @@ describe "find single available room" do
     5.times do
       front_desk.create_reservation(Date.new(2020,2,6),Date.new(2020,2,8))
     end
-   
+    
     expect { front_desk.find_available_room(Date.new(2020,2,6),Date.new(2020,2,8)) }.must_raise ArgumentError
   end
   
@@ -189,7 +195,7 @@ describe "create reservation" do
   # end 
 end
 
-describe "reservations on a single date" do
+describe "list reservations on a single date" do
   before do 
     @front_desk = Hotel::FrontDesk.new(5)
     @front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,4))

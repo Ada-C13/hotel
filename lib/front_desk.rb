@@ -39,12 +39,22 @@ module Hotel
       return room.first
     end
     
+    
     def find_reservations_by_room(room_number)
+      # if I give you a room number, call find_room_by_number, pass in that room_number, return an array of reservations for that room
+      room = find_room_by_number(room_number)
       
+      reservations = room.reservations 
+      
+      if reservations.empty?
+        return nil
+      end
+      
+      return reservations
     end
     
     
-    # This method is created and used in multi-hour collaboration and conversation with Cathy (and Nikki-by-proxy)
+    # This method was created in multi-hour collaboration/conversation with Cathy (and Nikki-by-proxy) - props to Nikki's genius brain!!
     def list_available_rooms(check_in, check_out)
       available_rooms = []
       
@@ -70,7 +80,7 @@ module Hotel
       return all_rooms[0]
     end
     
-
+    
     # TODO: Make more tests for this method     
     def create_reservation(check_in, check_out)
       room = find_available_room(check_in, check_out)
@@ -78,7 +88,7 @@ module Hotel
       room_number = room.room_number
       
       date_range = Hotel::DateRange.new(check_in,check_out)
-
+      
       reservation = Hotel::Reservation.new(date_range)
       reservation.room_number = room_number
       
@@ -87,8 +97,7 @@ module Hotel
       return reservation
     end  
     
-    # i give you a date
-    # you look at each reservation in @rooms and select the ones where that date is included
+    
     def reservations_by_date(date)
       reservations_on_date = []
       
