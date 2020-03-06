@@ -10,7 +10,7 @@ describe Hotel::HotelController do
     describe "rooms" do
       it "returns a list" do
         rooms = @hotel_controller.list_rooms
-        expect(rooms).must_be_kind_of Array
+        expect(rooms).must_be_instance_of Array
       end
     end
 
@@ -21,7 +21,7 @@ describe Hotel::HotelController do
 
         reservation = @hotel_controller.reserve_room(start_date, end_date)
 
-        expect(reservation).must_be_kind_of Hotel::Reservation
+        expect(reservation).must_be_instance_of Hotel::Reservation
       end
     end
 
@@ -36,9 +36,9 @@ describe Hotel::HotelController do
       end
 
       it "takes a Date and returns a list of Reservations" do
-        expect(@reservation_list).must_be_kind_of Array
+        expect(@reservation_list).must_be_instance_of Array
         @reservation_list.each do |res|
-          res.must_be_kind_of Hotel::Reservation
+          res.must_be_instance_of Hotel::Reservation
         end
       end
 
@@ -58,7 +58,13 @@ describe Hotel::HotelController do
 
         room_list = @hotel_controller.available_rooms(start_date, end_date)
 
-        expect(room_list).must_be_kind_of Array
+        expect(room_list).must_be_instance_of Array
+      end
+
+      it "raises ArgumentError if start date is not at least 1 day before end date" do
+        start_date = Date.new(2020,03,05)
+        end_date = start_date - 3
+        expect{@hotel_controller.available_rooms(start_date, end_date)}.must_raise ArgumentError
       end
     end
   end
