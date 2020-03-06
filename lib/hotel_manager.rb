@@ -12,9 +12,10 @@ module Hotel
     def initialize
       @rooms = []
       @reservations = []
+      @blocks = []
 
       ROOM_NUMBERS.times do |i| 
-        @rooms << Hotel::Room.new(i + 1)
+        @rooms << Hotel::Room.new(id: i + 1)
       end 
     end 
 
@@ -24,14 +25,14 @@ module Hotel
       return @reservations.select do |reservation| 
         # If the room number is the same
         # check the reservation inside of the room 
-        (reservation.room.number == room.number) && (reservation.date_range.overlap?(date_range))
+        (reservation.room.id == room.id) && (reservation.date_range.overlap?(date_range))
       end 
     end 
 
     
     # (2) Find available rooms (with given date range) 
     #  and use the "reservations_per_room" from (1)
-    def available_room_numbers(date_range) 
+    def available_room_ids(date_range) 
  
       # Find available rooms that are not reserved for the given date range
       available_rooms = @rooms.select do |room| 
@@ -40,7 +41,7 @@ module Hotel
       end 
 
       # Return room numbers
-      return available_rooms.map { |room| room.number }
+      return available_rooms.map { |room| room.id }
     end 
 
 
@@ -50,42 +51,78 @@ module Hotel
     def make_reservation(date_range)
 
       # Find available rooms for the specific date range
-      available_room_numbers = available_room_numbers(date_range) 
+      available_room_ids = available_room_ids(date_range)
+      
+      if available_room_ids.empty? 
+        raise ArgumentError, "There are no available rooms"
+      end 
 
-      # If available_rooms exist
-      if available_room_numbers.length > 0 
+      # Create an instance of Reservation
+      room = find_room_by_number(available_room_ids[0])
+      reservation = Reservation.new(date_range, room)
+      
+      self.add_reservation(reservation)
 
-        # Create an instance of Reservation
-        room = find_room_by_number(available_room_numbers[0])
-        reservation = Reservation.new(date_range, room)
-        
+      return reservation
+    end 
+
+
+    def make_block_reservation(date_range, number_of_rooms: 2)
+      if (number_of_rooms < 2) || (number_of_rooms > 5)
+        raise ArgumentError, "A block can contain between 2 and 5 rooms (a maximum of 5 rooms)"
+      end
+
+      # Find available rooms for the specific date range
+      available_room_ids = available_room_ids(date_range)
+      
+      # TO DO (make a custom error)
+      # If available_room_ids are less than the number_of_room, throw an error
+      if available_room_ids.length < number_of_rooms
+        raise ArgumentError, "There are no available rooms for #{number_of_rooms}"
+      end 
+
+      # Create instances of Reservation (block)
+      rooms = []
+      reservation = nil
+      number_of_rooms.times do |i|
+        room = find_room_by_number(available_room_ids[i])
+        reservation = Reservation.new(date_range, room, is_block: true)
         self.add_reservation(reservation)
 
-        return reservation
+        rooms << room
       end 
-  
-      raise ArgumentError, "There are no available rooms"
+
+      block_reservation = Hotel::Block.new(date_range, rooms, reservation)
+      @blocks << block_reservation
+      
+      return block_reservation
     end 
 
 
     # (4) Find reservations for date => include (searching)
     # iterate through reservations
-    def find_all_reservations(date)
+    def find_all_reservations(date, is_all: true, is_block: false)
 
-      list = @reservations.filter do |reservation|
-        # modified
-        reservation.date_range.include?(date) #end_date should be excluded
+      # TO DO: customer error
+      if is_all == true && is_block == true 
+        raise ArgumentError, "Both `is_all` and `is_block` cannot 'true'"
       end 
 
-      # TO DO
-      # Make a custom error
-      if list.empty? 
-        raise ArgumentError, "No reservations found"
+      if is_all
+        return @reservations.find_all do |reservation|
+          # modified
+          reservation.date_range.include?(date) #end_date should be excluded
+        end 
+      elsif is_block # truthy 
+        return @reservations.find_all do |reservation|
+          (reservation.date_range.include?(date)) && (reservation.is_block == true)
+        end 
+      elsif is_block == false 
+        return @reservations.find_all do |reservation|
+          (reservation.date_range.include?(date)) && (reservation.is_block == false)
+        end 
       end 
-
-      return list
     end 
-
 
     # Helper method
     def add_reservation(reservation)
@@ -95,7 +132,12 @@ module Hotel
     # TO DO
     # add test
     def find_room_by_number(number)
-      return @rooms.find { |room| room.number == number}
+      return @rooms.find { |room| room.id == number}
     end 
   end 
 end 
+
+
+# p "find_all_reservations(Date.new(2020, 11, 11))"
+
+# p Hotel::HotelManager.new().find_all_reservations(Date.new(2020, 11, 11))

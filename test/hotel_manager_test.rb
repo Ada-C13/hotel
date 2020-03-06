@@ -19,7 +19,7 @@ describe "HotelManager class" do
           expect(room).must_be_instance_of Hotel::Room
         end 
 
-        expect(rooms[0].number).must_equal 1
+        expect(rooms[0].id).must_equal 1
       end
     end
 
@@ -45,7 +45,7 @@ describe "HotelManager class" do
 
         expect(reservation).must_be_instance_of Hotel::Reservation 
         expect(reservation.room).must_be_instance_of Hotel::Room
-        expect(reservation.room.number).must_equal 1
+        expect(reservation.room.id).must_equal 1
       end 
 
       it "raise an Arugment error after making 20 reservations for the same date range" do 
@@ -63,8 +63,10 @@ describe "HotelManager class" do
 
     describe "#find_all_reservations" do 
 
-      it "raises an ArgumentError when there is no reservation" do 
-        expect{@hotel_manager.find_all_reservations(@date)}.must_raise ArgumentError
+      it "raises an ArgumentError when there is no reservation" do
+        p "@hotel_manager.find_all_reservations(@date)"
+        p @hotel_manager.find_all_reservations(@date)  
+        expect(@hotel_manager.find_all_reservations(@date)).must_equal []
       end 
 
 
@@ -80,7 +82,7 @@ describe "HotelManager class" do
         expect(reservations[0]).must_be_kind_of Hotel::Reservation
       end 
 
-      it "returns 5 reservations on the specific date" do 
+      it "returns 19 reservations on the specific date" do 
 
         @hotel_manager.make_reservation(@date_range)
 
@@ -105,34 +107,34 @@ describe "HotelManager class" do
 
         expect(reservations).must_be_kind_of Array
         expect(reservations.length).must_equal 19
-        expect(reservations.last.room.number).must_equal 19
+        expect(reservations.last.room.id).must_equal 19
       end 
     end 
 
     describe "#add_reservation" do 
       it "adds a reservation in reservations" do 
-        room = Hotel::Room.new(8)
+        room = Hotel::Room.new(id: 8)
         reservation = Hotel::Reservation.new(@date_range, room)
 
         reservations = @hotel_manager.add_reservation(reservation)
 
         expect(reservations).must_be_instance_of Array
         expect(reservations.length).must_equal 1
-        expect(reservations[0].room.number).must_equal 8
+        expect(reservations[0].room.id).must_equal 8
       end 
     end 
   end
 
   describe "wave 2" do 
-    describe "#available_room_numbers" do 
+    describe "#available_room_ids" do 
       it "returns available rooms for the given date range" do 
 
-        available_room_numbers = @hotel_manager.available_room_numbers(@date_range)
+        available_room_ids = @hotel_manager.available_room_ids(@date_range)
 
-        expect(available_room_numbers).must_be_kind_of Array
-        expect(available_room_numbers.length).must_equal 20 
+        expect(available_room_ids).must_be_kind_of Array
+        expect(available_room_ids.length).must_equal 20 
 
-        expect(available_room_numbers[0]).must_be_kind_of Integer
+        expect(available_room_ids[0]).must_be_kind_of Integer
       end 
 
       it "returns the room #1 after making 20 reservations in a different date range" do 
@@ -143,7 +145,7 @@ describe "HotelManager class" do
           @hotel_manager.make_reservation(date_range)
         end 
 
-        expect(@hotel_manager.available_room_numbers(new_date_range)[0]).must_equal 1
+        expect(@hotel_manager.available_room_ids(new_date_range)[0]).must_equal 1
       end 
 
       it "returns the room #20 after making 19 reservations for the same date range" do 
@@ -151,7 +153,25 @@ describe "HotelManager class" do
           @hotel_manager.make_reservation(@date_range)
         end 
  
-        expect(@hotel_manager.available_room_numbers(@date_range)[0]).must_equal 20
+        expect(@hotel_manager.available_room_ids(@date_range)[0]).must_equal 20
+      end 
+    end 
+  end 
+
+
+  describe "wave 3" do
+    describe "#make_block_reservation(date_range, number_of_rooms: 2)" do 
+      it "takes a date range & number of rooms and returns a Block Reservation" do 
+        block = @hotel_manager.make_block_reservation(@date_range, number_of_rooms: 4)
+
+        expect(block).must_be_instance_of Hotel::Block
+
+        expect(block.rooms).must_be_kind_of Array
+        expect(block.rooms[0]).must_be_kind_of Hotel::Room
+        # expect(block.reservation).must_be_kind_of Hotel::Reservation 
+        expect(block.total_block_cost).must_be_close_to 5 * (200 * 0.8) * 4, 0.01
+
+
       end 
     end 
   end 

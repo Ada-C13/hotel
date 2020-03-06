@@ -1,15 +1,23 @@
 module Hotel 
   class Room
 
-    NUMBERS = (1..20)
+    @@ids = []
 
-    attr_reader :number
+    attr_reader :id, :cost
 
-    def initialize(number)
-      if (number.class != Integer) || !NUMBERS.include?(number)
-        raise ArgumentError, "#{number} is an invalid value"
-      end 
-      @number = number 
+    def initialize(id: nil, cost: 200.00)
+
+      Room.validate_id(id)
+
+      @id = id 
+      @cost = cost  
+    end 
+
+    # TO DO - test
+    def self.validate_id(id)
+      raise ArgumentError, "The id #{id} already exists in our system" if @@ids.include?(id)
+
+      raise ArgumentError, "The id is between 1 and 20." if @@ids.length > 20
     end 
   end 
 end

@@ -41,7 +41,7 @@ module Hotel
         raise ArgumentError, "An invalid date range"
       end 
 
-      range = Date.today..Date.new(Date.today.year, 12, 31)
+      range = Date.today..Date.today + (30 * 12)
 
       if !(range.cover?(@start_date) && range.cover?(@end_date))
         raise ArgumentError, "Date range must be between #{range.first} and #{range.last}"  #i.e. 2020, 12, 31
