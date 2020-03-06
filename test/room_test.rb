@@ -1,22 +1,22 @@
 require_relative "test_helper"
 
 describe "Room" do
+  let (:room) { Hotel::Room.new(1) }
   describe "Initialize" do
     it "Create instance of Room" do
-      room = Hotel::Room.new(1)
       # Assert
       expect(room).must_be_kind_of Hotel::Room
     end 
 
     it "Room id tracker" do
-      room = Hotel::Room.new(1)
       # Assert
       expect(room).must_respond_to :id
+      expect(room.id).must_equal 1
     end
 
     it "Rooms numbers 1 - 20 only" do
       # Assert
-      expect(Hotel::Room.new(1).id).must_equal 1
+      expect(room.id).must_equal 1
       expect(Hotel::Room.new(20).id).must_equal 20
     end
 
@@ -28,17 +28,16 @@ describe "Room" do
 
     it "Same nightly cost for all" do
       # Assert
-      room = Hotel::Room.new(1)
       expect(room.nightly_rate).must_equal 200
     end
 
     it "Reservations is an empty array" do
-      room = Hotel::Room.new(1)
       # Assert
       expect(room.reservations).must_be_kind_of Array
       expect(room.reservations).must_equal []
     end   
   end
+
   describe "self.all" do
     it "Returns an array of 20 room objects" do
       all_rooms = Hotel::Room.all

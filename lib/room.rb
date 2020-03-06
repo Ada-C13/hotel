@@ -8,7 +8,6 @@ module Hotel
       if id <= 0 || id > 20
         raise ArgumentError.new("Not a real room")
       end
-
       @id = id
       @nightly_rate = 200
       @reservations = []
@@ -21,6 +20,5 @@ module Hotel
       end
       return all_rooms
     end
-
   end
 end
