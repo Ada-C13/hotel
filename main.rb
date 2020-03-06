@@ -37,8 +37,9 @@ def choice
   elsif answer == "d"
     puts "huh"
   elsif answer == "e"
-    puts "huh"
+    do_list_all
   elsif answer == "f"
+    do_check_date_reservations
   else 
     puts "what"
   end 
@@ -83,9 +84,15 @@ def do_reservation_cost
 end 
 
 def do_list_all
+  puts "pulling the list of all reservations"
+  puts MANAGER.list_all
 end 
 
 def do_check_date_reservations
+  puts "Enter a specific date that you would like to check..."
+  date = get_user_input.split("/").map{|a|a.to_i}
+  puts "okay. Here are all the reservations under #{date[0]}/#{date[1]}/#{date[2]}"
+  puts MANAGER.check_date_reservations(date)
 end 
 
 
@@ -106,12 +113,3 @@ end
 
 run_program
 
-# a
-# 2020/2/1
-# 2020/2/4
-# y
-# b
-# 2020/2/5
-# 2020/2/8
-# 5
-# 180
