@@ -4,8 +4,7 @@ module Hotel
   class Reservation 
     attr_accessor :start_date, :end_date, :room
 
-    def initialize(start_date, end_date, room, id = nil)  #is a third item needed here an id?
-     @id = id #not needed?
+    def initialize(start_date, end_date, room)  #is a third item needed here an id?
      @room = room
 
       if start_date.class == String
@@ -25,9 +24,6 @@ module Hotel
       if @end_date && (@end_date == @start_date)
         raise ArgumentError, "You cannot have a 0 length date range."
       end
-
-      @date_range = DateRange.new(start_date, end_date)  # is this needed?
-
     end
 
     def cost(start_date, end_date)
