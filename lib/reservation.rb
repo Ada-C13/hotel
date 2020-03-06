@@ -10,12 +10,10 @@ module Hotel
   
     end
 
-
-    # ! TODO How to get nights from date_range ?
     # User: I can get the total cost for a given reservation
-    def cost(reservation)
+    def cost
       room_rate = 200
-      cost = reservation.date_range.nights * room_rate
+      cost = @date_range.nights * room_rate
       return cost
     end
   end

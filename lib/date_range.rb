@@ -1,8 +1,9 @@
 module Hotel
   class DateRange
-    attr_reader :start_date, :end_date, :date_range
+    attr_reader :start_date, :end_date 
+    attr_accessor :date_range
 
-    def initialize(start_date, end_date)
+    def initialize(start_date:, end_date:)
       @start_date = start_date
       @end_date = end_date
       @date_range = Array(@start_date .. @end_date)
@@ -14,8 +15,9 @@ module Hotel
     
     end
 
-    def overlap?(other)
-      return false
+    def overlap?(requested_dates)
+      overlap = (self.date_range & requested_dates.date_range).empty? || (requested_dates.start_date >= self.end_date) ? false : true
+      return overlap
     end
 
     def include?(date)

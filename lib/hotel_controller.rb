@@ -5,14 +5,10 @@ module Hotel
   class HotelController
     attr_accessor :reservations, :rooms 
 
-    def initialize(
-      rooms:,
-      reservations:
-    )
-
-      rooms = (1..20).map { |i| i }
-      @rooms = rooms
-      @reservations = reservations || []
+    def initialize
+      @rooms = []
+      @rooms = (1..20).map { |i| i }
+      @reservations = []
     end
 
 
@@ -22,12 +18,12 @@ module Hotel
 
     # Wave 1
 
-    def reserve_room(date_range)
-      # start_date and end_date should be instances of class Date
-      book_room = available_rooms(date_range).first
-      new_reservation = Hotel::Reservation.new(
+    def reserve_room(requested_dates)
+       empty_rooms = available_rooms(requested_dates)
+       book_room = available_rooms.first
+       new_reservation = Hotel::Reservation.new(
         room: book_room, 
-        date_range: date_range,
+        date_range: requested_dates,
       )
       @reservations.push(new_reservation)
       return new_reservation
@@ -36,7 +32,7 @@ module Hotel
     # User: I can access the list of reservations for a specific date, so that I can track reservations by date
     def reservations(date)
       @reservations.each do |res|
-
+        
       end
       return []
     end
@@ -44,9 +40,11 @@ module Hotel
     # User: I access the list of reservations for a specified room and a given date range
 
     # Wave 2
-    def available_rooms(start_date, end_date)
+    def available_rooms(requested_dates)
       # start_date and end_date should be instances of class Date
-      empty_rooms = @rooms
+      empty_rooms = @rooms.reject do |room|
+        @reservations.any?{ |reservation| reservation.requested_dates.overlap?(requested_dates) == true }
+      end
       return empty_rooms
     end
   end

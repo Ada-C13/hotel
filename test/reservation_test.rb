@@ -2,7 +2,7 @@ require_relative "test_helper"
 
 describe Hotel::Reservation do
   before do
-    test_range = Array(Date.new(2021, 01, 01) .. Date.new(2021, 01, 04))
+    test_range = Hotel::DateRange.new(Date.new(2021, 01, 01), Date.new(2021, 01, 04))
 
     @reservation = Hotel::Reservation.new(
       date_range: test_range,
@@ -15,11 +15,10 @@ describe Hotel::Reservation do
       expect(@reservation).must_be_kind_of Hotel::Reservation
     end
   end
-
-  # ! TODO this is broken
-  xdescribe "cost" do
+ 
+  describe "cost" do
     it "returns a number" do
-      expect(cost(@reservation)).must_be_kind_of Numeric
+      expect(@reservation.cost).must_be_kind_of Numeric
     end
   end
 end

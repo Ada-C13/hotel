@@ -2,11 +2,7 @@ require_relative "test_helper"
 
 describe Hotel::HotelController do
   before do
-    @hotel_controller = Hotel::HotelController.new(
-      reservations: [],
-      rooms: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-    )
-    @date = Date.new(2020, 8, 4)
+    @hotel_controller = Hotel::HotelController.new
   end
 
   describe "initialize" do
@@ -22,26 +18,26 @@ describe Hotel::HotelController do
       expect(@hotel_controller.rooms.length).must_equal 20
     end
   end  
-
-
  
 
   describe "wave 1" do
- 
 
     describe "reserve_room" do
-      it "takes two Date objects and returns a Reservation" do
-        start_date = @date
-        end_date = start_date + 3
+      before do
+        @range = Hotel::DateRange.new(start_date: Date.today + 1, end_date: Date.today + 3)
+        @hotel_controller.reserve_room(@range)
+        @hotel_controller.available_rooms(@range)
+      end
 
-        reservation = @hotel_controller.reserve_room(start_date, end_date)
-
-        expect(reservation).must_be_kind_of Hotel::Reservation
+    
+      it "creates a Reservation" do
+        # reservation = @hotel_controller.reserve_room(@range)
+        expect(@hotel_controller.reservations[0]).must_be_instance_of Hotel::Reservation
       end
       
     end
 
-    describe "reservations" do
+    xdescribe "reservations" do
       it "takes a Date and returns a list of Reservations" do
         reservation_list = @hotel_controller.reservations(@date)
 

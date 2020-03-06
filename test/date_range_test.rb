@@ -4,10 +4,11 @@ require_relative "test_helper"
 describe Hotel::DateRange do
   before do
     @start_date = Date.new(2021, 01, 01)
-    @end_date = @start_date + 3
+    @end_date = Date.new(2021, 01, 04)
 
-    @range = Hotel::DateRange.new(@start_date, @end_date)
+    @range = Hotel::DateRange.new(start_date: @start_date, end_date: @end_date)
   end
+
   describe "constructor" do
 
     it "is an instance of DateRange" do
@@ -33,8 +34,8 @@ describe Hotel::DateRange do
 
     it "raises an error if the end date is before the start date" do
       expect { Hotel::DateRange.new(
-        Date.new(2021, 01, 01),
-        Date.new(2020, 12, 31)
+        start_date: Date.new(2021, 01, 01),
+        end_date: Date.new(2020, 12, 31)
         ) }.must_raise ArgumentError
     end
 
@@ -49,12 +50,12 @@ describe Hotel::DateRange do
 
   end
 
-  xdescribe "overlap?" do
+  describe "overlap?" do
 
     it "returns true for the same range" do
       start_date = @range.start_date
       end_date = @range.end_date
-      test_range = Hotel::DateRange.new(start_date, end_date)
+      test_range = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
 
       expect(@range.overlap?(test_range)).must_equal true
     end
