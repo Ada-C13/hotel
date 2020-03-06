@@ -19,11 +19,20 @@ module Hotel
     end
     
     def add(reservation)
+      # to do: is this check redundant, since front desk checks
       if self.available?(reservation)
         @reservations << reservation
       else
         raise ArgumentError.new("That room isn't available.")
       end
+    end
+
+    def get_reservations(start_date, end_date)
+      range = DateRange.new(start_date, end_date)
+      resv_within = reservations.find_all {|reservation|
+          reservation.nights.all? {|night| range.include?(night)}
+        }
+      return resv_within
     end
 
   end
