@@ -25,11 +25,11 @@ module Hotel
           raise ArgumentError, 'Room or room_number is required'
         end
 
-
         if number_of_days < 0
             raise ArgumentError.new("Invalid, number of days must be greater than 0")
         end
       end #initialize
+  #****************************************************************
 
       #Total cost for a given reservation
       #returns total_cost (float)
@@ -38,8 +38,9 @@ module Hotel
         total_cost = @room.price.to_f * @number_of_days
         return total_cost
       end  
+  #****************************************************************
 
-        #list of reservations for a specific date
+      #list of reservations for a specific date
       def get_reservations(date) 
         list_of_reservations_date = []
         @reservations.each do |reservation|
@@ -49,6 +50,18 @@ module Hotel
         end
         return list_of_reservations_date
       end
+  #****************************************************************
+  
+      # checks if aDate is within the check_in and check_out
+      # aDate (Date)
+      # returns true or false 
+      def is_within_stay(aDate)
+        if (aDate >= @check_in) && (aDate < @check_out)
+          return true
+        end
+        return false
+      end
+#****************************************************************
 
       def self.load_all_reservations() #what to get
         reservations = CSV.parse(File.read(__dir__ + "/../support/reservations.csv"), headers: true, header_converters: :symbol) #relative to HOTEL & reading csv file
@@ -65,16 +78,7 @@ module Hotel
         end
         return all_reservations #return all the rooms
       end
-
-      # checks if aDate is within the check_in and check_out
-      # aDate (Date)
-      # returns true or false 
-      def is_within_stay(aDate)
-        if (aDate >= @check_in) && (aDate < @check_out)
-          return true
-        end
-        return false
-      end
+  #****************************************************************
 
           # #valid date
     # def validate_date(date)

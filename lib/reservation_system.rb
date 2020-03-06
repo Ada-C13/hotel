@@ -13,6 +13,7 @@ module Hotel
       @rooms = Room.load_all_rooms()
       @reservations = Reservation.load_all_reservations()
     end
+    #****************************************************************
 
     #Search thru reservations and find ones that match room and date
     # aRoom_number (string)
@@ -38,6 +39,7 @@ module Hotel
       end
       return reservations
     end
+    #****************************************************************
 
     # find room based on id
     # returns Room
@@ -50,6 +52,7 @@ module Hotel
       end
       return found_room
     end
+    #****************************************************************
 
     #TODO
     # Reserves a room based on reservation request
@@ -57,11 +60,16 @@ module Hotel
     # returns aReservation with its status updated to :confirmed or :denied
     def reserve_room(aReservation)
       #loop through rooms
+      @rooms.each do |room|
       #check if room is available for reservation dates
-      
+        if (room.status == :confirmed) || (room.status == :denied)
+        end
+      end
       return aReservation
     end
-
+    #****************************************************************
+    #START HERE
+    
   end # Class
 end # Module
 
@@ -99,9 +107,14 @@ end # Module
   puts hotelsystem.rooms.class
   puts hotelsystem.reservations.class
 
-  found_res = hotelsystem.find_reservations(Date.parse("2020-10-29"))
-  found_res.each do |res|
-    puts res.room_number
-    puts res.check_in
-    puts res.check_out
-  end
+  res = Hotel::Reservation.new(1, Date.parse("2020-10-29"), 7, "confirmed", 1, 1)
+  puts hotelsystem.reserve_room(res)
+
+  # found_res = hotelsystem.find_reservations(Date.parse("2020-10-29"))
+  # found_res.each do |res|
+  #   puts res.room_number
+  #   puts res.check_in
+  #   puts res.check_out
+  # end
+
+
