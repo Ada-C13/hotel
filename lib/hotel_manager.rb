@@ -50,6 +50,12 @@ module Hotel
     # Wave 2
     def available_rooms(start_date, end_date)
       # start_date and end_date should be instances of class Date
+      # available_rooms = []
+      # you'll return an array of keys which are the rooms
+      # indicating the available rooms
+      # use logic from reservations(date)
+        # use unless date.between?(reserv.start date, enddate)
+        # add the room# to the available rooms list
       return []
     end
   end
