@@ -8,21 +8,18 @@ module Hotel
     
     def initialize
       @rooms = (1..20).map {|num| num}
-      @reservations = []
+      @reservations = {}
     end
 
     def reserve_room(start_date, end_date)  
-      # generate all the dates that are in the time frame of start_date and end_date
-      id = 1
       date_range = Hotel::DateRange.new(start_date, end_date)
-      room_num = 1
+      id = 1
       reservation = Hotel::Reservation.new(
         id = id, 
         date_range = date_range, 
         room_num = room_num
       )
       id += 1
-      # TODO: once the room num reach 20 on a date, you can no longer reserve a room
       room_num += 1
       add_reservation(reservation)
       return reservation
@@ -30,15 +27,41 @@ module Hotel
     end
 
     def add_reservation(reservation) # instance of Reservation class
-      @reservations << reservation
+      if !(@reservations.key?(reservation.room_num))
+        @reservations[reservation.room_num] = [reservation]
+      else
+        @reservations[reservation.room_num] << [reservation]
+      end
+      return @reservations[reservation.room_num] # return a list of reservations of that specific room number
     end
 
     # check the reservation of a specific date
-    def check_reservations(date) #(string)
+    def check_reservations_on_date(date) #(string)
       check_date = Date.parse(date)
-      return @reservations.select {|reservation| reservation.date_range.dates_except_last.include? check_date}
+      lists = []
+      @reservations.each_value do |reservations_of_each_room| 
+        reservations_of_each_room.each do |reservation|
+          if reservation.date_range.dates_exclude_last.include? check_date
+            lists << reservation
+          end
+        end
+      end
+      return lists
     end
- 
+
+    # check the reservation in a date range
+    def check_reservations_in_date_range(start_date, end_date)  
+      date_range = Hotel::DateRange.new(start_date, end_date)
+      lists = []
+      @reservations.each_value do |reservations_of_each_room| 
+        reservations_of_each_room.each do |reservation|
+          # if reservation.date_range.all_dates.include? date_range.all_dates
+          if reservation.date_range.overlap_include_last? date_range
+            lists << reservation
+          end
+        end
+      end
+      return lists
+    end
   end
 end
-

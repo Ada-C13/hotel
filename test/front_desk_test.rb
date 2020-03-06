@@ -4,41 +4,62 @@ describe "FrontDesk" do
   before do
     @front_desk = Hotel::FrontDesk.new
 
-    id = 1
-    date_range = Hotel::DateRange.new("2020-3-15", "2020-3-17")
-    room_num = 1
-    @reservation = Hotel::Reservation.new(
-      id = id, 
-      date_range = date_range, 
-      room_num = room_num
+    @reservation_one = Hotel::Reservation.new(
+      id = 1, 
+      date_range = Hotel::DateRange.new("2020-03-15", "2020-03-17"), 
+      room_num = 1
     )
+    @reservation_two = Hotel::Reservation.new(
+      id = 2, 
+      date_range = Hotel::DateRange.new("2020-04-01", "2020-04-05"), 
+      room_num = 2
+    )
+
   end
   
-  it "reserve a room" do
-    expect(@reservation).must_be_kind_of Hotel::Reservation
+  it "Reserve a room" do
+    expect(@reservation_one).must_be_kind_of Hotel::Reservation
   end
 
-  it "add reservation to the array after reserved a room" do
-    expect(@front_desk.reservations).wont_include @reservation
-      previous = @front_desk.reservations.length
+  # it "add reservation to the hash after reserved a room" do
+  #   expect(@front_desk.reservations).wont_include @reservation
+  #     previous = @front_desk.reservations.length
 
-      @front_desk.add_reservation(@reservation)
+  #     @front_desk.add_reservation(@reservation)
 
-      expect(@front_desk.reservations).must_include @reservation
-      expect(@front_desk.reservations.length).must_equal previous + 1
+  #     expect(@front_desk.reservations).must_include @reservation
+  #     expect(@front_desk.reservations.length).must_equal previous + 1
+  # end
+
+  it "Add a reservation to the associate room in the @reservations hash" do
+    @front_desk.add_reservation(@reservation_one)
+    expect(@front_desk.add_reservation(@reservation_one)).must_include @reservation_one
   end
 
-  it "using date to find the reservation (return the associate reservations)" do
-    @front_desk.add_reservation(@reservation)
-    date = "2020-3-16"
-    expect(@front_desk.check_reservations(date)).must_be_kind_of Array
-    expect(@front_desk.check_reservations(date)).must_include @reservation
+  it "Find the reservation using a date (return the associate reservations)" do
+    @front_desk.add_reservation(@reservation_one)
+    @front_desk.add_reservation(@reservation_two)
+    date = "2020-04-01"
+    expect(@front_desk.check_reservations_on_date(date)).must_be_kind_of Array
+    expect(@front_desk.check_reservations_on_date(date)).must_include @reservation_two
   end
 
-  it "using date to find the reservation (none reservation on that day)" do
-    @front_desk.add_reservation(@reservation)
+  it "Find the reservation using a date (none reservation on that day)" do
+    @front_desk.add_reservation(@reservation_one)
     date = "2020-3-20"
-    expect(@front_desk.check_reservations(date)).must_be_kind_of Array
-    expect(@front_desk.check_reservations(date)).wont_include @reservation
+    expect(@front_desk.check_reservations_on_date(date)).must_be_kind_of Array
+    expect(@front_desk.check_reservations_on_date(date)).wont_include @reservation_one
+  end
+
+  it "Find reservations using date range" do
+    @front_desk.add_reservation(@reservation_one)
+    @front_desk.add_reservation(@reservation_two)
+    start_date = "2020-03-16"
+    end_date = "2020-04-01"
+    p "============"
+    p @front_desk.check_reservations_in_date_range(start_date, end_date)
+    expect(@front_desk.check_reservations_in_date_range(start_date, end_date)).must_be_kind_of Array
+    expect(@front_desk.check_reservations_in_date_range(start_date, end_date)).must_include @reservation_one  
+    expect(@front_desk.check_reservations_in_date_range(start_date, end_date)).must_include @reservation_two  
   end
 end

@@ -32,29 +32,30 @@ describe "DateRange" do
     end
   end
 
-  describe "#dates_except_last" do
+  describe "#dates_exclude_last" do
     it "list out all the dates of a provided time frame (exclude the last day)" do
       start_date = "2020-03-08"
       end_date = "2020-03-10"
       date_range = Hotel::DateRange.new(start_date, end_date)
   
-      expect(date_range.dates_except_last).must_be_kind_of Array
+      expect(date_range.dates_exclude_last).must_be_kind_of Array
       date_range = Hotel::DateRange.new(start_date, end_date)
-      expect(date_range.dates_except_last.length).must_equal 2
+      expect(date_range.dates_exclude_last.length).must_equal 2
     end
+  end
 
-    describe "#all_dates" do
-      it "list out all the dates of a provided time frame (include the last day)" do
-        start_date = "2020-03-08"
-        end_date = "2020-03-10"
-        date_range = Hotel::DateRange.new(start_date, end_date)
-        expect(date_range.all_dates).must_be_kind_of Array
-        date_range = Hotel::DateRange.new(start_date, end_date)
-        expect(date_range.all_dates.length).must_equal 3
-      end
+  describe "#all_dates" do
+    it "list out all the dates of a provided time frame (include the last day)" do
+      start_date = "2020-03-08"
+      end_date = "2020-03-10"
+      date_range = Hotel::DateRange.new(start_date, end_date)
+      expect(date_range.all_dates).must_be_kind_of Array
+      date_range = Hotel::DateRange.new(start_date, end_date)
+      expect(date_range.all_dates.length).must_equal 3
     end
+  end
 
-    describe "overlap?" do
+  describe "overlap_exclude_last?" do
     before do
       start_date = "2020-03-05"
       end_date = "2020-03-10"
@@ -67,7 +68,7 @@ describe "DateRange" do
       test_end_date = "2020-03-10"
       test_range = Hotel::DateRange.new(test_start_date, test_end_date)
 
-      expect(@range.overlap?(test_range)).must_equal true
+      expect(@range.overlap_exclude_last?(test_range)).must_equal true
     end
 
     it "returns true for a contained range" do
@@ -75,7 +76,7 @@ describe "DateRange" do
       test_end_date = "2020-03-09"
       test_range = Hotel::DateRange.new(test_start_date, test_end_date)
 
-      expect(@range.overlap?(test_range)).must_equal true
+      expect(@range.overlap_exclude_last?(test_range)).must_equal true
     end
 
     it "returns true for a range that overlaps in front" do
@@ -83,7 +84,7 @@ describe "DateRange" do
       test_end_date = "2020-03-07"
       test_range = Hotel::DateRange.new(test_start_date, test_end_date)
 
-      expect(@range.overlap?(test_range)).must_equal true
+      expect(@range.overlap_exclude_last?(test_range)).must_equal true
     end
 
     it "returns true for a range that overlaps in the back" do
@@ -91,7 +92,7 @@ describe "DateRange" do
       test_end_date = "2020-03-10"
       test_range = Hotel::DateRange.new(test_start_date, test_end_date)
 
-      expect(@range.overlap?(test_range)).must_equal true
+      expect(@range.overlap_exclude_last?(test_range)).must_equal true
     end
 
     it "returns true for a containing range" do
@@ -99,7 +100,7 @@ describe "DateRange" do
       test_end_date = "2020-03-15"
       test_range = Hotel::DateRange.new(test_start_date, test_end_date)
 
-      expect(@range.overlap?(test_range)).must_equal true
+      expect(@range.overlap_exclude_last?(test_range)).must_equal true
     end
 
     it "returns false for a range starting on the end_date date" do
@@ -107,7 +108,7 @@ describe "DateRange" do
       test_end_date = "2020-03-11"
       test_range = Hotel::DateRange.new(test_start_date, test_end_date)
 
-      expect(@range.overlap?(test_range)).must_equal false
+      expect(@range.overlap_exclude_last?(test_range)).must_equal false
     end
 
     it "returns false for a range ending on the start_date date" do
@@ -115,7 +116,7 @@ describe "DateRange" do
       test_end_date = "2020-03-05"
       test_range = Hotel::DateRange.new(test_start_date, test_end_date)
 
-      expect(@range.overlap?(test_range)).must_equal false
+      expect(@range.overlap_exclude_last?(test_range)).must_equal false
     end
 
     it "returns false for a range completely before" do
@@ -123,7 +124,7 @@ describe "DateRange" do
       test_end_date = "2020-03-02"
       test_range = Hotel::DateRange.new(test_start_date, test_end_date)
 
-      expect(@range.overlap?(test_range)).must_equal false
+      expect(@range.overlap_exclude_last?(test_range)).must_equal false
     end
 
     it "returns false for a date completely after" do
@@ -131,9 +132,7 @@ describe "DateRange" do
       test_end_date = "2020-03-20"
       test_range = Hotel::DateRange.new(test_start_date, test_end_date)
 
-      expect(@range.overlap?(test_range)).must_equal false
+      expect(@range.overlap_exclude_last?(test_range)).must_equal false
     end
-  end
-
   end
 end

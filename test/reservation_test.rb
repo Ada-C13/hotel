@@ -38,5 +38,9 @@ describe "Reservation" do
     it "room_num must be integer between 1 to 20" do
       expect(@reservation.room_num).must_equal 15
     end
+
+    it "total_price" do
+      expect(@reservation.total_price).must_equal 400
+    end
   end
 end

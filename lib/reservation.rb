@@ -21,7 +21,7 @@ module Hotel
     end
 
     def total_price
-      return (@date_range.night) * 200
+      return (@date_range.nights) * 200
     end
 
     

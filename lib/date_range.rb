@@ -19,28 +19,35 @@ module Hotel
       
       @start_date = Date.parse(start_date) 
       @end_date = Date.parse(end_date) 
-      
     end
 
     def nights
-      return self.dates_except_last.length
+      return self.dates_exclude_last.length
     end
 
-    # list out all the dates of a provided time frame (exclude the last day b/c the room should be able to book by someone else on that day)
-    def dates_except_last
-      dates = (@start_date..@end_date).map { |each| each }
-      dates.pop
-      return dates
+    def dates_exclude_last
+      return (@start_date...@end_date).map { |each| each }
     end
 
     def all_dates
       return (@start_date..@end_date).map { |each| each }
     end
     
-    def overlap?(other) # (another existing instance of DateRange class)
-      (self.dates_except_last).each do |date|
-        if (other.dates_except_last).include? date
-          return true # return true meaning there is a overlap. Can't book the room.
+    # use when booking the room
+    def overlap_exclude_last?(other) # (another existing instance of DateRange class)
+      (self.dates_exclude_last).each do |date|
+        if (other.dates_exclude_last).include? date
+          return true
+        end
+      end
+      return false
+    end
+
+    # use when checking the room reservation in a date range
+    def overlap_include_last?(other) # (another existing instance of DateRange class)
+      (self.all_dates).each do |date|
+        if (other.all_dates).include? date
+          return true 
         end
       end
       return false
