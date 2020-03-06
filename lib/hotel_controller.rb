@@ -29,7 +29,7 @@ module Hotel
     def reservations(date)
       reservations_to_return = []
       @reservations.each do |reservation|
-        reservations_to_return.push(reservation) if reservation.date_range_for_reservation.include?(date)
+        reservations_to_return.push(reservation) if reservation.date_range.include?(date)
       end
 
       return reservations_to_return

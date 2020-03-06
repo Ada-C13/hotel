@@ -19,9 +19,9 @@ module Hotel
       return Hotel::DateRange.new(@start_date, @end_date).nights * @room.cost
     end
 
-    def date_range_for_reservation
-      return Hotel::DateRange.new(@start_date,@end_date)
-    end
+    # def date_range_for_reservation
+    #   return Hotel::DateRange.new(@start_date,@end_date)
+    # end
 
   end
 end
