@@ -7,7 +7,9 @@ module Hotel
       @room = room
     end
 
-    # def cost
-    # end
+    def calculate_total_cost
+      return (@date_range.nights) * 200
+    end
+
   end
 end
