@@ -71,7 +71,6 @@ describe Hotel::Room do
     it "doesn't include a reservation partly in the specified range" do
       reservation5 = Hotel::Reservation.new(Date.new(2019, 12, 24), Date.new(2019, 12, 31), 15)
       reservation6 = Hotel::Reservation.new(Date.new(2020, 01, 29), Date.new(2020, 02, 02), 15)
-      #not passing on following line. Why is Room reistering as not available for a dec reservation??
       @room15.add(reservation5)
       @room15.add(reservation6)
       resvs_within = @room15.get_reservations(Date.new(2020, 01,01), Date.new(2020,01,31))

@@ -11,7 +11,6 @@ module Hotel
       if reservations.length == 0
         return true
       end
-      # TO DO make this more ready by using any? or all?
       if reservations.any? {|r| r.overlap?(date_range)}
         return false
       else
@@ -21,7 +20,6 @@ module Hotel
 
     
     def add(reservation)
-      # to do: is this check redundant, since front desk checks
       if self.available?(reservation)
         @reservations << reservation
       else

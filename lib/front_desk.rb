@@ -2,12 +2,12 @@ require_relative 'room'
 module Hotel
   class FrontDesk 
     attr_reader :rooms, :reservations
+
     def initialize
         @rooms = []
         (1..20).each do |n|
           @rooms << Room.new(n)
         end
-        # fill @rooms with rooms 1-20, consecutively
     end
 
     def reserve_room(start_date, end_date)
@@ -39,7 +39,6 @@ module Hotel
     end
   
     private
-    # to do: refactor
     def find_room(date_range)
       room = rooms.find {|room|
         room.reservations.length == 0
