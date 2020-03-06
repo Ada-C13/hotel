@@ -20,7 +20,6 @@ module Hotel
     end
 
     def reserve_room(start_date, end_date)
-      # start_date and end_date should be instances of class Date
       new_reservation = Reservation.new(start_date, end_date, nil)
       @reservations.push(new_reservation)
       return new_reservation
@@ -35,10 +34,20 @@ module Hotel
       return reservations_to_return
     end
 
-    # Wave 2
     def available_rooms(start_date, end_date)
-      # start_date and end_date should be instances of class Date
-      return []
+      raise ArgumentError.new("start date has to be at least 1 day before end date") if (end_date - start_date).to_i < 1
+
+      date_range_for_room_request = Hotel::DateRange.new(start_date,end_date)
+
+      avail_rooms = rooms.clone
+
+      @reservations.each do |reservation|
+        if reservation.date_range.overlap?(date_range_for_room_request)
+          avail_rooms.delete_if{|room| room == reservation.room}
+        end
+      end
+
+      return avail_rooms
     end
   end
 end
