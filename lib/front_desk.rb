@@ -33,6 +33,10 @@ module Hotel
         room.reservations.any?{|reservation| reservation.date_range.overlap?(date_range) == true}
       end
       return available_rooms
+
+      #"I can view a list of rooms that are not reserved for a given date range, so that I can see all available rooms for that day"
+      #the above user story was confusing because I was not sure if it's asking to see all available rooms for a specific date range or for one specific day. 
+      #I interpreted it to mean for a specific date range. Because even if you are only booking for one day, hotels make you include a start and end date, even if it's the same date for both.
     end
 
     def find_reservation_with(room: nil, date_range:)
@@ -45,20 +49,25 @@ module Hotel
       return total_cost
     end
 
-    def request_block(block_count, date_range) 
+    def request_block(block_count, date_range, discount_cost) 
       available_rooms = available_rooms(date_range)
       raise NoAvailableRoomError.new("Not enough available rooms to fulfill block") if available_rooms.count < block_count
 
-      hotel_block = Hotel::HotelBlock.new(block_count: block_count, date_range: date_range)
+      hotel_block = Hotel::HotelBlock.new(block_count: block_count, date_range: date_range, discount_cost: discount_cost)
 
       x = 0
       until x == block_count do
-        hotel_block.rooms << available_rooms[x]
+       available_room = available_rooms[x].change_block_status 
+        hotel_block.rooms << available_room
         x += 1
       end
 
       @hotel_blocks << hotel_block
     end 
+
+    
+
+
 
     # @start_date = Date.today + 2
     # @end_date = Date.today + 6

@@ -131,10 +131,11 @@ describe "front desk" do
   describe "request_block" do
     before do
       @block_count = 3
+      @discount_cost = 180
     end
 
     it "reserves the correct number of rooms for the hotel block for given date range" do
-      @front_desk.request_block( @block_count, @dates)
+      @front_desk.request_block( @block_count, @dates, @discount_cost)
 
       expect(@front_desk.hotel_blocks[0].rooms.count).must_equal 3
       # expect(Hotel::HotelBlock.new(block_count: 2, date_range: @dates).rooms.count).must_equal 2
@@ -148,7 +149,7 @@ describe "front desk" do
         @front_desk.add_reservation(@dates)
       end
 
-      expect{@front_desk.request_block(@block_count, @dates)}.must_raise NoAvailableRoomError 
+      expect{@front_desk.request_block(@block_count, @dates, @discount_cost)}.must_raise NoAvailableRoomError 
 
     end
   

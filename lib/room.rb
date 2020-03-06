@@ -20,5 +20,14 @@ module Hotel
       @reservations << reservation
     end
 
+
+    def change_block_status
+      @block_status = :in_block
+    end
+
+    def change_availability_in_block
+      @availability_in_block = :unavailable
+    end
+
   end
 end
