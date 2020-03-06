@@ -31,8 +31,12 @@ describe Hotel::HotelController do
 
     
       it "creates a Reservation" do
+        @reserved = @hotel_controller.reserve_room(@range)
+        expect(@reserved).must_be_kind_of Hotel::Reservation
         # reservation = @hotel_controller.reserve_room(@range)
-        expect(@hotel_controller.reservations[0]).must_be_instance_of Hotel::Reservation
+        # expect(@hotel_controller.reservations[0]).must_be_instance_of Hotel::Reservation
+        # reservation_list.each do |res|
+        #   res.must_be_kind_of Hotel::Reservation
       end
       
     end
@@ -42,21 +46,25 @@ describe Hotel::HotelController do
         reservation_list = @hotel_controller.reservations(@date)
 
         expect(reservation_list).must_be_kind_of Array
+
         reservation_list.each do |res|
-          res.must_be_kind_of Reservation
+          res.must_be_kind_of Hotel::Reservation
         end
       end
     end
   end
 
-  xdescribe "wave 2" do
+  describe "wave 2" do
     describe "available_rooms" do
-      it "takes two dates and returns a list" do
-        start_date = @date
-        end_date = start_date + 3
 
-        room_list = @hotel_controller.available_rooms(start_date, end_date)
+      before do
+        @range = Hotel::DateRange.new(start_date: Date.today + 1, end_date: Date.today + 3)
+        @hotel_controller.available_rooms(@range)
+      end
 
+      it "takes date range and returns a list" do
+
+        room_list = @hotel_controller.available_rooms(@range)
         expect(room_list).must_be_kind_of Array
       end
     end
