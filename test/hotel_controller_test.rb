@@ -11,6 +11,7 @@ describe "HotelController class" do
     @reservations = @controller.reservations
     @list_available_rooms = @controller.find_available_rooms(@a, @b)
     @all_rooms = @controller.show_all_rooms
+    @res = @reservations[0]
   end
 
   describe "Initializer" do
@@ -24,12 +25,13 @@ describe "HotelController class" do
       expect(@controller.reservations).must_be_kind_of Array
     end
   end
-  # tests for each method, with tests for ArgumentErrors/exceptions
+
   describe "make_reservation" do
     it "creates instance of Reservation" do
       expect(@reservations[0]).must_be_kind_of Hotel::Reservation
     end
   end
+
   describe "find_available_rooms" do
     it "returns array of available rooms" do
       expect(@list_available_rooms).must_be_kind_of Array
@@ -37,18 +39,37 @@ describe "HotelController class" do
     end
     it "Raises exception if there are no available rooms" do
       @controller2 = Hotel::HotelController.new(rooms: [1], reservations: [])
-      # binding.pry
       @controller2.make_reservation(@a, @b)
       expect { @controller2.make_reservation(@a, @b) }.must_raise StandardError
     end
   end
+
+  describe "find_by_date" do
+    it "returns array of reservations for that date" do
+      expect(@controller.find_by_date(@a)).must_be_kind_of Array
+      expect(@controller.find_by_date(@a).length).must_equal 1
+    end
+  end
+
+  describe "find_by_date_and_room(room, date)" do
+    it "returns array of reservations for that date and room" do
+      expect(@controller.find_by_date_and_room(1, @a)).must_be_kind_of Array
+      expect(@controller.find_by_date_and_room(1, @a).length).must_equal 1
+    end
+  end
+
   describe "show_all_rooms" do
     it "returns array of all rooms" do
       expect(@all_rooms).must_be_kind_of Array
       expect(@all_rooms.length).must_equal 20
     end
   end
-  # tests for find_by_date method(s)
+
+  describe "show_reservation_cost" do
+    it "returns correct number" do
+      expect(@controller.show_reservation_cost(@res)).must_equal 200
+    end
+  end
 end
 
 # The final project submission should have 95% code coverage using simplecov

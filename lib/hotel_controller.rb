@@ -26,6 +26,7 @@ module Hotel
     def find_available_rooms(check_in, check_out)
       new_date_range = DateRange.new(check_in: check_in, check_out: check_out)
       available_rooms = @rooms.clone
+      # for all rooms in a block, .date_range.overlap? and delete from available_rooms. blocked_out? method?
       @reservations.each do |reservation|
         if reservation.date_range.overlap?(new_date_range) == true
           available_rooms.delete(reservation.room)
@@ -38,32 +39,53 @@ module Hotel
       end
     end
 
-    # def find_by_date(date_range)
-    # call include? ?
-    # end
+    def find_by_date(date)
+      all_reservations_for_date = []
+      @reservations.each do |reservation|
+        if reservation.date_range.include?(date) == true
+          all_reservations_for_date << reservation
+        end
+      end
+      return all_reservations_for_date
+    end
 
-    # def find_by_date(room, date_range)
-    # call include? ?
-    # end
+    def find_by_date_and_room(room, date)
+      all_reservations_for_date_and_room = []
+      @reservations.each do |reservation|
+        if reservation.date_range.include?(date) && reservation.room == room
+          all_reservations_for_date_and_room << reservation
+        end
+      end
+    end
 
     def show_all_rooms
       return @rooms
     end
 
-    # def show_reservation_cost (reservation) # is this needed/helpful?
-    #   return reservation.calculate_cost
-    # end
+    def show_reservation_cost(reservation)
+      return reservation.calculate_cost
+    end
   end
 end
 
-# Wave 1:
-# I can access the list of all of the rooms in the hotel
-# I access the list of reservations for a specified room and a given date range
-# I can access the list of reservations for a specific date, so that I can track reservations by date
-# I can get the total cost for a given reservation
-# I want exception raised when an invalid date range is provided, so that I can't make a reservation for an invalid date range
+# Wave 3: Hotel Blocks
 
-# Wave 2:
-# I can view a list of rooms that are not reserved for a given date range, so that I can see all available rooms for that day
-# I can make a reservation of a room for a given date range, and that room will not be part of any other reservation overlapping that date range
-# I want an exception raised if I try to reserve a room during a date range when all rooms are reserved, so that I cannot make two reservations for the same room that overlap by date
+# A Hotel Block is a group of rooms set aside for a specific group of customers for a set period of time.
+
+# Hotel Blocks are commonly created for large events like weddings or conventions. They contain a number of rooms and a specific set of days. These rooms are set aside, and are made available for reservation by certain customers at a discounted rate. These rooms are not available to be reserved by the general public.
+
+# I can create a Hotel Block if I give a date range, collection of rooms, and a discounted room rate
+# I want an exception raised if I try to create a Hotel Block and at least one of the rooms is unavailable for the given date range
+# Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot reserve that specific room for that specific date, because it is unavailable
+# Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot create another hotel block that includes that specific room for that specific date, because it is unavailable
+
+# I can check whether a given block has any rooms available
+
+# I can reserve a specific room from a hotel block ???
+
+# I can only reserve that room from a hotel block for the full duration of the block
+# I can see a reservation made from a hotel block from the list of reservations for that date (see wave 1 requirements)
+
+# A block can contain a maximum of 5 rooms
+# When a room is reserved from a block of rooms, the reservation dates will always match the date range of the block
+# All of the availability checking logic from Wave 2 should now respect room blocks as well as individual reservations
