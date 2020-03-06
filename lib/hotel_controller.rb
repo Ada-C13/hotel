@@ -16,11 +16,9 @@ module Hotel
     end
 
     def find_available_rooms(start_date, leave_date)
-      available_rooms = @rooms.reject do |room|
-        room.reservations.any? do |res|
-          res.overlap?(start_date, leave_date)
-        end
-      end
+      unavailable_rooms = @reservations.select { |res| res.overlap?(start_date, leave_date)}
+      unavailable_room_nums = unavailable_rooms.map{ |res| res.room_num }
+      available_rooms = @rooms.reject{ |room| unavailable_room_nums.include?(room.room_num)}
       return available_rooms
     end
     
@@ -31,7 +29,6 @@ module Hotel
       rooms = find_available_rooms(arrive, depart)
       raise ArgumentError, "Reservation can't be made, no available rooms" if rooms.empty?
       found_room = rooms.first
-      found_room.reservations << Hotel::Reservation.new(arrive, depart, found_room)
 
       @reservations << Hotel::Reservation.new(arrive, depart, found_room)
     
@@ -48,16 +45,14 @@ module Hotel
 
     def reservations_by_room_and_dates(given_room, *dates)
       raise ArgumentError,"Too many dates given for range" if dates.length > 2
-      selected_room = @rooms.find do |room|
-          room.room_num == given_room
-      end
+      reservations = @reservations.select{ |res| res.room_num == given_room}
 
       if dates.empty?
-        return selected_room.reservations
+        return reservations
       elsif dates.length == 1
-        return selected_room.reservations.select { |res| (res.arrive..res.depart).include?(dates[0]) }
+        return reservations.select{ |res| (res.arrive..res.depart).include?(dates[0]) }
       else
-        return selected_room.reservations.select{ |res| res.overlap?(dates[0], dates[1]) }
+        return reservations.select{ |res| res.overlap?(dates[0], dates[1]) }
       end
     end
   end
