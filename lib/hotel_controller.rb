@@ -20,6 +20,8 @@ module Hotel
     end
 
     def reserve_room(start_date, end_date, room=@rooms.sample)
+      raise RuntimeError.new("room #{room.room_number} isn't available for those dates") unless available_rooms(start_date,end_date).include?(room)
+
       new_reservation = Reservation.new(start_date, end_date, room)
       @reservations.push(new_reservation)
       return new_reservation

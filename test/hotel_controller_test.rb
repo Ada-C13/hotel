@@ -23,15 +23,36 @@ describe Hotel::HotelController do
 
         expect(reservation).must_be_instance_of Hotel::Reservation
       end
+
+      describe "make a reservation of a room for given date range" do
+        before do
+          19.times do |index|
+            room_num = index + 1
+            room_to_reserve = @hotel_controller.rooms.find { |room| room.room_number == room_num}
+            @hotel_controller.reserve_room(Date.new(2020,01,01), Date.new(2020,01,05),room_to_reserve)
+          end
+        end
+        
+        it "room will not be part of any other reservation overlapping that date range" do
+          expect(@hotel_controller.available_rooms(Date.new(2020,01,01),Date.new(2020,01,05)).length).must_equal 1
+        end
+
+        it "raises an exception if attempt to reserve a room during a date range when all rooms are reserved" do
+          @hotel_controller.reserve_room(Date.new(2020,01,01), Date.new(2020,01,05),@hotel_controller.rooms.find { |room| room.room_number == 20})
+          expect{@hotel_controller.reserve_room(Date.new(2020,01,01), Date.new(2020,01,05))}.must_raise RuntimeError
+        end
+
+      end
+
     end
 
     describe "reservations" do
       before do
-        @hotel_controller.reserve_room(Date.new(2020,01,01), Date.new(2020,01,05))
-        @hotel_controller.reserve_room(Date.new(2020,02,01), Date.new(2020,02,05))
-        @hotel_controller.reserve_room(Date.new(2020,03,01), Date.new(2020,03,05))
-        @hotel_controller.reserve_room(Date.new(2020,03,01), Date.new(2020,03,10))
-        @hotel_controller.reserve_room(Date.new(2020,03,04), Date.new(2020,03,06))
+        @hotel_controller.reserve_room(Date.new(2020,01,01), Date.new(2020,01,05),@hotel_controller.rooms.find { |room| room.room_number == 1})
+        @hotel_controller.reserve_room(Date.new(2020,02,01), Date.new(2020,02,05),@hotel_controller.rooms.find { |room| room.room_number == 2})
+        @hotel_controller.reserve_room(Date.new(2020,03,01), Date.new(2020,03,05), @hotel_controller.rooms.find { |room| room.room_number == 3})
+        @hotel_controller.reserve_room(Date.new(2020,03,01), Date.new(2020,03,10),@hotel_controller.rooms.find { |room| room.room_number == 4})
+        @hotel_controller.reserve_room(Date.new(2020,03,04), Date.new(2020,03,06),@hotel_controller.rooms.find { |room| room.room_number == 5})
         @reservation_list = @hotel_controller.reservations(@date)
       end
 
@@ -45,7 +66,6 @@ describe Hotel::HotelController do
       it "returns an accurate list of reservations" do
         expect(@reservation_list.length).must_equal 3
       end
-    
 
     end
   end
@@ -55,9 +75,7 @@ describe Hotel::HotelController do
       it "takes two dates and returns a list" do
         start_date = @date
         end_date = start_date + 3
-
         room_list = @hotel_controller.available_rooms(start_date, end_date)
-
         expect(room_list).must_be_instance_of Array
       end
 
