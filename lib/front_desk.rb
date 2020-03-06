@@ -23,11 +23,30 @@ module Hotel
     def total_reservations
       return @reservations
     end
-    # Make reservation method
+
+    def get_available_rooms(datarange)
+      unavailable_rooms = []
+    
+      @reservations.each do |reservation|
+        if reservation.datarange.overlap?(datarange) == true
+          unavailable_rooms << reservation.room
+        end
+      end
+      available_rooms = @rooms - unavailable_rooms
+      return available_rooms
+    end
+
     def make_resevation(datarange)
-      new_reservation = Hotel::Reservation.new(datarange,@rooms[0])
-      @reservations << new_reservation
-      return new_reservation
+
+      available_rooms = get_available_rooms(datarange)
+
+      if available_rooms.empty?
+        return raise ArgumentError
+      else
+        new_reservation = Hotel::Reservation.new(datarange,available_rooms[0])
+        @reservations << new_reservation
+        return new_reservation
+      end
     end
 
     def reservations_by_date(date)
