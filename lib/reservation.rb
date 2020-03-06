@@ -10,9 +10,8 @@ module Hotel
     def initialize(start_date, end_date)
       # reservation is a DateRange - instantiate based on attributes
 
-      start_date = parse_start_date(start_date)
-      end_date = parse_end_date(end_date)
       difference = end_date - start_date
+      
       if difference == 0
         raise ArgumentError, "Cannot have 0 length date range"
       elsif difference < 0
