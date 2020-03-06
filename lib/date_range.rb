@@ -12,16 +12,15 @@ module Hotel
 
     def overlap?(input_range)
 
-      a = input_range.start_date >= self.start_date
-      b = input_range.start_date < self.end_date
-      c = input_range.end_date > self.start_date 
-      d = input_range.end_date < self.end_date
-       
-      if a && b || c && d
-        return true
-      else
+      a = self.start_date >= input_range.end_date
+      b = self.end_date <= input_range.start_date
+
+      if a || b
         return false
+      else
+        return true
       end
+
     end
 
     def include?(input_range)
@@ -39,7 +38,7 @@ module Hotel
 
       date_format = '%Y-%m-%d'
       if !DateTime.strptime(start_date.to_s, date_format) || !DateTime.strptime(end_date.to_s, date_format)
-         return rescue ArgumentError
+        return rescue ArgumentError
       elsif start_date > end_date || start_date - end_date == 0
         raise ArgumentError.new("The end time is before the start time.")
       end
