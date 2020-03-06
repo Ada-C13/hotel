@@ -224,14 +224,57 @@ describe "FrontDesk" do
       expect(reservations).must_be_kind_of Array
       expect(reservations.length).must_equal 0
     end
+  end
 
+  describe "#not_reserved_rooms" do
+    it "returns a list of rooms that are not reserved for a given date range" do
+      front_desk = Hotel::FrontDesk.new
+      5.times do
+        front_desk.make_reservation(Date.new(2020, 4, 10), Date.new(2020, 4, 14))
+      end
+      puts "reservations = #{front_desk.reservations}"
+
+      given_date_range = Hotel::DateRange.new(Date.new(2020, 4, 10), Date.new(2020, 4, 14))
+      puts "given date range = #{given_date_range}"
+      puts "given date range = #{given_date_range.start_date}"
+      puts "given date range = #{given_date_range.end_date}"
+
+      unreserved_rooms = front_desk.not_reserved_rooms(given_date_range)
+      puts "unreseved rooms = #{unreserved_rooms}"
+
+      expect(unreserved_rooms).must_be_kind_of Array
+      expect(unreserved_rooms.length).must_equal 15
+      expect(unreserved_rooms[0]).must_equal 6
+      expect(unreserved_rooms[-1]).must_equal 20
+      unreserved_rooms.each do |room|
+        expect(room).must_be_kind_of Integer
+      end
+
+    end
+
+    it "returns all rooms if there are no reservations made for that date range" do
+      front_desk = Hotel::FrontDesk.new
+      5.times do
+        front_desk.make_reservation(Date.new(2020, 4, 10), Date.new(2020, 4, 14))
+      end
+
+      given_date_range = Hotel::DateRange.new(Date.new(2020, 5, 10), Date.new(2020, 5, 12))
+      unreserved_rooms = front_desk.not_reserved_rooms(given_date_range)
+      expect(unreserved_rooms).must_be_kind_of Array
+      expect(unreserved_rooms.length).must_equal 20
+    end
+
+    it "returns empty array if all rooms are reserved for that date range" do
+      front_desk = Hotel::FrontDesk.new
+      20.times do
+        front_desk.make_reservation(Date.new(2020, 4, 10), Date.new(2020, 4, 14))
+      end
+
+      given_date_range = Hotel::DateRange.new(Date.new(2020, 4, 10), Date.new(2020, 4, 15))
+
+      unreserved_rooms = front_desk.not_reserved_rooms(given_date_range)
+      puts "UNRESERVED ROOMS: #{unreserved_rooms}"
+      expect(unreserved_rooms.length).must_equal 0
+    end
   end
 end
-
-
-
-
-
-
-
-
