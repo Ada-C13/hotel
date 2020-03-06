@@ -28,33 +28,6 @@ module Hotel
       @reservations << reservation
     end 
 
-   # Create the new reservation 
-    def reserve_room(start_date, end_date)
-      given_date_range = Hotel::DateRange.new(start_date, end_date)
-      reservations_list = reservations.select do |res|
-        res.date_range.overlap?(given_date_range)
-      end
-      all_reserved_rooms = reservations_list.map do |res|
-        res.room
-      end
-
-      avialable_room = nil
-      rooms.each do |room|
-        if !(all_reserved_rooms).include?(room) 
-          avialable_room = room
-          break # stop when find an avialable_room 
-        end
-      end 
-
-      if avialable_room == nil 
-        raise ArgumentError.new " no room"
-      end
-
-      id = reservations.length + 1      
-      reservation = Reservation.new(id,given_date_range, avialable_room)
-      self.add_reservation(reservation)
-      return reservation
-    end
     
     # Access the list of reservations for a specific date, so that I can track reservations by date
     def reservations_list(date)
@@ -72,6 +45,12 @@ module Hotel
 
     # Wave 2
 
+    # Create the new reservation 
+    
+
+
+
+
 
     # I can view a list of rooms that are not reserved for a given date range, 
     # so that I can see all available rooms for that day
@@ -85,28 +64,49 @@ module Hotel
       all_reserved_rooms = reservations_list.map do |res|
         res.room
       end
-      # find the aviable_rooms_list
-      aviable_rooms_list = rooms.map do |room|
-        if !(all_reserved_rooms).include?(room) 
-          avialable_room = room 
-        end
+      # get the aviable_rooms_list
+      avialable_rooms_list = rooms.reject do |room|
+        all_reserved_rooms.include?(room) 
       end
-      return aviable_rooms_list
+      return avialable_rooms_list
     end
 
-
-
-
-    
   end
 end
-    
-
 
     # I can make a reservation of a room for a given date range, 
     # and that room will not be part of any other reservation overlapping that date range
+    # done already in wave 1
   
+    def reserve_room(start_date, end_date)
+      given_date_range = Hotel::DateRange.new(start_date, end_date)
+      # reservations_list = reservations.select do |res|
+      #   res.date_range.overlap?(given_date_range)
+      # end
+      # all_reserved_rooms = reservations_list.map do |res|
+      #   res.room
+      # end
+
+      # avialable_room = nil
+      # rooms.each do |room|
+      #   if !(all_reserved_rooms).include?(room) 
+      #     avialable_room = room
+      #     break # stop when find an avialable_room 
+      #   end
+      # end 
+
+      # if avialable_room == nil 
+      #   raise ArgumentError.new " no room"
+      # end
+      avialable_rooms_list = self.available_rooms(start_date, end_date)
+      id = reservations.length + 1      
+      reservation = Reservation.new(id,given_date_range, avialable_rooms_list[0])
+      self.add_reservation(reservation)
+      return reservation
+    end
 
     # I want an exception raised if I try to reserve a room during a date range when all rooms are reserved, 
     # so that I cannot make two reservations for the same room that overlap by date
+
+    # done already in wave 1
    

@@ -42,7 +42,7 @@ describe Hotel::HotelController do
 
         puts
         # reservation with data_range2
-        room = Hotel::Room.new(1, 200)
+      
         start_date2 = Date.new(2017, 01, 10)
         end_date2 = start_date2 + 4
         date_range2 = Hotel::DateRange.new(start_date2,end_date2)
@@ -67,7 +67,7 @@ describe Hotel::HotelController do
           res.must_be_kind_of Hotel::Reservation
         end
 
-        expect(reservations_list_of_given_room_date_range.length).must_equal 1    ########need to come back and check this 
+        expect(reservations_list_of_given_room_date_range.length).must_equal 2    ########need to come back and check this 
       end
     end
 
@@ -137,14 +137,26 @@ describe Hotel::HotelController do
       it "takes two dates and returns a list" do
         start_date = @date
         end_date = start_date + 3
+        reservation = @hotel_controller.reserve_room(start_date, end_date) # it will take the first room in the rooms list
 
-        room_list = @hotel_controller.available_rooms(start_date, end_date)
+        print @hotel_controller.reservations
+        test_start_date = Date.new(2020, 8, 01)
+        test_end_date = test_start_date + 29
+        room_list = @hotel_controller.available_rooms(test_start_date, test_end_date)
+        puts
+        puts
+        # print room_list
+        puts
+        puts
+        print "r###### #{room_list.length}"
 
         expect(room_list).must_be_kind_of Array
+        expect(room_list.length).must_equal 19
+
       end
       # I can view a list of rooms that are not reserved for a given date range, 
       # so that I can see all available rooms for that day
-      it "take a two dates and re"
+      
 
 
     end
