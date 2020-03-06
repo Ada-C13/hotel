@@ -35,7 +35,7 @@ def choice
   elsif answer == "c"
     do_book_room_of_block
   elsif answer == "d"
-    puts "huh"
+    do_reservation_cost
   elsif answer == "e"
     do_list_all
   elsif answer == "f"
@@ -80,7 +80,19 @@ def do_book_room_of_block
   puts MANAGER.list_all 
 end 
 
+# Helper Method to return reservation class by reservation_id
+
+def find_id(id)
+  reservation = MANAGER.reservations.select {|booking|booking.reservation_id == id}
+  return reservation[0]
+end 
+
 def do_reservation_cost
+  puts "Calculating cost for a reservation..."
+  puts "Please Enter the reservation id"
+  reservation_id_input = get_user_input
+  reservation = find_id(reservation_id_input)
+  puts "$#{'%.2f' %MANAGER.reservation_cost(reservation)}"
 end 
 
 def do_list_all
