@@ -16,9 +16,9 @@ describe Hotel::HotelController do
       end
 
       it "has 20 rooms" do
-        expect(@rooms[0].size).must_equal 20
+        expect(@rooms.size).must_equal 20
       end
-
+      
     end
     describe "reserve_room" do
       it "takes two Date objects and returns a Reservation" do
@@ -26,18 +26,26 @@ describe Hotel::HotelController do
         end_date = start_date + 3
 
         reservation = @hotel_controller.reserve_room(start_date, end_date)
-
         expect(reservation).must_be_kind_of Hotel::Reservation
       end
     end
 
     describe "reservations" do
+      before do
+        @rooms = @hotel_controller.rooms
+        start_date = @date
+        end_date = start_date + 3
+
+        reservation = @hotel_controller.reserve_room(start_date, end_date)
+        @rooms[0][:room1] << reservation
+      end
       it "takes a Date and returns a list of Reservations" do
         reservation_list = @hotel_controller.reservations(@date)
 
+        puts reservation_list
         expect(reservation_list).must_be_kind_of Array
         reservation_list.each do |res|
-          res.must_be_kind_of Reservation
+          res.must_be_kind_of Hotel::Reservation
         end
       end
     end
@@ -56,5 +64,4 @@ describe Hotel::HotelController do
     end
   end
 
-  # puts Hotel::HotelController.rooms
 end

@@ -5,19 +5,9 @@ module Hotel
     def rooms
       # You might want to replace this method with an attr_reader
       # array of hashes for rooms
-      rooms = []
-
-      room_base = []
-      20.times do |i|
-        room_base << ("room#{i+1}").to_sym
-      end
-
       @rooms = []
-      @rooms << room_base.each_with_object({}) do
-          |key, h| h[key] = {:date => [], :reservation => []} 
-          # may need to modify what's in my hash
-          # on the right track but need to modify
-          # just need reservation objects?
+      20.times do |i|
+        @rooms << {(("room#{i+1}").to_sym) => []}
       end
 
       return @rooms
@@ -32,7 +22,7 @@ module Hotel
       # if nil, default will then redirect to be first available room
       # add reservation instance to @rooms array based off of room attribute
       # add date instance to @rooms array
-      return Reservation.new(start_date, end_date, nil)
+      return Reservation.new(start_date, end_date)
     end
 
     def reservations(date)
@@ -45,7 +35,27 @@ module Hotel
           # date.between?(start_date, end_date)
             # returng reservation.inspect
       # .find/.detect to search through each array of @rooms and return the reservation
-      return []
+      
+      #@rooms[each:roomkey][:reservations]
+
+      reservation_list = []
+      # if date.between?(#list within rooms)
+      #   reservation_list <<
+
+      @rooms.each do |room| # O(20)
+        room.each_value do |reservation| # O(20)
+          reservation.each do |reservation_instance| # O(n)
+            if date.between?(reservation_instance.start_date, reservation_instance.end_date)
+              reservation_list << reservation_instance
+            end
+          end
+        end
+      end
+
+      # reservation_list = @rooms.map do {}
+
+      
+      return reservation_list
     end
 
     # Wave 2
