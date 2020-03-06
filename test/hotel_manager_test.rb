@@ -39,6 +39,7 @@ describe Hotel::HotelController do
         reservation = @hotel_controller.reserve_room(start_date, end_date)
         @rooms[0][:room1] << reservation
       end
+
       it "takes a Date and returns a list of Reservations" do
         reservation_list = @hotel_controller.reservations(@date)
 
@@ -47,6 +48,14 @@ describe Hotel::HotelController do
         reservation_list.each do |res|
           res.must_be_kind_of Hotel::Reservation
         end
+      end
+
+      it "raises an exception when an invalid date range is provided" do
+        #TODO
+      end
+
+      it "returns an empty array if no match" do
+        #TODO
       end
     end
   end
