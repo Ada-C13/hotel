@@ -1,5 +1,6 @@
 require_relative 'lib/front_desk'
 require 'ap'
+require 'csv'
 
 def print_options
   puts "options as below:"
@@ -108,11 +109,12 @@ def do_check_date_reservations
 end 
 
 
+
 def run_program
   puts "================================"
   puts "Hello Manager of HOTEL BUDAPEST"
   puts "================================"
-
+ 
   again = "y"
   while again == "y" 
     print_options
@@ -121,6 +123,16 @@ def run_program
     again = get_user_input
   end 
   puts "COOL Program Ended"
+
+  CSV.open('Hotel_bookings.csv','w') do |csv|
+    csv << ["reservation_id","start_date","end_date","room_num","block_tag","room_rate"]
+    reservations = MANAGER.reservations
+    
+    reservations.each do |record|
+      csv <<[record.reservation_id,record.date_range.start_date, record.date_range.end_date,record.room_num,record.block_tag, record.room_rate]
+    end 
+  end
+
 end 
 
 run_program
