@@ -1,18 +1,18 @@
-require_relative 'room'
-require_relative 'date_range'
-require_relative 'reservation'
+# require_relative 'room'
+# require_relative 'date_range'
+# require_relative 'reservation'
 
 
-module Hotel
-  class Block < Reservation
+# module Hotel
+#   class Block < Reservation
 
-    def initialize(date_range, room_id, block)  
-      super(date_range,room_id)
+#     def initialize(date_range, room_id, block)  
+#       super(date_range,room_id)
   
-      @block = block
-    end
-  end
-end
+#       @block = block
+#     end
+#   end
+# end
     
 # Scenario 1:
 # Block < Reservation
