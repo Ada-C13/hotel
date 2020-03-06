@@ -2,6 +2,7 @@ require 'date'
 require_relative 'room'
 require_relative 'date_range'
 require_relative 'reservation'
+require_relative 'no_rooms_error'
 
 module Hotel
   class FrontDesk
@@ -41,7 +42,6 @@ module Hotel
     
     
     def find_reservations_by_room(room_number)
-      # if I give you a room number, call find_room_by_number, pass in that room_number, return an array of reservations for that room
       room = find_room_by_number(room_number)
       
       reservations = room.reservations 
@@ -74,7 +74,7 @@ module Hotel
       all_rooms = list_available_rooms(check_in, check_out)
       
       if all_rooms.empty?
-        raise ArgumentError.new("No rooms available for the specified dates.")
+        raise NoAvailableRoomsError.new("No rooms available for the specified date.")
       end
       
       return all_rooms[0]

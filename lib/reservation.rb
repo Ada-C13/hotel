@@ -9,7 +9,6 @@ module Hotel
     def initialize(date_range, room_number: nil, price_per_night: 200, total_cost: nil)
       @date_range = date_range
       @room_number = room_number
-      # i think this should be the room object
       @price_per_night = price_per_night
       @total_cost = total_cost
     end

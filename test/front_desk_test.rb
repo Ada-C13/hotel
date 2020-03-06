@@ -157,7 +157,7 @@ describe "find single available room" do
       front_desk.create_reservation(Date.new(2020,2,6),Date.new(2020,2,8))
     end
     
-    expect { front_desk.find_available_room(Date.new(2020,2,6),Date.new(2020,2,8)) }.must_raise ArgumentError
+    expect { front_desk.find_available_room(Date.new(2020,2,6),Date.new(2020,2,8)) }.must_raise NoAvailableRoomsError
   end
   
 end
