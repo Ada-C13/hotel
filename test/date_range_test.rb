@@ -2,23 +2,30 @@ require_relative "test_helper"
 
 describe Hotel::DateRange do
   describe "constructor" do
-    it "Can be initialized with two dates" do
+    before do
       start_date = Date.new(2017, 01, 01)
       end_date = start_date + 3
 
-      range = Hotel::DateRange.new(start_date, end_date)
-
-      expect(range.start_date).must_equal start_date
-      expect(range.end_date).must_equal end_date
+      @range = Hotel::DateRange.new(start_date, end_date)
     end
 
-   
+    it "can be initialized with two dates" do
+      start_date = Date.new(2017, 01, 01)
+      end_date = start_date + 3
+      expect(@range.start_date).must_equal start_date
+      expect(@range.end_date).must_equal end_date
+    end
+
+    it "is set up for specific attributes and data types" do
+      expect(@range.start_date).must_be_kind_of Date
+      expect(@range.end_date).must_be_kind_of Date
+    end
 
     it "is an an error for negative-length ranges" do
       start_date = Date.new(2017, 02, 01)
-      end_date = Date.new(2017, 01, 01)
-      
-      expect{(Hotel::DateRange.new(start_date, end_date))}.must_raise ArgumentError
+      end_date = Date.new(2017, 01, 01) 
+
+      expect{Hotel::DateRange.new(start_date, end_date)}.must_raise ArgumentError
     end
 
     it "is an error to create a 0-length range" do
@@ -28,6 +35,7 @@ describe Hotel::DateRange do
       expect{(Hotel::DateRange.new(start_date, end_date))}.must_raise ArgumentError
     end
 
+
     it "it can take string inputs for dates" do
       start_date = "20190303"
       end_date = "20190305"
@@ -35,9 +43,6 @@ describe Hotel::DateRange do
       expect(Hotel::DateRange.new(start_date, end_date)).must_be_kind_of Hotel::DateRange
     end
 
-    # xit "raises argument error if not a string?" do
-      
-    # end
   end
 
   describe "overlap?" do
