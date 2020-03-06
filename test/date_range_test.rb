@@ -36,6 +36,11 @@ describe "Date Range" do
       expect { HotelBooking::DateRange.new(start_date: Date.new(2019, 3, 27), end_date: Date.new(2020, 3, 23)) }.must_raise ArgumentError
     end
 
+    
+    it "raises an argument error if the end date is not provided " do
+      expect { HotelBooking::DateRange.new(start_date: Date.new(2020, 3, 23), end_date: nil ) }.must_raise ArgumentError
+    end
+
   end
 
   describe "overlap?" do

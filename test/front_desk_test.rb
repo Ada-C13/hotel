@@ -58,11 +58,10 @@ describe "Front Desk" do
 
   end
 
-  describe "can access the list of reservations for a specified room and a given date range" do
+  describe "list room reservations" do
     let(:period) { HotelBooking::DateRange.new(start_date: Date.today, end_date: (Date.today + 15)) }
     let(:room) {HotelBooking::Room.new(number: 2)}
 
-    
     it "takes a date range and a room and returns the list of reservation that rooms has in that time period" do
       reservation_list = front_desk.room_reservations(room, period)
 
@@ -91,7 +90,7 @@ describe "Front Desk" do
 
   end
 
-  describe "date reservations" do
+  describe "list date reservations" do
     let(:date) {Date.new(2020, 03, 27)}
     it "takes a Date and returns a list of Reservations" do
       reservation_list = front_desk.date_reservations(date)
@@ -103,10 +102,61 @@ describe "Front Desk" do
   end
 
   xdescribe 'find available room' do
-    it 'returns a list of available rooms' do
+    before do
+      @reservation = front_desk.make_reservation(start_date: Date.today, end_date: (Date.today + 3))
+    end
+    let(:date_range) { HotelBooking::DateRange.new(start_date: Date.today, end_date: (Date.today + 3)) }
+
+    it 'can create a list of rooms with no reservations in date_range' do
+      expect(front_desk.available_rooms(date_range)).must_be_instance_of Array
     end
 
-    it 'returns an empty array if no room is available' do
+    it 'returns a list of available rooms' do
+      available_rooms = front_desk.available_rooms(date_range) 
+      available_rooms.each do |room|
+        room.must_be_kind_of HotelBooking::Room
+      end
+    end
+
+    # it 'returns all rooms if no reservations are made on that date' do
+    #   future_period = HotelBooking::DateRange.new(start_date: Date.new(2021, 03, 01), end_date: Date.new(2021, 03, 30))
+
+    #   available_rooms = front_desk.available_rooms(future_period)
+
+    #   expect(available_rooms).must_equal front_desk.rooms
+
+    # end
+
+    # xit 'returns an empty array if no room is available' do
+    #   available_rooms = []
+    #   front_desk.rooms.each do |room|
+    #     front_desk.reservations.each do |reservation| 
+    #       room_res = reservation.room_reservations(room, date_range) 
+    #       available_rooms << room if room_res.lenght == 0
+    #     end
+    #   end
+    #   if available_rooms.empty?
+    #     rooms_list = front_desk.available_rooms(date_range)
+    #   end
+    #   expect(rooms_list).must_equal []
+
+    # end
+
+  end
+
+  xdescribe "make reservation for specific room" do
+    let(:room) {front_desk.rooms[7]}
+    let(:date_range) { HotelBooking::DateRange.new(start_date: Date.today, end_date: (Date.today + 3)) }
+
+    it "I can make a reservation of a room for a given date range" do
+      res = front_desk.make_room_reservation(date_range, room)
+      expect(res).must_be_instance_of HotelBooking::Reservation
+    end
+    
+    it "room will not be part of any other reservation overlapping that date range" do
+
+      # res_1 = front_desk.make_room_reservation(date_range, room)
+      
     end
 
   end
