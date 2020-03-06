@@ -1,3 +1,5 @@
+
+
 module Hotel
   class HotelController
     attr_reader :rooms
@@ -45,13 +47,6 @@ module Hotel
 
     # Wave 2
 
-    # Create the new reservation 
-    
-
-
-
-
-
     # I can view a list of rooms that are not reserved for a given date range, 
     # so that I can see all available rooms for that day
     def available_rooms(start_date, end_date)
@@ -60,19 +55,20 @@ module Hotel
       reservations_list = reservations.select do |res|
         res.date_range.overlap?(given_date_range)
       end
+
       # get all the room that have been reserved for the given date range 
       all_reserved_rooms = reservations_list.map do |res|
         res.room
       end
+
       # get the aviable_rooms_list
       avialable_rooms_list = rooms.reject do |room|
-        all_reserved_rooms.include?(room) 
+        all_reserved_rooms.any? do |reserved_room|
+          reserved_room.id == room.id 
+        end
       end
       return avialable_rooms_list
     end
-
-  end
-end
 
     # I can make a reservation of a room for a given date range, 
     # and that room will not be part of any other reservation overlapping that date range
@@ -80,33 +76,14 @@ end
   
     def reserve_room(start_date, end_date)
       given_date_range = Hotel::DateRange.new(start_date, end_date)
-      # reservations_list = reservations.select do |res|
-      #   res.date_range.overlap?(given_date_range)
-      # end
-      # all_reserved_rooms = reservations_list.map do |res|
-      #   res.room
-      # end
-
-      # avialable_room = nil
-      # rooms.each do |room|
-      #   if !(all_reserved_rooms).include?(room) 
-      #     avialable_room = room
-      #     break # stop when find an avialable_room 
-      #   end
-      # end 
-
-      # if avialable_room == nil 
-      #   raise ArgumentError.new " no room"
-      # end
-      avialable_rooms_list = self.available_rooms(start_date, end_date)
+      avialable_rooms_list = available_rooms(start_date, end_date)
+      if avialable_rooms_list.empty?
+        raise NoRoomAvailableError.new("there is no available room.")
+      end
       id = reservations.length + 1      
-      reservation = Reservation.new(id,given_date_range, avialable_rooms_list[0])
-      self.add_reservation(reservation)
+      reservation = Hotel::Reservation.new(id,given_date_range, avialable_rooms_list.first)
+      add_reservation(reservation)
       return reservation
-    end
-
-    # I want an exception raised if I try to reserve a room during a date range when all rooms are reserved, 
-    # so that I cannot make two reservations for the same room that overlap by date
-
-    # done already in wave 1
-   
+    end  
+  end
+end
