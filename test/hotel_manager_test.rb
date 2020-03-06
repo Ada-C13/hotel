@@ -1,6 +1,5 @@
 require 'test_helper.rb'
 
-
 describe Hotel::HotelController do
   before do
     @hotel_controller = Hotel::HotelController.new
