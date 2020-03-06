@@ -1,13 +1,14 @@
 module Hotel
   class HotelController
     # Access the list of all of the rooms in the hotel
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :blocks
     
     # Constructor
     # Hotel has 20 rooms, numbered 1 through 20
     def initialize
       @rooms = (1..20).to_a
       @reservations = []
+      @blocks = [] 
     end
 
     # Reserve a Room for a Given Date Range
@@ -42,10 +43,67 @@ module Hotel
     end
 
     # Returns List of Rooms Available for a Date Range
-    # View a list of rooms that are not reserved for a given date range, so that I can see all available rooms for that date range
+    # Checks also if the room is in a block
     def available_rooms(start_date, end_date)
-      return @rooms.select { |room| is_room_available?(start_date, end_date, room) }
+      no_reservation = @rooms.select { |room| is_room_available?(start_date, end_date, room) }
+      # Availability checking logic respects room blocks as well as individual reservations
+      # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot reserve that specific room for that specific date, because it is unavailable
+      no_blocks      = no_reservation.select { |room| is_room_unblocked?(start_date, end_date, room) }
+      return no_blocks
     end
 
-  end
-end
+    ##### Wave 3
+
+    # Create a Block for a Given Date Range, a Set of Rooms and a Rate
+    def create_block(start_date, end_date, rooms, rate)
+      raise ArgumentError, "Invalid room" unless block_rooms_valid?(rooms)
+      # Exception raised if I try to create a Hotel Block and at least one of the rooms is unavailable for the given date range
+      raise ArgumentError, "Rooms not available" unless block_rooms_available?(start_date, end_date, rooms)
+      block = Hotel::Block.new(start_date, end_date, rooms, rate)
+      @blocks << block
+      return block
+    end
+
+    # Create a Reservation from a Block
+    # Reserve a specific room from a hotel block
+    def reserve_from_block(block, room)
+      raise ArgumentError, "Not a block" if block.instance_of?(Hotel::Block)
+      raise ArgumentError, "Room not in block" unless block.rooms.include?(room)
+      # Only reserves room from a hotel block for the full duration of the block
+      # When a room is reserved from a block of rooms, the reservation dates will always match the date range of the block
+      start_date = block.range.start_date
+      end_date   = block.range.end_date
+      raise ArgumentError, "No Vacancy" unless is_room_available?(start_date, end_date, room)
+      reservation = Hotel::Reservation.new(start_date, end_date, room)
+      # Reservation made from a hotel block adds to the list of reservations for that date
+      @reservations << reservation
+      return reservation
+    end
+    
+    # Check if Rooms for a Block are Valid
+    def block_rooms_valid?(rooms)
+
+      return true
+
+    end
+
+    # Check if the Rooms for a Block are Available in the Date Range
+    # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot create another hotel block that includes that specific room for that specific date, because it is unavailable
+    def block_rooms_available?(start_date, end_date, rooms)
+
+      return true
+    end
+
+    # Check if a Room is Not blocked in a Specific Date Range
+    def is_room_unblocked?(start_date, end_date, room)
+
+      return true
+    end
+    
+    # Checks whether a given block has any rooms available # test to fix this.
+    def available_rooms_in(block)
+      return block.rooms
+    end
+
+  end # class HotelController
+end # module Hotel *** add to others

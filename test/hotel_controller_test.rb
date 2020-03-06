@@ -167,6 +167,123 @@ describe "Hotel::HotelController" do
       end
 
     end
-  end
+  end # Wave 2 ***add coments to ends
 
+  describe "wave 3" do
+    # Create a Block for a Given Date Range, a Set of Rooms and a Rate
+    describe "create_block" do 
+      it "takes a start_date, end_date, rooms, rate" do
+
+      end
+
+      it "returns a Hotel::Block" do
+
+      end
+
+      it "raises and ArgumentError if the rooms are invalid " do
+
+      end
+
+      it "raises and ArgumentError if there are more than 5 rooms" do
+
+      end
+
+
+      it "raises and ArgumentError if at least one room in unavailable " do
+
+      end
+
+      it "adds to the block list" do
+
+      end
+
+    end # Create Block
+
+    # Create a Reservation from a Block
+    # Reserve a specific room from a hotel block
+    describe "reserve_from_block" do
+      it "takes a block and a room" do
+
+      end
+
+      it "raises an ArgumentError if the block is invalid" do
+        
+      end
+      
+      it "raises an ArgumentError if room is not in block" do
+        
+      end
+      
+      it "reserves room for the full duration of the block" do
+
+      end
+
+      it "raises an ArgumentError if the room is not available" do
+        
+      end
+
+      it "returns a reservation" do
+
+      end
+
+      it "adds to the list of reservations" do
+
+      end
+
+    end # Reserve from block
+    
+    # Check if Rooms for a Block are Valid
+    describe "block_rooms_valid?" do
+      it "returns true if the rooms are valid" do
+        
+      end
+
+      it "returns false if the rooms are invalid" do
+        
+      end
+
+    end
+
+    # Check if the Rooms for a Block are Available in the Date Range
+    # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot create another hotel block that includes that specific room for that specific date, because it is unavailable
+    describe "block_rooms_available?" do
+      it "returns true if the rooms are available in that date range" do
+        
+      end
+
+      it "returns false if the rooms are not available in that date range" do
+
+      end        
+    end
+
+    # Check if a Room is Not blocked in a Specific Date Range
+    describe "is_room_unblocked?" do
+      it "returns true if the room is not blocked in that date range" do
+        
+      end
+
+      it "returns false if the room is blocked in that date range" do
+
+      end        
+    end
+    
+    # Checks whether a given block has any rooms available # test to fix this.
+    describe "available_rooms_in(block)" do
+      it "returns a list of rooms" do
+
+      end
+
+      it "returns all rooms if there are no reservations" do
+
+      end
+
+      it "returns fewer rooms after a reservation is made" do
+
+      end
+
+      it "returns an empty array if no rooms are left" do
+
+      end
+    end
+  end # Wave 3
 end

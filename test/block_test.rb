@@ -25,6 +25,11 @@ describe "Hotel::Block" do
       expect{ Hotel::Block.new(@start_date, @end_date, 3, @rate) }.must_raise ArgumentError
     end
 
+    it "does not accept zero rooms or more than 5 rooms" do
+      expect{ Hotel::Block.new(@start_date, @end_date, [], @rate) }.must_raise ArgumentError
+      expect{ Hotel::Block.new(@start_date, @end_date, [1,2,3,4,5,6], @rate) }.must_raise ArgumentError
+    end
+
     it "does not accept invalid rates" do
       # create a block with rate = -1. Must raise argumenterror
       expect{ Hotel::Block.new(@start_date, @end_date, @rooms, -1) }.must_raise ArgumentError
