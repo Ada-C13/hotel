@@ -1,8 +1,14 @@
-require_relative 'test_helper'
+require "date"
 
 module Stayappy
   class ReservationManager 
     attr_reader 
+
+    all_rooms = (1..20).to_a
+    available_rooms = (1..20).to_a
+    unavailable_rooms = []
+    bookings = []
+
 
     def make_reservation
       #Add code to:
@@ -29,5 +35,5 @@ module Stayappy
     def reservations_by_room
       #Add code to show the reservations by room number
     end
-
-  end 
+  end
+end 

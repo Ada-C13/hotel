@@ -1,4 +1,4 @@
-require_relative 'test_helper'
+require_relative 'reservation'
 
 module Stayappy
   class Block_Res < Reservation
