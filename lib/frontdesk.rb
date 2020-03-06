@@ -16,9 +16,7 @@ module Hotel
       taken_rooms = []
       all_rooms = @rooms
       @all_reservations.each do |reservation|
-        if reservation.conflict?(new_reservation.start_date, new_reservation.end_date) 
-          taken_rooms << reservation.assigned_room
-        end
+        reservation.conflict?(new_reservation.start_date, new_reservation.end_date) ? taken_rooms << reservation.assigned_room : next
       end
       room_to_assign = (all_rooms - taken_rooms.flatten)
       return room_to_assign.sample(1)
@@ -39,11 +37,9 @@ module Hotel
 
     def find_available_room_by_date(date)
       taken = []
-      all_rooms = @rooms
-      booked = @all_reservations.select {|reservation| reservation.contains(date)}
-      booked.each do |reservation|
-        taken << reservation.assigned_room
-      end
+      all_rooms = @rooms.dup
+      booked = find_reservation_by_date(date)
+      booked.map {|reservation| taken << reservation.assigned_room}
       available_rooms = (all_rooms - taken.flatten)
     end
 
