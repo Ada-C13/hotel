@@ -25,6 +25,15 @@ describe Hotel::DateRange do
 
       expect{Hotel::DateRange.new(start_date, end_date)}.must_raise ArgumentError
     end
+    it "makes dates a date class" do
+      start_date = ("2020-08-04")
+      end_date = ("2020-08-09")
+
+      range = Hotel::DateRange.new(start_date, end_date)
+
+      expect(range.start_date).must_be_instance_of Date
+      expect(range.end_date).must_be_instance_of Date
+    end
   end
 
   describe "overlap?" do
@@ -109,7 +118,7 @@ describe Hotel::DateRange do
   end
 
   xdescribe "include?" do
-    it "reutrns false if the date is clearly out" do
+    it "reuturns false if the date is clearly out" do
     end
 
     it "returns true for dates in the range" do

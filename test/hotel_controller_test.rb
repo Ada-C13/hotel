@@ -119,7 +119,7 @@ describe Hotel::HotelController do
         expect(room_list.length).must_equal 20
       end
 
-      it "takes two dates and returns the correct rooms" do
+      it "takes two dates and returns the correct rooms when dates overlap" do
         reservation1 = @hotel_controller.reserve_room("2020-08-04", "2020-08-10",1)
         reservation2 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",2)
         reservation3 = @hotel_controller.reserve_room("2020-08-09", "2020-08-12",3)
@@ -131,6 +131,30 @@ describe Hotel::HotelController do
 
         expect(room_list.length).must_equal 17
         expect(room_list).must_equal [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+      end
+
+      it "takes two dates and returns the correct rooms when range starts on an end date" do
+        reservation1 = @hotel_controller.reserve_room("2020-08-01", "2020-08-04",1)
+
+        start_date = @date #2020-08-04
+        end_date = start_date + 10
+
+        room_list = @hotel_controller.available_rooms(DateRange.new(start_date, end_date))
+
+        expect(room_list.length).must_equal 20
+        expect(room_list).must_equal [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+      end
+
+      it "takes two dates and returns the correct rooms when range is with in a reservation" do
+        reservation1 = @hotel_controller.reserve_room("2020-08-01", "2020-08-10",1)
+
+        start_date = @date #2020-08-04
+        end_date = start_date + 2
+
+        room_list = @hotel_controller.available_rooms(DateRange.new(start_date, end_date))
+
+        expect(room_list.length).must_equal 19
+        expect(room_list).must_equal [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
       end
 
       it "Returns Argument error for bad dates" do
