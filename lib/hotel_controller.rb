@@ -27,6 +27,10 @@
 
 # setting the costs/ discounts for rooms
 
+require_relative 'date_range'
+require_relative 'reservation'
+require_relative 'room'
+
 module Hotel
   class Hotel::Controller
     attr_reader :rooms
@@ -34,6 +38,9 @@ module Hotel
     def initialize
       create_rooms
     end
+
+    # associations, has many, belongs to
+    # iterm 2 for multiple panes of terminals
 
     def find_available_rooms(input_range)
       available = []
@@ -64,10 +71,10 @@ module Hotel
     #   @rooms.each do |room|
     #     filtered_rez = room.find_by_range(input_range)
     #     filtered_rez.each do |rez|
-  #         if rez.date_range == input_range
-  #           reservations_by_date << rez
-  #           break
-  #         end
+    #        if rez.date_range == input_range
+    #          reservations_by_date << rez
+    #          break
+    #        end
     #     end
     #   return reservations_by_date
     # end

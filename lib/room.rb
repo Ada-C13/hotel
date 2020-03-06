@@ -11,7 +11,6 @@
 # find reservation for given date range
 
 # Rooms are responsible for creating own reservations and adding to rez list
-require_relative 'date_range'
 require_relative 'reservation'
 
 module Hotel
@@ -34,10 +33,11 @@ module Hotel
     # method to check if there's a conflict with input range in any of its reservations
     def conflict?(input_range)
       @rez_list.each do |rez|
-        if rez.date_range.overlap?(input_range) == true
+        if rez.date_range.overlap?(input_range)
           return true
         end
       end
+
       return false
     end
 
@@ -66,3 +66,6 @@ module Hotel
 
   end
 end
+
+
+# in my tests, I'm creating a reservation as an instance var that I think is a date range

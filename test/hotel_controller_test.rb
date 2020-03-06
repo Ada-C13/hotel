@@ -40,8 +40,7 @@ describe Hotel::Controller do
       # add rez to multiple rooms only if id is evenly divisible by 3
       hotel_controller.rooms.each do |room|
         if room.room_id % 3 == 0
-          new_reservation = Hotel::Reservation.new(@booked_range, room.room_id)
-          room.create_room_reservation(new_reservation)
+          room.create_room_reservation(@booked_range)
         end
       end
 
