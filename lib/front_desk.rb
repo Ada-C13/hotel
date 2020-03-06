@@ -30,16 +30,23 @@ module Hotel
     end
 
     def get_room_bookings(number, range)
+      room_bookings = []
       range_bookings = get_range_bookings(range)
-      return range_bookings.find_all{ |reservation| reservation.room.number == number }
+      range_bookings.each do |reservation|
+        rooms = reservation.rooms.find_all{ |room| room.number == number }
+        if rooms.length > 0
+        room_bookings << reservation
+        end
+      end
+      return room_bookings
     end
 
     def get_reserved_rooms(range)
       range_bookings = get_range_bookings(range)
       reserved_rooms = range_bookings.map do |reservation|
-        reservation.room
+        reservation.rooms
       end
-      return reserved_rooms
+      return reserved_rooms.flatten
     end
 
     def get_available_rooms(range)

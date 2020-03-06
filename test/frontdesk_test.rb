@@ -41,7 +41,7 @@ describe "FrontDesk class" do
       front_desk = Hotel::FrontDesk.new
       front_desk.add_reservation(reservation)
       expect(front_desk.reservations.first).must_be_instance_of Hotel::Reservation
-      expect(front_desk.reservations.first.room).must_be_instance_of Hotel::Room
+      expect(front_desk.reservations.first.rooms.first).must_be_instance_of Hotel::Room
     end
   end
 
@@ -210,8 +210,8 @@ describe "FrontDesk class" do
       check_in = Date.parse("3rd Mar 2020")
       check_out = Date.parse("5th Mar 2020")
       front_desk = Hotel::FrontDesk.new
-      expect(front_desk.reserve_room(range).room.number).must_equal 1
-      expect(front_desk.reserve_room(range).room).must_be_instance_of Hotel::Room
+      expect(front_desk.reserve_room(range).rooms.first.number).must_equal 1
+      expect(front_desk.reserve_room(range).rooms.first).must_be_instance_of Hotel::Room
       expect(front_desk.reserve_room(range).date_range.start_date).must_equal check_in
       expect(front_desk.reserve_room(range).date_range.end_date).must_equal check_out
       expect(front_desk.reserve_room(range).cost).must_equal 400
@@ -224,8 +224,8 @@ describe "FrontDesk class" do
       front_desk = Hotel::FrontDesk.new
       front_desk.reserve_room(range)
       expect(front_desk.reservations.size).must_equal 1
-      expect(front_desk.reserve_room(range).room.number).must_equal 2
-      expect(front_desk.reserve_room(range).room).must_be_instance_of Hotel::Room
+      expect(front_desk.reserve_room(range).rooms.first.number).must_equal 2
+      expect(front_desk.reserve_room(range).rooms.first).must_be_instance_of Hotel::Room
       expect(front_desk.reserve_room(range).date_range.start_date).must_equal check_in
       expect(front_desk.reserve_room(range).date_range.end_date).must_equal check_out
       expect(front_desk.reserve_room(range).cost).must_equal 400

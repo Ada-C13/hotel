@@ -19,6 +19,15 @@ describe "Reservation class" do
         expect(reservation.cost).must_equal 400
     end
 
+    it "checks that rooms is an array containing 1 element" do
+      range = Hotel::DateRange.new(start_date: "3 Mar 2020", end_date: "5 Mar 2020")
+      reservation = Hotel::Reservation.new(
+        room: Hotel::Room.new(1), 
+        date_range: range)
+        expect(reservation.rooms.length).must_equal 1
+        expect(reservation.rooms.first).must_be_instance_of Hotel::Room
+    end
+
     it "saves correct dates for check-in and check-out" do
       range = Hotel::DateRange.new(start_date: "3 Mar 2020", end_date: "5 Mar 2020")
 
