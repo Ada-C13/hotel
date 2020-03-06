@@ -24,7 +24,7 @@ describe "ReservationManager" do
     end  
   end
 
-  describe "available_rooms method" do
+  describe "available_rooms" do
     it "When no rooms have been booked return 20 available rooms" do
       rooms = manager.available_rooms("March 3, 2020", "March 5, 2020")
       # Assert

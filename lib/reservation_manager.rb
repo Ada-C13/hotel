@@ -12,12 +12,12 @@ module Hotel
     def available?(start_date, end_date, room)
       room.reservations.each do |reservation|
 
-        start_date = Date.parse(start_date)
-        end_date = Date.parse(end_date)
+        first_day = Date.parse(start_date)
+        last_day = Date.parse(end_date)
 
-        while start_date != end_date
-          return false if (reservation.start_date...reservation.end_date).include?(start_date)
-          start_date += 1          
+        while first_day != last_day
+          return false if (reservation.start_date...reservation.end_date).include?(first_day)
+          first_day += 1          
         end
       end
       return true
@@ -25,13 +25,13 @@ module Hotel
 
     # List available rooms
     def available_rooms(start_date, end_date)
-      list_available_rooms = Array.new
+      available_rooms = Array.new
 
       all_rooms.each do |room|
         result = available?(start_date, end_date, room)
-        list_available_rooms << room if result
+        available_rooms << room if result
         end       
-      return list_available_rooms
+      return available_rooms
     end
 
     # Make a new reservation
@@ -49,9 +49,9 @@ module Hotel
     # Look-up a reservation by date
     def find_reservation(date)
       by_date_reservation = all_reservations.select do |reservation|
-        start_date = reservation.start_date
-        end_date = reservation.end_date
-        (start_date...end_date).include? date
+        first_day = reservation.start_date
+        last_day = reservation.end_date
+        (first_day...last_day).include? Date.parse(date)
       end
       return by_date_reservation
     end

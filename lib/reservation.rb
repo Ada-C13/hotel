@@ -11,7 +11,7 @@ module Hotel
 
       # Check end date is after start date
       ##make unit test for edge case of 3/1/2020 - 3/12/2020
-      if start_date >= end_date
+      if @start_date >= @end_date
         raise ArgumentError.new("The end date cannot be before the start date")
       end
     end
