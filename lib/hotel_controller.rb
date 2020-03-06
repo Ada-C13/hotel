@@ -22,8 +22,14 @@ module Hotel
 
     end
      
+    def get_room_list 
+      return @room_list
+    end
+
     def reserve_room(start_date, end_date, customer_name)
       # start_date and end_date should be instances of class Date   
+      # new data range and reservation created 
+      # first available room assigned to the new reservation 
       raise ArgumentError.new("They are not the valid Date class for start_date and end_date") if (start_date.class != Date || end_date.class != Date)
       resevation_duration = DateRange.new(start_date, end_date)
       new_reservation = Reservation.new(resevation_duration, customer_name)
