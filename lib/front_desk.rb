@@ -26,6 +26,18 @@ module Hotel
       return avail_rooms
     end
 
+    def get_reservations(date)
+      reservations_at_date = []
+      rooms.each do |room|
+        room.reservations.each do |reservation| 
+          if reservation.include?(date)
+            reservations_at_date << reservation
+          end
+        end
+      end
+      return reservations_at_date
+    end
+  
     private
     # to do: refactor
     def find_room(date_range)
