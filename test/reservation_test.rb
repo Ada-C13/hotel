@@ -3,7 +3,7 @@ require_relative "test_helper"
 describe Hotel::Reservation do
   describe "constructor" do
     before do
-      @reservation = Hotel::Reservation.new("20010203","20010206", 1)
+      @reservation = Hotel::Reservation.new("20010203","20010206")
     end
     it "is an instance of reservation" do
       expect(@reservation).must_be_kind_of Hotel::Reservation
@@ -27,7 +27,7 @@ describe Hotel::Reservation do
     before do 
       start_date = Date.new(2017, 01, 01)
       end_date = start_date + 3
-      @reservation = Hotel::Reservation.new(start_date, end_date, nil)
+      @reservation = Hotel::Reservation.new(start_date, end_date)
     end
 
     it "returns a number" do

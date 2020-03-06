@@ -6,10 +6,9 @@ module Hotel
     
     # need reservation id?
     
-    attr_reader :start_date, :end_date, :room, :id
-    def initialize(start_date, end_date, room, id: nil)
-      # reservation has a DateRange - instantiate based on attributes
-
+    attr_reader :start_date, :end_date
+    def initialize(start_date, end_date)
+      # reservation is a DateRange - instantiate based on attributes
 
       start_date = parse_start_date(start_date)
       end_date = parse_end_date(end_date)
