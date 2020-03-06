@@ -1,7 +1,18 @@
 require_relative 'test_helper'
 
 describe "DateRange" do
+  before do
+    @start_date = Date.today + 2
+    @end_date = Date.today + 6
+    @date_range = Hotel::DateRange.new(start_date: @start_date, end_date: @end_date)
+  end
+  
   describe "initialize DateRange" do
+
+    it "creates a DateRange object" do
+      expect(@date_range).must_be_instance_of Hotel::DateRange
+    end
+
     it "raises ArgumentError if end date is before start date" do
       expect{Hotel::DateRange.new(start_date: Date.today + 6, end_date: Date.today + 2)}.must_raise ArgumentError
     end
@@ -11,19 +22,11 @@ describe "DateRange" do
     end
 
     it "creates a range of the start and end dates" do
-      start_date = Date.today + 2
-      end_date = Date.today + 6
-      date_range = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
-      expect(date_range.range).must_equal (start_date..end_date).to_a
+      expect(@date_range.range).must_equal (@start_date..@end_date).to_a
     end
   end
 
   describe "overlap?" do
-    before do
-      @start_date = Date.today + 2
-      @end_date = Date.today + 6
-      @date_range = Hotel::DateRange.new(start_date: @start_date, end_date: @end_date)
-    end
 
     it "returns true if there is overlap between date ranges" do
       date_range2 = Hotel::DateRange.new(start_date: Date.today + 2, end_date: Date.today + 4)
@@ -51,13 +54,9 @@ describe "DateRange" do
   end
 
   describe "nights" do
-    
-    start_date = Date.today + 2
-    end_date = Date.today + 6
-    date_range = Hotel::DateRange.new(start_date:start_date, end_date:end_date)
    
     it "calculates the number of nights booked" do
-      expect(date_range.nights).must_equal 4
+      expect(@date_range.nights).must_equal 4
     end
   end
   

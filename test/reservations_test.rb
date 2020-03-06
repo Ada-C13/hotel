@@ -7,7 +7,7 @@ describe "reservations" do
 
   describe "initialize reservations" do
 
-    it "creates an instance of a reservation" do
+    it "creates a Reservation object" do
       expect(@new_reservation).must_be_instance_of Hotel::Reservation
     end
 

@@ -1,6 +1,6 @@
-require_relative 'room'
-require_relative 'date_range'
-require_relative 'reservations'
+# require_relative 'room'
+# require_relative 'date_range'
+# require_relative 'reservations'
 
 
 module Hotel

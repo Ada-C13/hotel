@@ -7,7 +7,7 @@ describe "rooms" do
       @room = Hotel::Room.new(room_number: 1, cost: 200)
     end
 
-    it "creates an instance of a room" do
+    it "creates a Room object" do
       expect(@room).must_be_instance_of Hotel::Room
     end
 

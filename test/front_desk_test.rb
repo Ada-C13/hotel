@@ -3,10 +3,15 @@ require_relative 'test_helper'
 describe "front desk" do
   before do
     @front_desk = Hotel::FrontDesk.new
+    @dates = Hotel::DateRange.new(start_date: Date.today + 2, end_date: Date.today + 6)
   end
 
-  describe "self.rooms" do
-  
+  describe "initialize FrontDesk" do
+    
+    it "creates a FrontDesk object" do
+      expect(@front_desk).must_be_instance_of Hotel::FrontDesk
+    end
+    
     it "stores all 20 hotel rooms" do
       expect(@front_desk.rooms.count).must_equal 20
     end
@@ -24,7 +29,6 @@ describe "front desk" do
 
   describe "add_reservation" do
     before do
-      @dates = Hotel::DateRange.new(start_date: Date.today + 2, end_date: Date.today + 6)
       @front_desk.add_reservation(@dates)
     end
 
@@ -52,9 +56,6 @@ describe "front desk" do
   end
 
   describe "available_rooms" do
-    before do
-      @dates = Hotel::DateRange.new(start_date: Date.today + 2, end_date: Date.today + 6)
-    end
 
     it "returns an array of all available rooms given a date range" do
       expect(@front_desk.available_rooms(@dates)).must_be_instance_of Array
@@ -94,7 +95,6 @@ describe "front desk" do
 
   describe "find_reservation_with" do
     before do
-      @dates = Hotel::DateRange.new(start_date: Date.today + 2, end_date: Date.today + 6)
       @room = @front_desk.rooms[0]
     end
 
