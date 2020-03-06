@@ -30,7 +30,7 @@ def choice
   if answer == "a"
     do_request_reservation
   elsif answer == "b"
-    puts "huh"
+    do_create_block
   elsif answer == "c"
     puts "huh"
   elsif answer == "d"
@@ -53,6 +53,31 @@ def do_request_reservation
   puts MANAGER.list_all
 end 
 
+def do_create_block
+  puts "creating a block for you..."
+  puts "Enter Start Date year/month/day example input: 2020/3/1"
+  start_date = get_user_input.split("/").map{|a|a.to_i}
+  puts "Enter End Date year/month/day example input: 2020/3/3"
+  end_date = get_user_input.split("/").map{|a|a.to_i}
+  puts "Enter number of rooms to block (max 5)"
+  num_of_rooms = get_user_input.to_i
+  puts "Enter room rate"
+  room_rate = get_user_input.to_f
+  MANAGER.create_block(start_date,end_date,num_of_rooms,room_rate)
+  puts MANAGER.list_all
+end 
+
+def book_room_of_block
+end 
+
+def reservation_cost
+end 
+
+def list_all
+end 
+
+def check_date_reservations
+end 
 
 def run_program
   puts "================================"
