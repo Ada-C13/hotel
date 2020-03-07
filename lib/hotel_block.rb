@@ -18,9 +18,9 @@ module Hotel
 
     def book_room(room)
       valid_room = validate_room(room)
-      @available_rooms - [valid_room]
+      @available_rooms.delete(valid_room)
       @reserved_rooms << valid_room
-      return @reserved_rooms
+      return true
     end
 
     def validate_room(room)

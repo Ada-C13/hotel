@@ -32,15 +32,22 @@ describe "HotelBlock class" do
   end
 
   describe "#book_room" do
+    it "removes a specific room from available rooms array" do
+      reserving = @block.book_room(Hotel::Room.new(2))
+      expect(@block.available_rooms.length).must_equal 1
+      expect(@block.available_rooms.first.number).must_equal 1
+    end
+
     it "returns an array of rooms" do
       reserving = @block.book_room(Hotel::Room.new(2))
-      expect(reserving).must_be_instance_of Array
+      expect(reserving).must_equal true
       expect(@block.reserved_rooms.first).must_be_instance_of Hotel::Room
     end
 
     it "moves a specific room to reserved_rooms array" do
       reserving = @block.book_room(Hotel::Room.new(2))
       expect(@block.reserved_rooms.first.number).must_equal 2
+      expect(@block.reserved_rooms.length).must_equal 1
     end
   end
 

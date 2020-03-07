@@ -14,10 +14,6 @@ module Hotel
       @reservations = []
     end
 
-    def add_reservation(reservation)
-      @reservations << reservation
-    end
-
     def get_bookings(date)
       check_date = Date.parse(date)
       return @reservations.find_all{ |reservation| 
@@ -52,7 +48,7 @@ module Hotel
       available_rooms = get_available_rooms(range)
       raise ArgumentError, "No available rooms for this date range" if available_rooms.empty?
       new_reservation = Reservation.new(rooms: available_rooms.first, date_range: range)
-      add_reservation(new_reservation)
+      @reservations << new_reservation
       return new_reservation
     end
 
@@ -65,6 +61,8 @@ module Hotel
       add_block_to_reservations(new_block)
       return new_block
     end
+
+    private
 
     def add_block_to_reservations(block)
       (block.rooms.length - 1).times do |i|

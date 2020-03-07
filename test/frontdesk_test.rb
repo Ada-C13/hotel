@@ -33,143 +33,45 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "#add" do
-    it "adds a new reservation to a list of reservations" do
-      reservation = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "3rd May 2020", end_date: "6th May 2020"))
-      front_desk = Hotel::FrontDesk.new
-      front_desk.add_reservation(reservation)
-      expect(front_desk.reservations.first).must_be_instance_of Hotel::Reservation
-      expect(front_desk.reservations.first.rooms).must_be_instance_of Hotel::Room
-    end
-  end
-
   describe "#get_bookings" do
     it "gives an instance of Reservation in a list of reservations" do
-      reservation = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "3rd May 2020", end_date: "26th May 2020"))
+      range = Hotel::DateRange.new(start_date: "3rd May 2020", end_date: "26th May 2020")
       front_desk = Hotel::FrontDesk.new
-      front_desk.add_reservation(reservation)
+      front_desk.reserve_room(range)
       expect(front_desk.get_bookings("22nd May 2020").first).must_be_instance_of Hotel::Reservation
     end
 
-    it "gives a correct Reservation for a specified date" do
-      reservation = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "3rd May 2020", end_date: "26th May 2020"))
-      front_desk = Hotel::FrontDesk.new
-      front_desk.add_reservation(reservation)
-      expect(front_desk.get_bookings("22nd May 2020").first).must_equal reservation
-    end
-
-    it "gives a correct Reservation if a specified date coinsides with a check-in date" do
-      reservation = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "3rd May 2020", end_date: "26th May 2020"))
-      front_desk = Hotel::FrontDesk.new
-      front_desk.add_reservation(reservation)
-      expect(front_desk.get_bookings("21st May 2020").first).must_equal reservation
-    end
-
     it "gives nil if a specified date coinsides with a check-out date" do
-      reservation = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "3rd May 2020", end_date: "26th May 2020"))
+      range = Hotel::DateRange.new(start_date: "3rd May 2020", end_date: "26th May 2020")
       front_desk = Hotel::FrontDesk.new
-      front_desk.add_reservation(reservation)
+      front_desk.reserve_room(range)
       expect(front_desk.get_bookings("26th May 2020").first).must_be_nil
     end
 
     it "returns an empty array if no reservations are found" do
-      reservation = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020"))
+      range = Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
       front_desk = Hotel::FrontDesk.new
-      front_desk.add_reservation(reservation)
+      front_desk.reserve_room(range)
       expect(front_desk.get_bookings("21st Apr 2020")).must_equal []
-    end
-
-    it "gives a correct array length if a couple of reservations occured on a specified date" do
-      reservation1 = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020"))
-      reservation2 = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "1 Apr 2020", end_date: "23rd Apr 2020"))
-      front_desk = Hotel::FrontDesk.new
-      front_desk.add_reservation(reservation1)
-      front_desk.add_reservation(reservation2)
-
-      expect(front_desk.get_bookings("1st Apr 2020").length).must_equal 2
     end
   end
 
   describe "#get_room_bookings" do
     it "returns an instance of Reservation in a list" do
       range = Hotel::DateRange.new(start_date: "2nd Apr 2020", end_date: "4th Apr 2020")
-      reservation = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020"))
+      range = Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
       front_desk = Hotel::FrontDesk.new
-      front_desk.add_reservation(reservation)
+      front_desk.reserve_room(range)
       expect(front_desk.get_room_bookings(1, range).first).must_be_instance_of Hotel::Reservation
-    end
-
-    it "returns all instances of Reservations if they all satisfy parameters" do
-      range = Hotel::DateRange.new(start_date: "2nd Apr 2020", end_date: "4th Apr 2020")
-      reservation_1 = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020"))
-      reservation_2 = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "1 Apr 2020", end_date: "5 Apr 2020"))
-      front_desk = Hotel::FrontDesk.new
-      front_desk.add_reservation(reservation_1)
-      front_desk.add_reservation(reservation_2)
-      expect(front_desk.get_room_bookings(1, range).length).must_equal 2
-      expect(front_desk.get_room_bookings(1, range).first).must_equal reservation_1
-      expect(front_desk.get_room_bookings(1, range).last).must_equal reservation_2
-    end
-
-    it "returns an empty array if no matches of dates found for the room" do
-      range = Hotel::DateRange.new(start_date: "8th Apr 2020", end_date: "10th Apr 2020")
-      reservation_1 = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020"))
-      reservation_2 = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "1 Apr 2020", end_date: "5 Apr 2020"))
-      front_desk = Hotel::FrontDesk.new
-      front_desk.add_reservation(reservation_1)
-      front_desk.add_reservation(reservation_2)
-      expect(front_desk.get_room_bookings(1, range)).must_equal []
-    end
-
-    it "returns an empty array if a specified room had no reservations" do
-      range = Hotel::DateRange.new(start_date: "8th Apr 2020", end_date: "10th Apr 2020")
-      reservation_1 = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(2), 
-        date_range: Hotel::DateRange.new(start_date: "8 Apr 2020", end_date: "12 Apr 2020"))
-      reservation_2 = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(3), 
-        date_range: Hotel::DateRange.new(start_date: "7 Apr 2020", end_date: "15 Apr 2020"))
-      front_desk = Hotel::FrontDesk.new
-      front_desk.add_reservation(reservation_1)
-      front_desk.add_reservation(reservation_2)
-      expect(front_desk.get_room_bookings(1, range)).must_equal []
     end
   end
 
   describe "#get_available_rooms" do
     it "returns an instance of a Room in a list" do
       range = Hotel::DateRange.new(start_date: "2nd Apr 2020", end_date: "4th Apr 2020")
-      reservation = Hotel::Reservation.new(
-        rooms: Hotel::Room.new(1), 
-        date_range: Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020"))
+      range = Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
       front_desk = Hotel::FrontDesk.new
-      front_desk.add_reservation(reservation)
+      front_desk.reserve_room(range)
       expect(front_desk.get_available_rooms(range).first).must_be_instance_of Hotel::Room
     end
 
@@ -180,7 +82,7 @@ describe "FrontDesk class" do
         reservation = Hotel::Reservation.new(
           rooms: Hotel::Room.new(i+1), 
           date_range: Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020"))
-        front_desk.add_reservation(reservation)
+        front_desk.reserve_room(range)
       end
       expect(front_desk.get_available_rooms(range).length).must_equal 2
     end
