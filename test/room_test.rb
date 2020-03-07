@@ -45,14 +45,22 @@ describe "Room Class" do
     end
   end
 
-  # # PRIVATE METHODS
-  #   describe "new_reservation" do
-  #     it "creates a new reservation" do
-  #       room = Hotel::Room.new(5)
-  #       result = room.new_reservation(room_id: room.id, start_date: "2020-3-1", end_date: "2020-3-10")
-  #       expect(result).must_be_kind_of Hotel:: Reservation
-  #       expect(result.room_id).must_equal 5
-  #     end
-  #   end
-  # end
+  describe "select_reservations" do
+    before do
+      @room = Hotel::Room.new(10)
+      @room.reserve(start_date: "2020-3-1", end_date: "2020-3-10")
+      @room.reserve(start_date: "2020-3-12", end_date: "2020-3-13")
+      @room.reserve(start_date: "2020-3-15", end_date: "2020-3-20")
+      
+    end
+    it "returnes reservations which match requested date range" do
+      date_range = Hotel::DateRange.new(start_date: "2020-3-1", end_date: "2020-3-25")
+      expect(@room.select_reservations(date_range).length).must_equal 3
+    end
+
+    it "returns empty array if no reservations were made for requested dates" do
+      date_range = Hotel::DateRange.new(start_date: "2020-4-1", end_date: "2020-4-25")
+      expect(@room.select_reservations(date_range).empty?).must_equal true
+    end
+  end
 end

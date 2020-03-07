@@ -26,6 +26,10 @@ module Hotel
       add_reservation(reservation)
     end
 
+    def select_reservations(date_range)
+      reservations.select { |reservation| reservation.date_range.overlap? (date_range)}
+    end
+
     private
       def new_reservation(start_date:, end_date:) 
         reservation = Reservation.new(room_id: id, start_date: start_date, end_date: end_date)
@@ -33,6 +37,6 @@ module Hotel
 
       def add_reservation(reservation)
         reservations << reservation
-      end
+      end  
   end
 end

@@ -18,13 +18,11 @@ module Hotel
       if room_id 
         room = rooms.find { |room| room.id == room_id}
         return nil if room == nil
-        reservations = room.reservations.select { |reservation| 
-          reservation.date_range.overlap? (date_range) }
+        reservations = room.select_reservations(date_range)
       else
         reservations = []
         rooms.each do |room|
-          room_reservations = room.reservations.select { |reservation| 
-            reservation.date_range.overlap? (date_range) }
+          room_reservations = room.select_reservations(date_range)
           reservations += room_reservations
         end
       end
@@ -33,7 +31,7 @@ module Hotel
     end
 
     def find_available_rooms(start_date:, end_date:)
-      #TODO: efficient date checking, rename to find_available_rooms, date range?
+      #TODO: efficient date checking
       available_rooms = []
       rooms.each do |room|
         available_rooms << room if room.available?(start_date: start_date, end_date: end_date)
