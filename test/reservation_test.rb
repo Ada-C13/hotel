@@ -1,10 +1,11 @@
 require_relative 'test_helper'
+require 'pry'
 
 describe "Reservation class" do
   describe "initialize" do
     before do
-      start_date= "March 1, 2019"
-      end_date = "March 5, 2019"
+      start_date= Date.new(2019, 03, 01)
+      end_date = Date.new(2019, 03, 05)
 
       room = Hotel::Room.new(
         room_num: 13,
@@ -27,11 +28,11 @@ describe "Reservation class" do
     end 
     
     it "has a start_date that is a Date object" do
-      expect(@res_data.start_date).must_equal Date.parse("March 1, 2019") 
+      expect(@res_data.start_date).must_be_instance_of Date
     end
 
     it "has an end_date that is a Date object" do
-      expect(@res_data.end_date).must_equal Date.parse("March 5, 2019")
+      expect(@res_data.end_date).must_be_instance_of Date
     end
     
     it "@res_data.room is an instance of Room.new" do
