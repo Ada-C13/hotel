@@ -40,7 +40,7 @@ module Hotel
       return available_rooms.empty? ? nil : available_rooms
     end
 
-    def make_reservation(room_id: nil, start_date:, end_date:)
+    def make_reservation(room_id: nil, start_date:, end_date:, rate: :default)
       if room_id 
         room = find_room_by_id(room_id)
         raise ArgumentError.new("Invalid room ID.") if room == nil
@@ -48,22 +48,23 @@ module Hotel
         room = find_available_rooms(start_date: start_date, end_date: end_date)[0]
         raise StandardError.new("No rooms available for these dates.") if room == nil
       end
-      room.reserve(start_date: start_date, end_date: end_date)
+      room.reserve(start_date: start_date, end_date: end_date, rate: rate)
     end
 
-    def make_block(room_ids: nil, start_date:, end_date:)
+    def make_block(room_ids: nil, start_date:, end_date:, rate: :default)
       #TODO: nil scenario
       raise ArgumentError.new("Blocks can't contain more than 5 rooms.") if room_ids.length > 5
+    
       block_id = generate_block_id
       blocks[block_id] = []
       room_ids.each do |id|
         room = find_room_by_id(id)
         raise ArgumentError.new("Invalid room ID.") if room == nil
-        room.reserve(start_date: start_date, end_date: end_date, block: block_id)
+        room.reserve(start_date: start_date, end_date: end_date, block: block_id, rate: rate)
         blocks[block_id] << id
       end
     end
-
+  
     private
     def make_rooms
       rooms = []
@@ -78,6 +79,7 @@ module Hotel
     end
   end
 end
+
 
 
 

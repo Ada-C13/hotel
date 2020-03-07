@@ -162,6 +162,18 @@ describe "ReservationDesk class" do
         @reservation_desk.make_reservation(start_date: "2020-6-1", end_date: "2020-6-30")
       }.must_raise StandardError
     end
+
+    it "reserves a room at a default rate if no other specified" do
+      @reservation_desk.make_reservation(room_id: 1, start_date: "2020-5-5", end_date: "2020-5-7")
+      rate = @reservation_desk.rooms[0].reservations[0].rate
+      expect(rate).must_equal 200
+    end
+
+    it "reserves a room at a specified rate" do
+      @reservation_desk.make_reservation(room_id: 1, start_date: "2020-5-5", end_date: "2020-5-7", rate: 310.05)
+      rate = @reservation_desk.rooms[0].reservations[0].rate
+      expect(rate).must_equal 310.05
+    end
   end
 
   describe "make block" do
@@ -204,6 +216,18 @@ describe "ReservationDesk class" do
       expect {
         @reservation_desk.make_block(room_ids: [4, 5, 6, 7, 1], start_date: "2020-9-2", end_date: "2020-9-5")
       }.must_raise StandardError
+    end
+
+    it "creates reservations with default rate if no discount specified" do
+      @reservation_desk.make_block(room_ids: [1, 2, 3], start_date: "2020-9-1", end_date: "2020-9-10")
+      rate = @reservation_desk.rooms[0].block_participation[0].rate
+      expect(rate).must_equal 200
+    end
+
+    it "creates reservations with a different rate if specified" do
+      @reservation_desk.make_block(room_ids: [1, 2, 3], start_date: "2020-9-1", end_date: "2020-9-10", rate: 150)
+      rate = @reservation_desk.rooms[0].block_participation[0].rate
+      expect(rate).must_equal 150
     end
   end
 end

@@ -43,6 +43,20 @@ describe "Room Class" do
       expect(@room.reservations[0]).must_be_kind_of Hotel::Reservation
       expect(@room.reservations[0].room_id).must_equal 10
     end
+
+    it "reserves a room at default rate if no other specified" do
+      room = Hotel::Room.new(10)
+      room.reserve(start_date: "2020-3-1", end_date: "2020-3-10")
+      rate = room.reservations[0].rate
+      expect(rate).must_equal 200
+    end
+
+    it "reserves room at a specified rate" do
+      room = Hotel::Room.new(10)
+      room.reserve(start_date: "2020-3-1", end_date: "2020-3-10", rate: 339.99)
+      rate = room.reservations[0].rate
+      expect(rate).must_equal 339.99
+    end
   end
 
   describe "select_reservations" do
@@ -64,3 +78,4 @@ describe "Room Class" do
     end
   end
 end
+

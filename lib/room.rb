@@ -1,4 +1,5 @@
 module Hotel
+
   class Room
   # Responcibility: to reserve individual rooms
     attr_reader :id, :reservations, :block_participation
@@ -24,11 +25,12 @@ module Hotel
       return true
     end
 
-    def reserve(start_date:, end_date:, block: nil)
+    
+    def reserve(start_date:, end_date:, block: nil, rate: :default)
       unless available?(start_date: start_date, end_date: end_date) 
         raise StandardError.new("Room #{id} is unavailabe for requested dates.") 
       end
-      reservation = new_reservation(start_date: start_date, end_date: end_date) 
+      reservation = new_reservation(start_date: start_date, end_date: end_date, rate: rate) 
       block ? add_block_participation(reservation) : add_reservation(reservation)
     end
 
@@ -37,13 +39,14 @@ module Hotel
     end
 
     private
-      def new_reservation(start_date:, end_date:) 
-        reservation = Reservation.new(room_id: id, start_date: start_date, end_date: end_date)
+      def new_reservation(start_date:, end_date:, rate: :default) 
+        reservation = Reservation.new(room_id: id, start_date: start_date, end_date: end_date, rate: rate)
       end
 
       def add_reservation(reservation)
         reservations << reservation
       end  
+
 
       def add_block_participation(reservation)
         block_participation << reservation
