@@ -21,5 +21,19 @@ module Hotel
       price = reservation.date_range.count_nights * cost
       return price
     end
+
+    def is_available(given_range)   
+      return true if bookings.empty?
+
+      bookings.each do |item|
+        if item.class == Hotel::Block 
+          return false if item.date_range.overlapping(given_range) && item.date_range.exactly_matching(given_range)== false #it is not an exact match #method
+        elsif item.class == Hotel::Reservation
+          return false if item.date_range.overlapping(given_range)
+        end
+      end
+
+      return true
+    end
   end
 end

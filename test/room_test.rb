@@ -80,4 +80,49 @@ describe Hotel::Room do
       expect(@room01.get_price(@reservation01)).must_equal 1000.00
     end
   end
+
+  describe "is_available" do
+    before do
+      @coordinator01 = Hotel::SystemCoordinator.new
+      @start_date = Date.today + 5
+      @end_date = Date.today + 10
+      @date_range = Hotel::DateRange.new(@start_date, @end_date)
+    end
+
+    it "returns true if room is available with no reservations" do
+      expect(@room01.is_available(@date_range)).must_equal true
+      expect(@room01.bookings.length).must_equal 0
+    end
+
+    it "returns true if room is available with exact block match" do
+      block10 = Hotel::Block.new(@date_range, @room_id)
+      @room01.add_booking_to_room(block10)
+      expect(@room01.is_available(@date_range)).must_equal true
+      expect(@room01.bookings.length).must_equal 1
+    end
+
+    it "returns true if room is available with no overlapping reservations" do
+      range20 = Hotel::DateRange.new(Date.today + 10, Date.today + 12) 
+      reservation01 = Hotel::Reservation.new(range20, @room_id)
+      @room01.add_booking_to_room(reservation01)
+      expect(@room01.is_available(@date_range)).must_equal true
+      expect(@room01.bookings.length).must_equal 1
+    end
+
+    it "returns false when room has overlapping block" do
+      range20 = Hotel::DateRange.new(Date.today + 5, Date.today + 11) 
+      block20 = Hotel::Block.new(range20, @room_id)
+      @room01.add_booking_to_room(block20)
+      expect(@room01.is_available(@date_range)).must_equal false
+      expect(@room01.bookings.length).must_equal 1
+    end
+
+    it "returns false when room has overlapping reservation" do
+      range30 = Hotel::DateRange.new(Date.today + 5, Date.today + 6) 
+      reservation01 = Hotel::Reservation.new(range30, @room_id)
+      @room01.add_booking_to_room(reservation01)
+      expect(@room01.is_available(@date_range)).must_equal false
+      expect(@room01.bookings.length).must_equal 1
+    end
+  end
 end
