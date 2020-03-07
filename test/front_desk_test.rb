@@ -5,11 +5,11 @@ describe "FrontDesk" do
     before do
       @front_desk = Hotel::FrontDesk.new
 
-      @reservation_one = Hotel::Reservation.new(
+      @reservation_one = Hotel::IndividualReservation.new(
         date_range = Hotel::DateRange.new("2020-03-15", "2020-03-17"), 
         room_num = 1
       )
-      @reservation_two = Hotel::Reservation.new(
+      @reservation_two = Hotel::IndividualReservation.new(
         date_range = Hotel::DateRange.new("2020-04-01", "2020-04-05"), 
         room_num = 2
       )
@@ -44,11 +44,11 @@ describe "FrontDesk" do
   describe "Find available room" do
     before do
       @front_desk = Hotel::FrontDesk.new
-      @reservation_one = Hotel::Reservation.new(
+      @reservation_one = Hotel::IndividualReservation.new(
         date_range = Hotel::DateRange.new("2020-05-01", "2020-05-03"), 
         room_num = 1
       )
-      @reservation_two = Hotel::Reservation.new(
+      @reservation_two = Hotel::IndividualReservation.new(
         date_range = Hotel::DateRange.new("2020-05-03", "2020-05-10"), 
         room_num = 2
       )
@@ -77,7 +77,7 @@ describe "FrontDesk" do
   describe "Make a reservation" do 
     before do
       @front_desk = Hotel::FrontDesk.new
-      @reservation_one = Hotel::Reservation.new(
+      @reservation_one = Hotel::IndividualReservation.new(
         date_range = Hotel::DateRange.new("2020-05-10", "2020-05-20"), 
         room_num = 1
       )
@@ -90,7 +90,7 @@ describe "FrontDesk" do
 
     it "Return the instance of Reservation after reserve a room" do
       reservation = @front_desk.reserve_room("2020-05-01", "2020-05-03")
-      expect(reservation).must_be_kind_of Hotel::Reservation
+      expect(reservation).must_be_kind_of Hotel::IndividualReservation
     end
 
     it "Assign the first aviable room number in the array when reserve the room" do

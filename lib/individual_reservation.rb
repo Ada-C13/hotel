@@ -2,7 +2,7 @@ require "date"
 require_relative "date_range"
 
 module Hotel
-  class Reservation
+  class IndividualReservation
     attr_reader :id, :date_range, :room_num
 
     def initialize(date_range, room_num)

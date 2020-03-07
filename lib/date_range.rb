@@ -1,5 +1,6 @@
 require "date"
-require_relative "reservation"
+require_relative "individual_reservation"
+require_relative "block_reservation"
 
 module Hotel
   class DateRange

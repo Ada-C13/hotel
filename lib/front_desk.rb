@@ -1,6 +1,7 @@
 require "date"
 require_relative "date_range"
-require_relative "reservation"
+require_relative "individual_reservation"
+require_relative "block_reservation"
 
 module Hotel
   class FrontDesk
@@ -70,7 +71,7 @@ module Hotel
       room_num = available_rooms(start_date, end_date)
       raise StandardError.new("There's no available room in this date range!") if room_num.length == 0
 
-      reservation = Hotel::Reservation.new(
+      reservation = Hotel::IndividualReservation.new(
         date_range = date_range, 
         room_num = room_num.first
       )
