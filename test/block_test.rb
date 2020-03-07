@@ -11,7 +11,7 @@ describe "Hotel::Block" do
   end
 
   describe "constructor" do
-    it "initialize with two dates, array of rooms and rate" do
+    it "initializes with two dates, array of rooms and rate" do
       expect(@block).must_be_kind_of Hotel::Block
       expect(@block.range.start_date).must_equal @start_date
       expect(@block.range.end_date).must_equal @end_date
