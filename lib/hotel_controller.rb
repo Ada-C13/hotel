@@ -1,12 +1,11 @@
-
-
 module Hotel
   class HotelController
     attr_reader :rooms
-    attr_accessor :reservations
+    attr_accessor :reservations, :hotel_blocks
     def initialize
       @rooms = Array.new(20){|i| Hotel::Room.new(i+1)}
       @reservations = []
+      @hotel_block = []
     end
   
     # Wave 1

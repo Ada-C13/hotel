@@ -118,7 +118,6 @@ describe Hotel::HotelController do
           start_date = Date.today
           end_date = start_date + 4
           reservation1 = @hotel_controller.reserve_room(start_date, end_date)
-
           reservation2 = @hotel_controller.reserve_room(start_date, end_date)
   
           expect(@hotel_controller.reservations.length).must_equal 2
@@ -147,5 +146,5 @@ describe Hotel::HotelController do
 
 
 
-  
+
 end
