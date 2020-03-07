@@ -325,19 +325,33 @@ describe "Hotel::HotelController" do
     # Checks whether a given block has any rooms available # test to fix this.
     describe "available_rooms_in(block)" do
       it "returns a list of rooms" do
-
-      end
+        block = @hotel.create_block(dt(1), dt(4), [1, 2, 3, 4], 150)
+        available = @hotel.available_rooms_in(block)
+        expect(available).must_be_kind_of Array
+        expect(@hotel.rooms_valid?(available)).must_equal true
+     end
 
       it "returns all rooms if there are no reservations" do
-
+        block = @hotel.create_block(dt(1), dt(4), [1, 2, 3, 4], 150)
+        available = @hotel.available_rooms_in(block)
+        expect(available).must_equal [1, 2, 3, 4]
       end
 
       it "returns fewer rooms after a reservation is made" do
-
+        block = @hotel.create_block(dt(1), dt(4), [1, 2, 3, 4], 150)
+        @hotel.reserve_from_block(block, 1)
+        @hotel.reserve_from_block(block, 3)
+        available = @hotel.available_rooms_in(block)
+        expect(available).must_equal [2, 4]
       end
 
       it "returns an empty array if no rooms are left" do
-
+        block = @hotel.create_block(dt(1), dt(4), [1, 2, 3, 4], 150)
+        (1..4).each do |room|
+          @hotel.reserve_from_block(block, room)
+        end
+        available = @hotel.available_rooms_in(block)
+        expect(available.size).must_equal 0
       end
     end
   end # Wave 3
