@@ -107,6 +107,11 @@ describe "HotelManager" do
         )
       )}.must_raise ArgumentError 
     end
+
+    it "sends correct cost to new Reservation" do
+      cost = @hotel_manager.find_room(1).cost
+      expect(reservation.cost).must_equal 200
+    end
   end
 
   describe "find_room" do
