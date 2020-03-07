@@ -310,11 +310,15 @@ describe "Hotel::HotelController" do
     # Check if a Room is Not blocked in a Specific Date Range
     describe "is_room_unblocked?" do
       it "returns true if the room is not blocked in that date range" do
-        
+        @hotel.create_block(dt(1), dt(4), [1, 2, 3, 4], 150)
+        expect(@hotel.is_room_unblocked?(dt(1), dt(4), 5)).must_equal true # different room
+        expect(@hotel.is_room_unblocked?(dt(4), dt(8), 1)).must_equal true # different dates
       end
 
       it "returns false if the room is blocked in that date range" do
-
+        @hotel.create_block(dt(1), dt(4), [1, 2, 3, 4], 150)
+        expect(@hotel.is_room_unblocked?(dt(1), dt(4), 3)).must_equal false # room 3 is both
+        expect(@hotel.is_room_unblocked?(dt(3), dt(8), 3)).must_equal false # overlapping dates
       end        
     end
     
