@@ -26,7 +26,7 @@ module Hotel
     def find_available_rooms(check_in, check_out)
       new_date_range = DateRange.new(check_in: check_in, check_out: check_out)
       available_rooms = @rooms.clone
-      # for all rooms in a block, .date_range.overlap? and delete from available_rooms. blocked_out? method?
+      # for all rooms in a block, .date_range.overlap? and delete from available_rooms. blocked_out?(date_range) method
       @reservations.each do |reservation|
         if reservation.date_range.overlap?(new_date_range) == true
           available_rooms.delete(reservation.room)
@@ -49,6 +49,7 @@ module Hotel
       return all_reservations_for_date
     end
 
+    # I could create separate method for find_by_room, and combine with find_by_date
     def find_by_date_and_room(room, date)
       all_reservations_for_date_and_room = []
       @reservations.each do |reservation|
@@ -62,6 +63,7 @@ module Hotel
       return @rooms
     end
 
+    # Do I need this method here?
     def show_reservation_cost(reservation)
       return reservation.calculate_cost
     end
@@ -81,7 +83,7 @@ end
 
 # I can check whether a given block has any rooms available
 
-# I can reserve a specific room from a hotel block ???
+# I can reserve a specific room from a hotel block
 
 # I can only reserve that room from a hotel block for the full duration of the block
 # I can see a reservation made from a hotel block from the list of reservations for that date (see wave 1 requirements)
@@ -89,3 +91,15 @@ end
 # A block can contain a maximum of 5 rooms
 # When a room is reserved from a block of rooms, the reservation dates will always match the date range of the block
 # All of the availability checking logic from Wave 2 should now respect room blocks as well as individual reservations
+
+# Feedback reqs:
+# creates a block of rooms
+# reserves a room from a block
+
+# ### Design ideas: ###
+
+# Block as class with no inheritance
+# Block has @date_range and @rooms and @reservations and @discounted_rate
+# HotelController will have @blocks array and method to create Block and add to @blocks
+# HotelController find_available_rooms will have another loop to exclude blocks
+# HotelController reservation lookup methods will have loop for blocks
