@@ -4,20 +4,22 @@ module Hotel
 
 	class Block < Reservation
 
-		attr_reader
+		attr_reader :room, :cost, :range, :length_of_stay
 		
-		def initialize(room, range)
+		def initialize(room, range, cost)
 			super(room, range)
 
-			# if range.end_date < range.start_date
-			# 	raise ArgumentError.new("End date cannot be earlier than start.")
-			# else
-			# 	@range = range
-			# end
+			if room.length > 5 || room.length < 2
+				raise ArgumentError.new("Block can only accept up to 5 rooms.")
+			else
+				@room = room
+			end
 
 			@length_of_stay = @range.end_date - @range.start_date
-			@cost = ((@length_of_stay * PRICE) * 0.80).to_i
+			@cost = cost
 		end
+
+
 
 	end
 

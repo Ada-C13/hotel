@@ -57,7 +57,8 @@ describe Hotel::HotelSystem do
 
 			it "returns an instance of Room" do
 				found_room = @hotel.room_finder(@range)
-				expect(found_room).must_be_instance_of Hotel::Room
+				expect(found_room).must_be_instance_of Array
+				expect(found_room[0]).must_be_instance_of Hotel::Room
 			end
 
 			it "must assign a room that has not been assigned yet for each reservation" do
@@ -174,6 +175,42 @@ describe Hotel::HotelSystem do
 		it "returns an array of 17 for available rooms on a date" do
 			expect(@available_rooms.length).must_equal 17
 		end
+
+	end
+
+	describe "#make_block" do
+		
+		before do
+			@hotel = Hotel::HotelSystem.new
+
+			rooms = [@hotel.rooms[19], @hotel.rooms[18], @hotel.rooms[17]]
+			@range = Hotel::DateRange.new(Date.new(2019, 12, 23), Date.new(2019, 12, 28))
+			@cost = 900
+			@length_list = @hotel.reservations.length
+			@length_list_room = @hotel.rooms[19].reservations.length
+			@new_block = @hotel.make_block(rooms, @range, @cost)
+		end
+
+		it "return an instance of block" do
+			expect(@new_block).must_be_instance_of Hotel::Block
+		end
+
+		it "assigns new reservations to reservations list in Hotel" do
+			expect(@hotel.reservations.length).must_equal (@length_list + 3)
+		end
+
+		it "correctly adds Reservation to Room's list of reservations" do
+			expect(@hotel.rooms[19].reservations.length).must_equal (@length_list_room + 1)
+		end
+
+		it "raises an exception if one of the rooms is already booked for range" do
+			inval_rooms = [@hotel.rooms[15], @hotel.rooms[16], @hotel.rooms[17]]
+
+			expect{@hotel.make_block(inval_rooms, @range, @cost)}.must_raise ArgumentError
+		end
+	end
+
+	describe "#check_block_availability" do
 
 	end
 

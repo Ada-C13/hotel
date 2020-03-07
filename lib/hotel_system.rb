@@ -20,7 +20,7 @@ module Hotel
 
 		# Create a reservation from start date and end date.
 		def make_reservation(range)
-			room = room_finder(range)
+			room = room_finder(range).first
 			new_reservation = Hotel::Reservation.new(room, range)
 			@reservations << new_reservation
 			room.reservations << new_reservation
@@ -40,7 +40,7 @@ module Hotel
 			
 			raise ArgumentError.new("No rooms left for this time range") if possible_rooms.length == 0
 
-			return possible_rooms.first
+			return possible_rooms
 		end
 
 		# Get all reservations by a specific date.
@@ -73,5 +73,35 @@ module Hotel
 			unavail_rooms = get_reservations_by_date(date).map { |reservation| reservation.room }
 			return @rooms - unavail_rooms
 		end
+
+		# Create a block.
+		def make_block(rooms, range, cost)
+			possible_rooms = room_finder(range) # Returns available rooms in the given range.
+			
+			rooms.each do |room|
+				if possible_rooms.include?(room)
+					new_reservation = Hotel::Reservation.new(room, range)
+					@reservations << new_reservation
+					room.reservations << new_reservation
+				else
+					raise ArgumentError.new("Room #{ room.number } already booked for this range.")
+				end
+			end
+
+			return Hotel::Block.new(rooms, range, cost)
+		end
+
+		# def check_block_availability(rooms, range)
+		# 	avail = []
+		# 	@reservations.each do |reservation|
+		# 		rooms.each do |room|
+		# 			if (reservation.room.number == room) and (reservation.range.include_range?(:booking, range) == false)
+		# 				avail += room
+		# 			end
+		# 		end
+		# 	end
+
+		# 	return avail
+		# end
 	end
 end
