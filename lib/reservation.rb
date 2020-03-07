@@ -4,7 +4,7 @@ require_relative 'hotel_manager'
 
 module Hotel
   class Reservation
-    attr_reader :date_range, :id, :room_number, :nights
+    attr_reader :date_range, :id, :room_number, :nights, :cost
 
     attr_accessor :total_cost
 
