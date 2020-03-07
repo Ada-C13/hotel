@@ -65,6 +65,12 @@ describe Hotel::Block do
       end
       
     end
+    it "won't let another block be formed on the same rooms with overlapping range" do
+      block = Hotel::Block.new(@start, @end, @rooms, @rate)
+      start2 = Date.new(2020, 01, 03)
+      end2 = Date.new(2020, 01, 15)
+      expect{Hotel::Block.new(start2, end2, @rooms, @rate)}.must_raise ArgumentError
+    end
     it "won't erase another block in making room's block>reservation change" do
       block = Hotel::Block.new(@start, @end, @rooms, @rate)
       start2 = Date.new(2020, 02, 01)
