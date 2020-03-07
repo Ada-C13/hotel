@@ -289,11 +289,21 @@ describe "Hotel::HotelController" do
     # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot create another hotel block that includes that specific room for that specific date, because it is unavailable
     describe "block_rooms_available?" do
       it "returns true if the rooms are available in that date range" do
-        
+        @hotel.reserve_room(dt(1), dt(4)) # this will reserve room number 1
+        expect(@hotel.block_rooms_available?(dt(1), dt(4), [2, 3, 4])).must_equal true # different rooms
+        expect(@hotel.block_rooms_available?(dt(4), dt(8), [1, 2, 3])).must_equal true # different dates
+        @hotel.create_block(dt(1), dt(4), [2, 3, 4], 150)
+        expect(@hotel.block_rooms_available?(dt(1), dt(4), [5, 6, 7])).must_equal true # different rooms
+        expect(@hotel.block_rooms_available?(dt(4), dt(8), [1, 2, 3, 4])).must_equal true # different dates
       end
 
       it "returns false if the rooms are not available in that date range" do
-
+        @hotel.reserve_room(dt(1), dt(4)) # this will reserve room number 1
+        expect(@hotel.block_rooms_available?(dt(1), dt(4), [1, 2, 3])).must_equal false # room 1 in both
+        expect(@hotel.block_rooms_available?(dt(3), dt(6), [1, 2, 3])).must_equal false # overlapping dates
+        @hotel.create_block(dt(1), dt(4), [2, 3, 4], 150)
+        expect(@hotel.block_rooms_available?(dt(1), dt(4), [4, 5, 6])).must_equal false # room 4 in both
+        expect(@hotel.block_rooms_available?(dt(3), dt(6), [2, 3, 4])).must_equal false # overlapping dates
       end        
     end
 
