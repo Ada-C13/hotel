@@ -82,9 +82,11 @@ module Hotel
     
     # Check if Rooms for a Block are Valid
     def block_rooms_valid?(rooms)
-
+      return false unless rooms.instance_of?(Array)
+      rooms.each do |room|
+        return false unless @rooms.include?(room)
+      end
       return true
-
     end
 
     # Check if the Rooms for a Block are Available in the Date Range
