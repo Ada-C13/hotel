@@ -1,3 +1,5 @@
+require 'pry'
+
 module Hotel
   class DateRange
     attr_reader :start_date, :end_date
