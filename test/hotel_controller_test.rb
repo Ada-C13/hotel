@@ -85,51 +85,51 @@ describe Hotel::Controller do
     end
   end
 
-  # describe "find_by_date" do
-  #   let(:hotel_controller) {Hotel::Controller.new}
-  #   before do
-  #     @start_date = Date.new(2020, 1, 1)
-  #     @end_date = Date.new(2020, 1, 2)
-  #     @room_id = 5
-  #     @date_range_1 = Hotel::DateRange.new(@start_date, @end_date)
-  #     #@reservation_1 = Hotel::Reservation.new(@date_range_1, @room_id)
-  #     hotel_controller.reserve_with_range(@date_range_1)
+  describe "find_by_date" do
+    let(:hotel_controller) {Hotel::Controller.new}
+    before do
+      @start_date = Date.new(2020, 1, 1)
+      @end_date = Date.new(2020, 1, 2)
+      @room_id = 5
+      @date_range_1 = Hotel::DateRange.new(@start_date, @end_date)
+      #@reservation_1 = Hotel::Reservation.new(@date_range_1, @room_id)
+      hotel_controller.reserve_with_range(@date_range_1)
       
-  #     @date_range_2 = Hotel::DateRange.new(@start_date+1, @end_date+1)
-  #     # @reservation_2 = Hotel::Reservation.new(@date_range_2, 3)
-  #     hotel_controller.reserve_with_range(@date_range_2)
-  #   end
+      @date_range_2 = Hotel::DateRange.new(@start_date+1, @end_date+1)
+      # @reservation_2 = Hotel::Reservation.new(@date_range_2, 3)
+      hotel_controller.reserve_with_range(@date_range_2)
+    end
 
-  #   it "returns an array" do
-  #     expect(hotel_controller.find_by_date(@date_range_1)).must_be_kind_of Array
-  #   end
+    it "returns an array" do
+      expect(hotel_controller.find_by_date(@date_range_1)).must_be_kind_of Array
+    end
 
-  #   it "finds only the reservation(s) with the matching date" do
-  #     result_1 = hotel_controller.find_by_date(@date_range_1)
-  #     expect(result_1[0].date_range).must_equal @date_range_1
+    it "finds only the reservation(s) with the matching date" do
+      result_1 = hotel_controller.find_by_date(@date_range_1)
+      expect(result_1[0].date_range).must_equal @date_range_1
 
-  #     result_2 = hotel_controller.find_by_date(@date_range_2)
-  #     expect(result_2[0].date_range).must_equal @date_range_2
-  #   end
+      result_2 = hotel_controller.find_by_date(@date_range_2)
+      expect(result_2[0].date_range).must_equal @date_range_2
+    end
 
-  #   it "returns the correct number of Reservations that match a given date_range" do
-  #     result_1 = hotel_controller.find_by_date(@date_range_1)
-  #     expect(result_1[0].date_range).must_equal @date_range_1
+    it "returns the correct number of Reservations that match a given date_range" do
+      result_1 = hotel_controller.find_by_date(@date_range_1)
+      expect(result_1[0].date_range).must_equal @date_range_1
 
-  #     result_2 = hotel_controller.find_by_date(@date_range_2)
-  #     expect(result_2[0].date_range).must_equal @date_range_2
+      result_2 = hotel_controller.find_by_date(@date_range_2)
+      expect(result_2[0].date_range).must_equal @date_range_2
 
-  #     hotel_controller.reserve_with_range(@date_range_2)
+      hotel_controller.reserve_with_range(@date_range_2)
 
-  #     result_3 = hotel_controller.find_by_date(@date_range_2)
-  #     expect(result_3.length).must_equal 2
-  #   end
+      result_3 = hotel_controller.find_by_date(@date_range_2)
+      expect(result_3.length).must_equal 2
+    end
 
-  #   it "returns empty array if no date_range matches are found" do
-  #     date_range_3 = Hotel::DateRange.new(@start_date+10, @end_date+10)
-  #     expect(hotel_controller.find_by_date(@date_range_3)).must_be_empty
-  #   end
-  # end
+    it "returns empty array if no date_range matches are found" do
+      date_range_3 = Hotel::DateRange.new(@start_date+10, @end_date+10)
+      expect(hotel_controller.find_by_date(@date_range_3)).must_equal []
+    end
+  end
 
 # Private methods test
   describe "create_rooms" do

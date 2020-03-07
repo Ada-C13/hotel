@@ -19,15 +19,14 @@ describe Hotel::DateRange do
     end
   end
 
-    # Not sure why this doesn't break my code. ********
-    # it "throws an argument error if inputs are not Date objects" do
-    #   start_date = 42
-    #   end_date = "end"
+    it "throws an argument error if inputs are not Date objects" do
+      start_date = 1
+      end_date = Date.today
 
-    #   expect do
-    #     Hotel::DateRange.new(start_date, end_date)
-    #   end.must_raise ArgumentError
-    # end
+      expect do
+        Hotel::DateRange.new(start_date, end_date)
+      end.must_raise ArgumentError
+    end
 
     describe "overlap?" do
       before do

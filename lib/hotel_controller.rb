@@ -56,25 +56,28 @@ module Hotel
           # will return false if can't create rez, otherwise will create, add to rez_list, and return true
         return room.room_id if room.create_room_reservation(input_range)
       end
-      
+
       raise ArgumentError.new("No rooms available for date range.")
     end
 
     # Wave 1, US 3: "I can access the list of reservations for a specific date, so that I can track reservations by date"
 #  creates an array of matching reservations
 
-    # def find_by_date(input_range)
-    #   reservations_by_date = []
-    #   @rooms.each do |room|
-    #     filtered_rez = room.find_by_range(input_range)
-    #     filtered_rez.each do |rez|
-    #        if rez.date_range == input_range
-    #          reservations_by_date << rez
-    #          break
-    #        end
-    #     end
-    #   return reservations_by_date
-    # end
+    def find_by_date(input_range)
+      reservations_by_date = []
+      @rooms.each do |room|
+        filtered_rez = room.find_by_range(input_range)
+        # return [] if filtered_rez == []
+        filtered_rez.each do |rez|
+           if rez.date_range == input_range
+             reservations_by_date << rez
+             break
+           end
+        end
+      end
+
+      return reservations_by_date
+    end
 
     private
 

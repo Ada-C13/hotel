@@ -45,7 +45,7 @@ module Hotel
     def find_by_range(input_range)
       overlapping = []
       @rez_list.each do |rez|
-        if rez.date_range.overlap?(input_range) == true
+        if rez.date_range.overlap?(input_range)
           overlapping << rez
         end
       end
