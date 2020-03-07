@@ -2,17 +2,19 @@ require 'date'
 
 require_relative 'reservation'
 require_relative 'date_range'
+require_relative 'hotel_block'
 
 module Hotel
   class HotelController
     attr_reader :reservation_list
-    attr_accessor :room_list, :specific_date_reservation
+    attr_accessor :room_list, :specific_date_reservation, :hotel_block_list
 
     # Wave 1
     def initialize(number_of_room)
     @reservation_list = Hash.new
     @room_list = Array.new
-  
+    @hotel_block_list = Hash.new
+    
     n = 1
     number_of_room.times do
       @room_list << "Room #{n}"
@@ -94,6 +96,55 @@ module Hotel
         else
           return available_rooms_list
         end
+      end
+    end
+
+   #Wave 3 Hotel Block
+    def create_hotel_block(start_date, end_date, number_of_rooms)
+      raise ArgumentError.new("They are not the valid Date class for start_date and end_date") if (start_date.class != Date || end_date.class != Date)
+      raise ArgumentError.new("There is not enough room!") if number_of_rooms > 5 || number_of_rooms > self.available_rooms(start_date, end_date).length
+      block_duration = DateRange.new(start_date, end_date)
+      new_hotel_block = BlockReservation.new(block_duration, number_of_rooms)
+      number_of_rooms.times do 
+        block_room = self.reserve_room(block_duration.start_date, block_duration.end_date, "Hotel Block Reserve")
+        block_room.status = :open_hotel_block
+        new_hotel_block.block_reservations << block_room
+      end
+      hotel_block_id = hotel_block_list.length + 1
+      hotel_block_list[hotel_block_id] = new_hotel_block
+      return new_hotel_block
+    end
+
+    # check if a given block has any rooms available
+    # if there is available room - will return the rooms that are open
+    # else will raise argument
+    
+    def check_hotel_block_list_availability(hotel_block_id)
+      raise ArgumentError.new("Not a valid Hotel Block ID!") if !(hotel_block_list.keys.include? hotel_block_id)
+      available_rooms_in_block = Array.new
+      hotel_block_list[hotel_block_id].block_reservations.each do |reservation|
+        if reservation.status == :open_hotel_block
+          available_rooms_in_block << reservation.room_num
+        end
+      end
+
+      if available_rooms_in_block == []
+        raise ArgumentError.new("No room available in this hotel block anymore!")
+      else 
+        return available_rooms_in_block
+      end
+    end
+
+    def reserve_room_hotel_block(hotel_block_id, customer_name, specific_room) 
+      raise ArgumentError.new("Not a valid Hotel Block ID!") if !(hotel_block_list.keys.include? hotel_block_id)
+      hotel_block_list[hotel_block_id].block_reservations.each do |reservation|
+        if (reservation.room_num == specific_room) && (reservation.status != :reserved_hotel_block)
+          booking_room = reservation
+          booking_room.customer_name = customer_name
+          booking_room.status = :reserved_hotel_block
+        end  
+
+      # ???????? raise ArgumentError.new("This is not a reserved room for the hotel block guest!")
       end
     end
   end

@@ -5,8 +5,8 @@ require './lib/hotel_controller.rb'
 
 module Hotel
   class Reservation
-    attr_reader  :date_range, :customer_name
-    attr_accessor :room_num
+    attr_reader  :date_range
+    attr_accessor :room_num, :status, :customer_name
     
     def initialize(date_range, customer_name)
       @date_range = date_range
@@ -17,8 +17,13 @@ module Hotel
     end
 
     def cost
-      # how many night times 200 per night
+      # offering discount to hotel block customers
+      if @customer_name == "Hotel Block Reserve"
+        @cost = ((@date_range.duration)* 150).to_f
+      elsif
+        # how many night times 200 per night
         @cost = ((@date_range.duration)* 200).to_f
+      end
       return  @cost
     end
   end
