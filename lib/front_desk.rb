@@ -45,12 +45,12 @@ module Hotel
   
     private
     def find_room(date_range)
-      room = rooms.find {|room|
-        room.reservations.length == 0
+      room = rooms.find {|r|
+        r.reservations.length == 0
       }
       if room == nil
-        room = rooms.find {|room|
-          room.available?(date_range)
+        room = rooms.find {|r|
+          r.available?(date_range)
         }
       end
       if room == nil

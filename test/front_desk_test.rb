@@ -11,15 +11,15 @@ describe Hotel::FrontDesk do
       rooms = @front_desk.rooms
       expect(rooms).must_be_kind_of Array
     end
-
   end
+  
   describe "reserve_room" do
-    it "takes two Date objects and returns a Reservation, adds reservation to room" do
+    it "takes two Date objects and adds reservation to room" do
       start_date = @date
       end_date = start_date + 3
       reservation = @front_desk.reserve_room(start_date, end_date)
       expect(reservation).must_be_kind_of Hotel::Reservation
-      room = @front_desk.rooms.find {|room| room.reservations.length > 0}
+      room = @front_desk.rooms.find {|r| r.reservations.length > 0}
       expect(room.reservations.include? reservation).must_equal true
     end
 
@@ -108,7 +108,10 @@ describe Hotel::FrontDesk do
       expect(reservation_list.include?(@res2)).must_equal false
       expect(reservation_list.include?(@res3)).must_equal true
     end
-
+    #TO DO: write this test
+    it "excludes blocks, but includes reservations made from block" do
+      
+    end
   end
 
 end

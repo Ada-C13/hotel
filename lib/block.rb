@@ -22,7 +22,7 @@ module Hotel
       if !(@available_rooms.include?(room))
         raise ArgumentError.new("Room #{room.id} is not in this Block.")
       end
-      if @available_rooms.all?{|room| room == nil}
+      if @available_rooms.all?{|r| r == nil}
         raise ArgumentError.new("All rooms in block are already reserved.")
       end
       new_res = Reservation.new(start_date, end_date, room.id, rate)

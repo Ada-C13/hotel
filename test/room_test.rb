@@ -74,8 +74,8 @@ describe Hotel::Room do
       @room15.add(reservation5)
       @room15.add(reservation6)
       resvs_within = @room15.get_reservations(Date.new(2020, 01,01), Date.new(2020,01,31))
-      expect(resvs_within.include? @reservation5).must_equal false
-      expect(resvs_within.include? @reservation6).must_equal false
+      expect(resvs_within.include? reservation5).must_equal false
+      expect(resvs_within.include? reservation6).must_equal false
     end
     it "returns empty array if none found" do
       resvs_within = @room15.get_reservations(Date.new(2020, 03,01), Date.new(2020,03,31))
