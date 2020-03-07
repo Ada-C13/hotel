@@ -23,23 +23,20 @@ module Hotel
     end
 
     def reserve_room(date_range, room = nil)
-      available_rooms = list_available_rooms(date_range)
-      raise ArgumentError.new("No rooms available") if available_rooms == []
-      picked_room = available_rooms[0]
+      picked_room = ""
+      if !room
+        available_rooms = list_available_rooms(date_range)
+        raise ArgumentError.new("No rooms available") if available_rooms == []
+        picked_room = available_rooms[0]
+      else
+        picked_room = find_room(room)
+      end
 
       @total_reservations += 1
-      reservation = Reservation.new(
-        date_range, 
-        id = @total_reservations, 
-        room_number = picked_room.number,
-        total_cost = calculate_cost(date_range, room_number)
-      )
+      reservation = Reservation.new(date_range, @total_reservations, picked_room.number, picked_room.cost)
+
       find_room(reservation.room_number).reservations << reservation
       return reservation
-    end
-
-    def calculate_cost(date_range, room)
-      return date_range.total_nights * find_room(room).cost
     end
 
     def find_room(id)

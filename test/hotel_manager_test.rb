@@ -200,13 +200,4 @@ describe "HotelManager" do
     end
   end
 
-  describe "calculate_cost" do
-    it "returns correct cost for a reservation" do
-      date_range = Hotel::DateRange.new(Date.new(2020,5,25), Date.new(2020,5,26))
-      cost = @hotel_manager.calculate_cost(date_range, 1)
-      
-      expect(cost).must_equal 200
-    end
-  end
-
 end

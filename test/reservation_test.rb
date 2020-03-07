@@ -4,7 +4,7 @@ describe "Reservation" do
   before do
     date_range = Hotel::DateRange.new(Date.new(2020,5,3), Date.new(2020,5,5))
 
-    @reservation = Hotel::Reservation.new(date_range)
+    @reservation = Hotel::Reservation.new(date_range, 1, 1, 200)
   end
 
   describe "initialize" do
@@ -35,6 +35,14 @@ describe "Reservation" do
 
     it "creates correct number of elements within range" do
       expect(@reservation.date_range.range.length).must_equal 3
+    end
+  end
+
+  describe "calculate_cost" do
+    it "returns correct cost for a reservation" do
+      cost = @reservation.calculate_cost()
+      
+      expect(cost).must_equal 400
     end
   end
 end
