@@ -185,7 +185,7 @@ describe Hotel::HotelSystem do
 
 			rooms = [@hotel.rooms[19], @hotel.rooms[18], @hotel.rooms[17]]
 			@range = Hotel::DateRange.new(Date.new(2019, 12, 23), Date.new(2019, 12, 28))
-			@cost = 900
+			@cost = 0.80
 			@length_list = @hotel.reservations.length
 			@length_list_room = @hotel.rooms[19].reservations.length
 			@new_block = @hotel.make_block(rooms, @range, @cost)
@@ -226,11 +226,26 @@ describe Hotel::HotelSystem do
 		it "returns an array of Room instances" do
 			rooms = [@hotel.rooms[19], @hotel.rooms[18], @hotel.rooms[16]]
 			results = @hotel.check_block_availability(rooms, @range)
-			
+
 			expect(results).must_be_instance_of Array
 			expect(results[0]).must_be_instance_of Hotel::Room
 			expect(results.length).must_equal 1
 		end
+
+		it "returns an array length of 0" do
+			rooms = [@hotel.rooms[19], @hotel.rooms[18], @hotel.rooms[17]]
+			results = @hotel.check_block_availability(rooms, @range)
+
+			expect(results).must_be_empty
+		end 
+
+		it "returns an array length of 3" do
+			rooms = [@hotel.rooms[16], @hotel.rooms[15], @hotel.rooms[14]]
+			results = @hotel.check_block_availability(rooms, @range)
+
+			expect(results.length).must_equal 3
+		end
+
 	end
 
 end

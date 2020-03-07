@@ -1,5 +1,7 @@
 require_relative 'reservation'
 
+PRICE = 200
+
 module Hotel
 
 	class Block < Reservation
@@ -15,8 +17,8 @@ module Hotel
 				@room = room
 			end
 
-			@length_of_stay = @range.end_date - @range.start_date
-			@cost = cost
+			@length_of_stay = (@range.end_date - @range.start_date).to_i
+			@cost = (cost * PRICE * @length_of_stay).to_i
 		end
 
 

@@ -8,7 +8,7 @@ describe Hotel::Block do
 			start_date = Date.new(2019, 12, 23)
 			end_date = Date.new(2019, 12, 28)
 
-			@new_reservation = Hotel::Block.new(rooms, Hotel::DateRange.new(start_date, end_date), 800)
+			@new_reservation = Hotel::Block.new(rooms, Hotel::DateRange.new(start_date, end_date), 0.80)
 		end
 
 		it "creates an instance of Block" do
@@ -20,7 +20,7 @@ describe Hotel::Block do
 			start_date = Date.new(2019, 12, 23)
 			end_date = Date.new(2019, 12, 28)
 
-			expect{Hotel::Block.new(rooms, Hotel::DateRange.new(start_date, end_date), 800)}.must_raise ArgumentError
+			expect{Hotel::Block.new(rooms, Hotel::DateRange.new(start_date, end_date), 0.80)}.must_raise ArgumentError
 		end
 
 		it "Block @room is an Array" do
