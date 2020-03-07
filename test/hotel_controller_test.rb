@@ -41,11 +41,12 @@ describe "Hotel::HotelController" do
       end
 
       it "selects the first available room" do
-        # reserve a room, than check if the reservation room equals to 1
+        # Reserve a room, than check if the reservation room equals to 1
         reservation1 = @hotel.reserve_room(dt(1), dt(4))
         expect(reservation1.room).must_equal 1
         expect(@hotel.reservations.last.room).must_equal 1
-        # reserve another room, than check if the reservation room equals 2
+
+        # Reserve another room, than check if the reservation room equals 2
         reservation2 = @hotel.reserve_room(dt(1), dt(4))
         expect(reservation2.room).must_equal 2
         expect(@hotel.reservations.last.room).must_equal 2
@@ -74,7 +75,7 @@ describe "Hotel::HotelController" do
       end
     end
 
-    # access the list of reservations for a specific date, so that I can track reservations by date
+    # access the list of reservations for a specific date to track reservations by date
     describe "reservations_by_date" do
       it "takes a Date and returns a list of Reservations" do
         @hotel.reserve_room(dt(1), dt(4))
@@ -215,35 +216,51 @@ describe "Hotel::HotelController" do
 
     end # Create Block
 
-    # Create a Reservation from a Block
-    # Reserve a specific room from a hotel block
     describe "reserve_from_block" do
-      it "takes a block and a room" do
 
+      # Create a Reservation from a Block
+      # Reserve a specific room from a hotel block
+      it "takes a block and a room. Returns a reservation" do
+        block = @hotel.create_block(dt(1), dt(4), [1, 2, 3], 150)
+        reservation = @hotel.reserve_from_block(block, 2)
+        expect(reservation).must_be_kind_of Hotel::Reservation
       end
 
+      # trying to reserve from block without having a block
       it "raises an ArgumentError if the block is invalid" do
-        
+        expect{ @hotel.reserve_from_block(nil, 2) }.must_raise ArgumentError
+        expect{ @hotel.reserve_from_block(1, 2) }.must_raise ArgumentError        
+        expect{ @hotel.reserve_from_block(dt(1), 2) }.must_raise ArgumentError                
       end
       
       it "raises an ArgumentError if room is not in block" do
-        
+        block = @hotel.create_block(dt(1), dt(4), [1, 2, 3], 150)
+        expect{ @hotel.reserve_from_block(block, 4) }.must_raise ArgumentError
       end
       
       it "reserves room for the full duration of the block" do
-
+        block = @hotel.create_block(dt(1), dt(4), [1, 2, 3], 150)
+        reservation = @hotel.reserve_from_block(block, 2)
+        expect(reservation.range.start_date).must_equal block.range.start_date
+        expect(reservation.range.end_date).must_equal block.range.end_date
       end
 
       it "raises an ArgumentError if the room is not available" do
-        
-      end
-
-      it "returns a reservation" do
-
+        block = @hotel.create_block(dt(1), dt(4), [1, 2, 3], 150)
+        @hotel.reserve_from_block(block, 2)
+        expect{ @hotel.reserve_from_block(block, 2) }.must_raise ArgumentError
       end
 
       it "adds to the list of reservations" do
-
+        block = @hotel.create_block(dt(1), dt(4), [1, 2, 3], 150)
+        @hotel.reserve_from_block(block, 2)
+        expect(@hotel.reservations.size).must_equal 1
+        reservation = @hotel.reserve_room(dt(1), dt(4))
+        expect(@hotel.reservations.size).must_equal 2
+        @hotel.reserve_from_block(block, 1)
+        expect(@hotel.reservations.size).must_equal 3
+        @hotel.reserve_from_block(block, 3)
+        expect(@hotel.reservations.size).must_equal 4
       end
 
     end # Reserve from block

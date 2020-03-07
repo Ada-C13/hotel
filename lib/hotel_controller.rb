@@ -67,7 +67,7 @@ module Hotel
     # Create a Reservation from a Block
     # Reserve a specific room from a hotel block
     def reserve_from_block(block, room)
-      raise ArgumentError, "Not a block" if block.instance_of?(Hotel::Block)
+      raise ArgumentError, "Not a block" unless block.instance_of?(Hotel::Block)
       raise ArgumentError, "Room not in block" unless block.rooms.include?(room)
       # Only reserves room from a hotel block for the full duration of the block
       # When a room is reserved from a block of rooms, the reservation dates will always match the date range of the block
