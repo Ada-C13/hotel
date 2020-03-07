@@ -10,17 +10,9 @@ describe Hotel::Reservation do
       expect(@reservation).must_be_kind_of Hotel::Reservation
     end
 
-    it "raises an argument error for negative-length ranges" do
-      start_date = Date.new(2017, 01, 06)
-      end_date = Date.new(2017, 01, 05)
-      expect{Hotel::Reservation.new(start_date, end_date, 1)}.must_raise ArgumentError
-    end
-
-    it "raises an error when there is a 0-length range" do
-      start_date = Date.new(2017, 01, 01)
-      end_date = Date.new(2017, 01, 01)
-      
-      expect{Hotel::Reservation.new(start_date, end_date, 1)}.must_raise ArgumentError
+    it "is set up for specific attributes and data types" do
+      expect(@reservation.start_date).must_be_kind_of Date
+      expect(@reservation.end_date).must_be_kind_of Date
     end
   end
 
@@ -39,6 +31,4 @@ describe Hotel::Reservation do
       expect(@reservation.cost).must_equal 400
     end
   end
-
- 
 end
