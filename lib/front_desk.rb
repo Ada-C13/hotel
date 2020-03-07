@@ -49,7 +49,7 @@ module Hotel
         }
       end
       if room == nil
-        raise ArgumentError.new("No rooms are availble")
+        raise ArgumentError.new("No rooms are availble in that date range.")
       end
       return room
     end

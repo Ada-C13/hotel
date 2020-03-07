@@ -23,7 +23,7 @@ module Hotel
       if self.available?(reservation)
         @reservations << reservation
       else
-        raise ArgumentError.new("That room isn't available.")
+        raise ArgumentError.new("Room #{self.id} isn't available for that reservation.")
       end
     end
 
