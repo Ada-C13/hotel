@@ -56,7 +56,7 @@ module Hotel
 
     # Create a Block for a Given Date Range, a Set of Rooms and a Rate
     def create_block(start_date, end_date, rooms, rate)
-      raise ArgumentError, "Invalid room" unless block_rooms_valid?(rooms)
+      raise ArgumentError, "Invalid room" unless rooms_valid?(rooms)
       # Exception raised if I try to create a Hotel Block and at least one of the rooms is unavailable for the given date range
       raise ArgumentError, "Rooms not available" unless block_rooms_available?(start_date, end_date, rooms)
       block = Hotel::Block.new(start_date, end_date, rooms, rate)
@@ -80,9 +80,10 @@ module Hotel
       return reservation
     end
     
-    # Check if Rooms for a Block are Valid
-    def block_rooms_valid?(rooms)
+    # Check if Rooms are Valid
+    def rooms_valid?(rooms)
       return false unless rooms.instance_of?(Array)
+      return false if rooms.size == 0
       rooms.each do |room|
         return false unless @rooms.include?(room)
       end

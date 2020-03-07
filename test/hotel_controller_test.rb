@@ -266,14 +266,22 @@ describe "Hotel::HotelController" do
     end # Reserve from block
     
     # Check if Rooms for a Block are Valid
-    describe "block_rooms_valid?" do
+    describe "rooms_valid?" do
       it "returns true if the rooms are valid" do
-        
+        expect(@hotel.rooms_valid?([1, 2, 3])).must_equal true
+        expect(@hotel.rooms_valid?([18, 19, 20])).must_equal true
+        expect(@hotel.rooms_valid?([1])).must_equal true
+        expect(@hotel.rooms_valid?([1, 2, 3, 4, 5, 20])).must_equal true
+        expect(@hotel.rooms_valid?((1..20).to_a)).must_equal true
       end
 
       it "returns false if the rooms are invalid" do
-        
-      end
+        expect(@hotel.rooms_valid?([])).must_equal false
+        expect(@hotel.rooms_valid?(nil)).must_equal false
+        expect(@hotel.rooms_valid?(["1, 2, 3"])).must_equal false
+        expect(@hotel.rooms_valid?([18, 19, 20, 21])).must_equal false
+        expect(@hotel.rooms_valid?(1..20)).must_equal false
+        end
 
     end
 
