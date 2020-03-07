@@ -163,4 +163,47 @@ describe "ReservationDesk class" do
       }.must_raise StandardError
     end
   end
+
+  describe "make block" do
+    it "Room IDs provided: it creates Reservations and adds them to requested rooms' block_participation array" do
+      @reservation_desk.make_block(room_ids: [1, 2, 3], start_date: "2020-9-1", end_date: "2020-9-10")
+      expect(@reservation_desk.rooms[0].block_participation.length).must_equal 1
+      expect(@reservation_desk.rooms[1].block_participation.length).must_equal 1
+      expect(@reservation_desk.rooms[2].block_participation.length).must_equal 1
+      expect(@reservation_desk.rooms[3].block_participation.length).must_equal 0
+    end
+
+    it "Rooms IDs provided: it adds block information to the block hash" do
+      @reservation_desk.make_block(room_ids: [1, 2, 3], start_date: "2020-9-1", end_date: "2020-9-10")
+      expect(@reservation_desk.blocks.length).must_equal 1
+      expect(@reservation_desk.blocks[1].length).must_equal 3
+      expect(@reservation_desk.blocks[1]).must_equal [1, 2, 3]
+    end
+
+    it "Rooms IDs provided: raises an ArgumentError if any of IDs are invalid" do
+      expect {
+        @reservation_desk.make_block(room_ids: [1, 2, "love"], start_date: "2020-9-1", end_date: "2020-9-10")
+      }.must_raise ArgumentError
+    end
+
+    it "Rooms IDs provided: raises ArgumentError if the room_ids array includes more then 5 rooms" do
+      expect {
+        @reservation_desk.make_block(room_ids: [1, 2, 3, 4, 5, 6], start_date: "2020-9-1", end_date: "2020-9-10")
+      }.must_raise ArgumentError
+    end
+
+    it "Rooms IDs provided: it raises an Exception if any of the rooms are unavailable on requested dates" do
+      @reservation_desk.make_reservation(start_date: "2020-10-1", end_date: "2020-10-5")
+      
+      expect {
+        @reservation_desk.make_block(room_ids: [4, 5, 6, 7, 1], start_date: "2020-10-2", end_date: "2020-10-16")
+      }.must_raise StandardError
+
+      @reservation_desk.make_block(room_ids: [1, 2, 3], start_date: "2020-9-1", end_date: "2020-9-10")
+
+      expect {
+        @reservation_desk.make_block(room_ids: [4, 5, 6, 7, 1], start_date: "2020-9-2", end_date: "2020-9-5")
+      }.must_raise StandardError
+    end
+  end
 end

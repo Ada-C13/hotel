@@ -1,11 +1,12 @@
 module Hotel
   class ReservationDesk
   # Responcibility: to organize reservations across hotel
-    attr_reader :room_num, :rooms, :reservations
+    attr_reader :room_num, :rooms, :reservations, :blocks
 
     def initialize(room_num: 20)
       @room_num = room_num
       @rooms = make_rooms
+      @blocks = {}
     end
 
     def find_room_by_id(id)
@@ -50,7 +51,17 @@ module Hotel
       room.reserve(start_date: start_date, end_date: end_date)
     end
 
-    def make_block(start_date:, end_date:, rooms:)
+    def make_block(room_ids: nil, start_date:, end_date:)
+      #TODO: nil scenario
+      raise ArgumentError.new("Blocks can't contain more than 5 rooms.") if room_ids.length > 5
+      block_id = generate_block_id
+      blocks[block_id] = []
+      room_ids.each do |id|
+        room = find_room_by_id(id)
+        raise ArgumentError.new("Invalid room ID.") if room == nil
+        room.reserve(start_date: start_date, end_date: end_date, block: block_id)
+        blocks[block_id] << id
+      end
     end
 
     private
@@ -60,6 +71,10 @@ module Hotel
         rooms << Room.new(i+1)
       end
       return rooms
+    end
+
+    def generate_block_id
+      blocks.length + 1
     end
   end
 end
