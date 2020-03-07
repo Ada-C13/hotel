@@ -37,17 +37,10 @@ describe Hotel::SystemCoordinator do
   end
 
   describe "#build_rooms" do
-    it "returns an array" do
-      quantity = 5
-      expect(@coordinator01.build_rooms(quantity)).must_be_instance_of Array
-      expect(@coordinator01.build_rooms(quantity).length).must_equal quantity
-    end
-
-    it "stores Room instance in each element" do
-      built01 = @coordinator01.build_rooms(5)
-      built01.each do |room|
-        expect(room).must_be_instance_of Hotel::Room
-      end
+    it "increases the number of rooms" do
+      before = @coordinator01.rooms.length
+      @coordinator01.build_rooms(5)
+      expect(@coordinator01.rooms.length).must_equal before + 5
     end
   end
 
@@ -130,58 +123,68 @@ describe Hotel::SystemCoordinator do
     end
   end
 
-  # describe "#find_availabile_rooms" do
-  #   before do
-  #     @start_date = Date.today + 5
-  #     @end_date = Date.today + 10
-  #     @date_range = Hotel::DateRange.new(@start_date,@end_date)
-  #   end
+  describe "#find_block_rooms" do
+    before do
+      @start_date = Date.today + 5
+      @end_date = Date.today + 10
+      @date_range = Hotel::DateRange.new(@start_date,@end_date)
+    end
 
-  #   it "returns an array" do
-  #     available_rooms = @coordinator01.find_availabile_rooms(@date_range)
-  #     expect(available_rooms).must_be_instance_of Array
-  #   end
+    it "returns an array" do
+      available_rooms = @coordinator01.find_block_rooms(@date_range)
+      expect(available_rooms).must_be_instance_of Array
+    end
 
-  #   it "stores Room instances in the array" do
-  #     available_rooms = @coordinator01.find_availabile_rooms(@date_range)
-  #     available_rooms.each do |room|
-  #       expect(room).must_be_instance_of Hotel::Room
-  #     end
-  #   end
+    it "stores Room instances in the array" do
+      available_rooms = @coordinator01.find_block_rooms(@date_range)
+      available_rooms.each do |room|
+        expect(room).must_be_instance_of Hotel::Room
+      end
+    end
 
-  #   it "returns the correct number of available rooms when there are no reservations" do
-  #     available_rooms = @coordinator01.find_availabile_rooms(@date_range)
-  #     expect(available_rooms.length).must_equal 20
-  #   end
+    it "returns the correct number of available rooms when there are no reservations" do
+      available_rooms = @coordinator01.find_block_rooms(@date_range)
+      expect(available_rooms.length).must_equal 20
+    end
 
-  #   it "returns the correct number of available rooms when there are reservations" do
-  #     @coordinator01.make_reservation(@start_date, @end_date)
-  #     expect(@coordinator01.find_availabile_rooms(@date_range).length).must_equal 19
-  #     @coordinator01.make_reservation(Date.today + 10, Date.today + 12)
-  #     @coordinator01.make_reservation(Date.today + 1, Date.today + 2)
-  #     expect(@coordinator01.find_availabile_rooms(@date_range).length).must_equal 19
-  #     @coordinator01.make_reservation(@start_date, @end_date)
-  #     expect(@coordinator01.find_availabile_rooms(@date_range).length).must_equal 18
-  #   end
+    it "returns the correct number of available rooms when there are reservations" do
+      @coordinator01.make_reservation(@start_date, @end_date)
+      expect(@coordinator01.find_block_rooms(@date_range).length).must_equal 19
+      @coordinator01.make_reservation(Date.today + 10, Date.today + 12)
+      @coordinator01.make_reservation(Date.today + 1, Date.today + 2)
+      expect(@coordinator01.find_block_rooms(@date_range).length).must_equal 19
+      @coordinator01.make_reservation(@start_date, @end_date)
+      expect(@coordinator01.find_block_rooms(@date_range).length).must_equal 18
+    end
 
-  #   it "should not include rooms that have reservations in the given date_range" do
-  #     @coordinator01.make_reservation(@start_date, @end_date)
-  #     available_rooms = @coordinator01.find_availabile_rooms(@date_range)
-  #     available_rooms.each do |room|
-  #       room.bookings.each do |booking|
-  #         expect(booking.date_range.overlapping(@date_range)).must_equal false
-  #       end
-  #     end
-  #   end
+    it "returns the correct number of available rooms when there are blocks" do
+      @coordinator01.make_reservation(@start_date, @end_date)
+      expect(@coordinator01.find_block_rooms(@date_range).length).must_equal 19
+      @coordinator01.make_block(@date_range, 5, 150)
+      expect(@coordinator01.find_block_rooms(@date_range).length).must_equal 14
+      range02 = Hotel::DateRange.new(@start_date + 2, @end_date + 2)
+      @coordinator01.make_block(range02, 3, 180)
+      expect(@coordinator01.find_block_rooms(@date_range).length).must_equal 11
+    end
 
-  #   it "returns an empty array when there are no rooms available" do
-  #     20.times do 
-  #       @coordinator01.make_reservation(@start_date, @end_date)
-  #     end
-  #     available_rooms = @coordinator01.find_availabile_rooms(@date_range)
-  #     expect(available_rooms).must_equal []
-  #   end
-  # end
+    it "should not include rooms that have reservations in the given date_range" do
+      @coordinator01.make_reservation(@start_date, @end_date)
+      available_rooms = @coordinator01.find_block_rooms(@date_range)
+      available_rooms.each do |room|
+        room.bookings.each do |booking|
+          expect(booking.date_range.overlapping(@date_range)).must_equal false
+        end
+      end
+    end
+
+    it "returns an empty array when there are no rooms available" do
+      20.times do 
+        @coordinator01.make_reservation(@start_date, @end_date)
+      end
+      available_rooms = @coordinator01.find_block_rooms(@date_range)
+      expect(available_rooms).must_equal []
+    end
+  end
 
   describe "#make_reservation" do
     before do
@@ -217,6 +220,8 @@ describe Hotel::SystemCoordinator do
       expect(@coordinator01.find_room(999)).must_be_nil
     end
   end
+
+
 
 
   describe "#find_reservations_by_date" do
@@ -343,9 +348,123 @@ describe Hotel::SystemCoordinator do
       expect(room01.bookings.length).must_equal 1
       expect(room02.bookings.length).must_equal 1
     end
-
   end
 
+  describe "#make_specific_block" do
+    before do
+      @start_date = Date.today + 50
+      @end_date = Date.today + 60
+      @date_range = Hotel::DateRange.new(@start_date, @end_date)
+    end
+
+    it "returns an array" do
+      block10 = @coordinator01.make_specific_block(@date_range, [11,12], 100)
+      expect(block10).must_be_instance_of Array
+    end
+
+    it "returns the correct number of room blocks" do
+      block10 = @coordinator01.make_specific_block(@date_range, [20], 180)
+      expect(block10.length).must_equal 1
+      block20 = @coordinator01.make_specific_block(@date_range, [11,12,13,14,15], 100)
+      expect(block20.length).must_equal 5
+    end
+
+    it "returns an array of Block instances that match the date range and same block_id" do
+      block10 = @coordinator01.make_specific_block(@date_range, [11,12,13], 100)
+      block_id = block10[0].block
+      block10.each do |block|
+        expect(block).must_be_instance_of Hotel::Block
+        expect(block.date_range).must_equal @date_range
+        expect(block.block).must_equal block_id
+      end
+    end
+
+    it "reflects the correct cost that was passed in" do
+      block10 = @coordinator01.make_specific_block(@date_range, [11,12,13,14,15], 100)
+      block10.each do |block|
+        expect(block.cost).must_equal 100.00
+        expect(block.get_total_price).must_equal 1000.00
+      end
+    end
+
+    it "raises an Exception when there is a room unavailalblie" do
+      reservation10 = @coordinator01.make_reservation(@start_date, @end_date)
+      id = reservation10.room_id
+      expect{@coordinator01.make_specific_block(@date_range, [id,12,13], 100)}.must_raise NoAvailabilityError
+    end
+  end
+
+
+  describe "#check_block_availability" do
+    before do
+      @start_date = Date.today + 50
+      @end_date = Date.today + 60
+      @date_range = Hotel::DateRange.new(@start_date, @end_date)
+    end
+
+    it "returns true if the given block has any available rooms" do
+      block10 = @coordinator01.make_specific_block(@date_range, [1,2], 100)
+      block_id=block10[0].block
+      @coordinator01.make_reservation(@start_date,@end_date)
+      expect(@coordinator01.check_block_availability(block_id)).must_equal true
+    end
+
+    it "returns false if there are no available rooms" do
+      block10 = @coordinator01.make_specific_block(@date_range, [1,2], 100)
+      block_id=block10[0].block
+      @coordinator01.make_reservation(@start_date,@end_date)
+      @coordinator01.make_reservation(@start_date,@end_date)
+      expect(@coordinator01.check_block_availability(block_id)).must_equal false
+    end
+  end
 end
 
 
+
+
+  # describe "rm_available" do
+  #   before do
+  #     @start_date = Date.today + 5
+  #     @end_date = Date.today + 10
+  #     @date_range = Hotel::DateRange.new(@start_date,@end_date)
+  #     @room01 = @coordinator01.find_room(1)
+  #   end
+
+  #   it "returns true if room is available with no reservations" do
+  #     expect(@coordinator01.rm_available(@room01, @date_range)).must_equal true
+  #     expect(@room01.bookings.length).must_equal 0
+  #   end
+
+  #   it "returns true if room is available with exact block match" do
+  #     block10 = @coordinator01.make_block(@date_range, 1, 100)
+  #     room_id = block10[0].room_id
+  #     room = @coordinator01.find_room(room_id)
+  #     expect(@coordinator01.rm_available(room, @date_range)).must_equal true
+  #     expect(room.bookings.length).must_equal 1
+  #   end
+
+  #   it "returns true if room is available with no overlapping reservations" do
+  #     reservation10 = @coordinator01.make_reservation(Date.today + 1, Date.today + 3)
+  #     room_id = reservation10.room_id
+  #     room = @coordinator01.find_room(room_id)
+  #     expect(@coordinator01.rm_available(room, @date_range)).must_equal true
+  #     expect(room.bookings.length).must_equal 1
+  #   end
+
+  #   it "returns false when room has overlapping block" do
+  #     range20 = Hotel::DateRange.new(Date.today + 3, Date.today + 7) 
+  #     block20 = @coordinator01.make_block(range20, 1, 100)
+  #     room_id = block20[0].room_id
+  #     room = @coordinator01.find_room(room_id)
+  #     expect(@coordinator01.rm_available(room, @date_range)).must_equal false
+  #     expect(room.bookings.length).must_equal 1
+  #   end
+
+  #   it "returns false when room has overlapping reservation" do
+  #     reservation20 = @coordinator01.make_reservation(Date.today + 8, Date.today + 13)
+  #     room_id = reservation20.room_id
+  #     room = @coordinator01.find_room(room_id)
+  #     expect(@coordinator01.rm_available(room, @date_range)).must_equal false
+  #     expect(room.bookings.length).must_equal 1
+  #   end
+  # end
