@@ -48,7 +48,7 @@ def choice
   end 
 end 
 
-# pretty_up
+# pretty_up ouput
 def pretty_up
   puts "*************************************************************"
 end 

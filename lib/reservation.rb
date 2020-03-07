@@ -29,6 +29,3 @@ module Hotel
   end 
 end 
 
-#assign logic on how to assign room num
-# maybe if blocktag is not nil make reservation_id into a specific block id in the front (B0 to B9)
-# maybe store room cost here to differenciate room cost
