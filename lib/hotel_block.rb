@@ -4,7 +4,8 @@ module Hotel
     def initialize(date_range, rooms, discounted_rate)
       @date_range = date_range
       @rooms = []
-      @discounted_rate = discounted_rate
+      raise ArgumentError.new "A block can contain a maximum of 5 rooms" if @rooms.length > 5
+      @discounted_rate = 0.1
     end
   end
 end

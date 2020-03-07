@@ -5,7 +5,7 @@ module Hotel
     def initialize
       @rooms = Array.new(20){|i| Hotel::Room.new(i+1)}
       @reservations = []
-      @hotel_block = []
+      @hotel_block = [] #contain a number of rooms and a specific set of days
     end
   
     # Wave 1
@@ -45,20 +45,28 @@ module Hotel
     end
 
     # Wave 2
+    # Get reserved_rooms_list 
 
-    # I can view a list of rooms that are not reserved for a given date range, 
-    # so that I can see all available rooms for that day
-    def available_rooms(start_date, end_date)
+    def reserved_rooms_list(start_date, end_date)
       given_date_range = Hotel::DateRange.new(start_date, end_date)
       # get the reservations_list for the given date range
       reservations_list = reservations.select do |res|
-        res.date_range.overlap?(given_date_range)
+      res.date_range.overlap?(given_date_range)
       end
 
       # get all the room that have been reserved for the given date range 
       all_reserved_rooms = reservations_list.map do |res|
         res.room
       end
+      return all_reserved_rooms 
+    end 
+
+    # I can view a list of rooms that are not reserved for a given date range, 
+    # so that I can see all available rooms for that day
+    def available_rooms(start_date, end_date)
+      given_date_range = Hotel::DateRange.new(start_date, end_date)
+      # get all the room that have been reserved for the given date range 
+      all_reserved_rooms = reserved_rooms_list(start_date, end_date)
 
       # get the aviable_rooms_list
       avialable_rooms_list = rooms.reject do |room|
@@ -84,5 +92,34 @@ module Hotel
       add_reservation(reservation)
       return reservation
     end  
+
+    # Wave 3
+
+    # Add hotel_block method
+
+    def add_hotel_block(hotel_block)
+      @hotel_blocks << hotel_block
+    end
+    
+    #Create a hotel_block
+    def create_hotel_block(date_range, rooms_array, discount_rate)
+      # all rooms of rooms_array must be available room during the given date range
+      all_reserved_rooms = reserved_rooms_list(start_date, end_date)
+      
+      # an exception raised if I try to create a Hotel Block 
+      # and at least one of the rooms is unavailable for the given date range
+      
+      @rooms.each do |room|
+        if all_reserved_rooms.any?(room)
+          raise ArgumentError.nw "There is reservation conflict"
+        end
+      end
+      hotel_block = Hotel::HotelBlock.new(date_range, rooms_array, discount_rate)
+      add_hotel_block(hotel_block)
+      return hotel_block
+    end
+
+    # A block can contain a maximum of 5 rooms
+
   end
 end
