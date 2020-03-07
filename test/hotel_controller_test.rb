@@ -251,16 +251,19 @@ describe Hotel::HotelController do
       end
 
     end
-    # describe "block_available" do
-    #   it "Will raise error if one room in block is unavailable " do
-    #     reservation1 = @hotel_controller.reserve_room("2020-08-04", "2020-08-10",1)
+  end
+  describe "wave 3" do
+    describe "set_aside_block" do
   
-    #     date_range = DateRange.new(@date,(@date + 3))
-    #     collection_of_rooms = [1..5]
-    #     discount_rate = 150
+      it "reserves rooms in a date range" do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1, 2, 3, 4, 5]
+        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms)
+  
+        expect(@hotel_controller.reservation_array).must_be_kind_of Array 
+        expect(@hotel_controller.reservation_array.length).must_equal 5
         
-    #     expect{Block.new(date_range, collection_of_rooms, discount_rate)}.must_raise ArgumentError
-    #   end
-    # end
+      end
+    end
   end
 end
