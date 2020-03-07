@@ -63,11 +63,21 @@ module Hotel
     # Wave 1, US 3: "I can access the list of reservations for a specific date, so that I can track reservations by date"
 #  creates an array of matching reservations
 
-    def find_by_date(input_range)
+    def find_all_within_range(input_range)
+      reservations_by_range = []
+      @rooms.each do |room|
+        reservations_by_range << room.find_by_range(input_range)
+      end
+
+      return reservations_by_range.flatten
+    end
+
+
+
+    def find_by_exact_date(input_range)
       reservations_by_date = []
       @rooms.each do |room|
         filtered_rez = room.find_by_range(input_range)
-        # return [] if filtered_rez == []
         filtered_rez.each do |rez|
            if rez.date_range == input_range
              reservations_by_date << rez
