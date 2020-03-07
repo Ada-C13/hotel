@@ -3,6 +3,7 @@ require_relative 'room'
 require_relative 'date_range'
 require_relative 'reservation'
 require_relative 'no_rooms_error'
+require_relative 'reservation_block'
 
 module Hotel
   class FrontDesk
@@ -81,7 +82,7 @@ module Hotel
     end
     
     
-    # TODO: Make more tests for this method     
+    # TODO: Edge case testing
     def create_reservation(check_in, check_out)
       room = find_available_room(check_in, check_out)
       
@@ -90,6 +91,7 @@ module Hotel
       date_range = Hotel::DateRange.new(check_in,check_out)
       
       reservation = Hotel::Reservation.new(date_range)
+
       reservation.room_number = room_number
       
       room.reservations << reservation
