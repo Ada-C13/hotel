@@ -11,7 +11,7 @@ a = Hotel::FrontDesk.new
 # date1 = Hotel::DateRange.new("2020-03-05", "2020-03-10")
 # date2 = Hotel::DateRange.new("2020-03-20", "2020-03-25")
 a.reserve_room("2020-03-05", "2020-03-10")  
-a.reserve_room("2020-03-20", "2020-03-25") 
+a.reserve_room("2020-03-05", "2020-03-10") 
 a.reserve_room("2020-03-10", "2020-03-20")  
 
 # a.add_reservation(reservation1)

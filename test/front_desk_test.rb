@@ -65,10 +65,10 @@ describe "FrontDesk" do
     end
 
     it "Return a list of available rooms" do
-      @front_desk.add_reservation(@reservation_one) # 5/1 - 5/3
-      @front_desk.add_reservation(@reservation_two) # 5/3 - 5/10
-      start_date = "2020-05-02" # 5/2
-      end_date = "2020-05-04" # 5/4
+      @front_desk.add_reservation(@reservation_one)
+      @front_desk.add_reservation(@reservation_two)
+      start_date = "2020-05-02" 
+      end_date = "2020-05-04" 
       expect(@front_desk.available_rooms(start_date, end_date)).wont_include 1
       expect(@front_desk.available_rooms(start_date, end_date)).wont_include 2
     end
@@ -77,21 +77,33 @@ describe "FrontDesk" do
   describe "Make a reservation" do 
     before do
       @front_desk = Hotel::FrontDesk.new
-      @reservation = Hotel::Reservation.new(
+      @reservation_one = Hotel::Reservation.new(
         date_range = Hotel::DateRange.new("2020-05-10", "2020-05-20"), 
         room_num = 1
       )
     end
 
-    it "return the instance of Reservation after reserve a room" do
+    it "Shuffle a reservation to the associate room # in the @reservations hash" do
+      @front_desk.add_reservation(@reservation_one)
+      expect(@front_desk.reservations[1]).must_include @reservation_one
+    end
+
+    it "Return the instance of Reservation after reserve a room" do
       reservation = @front_desk.reserve_room("2020-05-01", "2020-05-03")
       expect(reservation).must_be_kind_of Hotel::Reservation
     end
 
-    it "shuffle a reservation to the associate room # in the @reservations hash" do
-      @front_desk.add_reservation(@reservation)
-      expect(@front_desk.reservations[1]).must_include @reservation
+    it "Assign the first aviable room number in the array when reserve the room" do
+      room_one = @front_desk.reserve_room("2020-05-01", "2020-05-03")
+      room_two = @front_desk.reserve_room("2020-05-01", "2020-05-03")
+      expect(room_two.room_num).must_equal 2
     end
 
+    it "Raise exception when try to reserve a room during a date range when all rooms are reserved" do
+      20.times do |time|
+        @front_desk.reserve_room("2020-05-01", "2020-05-03")
+      end
+      expect{@front_desk.reserve_room("2020-05-01", "2020-05-03")}.must_raise StandardError
+    end
   end
 end

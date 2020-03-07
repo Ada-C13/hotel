@@ -56,9 +56,9 @@ module Hotel
     def available_rooms(start_date, end_date)
       date_range = Hotel::DateRange.new(start_date, end_date)
       available_rooms = []
-      20.times do |time| # b/c there are 20 rooms
-        if is_room_avaiable_for_entire_date_range?(date_range, (time + 1))
-          available_rooms << (time + 1)
+      @rooms.each do |room|
+        if is_room_avaiable_for_entire_date_range?(date_range, (room))
+          available_rooms << (room)
         end
       end
       return available_rooms
@@ -66,10 +66,13 @@ module Hotel
 
     def reserve_room(start_date, end_date)
       date_range = Hotel::DateRange.new(start_date, end_date)
-      room_num = available_rooms(start_date, end_date).first
+
+      room_num = available_rooms(start_date, end_date)
+      raise StandardError.new("There's no available room in this date range!") if room_num.length == 0
+
       reservation = Hotel::Reservation.new(
         date_range = date_range, 
-        room_num = room_num
+        room_num = room_num.first
       )
       add_reservation(reservation)
       return reservation
@@ -88,3 +91,8 @@ module Hotel
 end
 
 
+### USER STORY 2.3
+# I want an exception raised if I try to reserve a room during a date range when all rooms are reserved, so that I cannot make two reservations for the same room that overlap by date
+# THIS GOES INTO THE 2.2 METHOD 
+# If the array is empty (after calling get_list_of_reservations_for_room_in_range)
+# raise an exception
