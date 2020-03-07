@@ -61,7 +61,7 @@ describe "HotelManager class" do
     end 
 
 
-    describe "#find_all_reservations" do 
+    describe "#find_all_reservations(date, room_type: 'all')" do 
 
       it "raises an ArgumentError when there is no reservation" do
         p "@hotel_manager.find_all_reservations(@date)"
@@ -69,16 +69,22 @@ describe "HotelManager class" do
         expect(@hotel_manager.find_all_reservations(@date)).must_equal []
       end 
 
+      it "raises an ArgumentError when receiving an invalid room_type" do 
+        expect{@hotel_manager.find_all_reservations(@date, room_type: "every")}.must_raise ArgumentError
+      end 
 
       it "returns 5 reservations on the specific date" do 
-        5.times do 
+        6.times do 
           @hotel_manager.make_reservation(@date_range)
         end 
+
+        # Make block reservation
+        @hotel_manager.make_block_reservation(@date_range, number_of_rooms: 5)
 
         reservations = @hotel_manager.find_all_reservations(@date)
 
         expect(reservations).must_be_kind_of Array
-        expect(reservations.length).must_equal 5
+        expect(reservations.length).must_equal 11
         expect(reservations[0]).must_be_kind_of Hotel::Reservation
       end 
 
@@ -87,14 +93,12 @@ describe "HotelManager class" do
         @hotel_manager.make_reservation(@date_range)
 
         # TO DO
-        # no overlap
         test_date_range = Hotel::DateRange.new(Date.new(2020, 07, 11), Date.new(2020, 07, 13))
 
         10.times do 
           @hotel_manager.make_reservation(test_date_range)
         end 
 
-        # overlap
         test_date_range_2 = Hotel::DateRange.new(Date.new(2020, 07, 6), Date.new(2020, 07, 12))
 
         9.times do 
@@ -108,6 +112,27 @@ describe "HotelManager class" do
         expect(reservations).must_be_kind_of Array
         expect(reservations.length).must_equal 19
         expect(reservations.last.room.id).must_equal 19
+      end 
+    end 
+
+
+    describe "#find_all_reservations(date, room_type: 'individual')" do 
+      it "returns reservation list for the individual room type" do 
+
+       date = Date.new(2020, 07, 11)
+       date_range = Hotel::DateRange.new(Date.new(2020, 07, 11), Date.new(2020, 07, 13))
+
+       7.times do 
+        @hotel_manager.make_reservation(date_range)
+       end 
+
+       @hotel_manager.make_block_reservation(date_range, number_of_rooms: 5)
+
+       expect(@hotel_manager.find_all_reservations(date, room_type: "individual").length).must_equal 7
+      end 
+
+      it "raises an ArgumentError when receiving an invalid room_type" do 
+        expect{@hotel_manager.find_all_reservations(@date, room_type: "test")}.must_raise ArgumentError
       end 
     end 
 
@@ -168,10 +193,66 @@ describe "HotelManager class" do
 
         expect(block.rooms).must_be_kind_of Array
         expect(block.rooms[0]).must_be_kind_of Hotel::Room
-        # expect(block.reservation).must_be_kind_of Hotel::Reservation 
+        expect(block.reservation).must_be_kind_of Hotel::Reservation 
         expect(block.total_block_cost).must_be_close_to 5 * (200 * 0.8) * 4, 0.01
+      end 
+
+      it "raises an ArgumentError if the number of rooms are not between 2 and 5" do 
+  
+        expect{@hotel_manager.make_block_reservation(@date_range, number_of_rooms: 1)}.must_raise ArgumentError
+
+        expect{@hotel_manager.make_block_reservation(@date_range, number_of_rooms: 6)}.must_raise ArgumentError
+
+        expect{@hotel_manager.make_block_reservation(@date_range, number_of_rooms: 0)}.must_raise ArgumentError
+      end 
 
 
+      it "raise an ArgumentError if there are no available rooms for block (2 - 5 rooms)" do 
+
+        # 20 rooms are booked for the same date range
+        4.times do
+          @hotel_manager.make_block_reservation(@date_range, number_of_rooms: 5) 
+        end 
+
+        expect{@hotel_manager.make_block_reservation(@date_range, number_of_rooms: 5)}.must_raise ArgumentError
+
+
+        # 18 rooms are booked for the same date range
+        date_range_2 = Hotel::DateRange.new(Date.new(2020, 11, 5), Date.new(2020, 11, 11))
+
+        6.times do 
+          @hotel_manager.make_block_reservation(date_range_2, number_of_rooms: 3) 
+        end 
+
+        expect{@hotel_manager.make_block_reservation(@date_range, number_of_rooms: 4)}.must_raise ArgumentError
+      end 
+    end 
+
+    describe "#find_all_reservations(date, room_type: 'block')" do 
+      it "finds block reservations" do 
+
+        date_range_1 = Hotel::DateRange.new(Date.new(2020, 11, 5), Date.new(2020, 11, 11))
+        date_range_2 = Hotel::DateRange.new(Date.new(2020, 11, 7), Date.new(2020, 11, 9))
+        date = Date.new(2020, 11, 9)
+
+        # Made block reservations
+        @hotel_manager.make_block_reservation(date_range_1, number_of_rooms: 5)
+
+        # Not overlap
+        @hotel_manager.make_block_reservation(date_range_2, number_of_rooms: 3)
+
+        # Made a reservation for individual room type
+        @hotel_manager.make_reservation(date_range_1)
+
+        block_reservations = @hotel_manager.find_all_reservations(date, room_type: "block")
+
+        # Because 11/9 is the end_date for date_range_2.
+        expect(block_reservations).must_be_instance_of Array
+        expect(block_reservations.length).must_equal 5
+      end  
+
+      it "raises an ArgumentError when receiving an invalid room_type" do 
+        expect{@hotel_manager.find_all_reservations(@date, room_type: "blocking")}.must_raise ArgumentError
       end 
     end 
   end 

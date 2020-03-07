@@ -56,4 +56,22 @@ describe "Reservation class" do
      end 
    end 
 
+   describe ".generate_id" do 
+     it "returns a non consecutive random id with 6 digits as a string" do 
+       expect(Hotel::Reservation.generate_id.length).must_equal 6
+
+       expect(Hotel::Reservation.generate_id).must_be_kind_of String
+     end 
+
+
+     # TO DO
+     # Question: I'm not sure how to check this
+    #  it "re-generate an ID if there was the same ID in our system" do 
+    #    @@ids = ["222222"]
+
+    #    p "Hotel::Reservation.ids"
+    #    p Hotel::Reservation.ids
+    #  end 
+    end 
+
 end 
