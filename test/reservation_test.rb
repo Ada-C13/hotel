@@ -19,9 +19,9 @@ describe Hotel::Reservation do
     end
 
     it "throws an argument error if given an invalid room_ID value" do
-      [-1, 0, 21, nil, true, "hello"].each do |num|
+      [-1, 0, 21, nil, true, "hello"].each do |item|
         expect do
-          Hotel::Reservation.new(date_range:@date_range, room_id:num)
+          Hotel::Reservation.new(date_range:@date_range, room_id:item)
         end.must_raise ArgumentError
       end
     end

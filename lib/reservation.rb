@@ -10,11 +10,7 @@ module Hotel
       @date_range = date_range
       @room_id = room_id
 
-      # not sure if I'll need this check here - in Room class instead?
-      if room_id < 1 || room_id > 20
-        raise ArgumentError
-      end
-
+      raise ArgumentError if room_id < 1 || room_id > 20
     end
 
     def cost
