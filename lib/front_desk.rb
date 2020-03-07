@@ -11,7 +11,15 @@ module Hotel
       @calendar = {}
     end
 
-
+    def populate_calendar(reservation)
+      reservation.date_range.dates.each do |date|
+        if !@calendar.key?(date)
+          @calendar[date] =[]
+        end
+        @calendar[date] << reservation
+      end
+      return @calendar
+    end
 
 
     # User: I can access the list of all of the rooms in the hotel

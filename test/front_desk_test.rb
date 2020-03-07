@@ -8,7 +8,7 @@ describe Hotel::FrontDesk do
       end_date: Date.today + 3
     )
     @res_instance = Hotel::Reservation.new(
-      date_range: @date_instance.dates,
+      date_range: @date_instance,
       room: 2
     )
     @room_list = @desk_instance.available_rooms(@date_instance)
@@ -47,7 +47,6 @@ describe Hotel::FrontDesk do
   describe "wave 1" do
 
     describe "reserve_room" do
-    
       it "creates a Reservation" do
         expect(@reserved).must_be_kind_of Hotel::Reservation
       end
@@ -55,10 +54,24 @@ describe Hotel::FrontDesk do
     end
     
     describe "populate_calendar" do
-      it "x" do
-      
+      before do
+        @cal_instance = @desk_instance.populate_calendar(@res_instance)
       end
 
+      it "takes a reservation and loops through date ranges" do
+        @desk_instance.populate_calendar(@res_instance)
+          @res_instance.date_range.dates.each do |date|
+            date.must_be_kind_of Date
+          end
+      end
+
+      it "returns a hash" do
+        expect(@cal_instance).must_be_kind_of Hash
+      end
+
+      it "creates a hash key for every date" do
+        expect(@cal_instance.length).must_equal 3 
+      end
 
     end
 
