@@ -1,4 +1,3 @@
-require_relative 'room'
 module Hotel
   class FrontDesk 
     attr_reader :rooms, :reservations
@@ -9,13 +8,19 @@ module Hotel
           @rooms << Room.new(n)
         end
     end
+    # TO DO: refactor so that add takes start,end or range and more Resv.new to Room#add
+    # def reserve_room(start_date, end_date)
+    #   date_range = Hotel::DateRange.new(start_date, end_date)
+    #   room = find_room(date_range)
+    #   reservation = Reservation.new(start_date, end_date, room.id)
+    #   room.add(reservation)
+    #   return reservation
+    # end
 
     def reserve_room(start_date, end_date)
       date_range = Hotel::DateRange.new(start_date, end_date)
       room = find_room(date_range)
-      reservation = Reservation.new(start_date, end_date, room.id)
-      room.add(reservation)
-      return reservation
+      return room.add(date_range)
     end
 
     def get_avail_rooms(start_date, end_date)
@@ -30,7 +35,7 @@ module Hotel
       reservations_at_date = []
       rooms.each do |room|
         room.reservations.each do |reservation| 
-          if reservation.include?(date)
+          if reservation.include?(date) && reservation.class != Block
             reservations_at_date << reservation
           end
         end
