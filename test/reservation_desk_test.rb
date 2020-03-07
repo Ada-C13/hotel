@@ -49,17 +49,6 @@ describe "ReservationDesk class" do
       assert_nil @reservation_desk.find_room_by_id(20000000)
    end
   end
-   
-  describe "reservations" do
-    it "returns an array" do
-      expect(@reservation_desk.reservations).must_be_kind_of Array
-    end
-
-    # it "returns an array of reservations" do
-    #   expect(@reservation_desk.reservations.first).must_be_kind_of Hotel::Reservation
-    #   expect(@reservation_desk.reservations.last).must_be_kind_of Hotel::Reservation
-    # end
-  end
 
   describe "find_reservations" do
     before do
@@ -151,17 +140,13 @@ describe "ReservationDesk class" do
     # end
   end
 
-  describe "check_availability" do
+  describe "find_available_rooms" do
     before do
-      @reservation_1 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-1", end_date: "2020-3-5")
-      @reservation_2 = @reservation_desk.new_reservation(room_id: 2, start_date: "2020-3-1", end_date: "2020-3-10")
-      @reservation_3 = @reservation_desk.new_reservation(room_id: 3, start_date: "2020-3-1", end_date: "2020-3-25")
+      @reservation_desk.rooms[0].reserve(start_date: "2020-3-1", end_date: "2020-3-5")
+      @reservation_desk.rooms[1].reserve(start_date: "2020-3-1", end_date: "2020-3-10")
+      @reservation_desk.rooms[2].reserve(start_date: "2020-3-1", end_date: "2020-3-25")
 
-      @reservation_desk.add_reservation(@reservation_1)
-      @reservation_desk.add_reservation(@reservation_2)
-      @reservation_desk.add_reservation(@reservation_3)
-
-      @request = @reservation_desk.check_availability(start_date: "2020-2-27", end_date: "2020-4-2")
+      @request = @reservation_desk.find_available_rooms(start_date: "2020-2-27", end_date: "2020-4-2")
     end
 
     it "returns an Array" do
@@ -178,129 +163,44 @@ describe "ReservationDesk class" do
     end
 
     it "returns nil if there are no Rooms available for requested dates" do
-      20.times do |i|
-        reservation = @reservation_desk.new_reservation(room_id: (i + 1), start_date: "2020-6-1", end_date: "2020-6-30")
-        @reservation_desk.add_reservation(reservation)
+      @reservation_desk.rooms.each do |room|
+        room.reserve(start_date: "2020-6-1", end_date: "2020-6-30")
       end
-      search = @reservation_desk.check_availability(start_date: "2020-6-5", end_date: "2020-6-10")
+      search = @reservation_desk.find_available_rooms(start_date: "2020-6-5", end_date: "2020-6-10")
       assert_nil search
     end
   end
 
-  # describe "find_available_room" do
-  #   before do
-  #     @reservation_1 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-1", end_date: "2020-3-5")
-  #     @reservation_2 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-10", end_date: "2020-3-15")
-  #     @reservation_3 = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-20", end_date: "2020-3-25")
-  #     @reservation_4 = @reservation_desk.new_reservation(room_id: 2, start_date: "2020-3-20", end_date: "2020-3-25")
-
-  #     @reservation_desk.add_reservation(@reservation_1)
-  #     @reservation_desk.add_reservation(@reservation_2)
-  #     @reservation_desk.add_reservation(@reservation_3)
-  #     @reservation_desk.add_reservation(@reservation_4)
-
-  #   end
-
-  #   it "returns an instance of Room" do
-  #     search = @reservation_desk.find_available_room(start_date: "2020-3-5", end_date: "2020-3-6")
-  #     expect(search).must_be_kind_of Hotel::Room
-  #   end
-
-  #   it "returns a first room which is available for dates in question" do
-  #     search = @reservation_desk.find_available_room(start_date: "2020-3-5", end_date: "2020-3-6")
-  #     expect(search.id).must_equal 1
-
-  #     search_2 = @reservation_desk.find_available_room(start_date: "2020-3-2", end_date: "2020-3-4")
-  #     expect(search_2.id).must_equal 2
-
-  #     search_3 = @reservation_desk.find_available_room(start_date: "2020-3-21", end_date: "2020-3-24")
-  #     expect(search_3.id).must_equal 3
-  #   end
-
-  #   it "returns nil if no rooms are available for requested dates" do
-  #     20.times do |i|
-  #       reservation = @reservation_desk.new_reservation(room_id: (i + 1), start_date: "2020-6-1", end_date: "2020-6-30")
-  #       @reservation_desk.add_reservation(reservation)
-  #     end
-  #     search = @reservation_desk.find_available_room(start_date: "2020-6-5", end_date: "2020-6-10")
-  #     assert_nil search
-  #   end
-  # end
-
-  describe "new_reservation" do
-    before do
-      @room_id = 10
-      @start_date = "2020-4-1"
-      @end_date = "2020-4-5"
-      @new_reservation = @reservation_desk.new_reservation(room_id: @room_id, start_date: @start_date, end_date: @end_date)
+  describe "make_reservation" do
+    it "ID provided: makes a new reservation and add it into the Room's reservations array" do
+      @reservation_desk.make_reservation(room_id: 5, start_date: "2020-5-5", end_date: "2020-5-7")
+      @reservation_desk.make_reservation(room_id: 5, start_date: "2020-6-5", end_date: "2020-6-7")
+      expect(@reservation_desk.rooms[4].reservations.length).must_equal 2
+      expect(@reservation_desk.rooms[4].available?(start_date: "2020-5-5", end_date: "2020-5-6")).must_equal false
     end
 
-    it "creates a new instanse of Reservation" do
-      expect(@new_reservation).must_be_kind_of Hotel::Reservation
-    end
-
-    it "raises an error if room id is invalid" do
-      room_id = 1000 #TODO: what if there is one?
-      start_date = "2020-4-1"
-      end_date = "2020-4-5"
+    it "ID provided: Raises an ArgumentError if ID is invalid" do
       expect {
-        @reservation_desk.new_reservation(room_id, start_date, end_date)
+        @reservation_desk.make_reservation(room_id: 999999, start_date: "2020-5-5", end_date: "2020-5-7")
       }.must_raise ArgumentError
     end
 
-    it "reserves a room with a given ID" do
-      expect(@new_reservation.room_id).must_equal 10
+    it "No ID provided: reserves the first available room down the list for requested dates" do
+      @reservation_desk.rooms[0].reserve(start_date: "2020-3-1", end_date: "2020-3-5")
+      @reservation_desk.rooms[1].reserve(start_date: "2020-3-1", end_date: "2020-3-10")
+
+      @request = @reservation_desk.make_reservation(start_date: "2020-3-4", end_date: "2020-3-15")
+      expect(@reservation_desk.rooms[2].reservations.length).must_equal 1
+      expect(@reservation_desk.rooms[2].available?(start_date: "2020-3-1", end_date: "2020-3-5")).must_equal false
     end
 
-    it "raises ArgumentError if the requested room is occupied on requested dates" do
-      #possibly not needed
-    end
-
-    it "reserves the first available room down the list if no provided" do
-      reservation = @reservation_desk.new_reservation(room_id: 1, start_date: "2020-3-1", end_date: "2020-3-10")
-      @reservation_desk.add_reservation(reservation)
-      expect(@reservation_desk.new_reservation(start_date: "2020-3-2", end_date: "2020-3-15").room_id).must_equal 2
-    end
-  end
-
-  describe "add_reservation" do
-    before do
-      @room = @reservation_desk.rooms[0]
-      @room_id = 1
-      @start_date = "2020-4-1"
-      @end_date = "2020-4-5"
-      @reservation = @reservation_desk.new_reservation(room_id: @room_id, start_date: @start_date, end_date: @end_date)
-      @reservations_num = @reservation_desk.rooms[0].reservations.length
-      @reservation_desk.add_reservation(@reservation)
-    end
-
-    it "add a new instance of Reservation to a correct Room's reservations array" do
-      expect(@reservation_desk.rooms[0].reservations.include? @reservation).must_equal true
-      expect(@reservation_desk.rooms[0].reservations.length).must_equal (@reservations_num + 1)
-    end
-  end
-
-  describe "make_reservation" do
-    it "makes a new reservation and add it into the Room's reservations array" do
-      room_id = 1
-      start_date = "2020-4-1"
-      end_date = "2020-4-5"
-      reservation = @reservation_desk.new_reservation(room_id: room_id, start_date: start_date, end_date: end_date)
-      @reservation_desk.add_reservation(reservation)
-      
-      @reservation_desk.make_reservation(start_date: "2020-4-2", end_date: "2020-5-2")
-      expect(@reservation_desk.rooms[1].reservations.length).must_equal 1
-
-      @reservation_desk.make_reservation(start_date: "2020-4-20", end_date: "2020-5-1")
-      expect(@reservation_desk.rooms[0].reservations.length).must_equal 2
-    end
-
-    it "raises an Exception if no rooms are available for requested dates" do
-      20.times do |i|
-        reservation = @reservation_desk.new_reservation(room_id: (i + 1), start_date: "2020-6-1", end_date: "2020-6-30")
-        @reservation_desk.add_reservation(reservation)
+    it "No ID provided: raises an Exception if no rooms are available for requested dates" do
+      20.times do
+        @reservation_desk.make_reservation(start_date: "2020-6-1", end_date: "2020-6-30")
       end
-      expect {@reservation_desk.make_reservation(start_date: "2020-6-12", end_date: "2020-6-15")}.must_raise StandardError     
+      expect {
+        @reservation_desk.make_reservation(start_date: "2020-6-1", end_date: "2020-6-30")
+      }.must_raise StandardError
     end
   end
 end

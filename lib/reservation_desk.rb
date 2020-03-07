@@ -1,12 +1,11 @@
 module Hotel
   class ReservationDesk
+  # Responcibility: to organize reservations across hotel
     attr_reader :room_num, :rooms, :reservations
 
     def initialize(room_num: 20)
       @room_num = room_num
       @rooms = make_rooms
-      @reservations = [] 
-      #TODO: not needed?
     end
 
     def find_room_by_id(id)
@@ -33,50 +32,27 @@ module Hotel
       return reservations
     end
 
-    def check_availability(start_date: start_date, end_date: end_date)
-      #TODO: efficient date checking
-      date_range = DateRange.new(start_date: start_date, end_date: end_date)
-
+    def find_available_rooms(start_date:, end_date:)
+      #TODO: efficient date checking, rename to find_available_rooms, date range?
       available_rooms = []
       rooms.each do |room|
-        switch = 0
-        room.reservations.each do |reservation|
-          if reservation.date_range.overlap?(date_range)
-            switch = 1
-            break
-          end
-        end
-        available_rooms << room if switch == 0
+        available_rooms << room if room.available?(start_date: start_date, end_date: end_date)
       end
-
       return available_rooms.empty? ? nil : available_rooms
     end
 
-
-    def make_reservation(start_date:, end_date:)
-      # Create a date range here and use it moing forward?
-      room = check_availability(start_date: start_date, end_date: end_date)[0]
-      raise StandardError.new("No rooms available for these dates.") if room == nil
-      reservation = new_reservation(room_id: room.id, start_date: start_date, end_date: end_date)
-      add_reservation(reservation)
+    def make_reservation(room_id: nil, start_date:, end_date:)
+      if room_id 
+        room = find_room_by_id(room_id)
+        raise ArgumentError.new("Invalid room ID.") if room == nil
+      else
+        room = find_available_rooms(start_date: start_date, end_date: end_date)[0]
+        raise StandardError.new("No rooms available for these dates.") if room == nil
+      end
+      room.reserve(start_date: start_date, end_date: end_date)
     end
 
-    def new_reservation(room_id: nil, start_date: , end_date: )
-      unless room_id == nil || rooms.find {|room| room.id == room_id}
-        raise ArgumentError.new("Invalid room ID.")
-      end
-      #TODO: Check availability or possibly remove?
-
-      if room_id == nil
-        room_id = check_availability(start_date: start_date, end_date: end_date).first.id
-      end
-      Reservation.new(room_id: room_id, start_date: start_date, end_date: end_date)
-    end
-
-    # TODO: should be combined with new_reservation? Maybe a larger method to call both of them?
-    def add_reservation(new_reservation)
-      room = find_room_by_id(new_reservation.room_id)
-      room.reservations << new_reservation
+    def make_block(start_date:, end_date:, rooms:)
     end
 
     private
@@ -87,10 +63,39 @@ module Hotel
       end
       return rooms
     end
-
   end
 end
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+# def new_reservation(room_id: nil, start_date: , end_date: )
+#   unless room_id == nil || rooms.find {|room| room.id == room_id}
+#     raise ArgumentError.new("Invalid room ID.")
+#   end
+#   #TODO: Check availability or possibly remove?
+
+#   if room_id == nil
+#     room_id = find_available_rooms(start_date: start_date, end_date: end_date).first.id
+#   end
+#   Reservation.new(room_id: room_id, start_date: start_date, end_date: end_date)
+# end
+
+# # TODO: should be combined with new_reservation? Maybe a larger method to call both of them?
+# def add_reservation(new_reservation)
+#   room = find_room_by_id(new_reservation.room_id)
+#   room.reservations << new_reservation
+# end
 
 
 # def find_reservations(room_id: nil , start_date: nil, end_date: nil)
