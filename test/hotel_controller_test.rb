@@ -11,6 +11,7 @@ describe "Hotel::HotelController" do
   end
 
   describe "wave 1" do
+
     describe "rooms" do
       it "returns a list" do
         expect(@hotel.rooms).must_be_kind_of Array
@@ -25,7 +26,7 @@ describe "Hotel::HotelController" do
           expect(@hotel.rooms.include?(room)).must_equal true
         end
       end
-    end
+    end # describe "rooms"
 
     describe "reserve_room" do
       it "takes two Date objects and returns a Reservation" do
@@ -73,9 +74,9 @@ describe "Hotel::HotelController" do
         # create a reservation from 2020/01/05 to 2020/01/01. It should raise an exception
         expect{ @hotel.reserve_room(dt(5), dt(1)) }.must_raise ArgumentError
       end
-    end
+    end # describe "reserve_room"
 
-    # access the list of reservations for a specific date to track reservations by date
+    # Access the list of reservations for a specific date to track reservations by date
     describe "reservations_by_date" do
       it "takes a Date and returns a list of Reservations" do
         @hotel.reserve_room(dt(1), dt(4))
@@ -125,12 +126,13 @@ describe "Hotel::HotelController" do
         @hotel.reserve_room(dt(5), dt(10))
         expect(@hotel.reservations_by_date(dt(10)).size).must_equal 0
       end
+    end # describe "reservations_by_date"
 
-    end
-  end
+  end # describe "wave 1"
 
   # check whether reservations conflict with each other
   describe "wave 2" do
+
     describe "available_rooms" do
       it "takes two dates and returns a list" do
         room_list = @hotel.available_rooms(dt(1), dt(4))
@@ -167,10 +169,12 @@ describe "Hotel::HotelController" do
         expect(@hotel.available_rooms(dt(1), dt(5)).size).must_equal 20
       end
 
-    end
-  end # Wave 2 ***add coments to ends
+    end # describe "available_rooms"
+
+  end # describe "wave 2"
 
   describe "wave 3" do
+
     # Create a Block for a Given Date Range, a Set of Rooms and a Rate
     describe "create_block" do 
       it "takes start/end/rooms/rate and returns Block" do
@@ -213,11 +217,9 @@ describe "Hotel::HotelController" do
         reservation = @hotel.reserve_room(dt(1), dt(4)) # this should reserve room number 4 instead of 1
         expect(reservation.room).must_equal 4
       end
-
-    end # Create Block
+    end # describe "create_block"
 
     describe "reserve_from_block" do
-
       # Create a Reservation from a Block
       # Reserve a specific room from a hotel block
       it "takes a block and a room. Returns a reservation" do
@@ -262,8 +264,7 @@ describe "Hotel::HotelController" do
         @hotel.reserve_from_block(block, 3)
         expect(@hotel.reservations.size).must_equal 4
       end
-
-    end # Reserve from block
+    end # describe "reserve_from_block"
     
     # Check if Rooms for a Block are Valid
     describe "rooms_valid?" do
@@ -282,8 +283,7 @@ describe "Hotel::HotelController" do
         expect(@hotel.rooms_valid?([18, 19, 20, 21])).must_equal false
         expect(@hotel.rooms_valid?(1..20)).must_equal false
         end
-
-    end
+    end # describe "rooms_valid?"
 
     # Check if the Rooms for a Block are Available in the Date Range
     # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot create another hotel block that includes that specific room for that specific date, because it is unavailable
@@ -305,7 +305,7 @@ describe "Hotel::HotelController" do
         expect(@hotel.block_rooms_available?(dt(1), dt(4), [4, 5, 6])).must_equal false # room 4 in both
         expect(@hotel.block_rooms_available?(dt(3), dt(6), [2, 3, 4])).must_equal false # overlapping dates
       end        
-    end
+    end # describe "block_rooms_available?"
 
     # Check if a Room is Not blocked in a Specific Date Range
     describe "is_room_unblocked?" do
@@ -320,7 +320,7 @@ describe "Hotel::HotelController" do
         expect(@hotel.is_room_unblocked?(dt(1), dt(4), 3)).must_equal false # room 3 is both
         expect(@hotel.is_room_unblocked?(dt(3), dt(8), 3)).must_equal false # overlapping dates
       end        
-    end
+    end # describe "is_room_unblocked?"
     
     # Checks whether a given block has any rooms available # test to fix this.
     describe "available_rooms_in(block)" do
@@ -353,6 +353,8 @@ describe "Hotel::HotelController" do
         available = @hotel.available_rooms_in(block)
         expect(available.size).must_equal 0
       end
-    end
-  end # Wave 3
-end
+    end # describe "available_rooms_in(block)"
+
+  end # escribe "wave 3"
+
+end # describe "Hotel::HotelController"
