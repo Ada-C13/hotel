@@ -21,7 +21,7 @@ module Hotel
       end
 
       if @room_rate == nil
-        @room_rate = 200
+        @room_rate = 200.0
       end 
 
 
