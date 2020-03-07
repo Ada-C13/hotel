@@ -18,8 +18,8 @@ describe Hotel::HotelController do
       it "has 20 rooms" do
         expect(@rooms.size).must_equal 20
       end
-      
     end
+
     describe "reserve_room" do
       it "takes two Date objects and returns a Reservation" do
         start_date = @date
@@ -33,29 +33,25 @@ describe Hotel::HotelController do
     describe "reservations" do
       before do
         @rooms = @hotel_controller.rooms
-        start_date = @date
-        end_date = start_date + 3
-
-        reservation = @hotel_controller.reserve_room(start_date, end_date)
+        reservation = @hotel_controller.reserve_room(@date, (@date + 3))
         @rooms[0][:room1] << reservation
       end
 
       it "takes a Date and returns a list of Reservations" do
         reservation_list = @hotel_controller.reservations(@date)
 
-        puts reservation_list
         expect(reservation_list).must_be_kind_of Array
         reservation_list.each do |res|
           res.must_be_kind_of Hotel::Reservation
         end
       end
 
-      it "raises an exception when an invalid date range is provided" do
-        #TODO
+      it "raises an error when an Date object is not provided provided" do
+        expect{@hotel_controller.reservations("768")}.must_raise ArgumentError
       end
 
       it "returns an empty array if no match" do
-        #TODO
+        expect(@hotel_controller.reservations(Date.new(2020, 9, 4))).must_equal []
       end
     end
   end
