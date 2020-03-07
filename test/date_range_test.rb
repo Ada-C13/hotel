@@ -18,19 +18,6 @@ describe 'DateRange class' do
     end
   end
 
-  describe 'get_all_dates method' do
-    it 'takes in an arrive and depart dates' do
-      expect(Hotel::DateRange.get_all_dates(@dates.arrive, @dates.depart)).must_be_kind_of Array
-    end
-
-    it 'returns an array with all dates in dates range' do 
-      all_dates = (@dates.arrive..@dates.depart).map { |date| date }
-      one_date = (@dates.arrive..@dates.arrive).map { |date| date }
-      expect(Hotel::DateRange.get_all_dates(@dates.arrive, @dates.depart)).must_equal all_dates
-      expect(Hotel::DateRange.get_all_dates(@dates.arrive, @dates.arrive)).must_equal one_date
-    end
-  end
-
   describe 'overlap? method' do
     it 'should return true if given dates are included in reservaton dates' do
       expect(@dates.overlap?(Date.new(2021, 2, 24), Date.new(2021, 2, 26))).must_equal true
