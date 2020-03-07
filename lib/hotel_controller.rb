@@ -57,7 +57,7 @@ module Hotel
         return room.room_id if room.create_room_reservation(input_range)
       end
 
-      return false
+      raise ArgumentError.new("No rooms available for date range.")
     end
 
     # Wave 1, US 3: "I can access the list of reservations for a specific date, so that I can track reservations by date"

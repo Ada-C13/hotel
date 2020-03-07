@@ -61,12 +61,12 @@ describe Hotel::Controller do
       @new_reservation = Hotel::Reservation.new(@input_range,@room_id)
     end
 
-    it "returns false if the input range cannot be accommodated in any room" do
+    it "raises an ArgumentError if the input range cannot be accommodated in any room" do
       hotel_controller.rooms.each do |room|
         room.create_room_reservation(@booked_range)
       end
 
-      expect(hotel_controller.reserve_with_range(@booked_range)).must_equal false
+      expect{hotel_controller.reserve_with_range(@booked_range)}.must_raise ArgumentError
     end
 
     it "returns the room_id of the first room that can accommodate the input range" do
