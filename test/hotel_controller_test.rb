@@ -8,6 +8,8 @@ describe "HotelController class" do
     @b = Date.new(2020, 2, 25)
     @controller.make_reservation(@a, @b)
     @reservations = @controller.reservations
+    @controller.make_block(@a, @b, [3, 4, 5], 180)
+    @blocks = @controller.blocks
     @list_available_rooms = @controller.find_available_rooms(@a, @b)
     @all_rooms = @controller.show_all_rooms
     @res = @reservations[0]
@@ -31,10 +33,19 @@ describe "HotelController class" do
     end
   end
 
+  describe "make_block" do
+    it "creates instance of Block" do
+      expect(@blocks[0]).must_be_kind_of Hotel::Block
+    end
+  end
+
   describe "find_available_rooms" do
     it "returns array of available rooms" do
       expect(@list_available_rooms).must_be_kind_of Array
-      expect(@list_available_rooms.length).must_equal 19 # Because one reservation was made for given range
+      expect(@list_available_rooms.length).must_equal 16
+    end
+    it "excludes rooms in block" do
+      expect(@list_available_rooms.include?(3)).must_equal false
     end
     it "Raises exception if there are no available rooms" do
       @controller2 = Hotel::HotelController.new(rooms: [1], reservations: [])
@@ -42,7 +53,6 @@ describe "HotelController class" do
       expect { @controller2.make_reservation(@a, @b) }.must_raise StandardError
     end
   end
-
   describe "find_by_date" do
     it "returns array of reservations for that date" do
       expect(@controller.find_by_date(@a)).must_be_kind_of Array

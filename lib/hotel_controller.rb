@@ -4,11 +4,12 @@ require_relative "date_range"
 
 module Hotel
   class HotelController
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :blocks
 
     def initialize(rooms: (1..20).to_a, reservations: [])
       @rooms = rooms
       @reservations = reservations
+      @blocks = []
     end
 
     def make_reservation(check_in, check_out)
@@ -23,15 +24,30 @@ module Hotel
       return reservation
     end
 
+    def make_block(check_in, check_out, rooms, discounted_rate)
+      date_range = DateRange.new(check_in: check_in, check_out: check_out)
+      block = Block.new(date_range: date_range, rooms: rooms, discounted_rate: discounted_rate)
+      @blocks << block
+      return block
+    end
+
     def find_available_rooms(check_in, check_out)
       new_date_range = DateRange.new(check_in: check_in, check_out: check_out)
       available_rooms = @rooms.clone
-      # for all rooms in a block, .date_range.overlap? and delete from available_rooms. blocked_out?(date_range) method
       @reservations.each do |reservation|
         if reservation.date_range.overlap?(new_date_range) == true
           available_rooms.delete(reservation.room)
         end
       end
+
+      @blocks.each do |block|
+        if block.date_range.overlap?(new_date_range) == true
+          block.rooms.each do |room|
+            available_rooms.delete(room)
+          end
+        end
+      end
+
       if available_rooms.length > 0
         return available_rooms
       else
@@ -39,7 +55,7 @@ module Hotel
       end
     end
 
-    def find_by_date(date)
+    def find_by_date(date) # add blocks
       all_reservations_for_date = []
       @reservations.each do |reservation|
         if reservation.date_range.include?(date) == true
@@ -49,8 +65,7 @@ module Hotel
       return all_reservations_for_date
     end
 
-    # I could create separate method for find_by_room, and combine with find_by_date
-    def find_by_date_and_room(room, date)
+    def find_by_date_and_room(room, date) # add blocks
       all_reservations_for_date_and_room = []
       @reservations.each do |reservation|
         if reservation.date_range.include?(date) && reservation.room == room
@@ -64,7 +79,7 @@ module Hotel
     end
 
     # Do I need this method here?
-    def show_reservation_cost(reservation)
+    def show_reservation_cost(reservation) # add blocks?
       return reservation.calculate_cost
     end
   end
