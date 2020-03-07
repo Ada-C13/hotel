@@ -1,0 +1,12 @@
+date: Mar 7, 2020 Notes on Hotel project
+
+- DateRage class, instead of passing in an array as date input, 
+it can be changed to taking in a Date class instead.
+- reservation cost method is currently in front desk, 
+maybe this should be calculated in reservation instead.
+- currently the reservation id is generated randomly between 1000 to 9999,
+it will still have possiblitly of duplicates. 
+- the Hotel_bookings csv is restoring all the data every time the program runs,
+maybe this should be changed to appending new reservations instead. 
+- hotel block is in front desk, maybe this should be its own class.
+
