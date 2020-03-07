@@ -23,8 +23,8 @@ describe Hotel::DateRange do
       expect(@range.end_date).must_be_kind_of Date
     end
 
-    it "date_range is an array" do
-      expect(@range.date_range).must_be_kind_of Array
+    it "dates is an array" do
+      expect(@range.dates).must_be_kind_of Array
     end
 
     it "can be initialized with two dates" do

@@ -1,13 +1,13 @@
 require_relative "test_helper"
 
-describe Hotel::HotelController do
+describe Hotel::FrontDesk do
   before do
-    @hotel_controller = Hotel::HotelController.new
+    @hotel_controller = Hotel::FrontDesk.new
   end
 
   describe "initialize" do
-    it "is an instance of HotelController" do
-      expect(@hotel_controller).must_be_kind_of Hotel::HotelController
+    it "is an instance of FrontDesk" do
+      expect(@hotel_controller).must_be_kind_of Hotel::FrontDesk
     end
 
     it "rooms is a type of array" do
@@ -25,7 +25,6 @@ describe Hotel::HotelController do
     describe "reserve_room" do
       before do
         @range = Hotel::DateRange.new(start_date: Date.today + 1, end_date: Date.today + 3)
-        @hotel_controller.reserve_room(@range)
         @hotel_controller.available_rooms(@range)
       end
 
@@ -33,10 +32,6 @@ describe Hotel::HotelController do
       it "creates a Reservation" do
         @reserved = @hotel_controller.reserve_room(@range)
         expect(@reserved).must_be_kind_of Hotel::Reservation
-        # reservation = @hotel_controller.reserve_room(@range)
-        # expect(@hotel_controller.reservations[0]).must_be_instance_of Hotel::Reservation
-        # reservation_list.each do |res|
-        #   res.must_be_kind_of Hotel::Reservation
       end
       
     end
