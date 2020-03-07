@@ -113,9 +113,9 @@ module Hotel
       end
     end
     
-    # Checks whether a given block has any rooms available # test to fix this.
+    # Checks whether a given block has any rooms available
     def available_rooms_in(block)
-      return block.rooms
+      return block.rooms.select { |room| is_room_available?(block.range.start_date, block.range.end_date, room)}
     end
 
   end # class HotelController
