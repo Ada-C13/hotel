@@ -262,7 +262,71 @@ describe Hotel::HotelController do
   
         expect(@hotel_controller.reservation_array).must_be_kind_of Array 
         expect(@hotel_controller.reservation_array.length).must_equal 5
+      end
+
+      it "does not reserve rooms in a block if a reservation comes in with the same date." do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1, 2, 3, 4, 5]
+        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms)
         
+        new_res = @hotel_controller.res_with_valid_dates(DateRange.new(@date,@date + 3))
+        
+        expect(@hotel_controller.reservation_array.length).must_equal 6
+        expect(@hotel_controller.reservation_array[5].room).must_equal 6 # could not reserve room 1-5 because it was reserved
+      end
+
+      it "reserves room on end date of block" do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1, 2, 3, 4, 5]
+        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms)
+  
+        new_res = @hotel_controller.res_with_valid_dates(DateRange.new(@date + 3,(@date + 6))) #reserving room on block end date
+
+        expect(@hotel_controller.reservation_array.length).must_equal 6
+        expect(@hotel_controller.reservation_array[5].room).must_equal 1
+      end
+
+
+      it "cannot make a block on a block" do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1, 2, 3, 4, 5]
+        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms)
+
+        expect{@hotel_controller.set_aside_block(date_range, collection_of_rooms)}.must_raise ArgumentError
+      end
+
+      it "cannot make a block on with one overlap in room" do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1, 2, 3, 4, 5]
+        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms)
+
+        collection_of_rooms2 = [5, 6, 7, 8, 9]
+
+        expect{@hotel_controller.set_aside_block(date_range, collection_of_rooms2)}.must_raise ArgumentError
+      end
+
+      it "cannot make a block on with one day overlap" do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1, 2, 3, 4, 5]
+        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms)
+
+        date_range2 = DateRange.new(@date + 2,(@date + 4))
+
+        expect{@hotel_controller.set_aside_block(date_range2, collection_of_rooms)}.must_raise ArgumentError
+      end
+
+      it "cannot make a block with 6 rooms" do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1, 2, 3, 4, 5, 6]
+        
+        expect{@hotel_controller.set_aside_block(date_range, collection_of_rooms)}.must_raise ArgumentError
+      end
+
+      it "cannot make a block with 1 rooms" do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1]
+        
+        expect{@hotel_controller.set_aside_block(date_range, collection_of_rooms)}.must_raise ArgumentError
       end
     end
   end
