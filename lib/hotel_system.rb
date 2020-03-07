@@ -6,6 +6,7 @@ require_relative 'date_range'
 
 module Hotel
 	class HotelSystem
+
 		attr_reader :rooms, :reservations
 
 		def initialize
@@ -54,7 +55,6 @@ module Hotel
 
 			return found_reservations
 		end
-
 		# Get all reservations for a specific room in a date range.
 		def get_reservations_by_room(room, searching_range)
 			found_reservations = []
