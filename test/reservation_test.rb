@@ -25,10 +25,10 @@ describe "Hotel::Reservation" do
       expect{ reservation = Hotel::Reservation.new(start_date, end_date1, room) }.must_raise ArgumentError
       # date can not be a string
       expect{ reservation = Hotel::Reservation.new(start_date, end_date2, room) }.must_raise ArgumentError
-      # start date can not be the same as end date
+      # start date can not be same as end date
       expect{ reservation = Hotel::Reservation.new(start_date, start_date, room) }.must_raise ArgumentError
     end
-  end
+  end # describe "constructor"
 
   describe "cost" do
     before do
@@ -43,9 +43,9 @@ describe "Hotel::Reservation" do
     end
 
     it "calculates the cost" do
-      # Reservation - Every room is identical and a room always costs $200/night
+      # Rooms identical and cost $200/night
       expect(@reservation.cost).must_equal 600
     end
-  end
+  end # describe "cost"
   
-end
+end # describe "Hotel::Reservation"

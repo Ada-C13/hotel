@@ -1,5 +1,6 @@
 module Hotel
   class Reservation
+    # Generator
     attr_reader :range, :room
     ROOM_COST = 200
 
