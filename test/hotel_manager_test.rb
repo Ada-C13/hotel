@@ -28,6 +28,21 @@ describe Hotel::HotelController do
         reservation = @hotel_controller.reserve_room(start_date, end_date)
         expect(reservation).must_be_kind_of Hotel::Reservation
       end
+
+      it "is an an error for negative-length ranges" do
+        start_date = Date.new(2017, 02, 01)
+        end_date = Date.new(2017, 01, 01) 
+  
+        expect{@hotel_controller.reserve_room(start_date, end_date)}.must_raise ArgumentError, "Cannot have negative length for a date range"
+      end
+  
+      it "is an error to create a 0-length range" do
+        start_date = Date.new(2017, 01, 01)
+        end_date = Date.new(2017, 01, 01)
+        
+        expect{@hotel_controller.reserve_room(start_date, end_date)}.must_raise ArgumentError, "Cannot have 0 length date range"
+      end
+
     end
 
     describe "reservations" do
@@ -54,6 +69,22 @@ describe Hotel::HotelController do
         expect(@hotel_controller.reservations(Date.new(2020, 9, 4))).must_equal []
       end
     end
+
+    describe  "reservations_by_room" do
+      #TODO
+      before do
+        @rooms = @hotel_controller.rooms
+        reservation = @hotel_controller.reserve_room(@date, (@date + 3))
+        @rooms[4][:room5] << reservation
+      end
+
+      it "takes a room and date and returns a list of reservations" do
+        reservation_list = @hotel_controller.reservations_by_room(:room5, Date.new(2020, 8, 5))
+        #TODO
+      end
+
+    end
+
   end
 
   describe "wave 2" do
