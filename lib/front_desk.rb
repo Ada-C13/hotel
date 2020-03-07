@@ -35,7 +35,7 @@ module Hotel
     end
 
     # User: I can access the list of reservations for a specific date, so that I can track reservations by date
-    def reservations(date)
+    def date_reservations(date)
       @reservations.each do |res|
         res.select if @reservation.includes? Date
       end
