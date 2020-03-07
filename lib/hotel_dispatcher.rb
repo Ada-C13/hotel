@@ -21,9 +21,20 @@ module Hotel
         return @rooms
     end # create rooms end
 
+    # def verify_dates(start_date, end_date)
+    #   if end_date < start_date
+    #       raise ArgumentError
+    #   elsif start_date < Date.today()
+    #         raise ArgumentError
+    #   elsif end_date < Date.today(
+    #           raise ArgumentError
+    #   end
+  
+    # end
+
     # Wave 1
     def make_reservation(start_date, end_date)
-      if end_date < start_date 
+      if end_date < start_date
         raise ArgumentError
       end
       room = create_rooms[0]
@@ -32,7 +43,7 @@ module Hotel
       return @reservations
     end
 
-
+    # Wave 1
     def find_all_res_for_room(room_num, start_date, end_date)
       found_reservations = []
         @reservations.each  do |reservation| 
@@ -47,21 +58,6 @@ module Hotel
         return found_reservations
     end # find_all_res_for_room end
 
-
-    # def find_available_rooms(start_date, end_date)
-    #   found_rooms = []
-    #     @reservations.each do |reservation|
-    #       if (start_date >= reservation.end_date && end_date >= reservation.end_date) ||
-    #         (start_date < reservation.start_date && end_date <= reservation.start_date) ||
-    #         (start_date >= reservation.end_date && end_date > reservation.end_date)
-    #         found_rooms << reservation.room
-    #       else 
-    #         raise ArgumentError, "The dates you have entered are NOT available"
-    #       end
-    #     end
-    #     return found_rooms
-    # end # find_available_rooms end
-
     # Wave 1
     def find_all_reservations(date)
       all_reservations_by_date = []
@@ -72,6 +68,24 @@ module Hotel
       end
       return all_reservations_by_date
     end #find_all_reservations by date end
+
+    #   # View all available rooms for a given date range
+    #    def find_available_rooms(start_date, end_date)
+    #   found_rooms = []
+    #     @reservations.each do |reservation|
+    #       if (start_date >= reservation.end_date && end_date >= reservation.end_date) 
+    #         (start_date < reservation.start_date && end_date <= reservation.start_date) ||
+    #         (start_date >= reservation.end_date && end_date > reservation.end_date)
+    #         found_rooms << reservation
+    #       else 
+    #         return 
+    #         raise ArgumentError
+    #       end
+    #     end
+    #     return found_rooms
+    # end # find_available_rooms end
+
+
 
 
   end # class end
