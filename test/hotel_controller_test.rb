@@ -122,4 +122,9 @@ describe 'HotelController class' do
       expect{(@new_hotel.reservations_by_room_and_dates(1, @start_date, @end_date, Date.new(2021, 3, 15)))}.must_raise ArgumentError
     end
   end
+
+  describe 'make a block' do 
+    it 'should make a block with a date range and rate' do
+    end
+  end
 end
