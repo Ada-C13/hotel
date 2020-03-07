@@ -27,6 +27,7 @@ describe "reservation" do
     it "accepts value for rm_num" do
       res = Hotel::Reservation.new(start_date: "3/4/2014", end_date: "7/4/2014", rm_num: 4)
       res.must_respond_to :rm_num
+      res.rm_num.must_equal 4
     end
     
     it "calculates the correct cost" do 
@@ -41,14 +42,4 @@ describe "reservation" do
       res.recloc.length.must_equal 6
     end 
   end
-
-  describe "conflict" do 
-    it "returns true if there is no conflict" do 
-      res = Hotel::Reservation.new(start_date: "3/4/2014", end_date: "7/4/2014")
-      
-    end
-    it "returns false if there is a conflict" do 
-      res = Hotel::Reservation.new(start_date: "3/4/2014", end_date: "7/4/2014")
-    end 
-  end 
 end

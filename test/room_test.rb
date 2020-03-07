@@ -26,28 +26,21 @@ describe "room" do
       expect{Hotel::Room.new(rm_num: -3)}.must_raise ArgumentError
       expect{Hotel::Room.new(rm_num: nil)}.must_raise ArgumentError
     end 
-
-    
-    # it "verifies cost is valid" do 
-    # cost = 300
-    # room = Hotel::Room.new(rm_num: 3, cost: cost)
-    # room.must_respond_to :cost
-    # room.cost.must_be_instance_of Integer
-    # room.cost.must_equal cost
-    # end
-
-
-    # it "raises argument error if invalid cost" do 
-    #   expect{Hotel::Room.new(rm_num: 3, cost: -200)}.must_raise ArgumentError
-    # end 
-    
   end 
 
-  # describe "create_rooms" do 
-  #   it "creates the correct number of rooms" do 
-  #     all_rooms = Hotel::Room.create_rooms(20)
-  #     expect(all_rooms.length).must_equal 20
-  #   end
-  # end
+  describe "is_available" do 
+    it "checks if a room is available on a given date" do 
+      # expect if room has no reservations returns true
+      # expect if not available returns false 
+      # expect if available returns true 
+      # invalid date returns argument error?
+    end 
+  end 
+
+  describe "book_room" do 
+    it "correctly makes a reservation for available room" do 
+      # expect new instance of Reservation is created
+    end 
+  end 
 
 end

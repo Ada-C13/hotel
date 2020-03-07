@@ -18,14 +18,36 @@ describe "manager" do
     expect(all_rooms.length).must_equal 20
   end
   
-
-  it "can make a reservation" do 
-  
+    ##not working lol 
+  describe "show_all_rooms" do 
+    it "shows all rooms" do 
+  #     expect(Hotel::Manager.show_all_rooms).must_output(/@all_rooms/)  
+    end
   end 
 
-  it "can check availability by room" do 
-
+  describe "book_res" do 
+    it "" do 
+    
+    end 
   end 
-  
+
+  describe "res_by_date" do 
+    it "" do 
+    
+    end 
+  end 
+
+  describe "total_cost" do 
+    it "" do 
+    
+    end 
+  end 
+
+    # describe "create_rooms" do 
+  #   it "creates the correct number of rooms" do 
+  #     all_rooms = Hotel::Room.create_rooms(20)
+  #     expect(all_rooms.length).must_equal 20
+  #   end
+  # end
 
 end
