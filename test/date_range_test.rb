@@ -2,7 +2,7 @@ require_relative 'test_helper'
 
 describe "Date Range" do 
   # did you see what I did here? it's our break week!
-  # JK - I will be at home doing ada projects or personal projects like cleaning my cloud drives.
+  # JK - I will be at home, working on ada/personal projects.
   let(:start_date) { Date.new(2020, 3, 23)}
   let(:end_date) { Date.new(2020, 3, 27)}
   let(:date_range) { HotelBooking::DateRange.new(start_date: start_date, end_date: end_date) }

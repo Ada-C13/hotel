@@ -8,10 +8,10 @@ module HotelBooking
     end
 
     def cost
-      if @room.in_block == true
-        return self.date_range.nights * ( self.room.cost * self.block.discount_rate )
+      if @room.in_block 
+        return @date_range.nights * ( @room.cost * @block.discount_rate )
       else
-        return self.date_range.nights * self.room.cost
+        return @date_range.nights * @room.cost
       end
     end
 

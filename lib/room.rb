@@ -1,7 +1,7 @@
 module HotelBooking
   class Room
-    attr_reader :number, :cost, :unavailable_dates, :in_block
-    attr_writer :in_block
+    attr_reader :number, :cost, :in_block
+    attr_writer :in_block, :cost
     def initialize(number:, cost: 200, in_block: false)
       @number = number
       @cost = cost

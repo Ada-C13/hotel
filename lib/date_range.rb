@@ -17,16 +17,16 @@ module HotelBooking
     def overlap?(test_range)
       ts = test_range.start_date
       te = test_range.end_date
-      ss = self.start_date
-      se = self.end_date
+      ss = @start_date
+      se = @end_date
       if 
-        (ts < ss && te == ss) || 
-        (ts == se && te > se) || 
-        (ts < ss && te < ss) || 
-        (ts > se  && te > se)
+        te == ss || 
+        ts == se || 
+        te < ss || 
+        ts > se
         return false
       elsif 
-        ((ts == ss) && (te == se))||
+        ((ts == ss) && (te == se)) ||
         ((ts > ss) && (te < se)) || 
         ((ts > ss) && (te > se)) || 
         ((ts < ss) && (te < se)) || 
@@ -36,9 +36,9 @@ module HotelBooking
     end
 
     def include?(date)
-      if (date < self.start_date) || (date >= self.end_date) 
+      if (date < start_date) || (date >= end_date) 
         return false
-      else (date > self.start_date) && (date < self.end_date)
+      else (date >= start_date) && (date < end_date)
         return true
       end
     end
@@ -48,7 +48,7 @@ module HotelBooking
     end
 
     def ==(other)
-      return self.start_date == other.start_date && self.end_date == other.end_date
+      return @start_date == other.start_date && @end_date == other.end_date
     end
   end
 end
