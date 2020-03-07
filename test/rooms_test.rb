@@ -54,4 +54,14 @@ describe "rooms" do
     end
     
   end
+
+  describe "change_cost" do
+    it "changes the cost of the room" do
+      expect(@room.cost).must_equal 200
+      
+      @room.change_cost(180)
+      expect(@room.cost).must_equal 180
+    end
+    
+  end
 end

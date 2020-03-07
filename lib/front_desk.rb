@@ -2,6 +2,7 @@ require_relative 'room'
 require_relative 'date_range'
 require_relative 'reservations'
 require_relative 'hotel_block'
+require_relative 'no_available_room_error'
 
 module Hotel
   class FrontDesk
@@ -18,7 +19,7 @@ module Hotel
       @hotel_blocks = []
     end
 
-    def add_reservation(date_range)
+    def add_reservation(date_range) #TODO check/rewtire tests
       available_rooms = available_rooms(date_range)
       raise NoAvailableRoomError.new("there are no available rooms for that date")if available_rooms.empty? == true
 
@@ -28,9 +29,12 @@ module Hotel
       chosen_room.add_room_reservation(new_reservation)
     end
 
-    def available_rooms(date_range)
+    def available_rooms(date_range) #TODO rewrite tests
       available_rooms = @rooms.reject do |room|
-        room.reservations.any?{|reservation| reservation.date_range.overlap?(date_range) == true}
+        room.block_status == :in_block 
+      end
+      available_rooms = available_rooms.reject do |room|
+        room.reservations.any?{|reservation| reservation.date_range.overlap?(date_range) == true} 
       end
       return available_rooms
 
@@ -57,34 +61,37 @@ module Hotel
 
       x = 0
       until x == block_count do
-       available_room = available_rooms[x].change_block_status 
+       available_room = available_rooms[x].change_cost(discount_cost)
+       available_room = available_room.change_block_status
         hotel_block.rooms << available_room
         x += 1
       end
-
       @hotel_blocks << hotel_block
+      return hotel_block
     end 
 
+
+
+
+
     
-
-
-
-    # @start_date = Date.today + 2
-    # @end_date = Date.today + 6
     # @date_range = Hotel::DateRange.new(start_date: @start_date, end_date: @end_date)
     # hotel_block = Hotel::HotelBlock.new(block_count: 3, date_range: @date_range)
     # hotel_block.find_room_4_block(block_count: 3, date_range: @date_range)
 
-  #   start_date = Date.new(2020,3,1)
-  #   end_date = Date.new(2020,3,4)
-  #   dates = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
-  #   front_desk = Hotel::FrontDesk.new
-  #   room = front_desk.rooms[0]
+    # start_date = Date.today + 2
+    # end_date = Date.today + 6
+    # dates = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
+    # front_desk = Hotel::FrontDesk.new
+    # p front_desk.request_block(3,dates, 180) 
+    # puts "\n"
+    # 17.times do
+    #   p front_desk.add_reservation(dates)
+    # end
+    # puts "\n"
+    # p front_desk.request_block(4,dates, 180)
 
-  #   front_desk.add_reservation(dates)
-  #  p front_desk.find_reservation_with( date_range: dates)
-  #  puts "\n"
-  #  p front_desk.find_reservation_with( room: room, date_range: dates)
+
     
 
 
