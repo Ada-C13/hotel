@@ -71,7 +71,6 @@ describe Hotel::HotelController do
     end
 
     describe  "reservations_by_room" do
-      #TODO
       before do
         @rooms = @hotel_controller.rooms
         reservation = @hotel_controller.reserve_room(@date, (@date + 3))
@@ -80,11 +79,23 @@ describe Hotel::HotelController do
 
       it "takes a room and date and returns a list of reservations" do
         reservation_list = @hotel_controller.reservations_by_room(:room5, Date.new(2020, 8, 5))
-        #TODO
+        puts reservation_list
+        expect(reservation_list).must_be_kind_of Array
+        reservation_list.each do |res|
+          res.must_be_kind_of Hotel::Reservation
+        end
       end
 
-    end
+      it "raises an error when an Date object is not provided" do
+        expect{@hotel_controller.reservations_by_room("898", "98")}.must_raise ArgumentError
+      end
 
+      it "returns an empty array if no match" do
+        reservation_list = @hotel_controller.reservations_by_room(:room5, Date.new(2020, 9, 4))
+        expect(@hotel_controller.reservations_by_room(:room5, Date.new(2020, 9, 4))).must_equal []
+        print reservation_list
+      end
+    end
   end
 
   describe "wave 2" do

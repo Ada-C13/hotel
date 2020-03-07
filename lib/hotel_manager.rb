@@ -42,10 +42,9 @@ module Hotel
       return reservation_list
     end
 
-    # lookup reservations by room and date
+    # method to lookup reservations by room and date
     def reservations_by_room(room, date)
-    # to lookup by room use key
-    # use reservations(date) method to get specific date range
+
     valid_room_inputs = []
     20.times do |i|
       valid_room_inputs << ("room#{i+1}").to_sym
@@ -55,16 +54,20 @@ module Hotel
       raise ArgumentError.new("Not a valid room")
     end
 
-    room_index = ((room.to_s).match('[0-9]')[0]).to_i
-
-    return []
-
     # room 1 - @rooms[0][:room1]
     # room 5 - @rooms[4][:room5]
     # use regex on room attribute, then turn into integer subtract 1 for the index to access
+    room_index = (((room.to_s).match('[0-9]')[0]).to_i) - 1
+    reservation_list = []
 
 
+    @rooms[room_index][room].each do |reservation_instance|
+      if date.between?(reservation_instance.start_date, reservation_instance.end_date)
+        reservation_list << reservation_instance
+      end
+    end
 
+    return reservation_list
     end
 
     # Wave 2
