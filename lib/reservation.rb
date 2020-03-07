@@ -12,6 +12,7 @@ module Hotel
 
       @date_range = date_range
       @room = room  #room_number TO DO
+      
       @id = Reservation.generate_id  # Invoke class method
       @is_block = is_block
     end 

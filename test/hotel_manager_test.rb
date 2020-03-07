@@ -193,7 +193,8 @@ describe "HotelManager class" do
 
         expect(block.rooms).must_be_kind_of Array
         expect(block.rooms[0]).must_be_kind_of Hotel::Room
-        expect(block.reservation).must_be_kind_of Hotel::Reservation 
+        expect(block.reservations).must_be_kind_of Array
+        expect(block.reservations[0]).must_be_kind_of Hotel::Reservation
         expect(block.total_block_cost).must_be_close_to 5 * (200 * 0.8) * 4, 0.01
       end 
 

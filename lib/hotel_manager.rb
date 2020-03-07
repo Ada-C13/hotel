@@ -84,16 +84,18 @@ module Hotel
 
       # Create instances of Reservation (block)
       rooms = []
-      reservation = nil
+      reservations = []
+
       number_of_rooms.times do |i|
         room = find_room_by_number(available_room_ids[i])
         reservation = Reservation.new(date_range, room, is_block: true)
         self.add_reservation(reservation)
 
         rooms << room
+        reservations << reservation
       end 
 
-      block_reservation = Hotel::Block.new(date_range, rooms, reservation)
+      block_reservation = Hotel::Block.new(date_range, rooms, reservations)
       @blocks << block_reservation
       
       return block_reservation
