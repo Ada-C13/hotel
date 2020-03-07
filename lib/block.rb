@@ -9,8 +9,13 @@ module Hotel
 
       @room_collection = room_collection
       @discount_rate = discount_rate
-      
     end
+
+    def calculate_cost
+      cost = (@date_range.nights) * 200
+      return cost - (cost * (@discount_rate/100.0))
+    end
+
 
 
 
@@ -19,6 +24,10 @@ module Hotel
     def validate_input(date_range, room_collection, discount_rate)
       if !room_collection.is_a? Array
         raise ArgumentError.new("Invalid argument #{room_collection}. Must be of type Array")
+      end
+
+      if room_collection.length > 5
+        raise ArgumentError.new("Room collection cannot have more than 5 rooms in it.")
       end
 
       room_collection.each do |room|
