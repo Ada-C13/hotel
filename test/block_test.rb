@@ -62,6 +62,16 @@ describe "Block" do
       # if numbers are less than 1 and greater than 20
     end
 
+    it "Raises an exception if room collection has more than 5 rooms" do
+      date_range = Hotel::DateRange.new(Date.new(2020, 4, 10), Date.new(2020, 4, 14))
+      room_collection = [7, 8, 9, 10, 11, 12]
+      discount_rate = 10
+
+      expect{
+        Hotel::Block.new(date_range, room_collection, discount_rate)
+      }.must_raise ArgumentError
+    end
+
     it "Raises an exception if room collection has room numbers < 0 or > 20" do
       date_range = Hotel::DateRange.new(Date.new(2020, 4, 10), Date.new(2020, 4, 14))
       room_collection = [10, 19, 21]
@@ -114,9 +124,21 @@ describe "Block" do
 
   describe "#calculate_cost" do
     it "Calculates cost applying the discount" do
+      date_range = Hotel::DateRange.new(Date.new(2020, 4, 10), Date.new(2020, 4, 14))
+      room_collection = [10, 14, 16, 20]
+      discount_rate = 20
+
+      block = Hotel::Block.new(date_range, room_collection, discount_rate)
+      expect(block.calculate_cost).must_equal 640
     end
 
     it "Does not add up the discount if it is zero" do
+      date_range = Hotel::DateRange.new(Date.new(2020, 4, 10), Date.new(2020, 4, 14))
+      room_collection = [10, 14, 16, 20]
+      discount_rate = 0
+
+      block = Hotel::Block.new(date_range, room_collection, discount_rate)
+      expect(block.calculate_cost).must_equal 800
     end
   end
 end
