@@ -1,10 +1,11 @@
 module Hotel
   class DateRange
+    # Generator
     attr_accessor :start_date, :end_date
 
     # Constructor
-    # Raise exception when an invalid date range is provided
     def initialize(start_date, end_date)
+      # Raise an error when an invalid date range is provided
       unless start_date.instance_of?(Date) && end_date.instance_of?(Date)
         raise ArgumentError, "Parameters must be of class Date"
       end
@@ -15,7 +16,7 @@ module Hotel
       @end_date   = end_date
     end
 
-    # Check Range Overlap
+    # Check range overlap
     def overlap?(other)
       unless other.instance_of?(Hotel::DateRange)
         raise ArgumentError, "Parameters must be of class Hotel::DateRange"
@@ -24,7 +25,7 @@ module Hotel
       return other.start_date < @end_date && other.end_date > @start_date
     end
 
-    # Check if a Date is Included in the DateRange
+    # Check if a date is included in the date range
     def include?(date)
       unless date.instance_of?(Date)
         raise ArgumentError, "Parameters must be of class Date"
@@ -33,8 +34,8 @@ module Hotel
       return date >= @start_date && date < @end_date
     end
 
-    # Calculate Number of Nights
-    # Last day is the checkout day, guest shouldn't be charged for that day/night
+    # Calculate number of nights
+    # Checkout day not to be charged
     def nights
       return (@end_date - @start_date).to_i
     end

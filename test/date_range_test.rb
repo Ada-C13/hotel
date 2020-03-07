@@ -43,7 +43,7 @@ describe "Hotel::DateRange" do
       end
     end
 
-    it "raises an ArgumentError if parameter is not a range" do
+    it "raises an ArgumentError if parameter not a range" do
       range1 = simple_range(01, 05)
       range2 = Date.new(2017, 01, 01)
       expect{ range1.overlap?(range2) }.must_raise ArgumentError
@@ -79,13 +79,13 @@ describe "Hotel::DateRange" do
       expect(range1.overlap?(range2)).must_equal true
     end
 
-    it "returns false for a range starting on the end_date date" do
+    it "returns false if range starts on end_date date" do
       range1 = simple_range(01, 05)
       range2 = simple_range(05, 10)
       expect(range1.overlap?(range2)).must_equal false
     end
 
-    it "returns false for a range ending on the start_date date" do
+    it "returns false if range starts on start_date date" do
       range1 = simple_range(05, 10)
       range2 = simple_range(01, 05)
       expect(range1.overlap?(range2)).must_equal false
@@ -112,7 +112,7 @@ describe "Hotel::DateRange" do
       @range = Hotel::DateRange.new(start_date, end_date)
     end
 
-    it "raises an ArgumentError if parameter is not a date" do
+    it "raises an ArgumentError if parameter not a date" do
       expect{ @range.include?("2018/01/01") }.must_raise ArgumentError
     end
 
