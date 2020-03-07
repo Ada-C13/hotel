@@ -17,11 +17,17 @@ module Hotel
     end
 
     def book_room(room)
-      @available_rooms - [room]
-      @reserved_rooms << room
+      valid_room = validate_room(room)
+      @available_rooms - [valid_room]
+      @reserved_rooms << valid_room
       return @reserved_rooms
     end
 
-    
+    def validate_room(room)
+      unless @available_rooms.include?(room)
+        raise ArgumentError, "Room not found in Hotel Block"
+      end
+      return room
+    end
   end
 end

@@ -1,23 +1,20 @@
 require_relative 'test_helper'
 
 describe "HotelBlock class" do
+  before do
+    @block = Hotel::HotelBlock.new(
+      rooms: [Hotel::Room.new(1), Hotel::Room.new(2)],
+      date_range: Hotel::DateRange.new(start_date: "3 Mar 2020", end_date: "5 Mar 2020"),
+      discounted_rate: 150)
+  end
+
   describe "#initialize" do
     it "creates an instance of a HotelBlock class" do
-      range = Hotel::DateRange.new(start_date: "2 Mar 2020", end_date: "5 Mar 2020")
-      block = Hotel::HotelBlock.new(
-        rooms: [Hotel::Room.new(1), Hotel::Room.new(2)],
-        date_range: range,
-        discounted_rate: 150)
-      expect(block).must_be_instance_of Hotel::HotelBlock
+      expect(@block).must_be_instance_of Hotel::HotelBlock
     end
 
     it "calculates the cost of reservation, does not count the last day" do
-      range = Hotel::DateRange.new(start_date: "3 Mar 2020", end_date: "5 Mar 2020")
-      block = Hotel::HotelBlock.new(
-        rooms: [Hotel::Room.new(1), Hotel::Room.new(2)],
-        date_range: range,
-        discounted_rate: 150)
-      expect(block.cost).must_equal 600
+      expect(@block.cost).must_equal 600
     end
 
     it "raises an ArgumentError when trying to book more than 5 rooms in a block" do
@@ -36,24 +33,26 @@ describe "HotelBlock class" do
 
   describe "#book_room" do
     it "returns an array of rooms" do
-      range = Hotel::DateRange.new(start_date: "2 Mar 2020", end_date: "5 Mar 2020")
-      block = Hotel::HotelBlock.new(
-        rooms: [Hotel::Room.new(1), Hotel::Room.new(2)],
-        date_range: range,
-        discounted_rate: 150)
-      reserving = block.book_room(Hotel::Room.new(2))
+      reserving = @block.book_room(Hotel::Room.new(2))
       expect(reserving).must_be_instance_of Array
-      expect(block.reserved_rooms.first).must_be_instance_of Hotel::Room
+      expect(@block.reserved_rooms.first).must_be_instance_of Hotel::Room
     end
 
     it "moves a specific room to reserved_rooms array" do
-      range = Hotel::DateRange.new(start_date: "2 Mar 2020", end_date: "5 Mar 2020")
-      block = Hotel::HotelBlock.new(
-        rooms: [Hotel::Room.new(1), Hotel::Room.new(2)],
-        date_range: range,
-        discounted_rate: 150)
-      reserving = block.book_room(Hotel::Room.new(2))
-      expect(block.reserved_rooms.first.number).must_equal 2
+      reserving = @block.book_room(Hotel::Room.new(2))
+      expect(@block.reserved_rooms.first.number).must_equal 2
+    end
+  end
+
+  describe "#validate_room" do
+    it "validates that a room is in a HotelBlock" do
+      room = Hotel::Room.new(1)
+      expect(@block.validate_room(room)).must_equal room
+    end
+
+    it "raises an ArgumentError if there is no specific room in a HotelBlock" do
+      room = Hotel::Room.new(3)
+      expect{@block.validate_room(room)}.must_raise ArgumentError
     end
   end
 end
