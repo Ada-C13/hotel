@@ -173,7 +173,7 @@ describe "Hotel::HotelController" do
     # Create a Block for a Given Date Range, a Set of Rooms and a Rate
     describe "create_block" do 
       it "takes start/end/rooms/rate and returns Block" do
-        block = @hotel.create_block(dt(1), dt(4), [3,4,5], 150)
+        block = @hotel.create_block(dt(1), dt(4), [3, 4, 5], 150)
         expect(block).must_be_kind_of Hotel::Block
       end
 
@@ -181,17 +181,36 @@ describe "Hotel::HotelController" do
         expect{ @hotel.create_block(dt(1), dt(4), [1, 10, 18, 20, 21], 150) }.must_raise ArgumentError
       end
 
-      it "raises and ArgumentError if there are more than 5 rooms" do
-
+      it "raises and ArgumentError if more than 5 rooms" do
+        expect{ @hotel.create_block(dt(1), dt(4), [1, 2, 3, 4, 5, 6], 150) }.must_raise ArgumentError
       end
 
-
-      it "raises and ArgumentError if at least one room in unavailable " do
-
+      it "raises and ArgumentError if rooms is an empty array" do
+        expect{ @hotel.create_block(dt(1), dt(4), [], 150) }.must_raise ArgumentError
+      end
+      
+      it "raises and ArgumentError if room is unavailable " do
+        # Create a reservation and try to block a room that is already reserved
+        @hotel.reserve_room(dt(1), dt(4)) # this will reserve room number 1
+        expect{ @hotel.create_block(dt(1), dt(4), [1, 2, 3], 150) }.must_raise ArgumentError
+        # Create a block and try to block a room that is already blocked (in another block)
+        @hotel.create_block(dt(1), dt(4), [2, 3, 4], 150)
+        expect{ @hotel.create_block(dt(1), dt(4), [4, 5, 6], 150) }.must_raise ArgumentError
+        expect{ @hotel.create_block(dt(2), dt(3), [4, 5, 6], 150) }.must_raise ArgumentError
       end
 
       it "adds to the block list" do
+        @hotel.create_block(dt(1), dt(4), [3, 4, 5], 150)
+        expect(@hotel.blocks.size).must_equal 1
+        @hotel.create_block(dt(1), dt(4), [6, 7, 8], 150)
+        @hotel.create_block(dt(4), dt(8), [6, 7, 8], 150)
+        expect(@hotel.blocks.size).must_equal 3
+      end
 
+      it "blocks reservations that conflict with a block" do # improve...
+        @hotel.create_block(dt(1), dt(4), [1, 2, 3], 150)
+        reservation = @hotel.reserve_room(dt(1), dt(4)) # this should reserve room number 4 instead of 1
+        expect(reservation.room).must_equal 4
       end
 
     end # Create Block

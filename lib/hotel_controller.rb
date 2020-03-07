@@ -92,14 +92,24 @@ module Hotel
     # Check if the Rooms for a Block are Available in the Date Range
     # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot create another hotel block that includes that specific room for that specific date, because it is unavailable
     def block_rooms_available?(start_date, end_date, rooms)
-
+      rooms.each do |room|
+        return false unless is_room_available?(start_date, end_date, room)
+        return false unless is_room_unblocked?(start_date, end_date, room)
+      end
       return true
     end
 
     # Check if a Room is Not blocked in a Specific Date Range
     def is_room_unblocked?(start_date, end_date, room)
-
-      return true
+      return blocks_by_room(start_date, end_date, room).size == 0
+    end
+    
+    # Returns a list of blocks for that Room in the Date Range
+    def blocks_by_room(start_date, end_date, room)
+      range = Hotel::DateRange.new(start_date, end_date)
+      return @blocks.select do |block| # which blocks have an overlap with the ranged passed
+        block.range.overlap?(range) && block.rooms.include?(room)
+      end
     end
     
     # Checks whether a given block has any rooms available # test to fix this.
