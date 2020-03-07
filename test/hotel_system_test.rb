@@ -208,10 +208,29 @@ describe Hotel::HotelSystem do
 
 			expect{@hotel.make_block(inval_rooms, @range, @cost)}.must_raise ArgumentError
 		end
+
 	end
 
 	describe "#check_block_availability" do
+		before do
+			@hotel = Hotel::HotelSystem.new
 
+			rooms = [@hotel.rooms[19], @hotel.rooms[18], @hotel.rooms[17]]
+			@range = Hotel::DateRange.new(Date.new(2019, 12, 23), Date.new(2019, 12, 28))
+			@cost = 900
+			@length_list = @hotel.reservations.length
+			@length_list_room = @hotel.rooms[19].reservations.length
+			@new_block = @hotel.make_block(rooms, @range, @cost)
+		end
+
+		it "returns an array of Room instances" do
+			rooms = [@hotel.rooms[19], @hotel.rooms[18], @hotel.rooms[16]]
+			results = @hotel.check_block_availability(rooms, @range)
+			
+			expect(results).must_be_instance_of Array
+			expect(results[0]).must_be_instance_of Hotel::Room
+			expect(results.length).must_equal 1
+		end
 	end
 
 end

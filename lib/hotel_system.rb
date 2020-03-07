@@ -55,6 +55,7 @@ module Hotel
 
 			return found_reservations
 		end
+
 		# Get all reservations for a specific room in a date range.
 		def get_reservations_by_room(room, searching_range)
 			found_reservations = []
@@ -91,17 +92,18 @@ module Hotel
 			return Hotel::Block.new(rooms, range, cost)
 		end
 
-		# def check_block_availability(rooms, range)
-		# 	avail = []
-		# 	@reservations.each do |reservation|
-		# 		rooms.each do |room|
-		# 			if (reservation.room.number == room) and (reservation.range.include_range?(:booking, range) == false)
-		# 				avail += room
-		# 			end
-		# 		end
-		# 	end
+		# Checks the availability of a block of rooms for a given range.
+		def check_block_availability(rooms, range)
+			possible_rooms = room_finder(range) # Returns available rooms in the given range.
+			avail = []
 
-		# 	return avail
-		# end
+			rooms.each do |room|
+				if possible_rooms.include?(room)
+					avail << room
+				end
+			end
+
+			return avail
+		end
 	end
 end
