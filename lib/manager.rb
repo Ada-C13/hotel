@@ -31,27 +31,13 @@ module Hotel
     end 
 
     def book_res(start_date, end_date)
-      # room.date_range(start_date, end_date)
-
-
-      all_available = []
-      (start_date..end_date).each do |date| ## nn to parse 
-        @rooms.rm_reservations.each do |date| ## nn to change to each instance of room 
-          if @room.is_available(date) == true #if room is availble call book method ## for every day thoooo
-            all_available << true
-          else 
-            all_available << false # move onto the next room?
+        @all_rooms.each do |room|
+          if room.is_available_range(start_date, end_date) == true 
+            room.book_room(start_date, end_date)
+            return
           end 
         end
-
-        if all_available.include? false
-          #reset all_available  
-        else 
-          @room.book_room(start_date, end_date)
-          #return
-        end 
-        
-      end
+          raise ArgumentError "No rooms available"
     end
 
     def res_by_date(date) 

@@ -38,9 +38,9 @@ module Hotel
       @rm_reservations << @reservation
     end
     
-    def date_range(start_date, end_date)
+    def is_available_range(start_date, end_date)
       (start_date..end_date).each do |date|
-        if is_available == false
+        if is_available(date) == false
           return false
         end
       end

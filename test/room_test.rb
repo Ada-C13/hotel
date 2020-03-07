@@ -37,6 +37,11 @@ describe "room" do
     end 
   end 
 
+  describe "is_available_range" do 
+    it "checks if a room is available on a range of dates" do 
+      
+    end 
+  end 
   describe "book_room" do 
     it "correctly makes a reservation for available room" do 
       # expect new instance of Reservation is created
