@@ -3,7 +3,7 @@ require 'date'
 module Hotel
   class DateRange
 
-    # start_date and #end_date are required to be date objects
+    #start_date and #end_date are required to be date objects
     attr_reader :start_date, :end_date
     def initialize(start_date, end_date)
       @start_date = start_date

@@ -19,10 +19,14 @@ describe Hotel::DateRange do
     end
   end
 
+    # Not sure why this doesn't break my code. ********
     # it "throws an argument error if inputs are not Date objects" do
-    #   let(:date_range_test) {Hotel::DateRange.new(42,"end")}
+    #   start_date = 42
+    #   end_date = "end"
 
-    #   expect{date_range_test}.must_raise ArgumentError
+    #   expect do
+    #     Hotel::DateRange.new(start_date, end_date)
+    #   end.must_raise ArgumentError
     # end
 
     describe "overlap?" do

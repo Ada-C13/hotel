@@ -28,13 +28,33 @@ describe Hotel::Reservation do
 
   end
 
-  # describe "cost" do
-  #   it "returns a number" do
-  #     checkin = Date.new(2017, 01, 01)
-  #     checkout = checkin + 3
-  #     reservation = Reservation.new(id: 1, checkin:checkin, checkout:checkout, room_id:2)
-  #     expect(reservation.cost).must_be_kind_of Numeric
-  #   end
-  # end
+  describe "cost" do
+    before do
+      @start_date = Date.new(2020, 1, 1)
+      @end_date = Date.new(2020, 1, 2)
+      @date_range = Hotel::DateRange.new(@start_date, @end_date)
+      @reservation = Hotel::Reservation.new(@date_range, 2)
+    end
+
+    it "returns a number" do
+      expect(@reservation.cost).must_be_kind_of Numeric
+    end
+
+    it "calculates the correct cost for a one-night reservation" do
+      expect(@reservation.cost).must_equal 200
+    end
+
+    it "calculates the correct cost for a multiple-night reservation" do
+      end_date_2 = @end_date + 1
+      date_range_2 = Hotel::DateRange.new(@start_date, end_date_2)
+      reservation = Hotel::Reservation.new(date_range_2, 2)
+      expect(reservation.cost).must_equal 400
+
+      end_date_3 = @end_date + 2
+      date_range_3 = Hotel::DateRange.new(@start_date, end_date_3)
+      reservation = Hotel::Reservation.new(date_range_3, 2)
+      expect(reservation.cost).must_equal 600
+    end
+  end
 
 end
