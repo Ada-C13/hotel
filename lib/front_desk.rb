@@ -89,10 +89,3 @@ module Hotel
 
   end
 end
-
-
-### USER STORY 2.3
-# I want an exception raised if I try to reserve a room during a date range when all rooms are reserved, so that I cannot make two reservations for the same room that overlap by date
-# THIS GOES INTO THE 2.2 METHOD 
-# If the array is empty (after calling get_list_of_reservations_for_room_in_range)
-# raise an exception

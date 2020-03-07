@@ -33,8 +33,8 @@ describe "FrontDesk" do
     it "Find reservations using date range" do
       @front_desk.add_reservation(@reservation_one)
       @front_desk.add_reservation(@reservation_two)
-      start_date = "2020-03-16" #3/15 - 3/17
-      end_date = "2020-04-01" # 4/1 - 4/5
+      start_date = "2020-03-16"
+      end_date = "2020-04-01"
       expect(@front_desk.check_reservations_in_date_range(start_date, end_date)).must_be_kind_of Array
       expect(@front_desk.check_reservations_in_date_range(start_date, end_date)).must_include @reservation_one  
       expect(@front_desk.check_reservations_in_date_range(start_date, end_date)).must_include @reservation_two
