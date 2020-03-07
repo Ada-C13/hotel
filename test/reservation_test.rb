@@ -4,7 +4,7 @@ describe Hotel::Reservation do
   before do
     test_range = Hotel::DateRange.new(start_date: Date.new(2021, 01, 01), end_date: Date.new(2021, 01, 04))
 
-    @reservation = Hotel::Reservation.new(
+    @res_instance = Hotel::Reservation.new(
       date_range: test_range,
       room: 2
     )
@@ -12,13 +12,13 @@ describe Hotel::Reservation do
 
   describe "initialize" do
     it "is an instance of Reservation" do
-      expect(@reservation).must_be_kind_of Hotel::Reservation
+      expect(@res_instance).must_be_kind_of Hotel::Reservation
     end
   end
  
   describe "cost" do
     it "returns a number" do
-      expect(@reservation.cost).must_be_kind_of Numeric
+      expect(@res_instance.cost).must_be_kind_of Numeric
     end
   end
 end

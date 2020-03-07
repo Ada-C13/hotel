@@ -6,9 +6,7 @@ module Hotel
     attr_accessor :reservations, :rooms, :calendar
 
     def initialize
-      rooms = []
-      rooms = (1..20).map { |i| i }
-      @rooms = rooms
+      @rooms = (1..20).map { |i| i }
       @reservations = []
       @calendar = {}
     end
@@ -17,6 +15,9 @@ module Hotel
 
 
     # User: I can access the list of all of the rooms in the hotel
+    def list_rooms
+      return @rooms
+    end
 
     # Wave 1
 
