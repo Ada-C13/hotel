@@ -1,7 +1,6 @@
-# Add simplecov
 require 'simplecov'
 SimpleCov.start do
-  add_filter 'test/' # Tests should not be checked for coverage.
+  add_filter 'test/'
 end
 
 require 'date'
@@ -12,10 +11,6 @@ require "minitest/skip_dsl"
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
-# require_relative your lib files here!
-# Place `require_relative` commands for loading application code
-#   Example:  require_relative '../lib/customer'
-# ...
 require_relative '../lib/reservation'
 require_relative '../lib/front_desk'
 require_relative '../lib/room'

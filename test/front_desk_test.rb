@@ -45,8 +45,6 @@ describe "Front Desk" do
 
     
 
-
-
   end
 
   describe "make reservation" do

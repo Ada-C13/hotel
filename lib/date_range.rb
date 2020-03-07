@@ -9,11 +9,8 @@ module HotelBooking
       @end_date = end_date
 
       raise ArgumentError.new("Please provide an end date!") if end_date == nil
-
       raise ArgumentError.new("End date needs to be after start date") if end_date <= start_date
-
       raise ArgumentError.new("Start date cannot be in the past!") if start_date < Date.today
-
         
     end
 

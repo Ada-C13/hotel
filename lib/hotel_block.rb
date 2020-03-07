@@ -10,16 +10,8 @@ module HotelBooking
       @rooms = []
     end
   end
-
-  # keep this class light 
+ 
   # calculating cost might come here
 
-  # def create_block_rooms
-  #   block_rooms = []
-  #   (1..@room_count).each do |x| 
-  #     block_rooms << Room.new(number: x, cost: room_rate)
-  #   end 
-  #   return block_rooms
-  # end
   
 end

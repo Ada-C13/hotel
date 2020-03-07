@@ -26,8 +26,6 @@ describe "Room" do
       expect { HotelBooking::Room.new(number: 0) }.must_raise ArgumentError
       expect { HotelBooking::Room.new(number: 21) }.must_raise ArgumentError
     end
-
-    # room price is 200
     
   end
 
