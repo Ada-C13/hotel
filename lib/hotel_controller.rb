@@ -53,10 +53,10 @@ module Hotel
     # Wave 1, US 2: "I can reserve a room for a given date range, so that I can make a reservation"
     def reserve_with_range(input_range)
       @rooms.each do |room|
-          # will return false if can't create rez, otherwise will create and add to rez_list and return true
+          # will return false if can't create rez, otherwise will create, add to rez_list, and return true
         return room.room_id if room.create_room_reservation(input_range)
       end
-
+      
       raise ArgumentError.new("No rooms available for date range.")
     end
 
