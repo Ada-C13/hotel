@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require_relative 'test_helper'
 
 describe "Front Desk" do
@@ -18,6 +21,14 @@ describe "Front Desk" do
 
     it "can return a list of 20 rooms represented by Integers" do
       expect(@front_desk.rooms[0]).must_be_kind_of Integer
+    end
+
+    it "can return an empty reservation collection when initialized (before reservations have been added)" do
+      expect(@front_desk.all_reservations.empty?).must_equal true
+    end
+
+    it "can return the reservation collection as an Array" do
+      expect(@front_desk.all_reservations).must_be_kind_of Array
     end
   end
 
@@ -93,13 +104,18 @@ describe "Front Desk" do
       expect(reservation[0].assigned_room.empty?).must_equal false
     end
 
-    # it "assigns a different room to each reservation" do
-    #   @front_desk = Hotel::FrontDesk.new()
-    #   20.times do @front_desk.add_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 1) 
-    #     end
-    #   #return @front_desk.all_reservations
-    #   expect(@front_desk.all_reservations).must_equal 7
-    # end
+    it "assigns a different room to each reservation" do
+      @front_desk = Hotel::FrontDesk.new()
+      20.times do @front_desk.add_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 1) 
+        end
+      
+      room_numbers = []
+      @front_desk.all_reservations.each do |reservation|
+        room_numbers << reservation.assigned_room
+      end
+      #return @front_desk.all_reservations
+      expect(room_numbers.length).must_equal room_numbers.uniq.length
+    end
 
     it "returns an error if no rooms are available" do
       @front_desk = Hotel::FrontDesk.new()
@@ -109,13 +125,10 @@ describe "Front Desk" do
       expect{ @front_desk.add_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 1, 1) }.must_raise ArgumentError
     end
 
-    #I want an exception raised if I try to create a Hotel Block and at least one of the rooms is unavailable for the given date range
-    it "returns an error if not enough rooms are available for a block" do
+    it "returns an error if more than one room is requested" do
       @front_desk = Hotel::FrontDesk.new()
-      15.times do @front_desk.add_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 1) 
-        end
       
-      expect{ @front_desk.add_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 5, 1) }.must_raise ArgumentError
+      expect{ @front_desk.add_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 4) }.must_raise ArgumentError
     end
 
     it "can start a reservation on the same day that another in the same room ends" do
@@ -128,6 +141,31 @@ describe "Front Desk" do
       expect(reservation[0].assigned_room.empty?).must_equal false
     end
 
+  end
+
+  describe "add_block_reservation" do
+    it "returns a block reservation when a block is added" do
+      @front_desk = Hotel::FrontDesk.new()
+      @front_desk.add_block_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 3, 0.10, "banana")
+
+      expect(@front_desk.all_reservations[0].block).must_equal :BLOCK
+    end
+
+    it "raises an error if only one room is requested" do
+      @front_desk = Hotel::FrontDesk.new()
+      
+      expect{ @front_desk.add_block_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 1, 0.10, "bananas") }.must_raise ArgumentError
+    end
+
+    #I want an exception raised if I try to create a Hotel Block and at least one of the rooms is unavailable for the given date range
+    #{TODO}MOVE THIS TO BLOCK SECTION
+    it "returns an error if not enough rooms are available for a block" do
+      @front_desk = Hotel::FrontDesk.new()
+      15.times do @front_desk.add_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 1) 
+        end
+      
+      expect{ @front_desk.add_block_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 5, 1) }.must_raise ArgumentError
+    end
   end
 
   describe "find_available_room_by_date" do
@@ -169,15 +207,15 @@ describe "Front Desk" do
     # end
   end
 
-  describe "reserve_from_block" do
-    before do
-      @front_desk = Hotel::FrontDesk.new()
-      @front_desk.add_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 5, block_key: "bananas")
-    end
+  # describe "reserve_from_block" do
+  #   before do
+  #     @front_desk = Hotel::FrontDesk.new()
+  #     @front_desk.add_block_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 5, "bananas")
+  #   end
 
-    it "can return a hotel block by block_key" do
-      expect(@front_desk.reserve_from_block(Date.new(2019, 1, 4), "banana")).must_equal 7
-    end
+  #   it "can return a hotel block by block_key" do
+      
+  #   end
 
     # it "can return an array of Integers (room numbers)" do
     #   available_rooms = @front_desk.find_available_room_by_date(Date.new(2019, 1, 4))
@@ -203,5 +241,5 @@ describe "Front Desk" do
     #   room_by_date = @front_desk.find_available_room_by_date(Date.parse(Date.new(2019, 1, 4)))
     #   expect(room_by_date.last).must_equal 20
     # end
-  end
+  #end
 end

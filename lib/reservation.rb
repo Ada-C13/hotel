@@ -1,10 +1,11 @@
 require 'date'
 
+
 require_relative 'frontdesk.rb'
 
 module Hotel
   class Reservation
-    attr_accessor :start_date, :end_date, :num_rooms, :assigned_room, :discount
+    attr_accessor :start_date, :end_date, :num_rooms, :assigned_room, :discount, :block, :block_key
     
     COST = 200.00
 
@@ -12,7 +13,7 @@ module Hotel
       @start_date = start_date 
       @end_date = end_date 
       @num_rooms = num_rooms
-      @assigned_room = nil
+      @assigned_room = []
       @discount = discount
       @block = block
       @block_key = block_key
@@ -31,11 +32,7 @@ module Hotel
     end
 
     def total_cost
-      if @block == :SINGLE 
-        final_bill = (@end_date - @start_date)*@num_rooms*COST 
-      else
-        final_bill = (@end_date - @start_date)*@num_rooms*COST*(1 - @discount)
-      end
+      @num_rooms == 1 ? final_bill = (@end_date - @start_date)*@num_rooms*COST : final_bill = (@end_date - @start_date)*@num_rooms*COST*(1 - @discount)
       return final_bill
     end
 

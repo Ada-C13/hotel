@@ -1,5 +1,6 @@
 require 'date'
 
+
 require_relative 'reservation.rb'
 
 module Hotel
@@ -14,19 +15,32 @@ module Hotel
 
     def assign_room(new_reservation)
       taken_rooms = []
-      all_rooms = @rooms
+      all_rooms = @rooms.dup
       @all_reservations.each do |reservation|
         reservation.conflict?(new_reservation.start_date, new_reservation.end_date) ? taken_rooms << reservation.assigned_room : next
       end
       room_to_assign = (all_rooms - taken_rooms.flatten)
-      return room_to_assign.sample(1)
+      assigning = room_to_assign.sample(new_reservation.num_rooms)
+      taken_rooms.include?(assigning)
+        assigning = room_to_assign.sample(new_reservation.num_rooms)
     end
 
     def add_reservation(start_date, end_date, num_rooms)
       new_reservation = Hotel::Reservation.new(start_date: start_date, end_date: end_date, num_rooms: num_rooms)
       new_reservation.assigned_room = assign_room(new_reservation)
       if new_reservation.num_rooms > 1 
-        new_reservation.block = :BLOCK 
+        raise ArgumentError.new("Invalid room reservation request: if you would still like #{num_rooms} rooms please reserve as a block.")
+      end
+      @all_reservations << new_reservation
+    end
+
+    def add_block_reservation(start_date, end_date, num_rooms, discount, block_key)
+      new_reservation = Hotel::Reservation.new(start_date: start_date, end_date: end_date, num_rooms: num_rooms, discount: discount, block_key: block_key)
+      new_reservation.assigned_room = assign_room(new_reservation)
+      if new_reservation.num_rooms > 1 
+        new_reservation.block = :BLOCK
+      elsif new_reservation.num_rooms == 1
+        raise ArgumentError.new("Invalid room reservation request: if you would still like #{num_rooms} room please reserve as a single.")
       end
       @all_reservations << new_reservation
     end
