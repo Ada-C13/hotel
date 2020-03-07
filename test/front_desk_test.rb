@@ -20,11 +20,16 @@ describe Hotel::FrontDesk do
       expect(@desk_instance).must_be_kind_of Hotel::FrontDesk
     end
 
-    it "rooms is a type of array" do
+    # ! how to test these variable
+    # it "Class.rooms is a type of Array" do
+    #   expect(Hotel::FrontDesk.rooms).must_be_kind_of Array
+    # end
+
+    it "reservations is a type of Array" do
       expect(@desk_instance.reservations).must_be_kind_of Array
     end
 
-    it "rooms is a type of array" do
+    it "calendar is a type of Hash" do
       expect(@desk_instance.calendar).must_be_kind_of Hash
     end
 
@@ -75,14 +80,24 @@ describe Hotel::FrontDesk do
 
     end
 
-    xdescribe "reservations" do
-      it "takes a Date and returns a list of Reservations" do
+    describe "date_reservations" do
+      before do
         date = Date.today + 1
-        reservation_list = @desk_instance.date_reservations(date)
+        @date_res = @desk_instance.date_reservations(date)
+      end
 
-        expect(reservation_list).must_be_kind_of Array
+      it "raises an ArgumentError if no reservations for date" do
+        # ! TODO
+      end
 
-        reservation_list.each do |res|
+      it "raises an argumenterror if date is not a date" do
+        # ! TODO
+      end
+
+      it "takes a Date and returns an array" do
+        expect(@date_res).must_be_kind_of Array
+
+        @date_res.each do |res|
           res.must_be_kind_of Hotel::Reservation
         end
       end
