@@ -30,6 +30,25 @@ describe "Front Desk" do
     end
   end
 
+  describe "create hotel block" do
+    let(:date_range) { HotelBooking::DateRange.new(start_date: Date.today, end_date: (Date.today + 3)) }
+
+    it "raises an argument error if sufficient rooms are not available in given date range" do
+
+      
+      
+    end
+
+    it "creates a hotel block with predefined number of available rooms and a discount rate" do
+    
+    end
+
+    
+
+
+
+  end
+
   describe "make reservation" do
     let(:date_range) { HotelBooking::DateRange.new(start_date: Date.today, end_date: (Date.today + 3)) }
     
@@ -63,11 +82,15 @@ describe "Front Desk" do
     let(:room) {HotelBooking::Room.new(number: 2)}
 
     it "takes a date range and a room and returns the list of reservation that rooms has in that time period" do
-      reservation_list = front_desk.room_reservations(room, period)
+      reservation_list = front_desk.list_room_reservations(room, period)
+
 
       expect(reservation_list).must_be_kind_of Array
       reservation_list.each do |res|
         expect(res).must_be_instance_of HotelBooking::Reservation
+        expect(res.room).must_equal room
+        expect(res.date_range.overlap?(period)).must_equal true
+
       end
     end
 
@@ -78,7 +101,7 @@ describe "Front Desk" do
         room_reservations << res
       end
       if room_reservations.empty?
-        reservation_list = front_desk.room_reservations(room, period)
+        reservation_list = front_desk.list_room_reservations(room, period)
       end
       expect(reservation_list).must_equal []
 
@@ -93,7 +116,7 @@ describe "Front Desk" do
   describe "list date reservations" do
     let(:date) {Date.new(2020, 03, 27)}
     it "takes a Date and returns a list of Reservations" do
-      reservation_list = front_desk.date_reservations(date)
+      reservation_list = front_desk.list_date_reservations(date)
       expect(reservation_list).must_be_kind_of Array
       reservation_list.each do |res|
         res.must_be_kind_of Reservation
@@ -101,11 +124,12 @@ describe "Front Desk" do
     end
   end
 
-  xdescribe 'find available room' do
+  describe 'find available room' do
     before do
-      @reservation = front_desk.make_reservation(start_date: Date.today, end_date: (Date.today + 3))
+      date_range = HotelBooking::DateRange.new(start_date: Date.today, end_date: (Date.today + 3))
+      @reservation = front_desk.make_reservation(date_range)
     end
-    let(:date_range) { HotelBooking::DateRange.new(start_date: Date.today, end_date: (Date.today + 3)) }
+    let(:date_range) { HotelBooking::DateRange.new(start_date: Date.today, end_date:(Date.today + 3)) }
 
     it 'can create a list of rooms with no reservations in date_range' do
       expect(front_desk.available_rooms(date_range)).must_be_instance_of Array
@@ -114,7 +138,7 @@ describe "Front Desk" do
     it 'returns a list of available rooms' do
       available_rooms = front_desk.available_rooms(date_range) 
       available_rooms.each do |room|
-        room.must_be_kind_of HotelBooking::Room
+        expect(room).must_be_kind_of HotelBooking::Room
       end
     end
 
@@ -131,7 +155,7 @@ describe "Front Desk" do
     #   available_rooms = []
     #   front_desk.rooms.each do |room|
     #     front_desk.reservations.each do |reservation| 
-    #       room_res = reservation.room_reservations(room, date_range) 
+    #       room_res = reservation.list_room_reservations(room, date_range) 
     #       available_rooms << room if room_res.lenght == 0
     #     end
     #   end
@@ -144,7 +168,7 @@ describe "Front Desk" do
 
   end
 
-  xdescribe "make reservation for specific room" do
+  describe "make reservation for specific room" do
     let(:room) {front_desk.rooms[7]}
     let(:date_range) { HotelBooking::DateRange.new(start_date: Date.today, end_date: (Date.today + 3)) }
 
@@ -153,6 +177,12 @@ describe "Front Desk" do
       expect(res).must_be_instance_of HotelBooking::Reservation
     end
     
+    it "room will not be part of any other reservation overlapping that date range" do
+
+      # res_1 = front_desk.make_room_reservation(date_range, room)
+      
+    end
+
     it "room will not be part of any other reservation overlapping that date range" do
 
       # res_1 = front_desk.make_room_reservation(date_range, room)

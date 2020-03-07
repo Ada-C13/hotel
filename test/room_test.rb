@@ -22,16 +22,6 @@ describe "Room" do
       expect(room.cost).must_be_instance_of Integer
     end
 
-    # it "keeps track of unavailable dates for that room" do
-    #   expect(room).must_respond_to :unavailable_dates
-    #   expect(room.unavailable_dates).must_equal []
-    # end
-
-    # it "keeps track of reservations for that room" do
-    #   expect(room).must_respond_to :reservations
-    #   expect(room.reservations).must_be_kind_of Array
-    # end
-
     it "raises an argument error if room number is invalid" do
       expect { HotelBooking::Room.new(number: 0) }.must_raise ArgumentError
       expect { HotelBooking::Room.new(number: 21) }.must_raise ArgumentError
@@ -40,11 +30,5 @@ describe "Room" do
     # room price is 200
     
   end
-
-
-
-  # describe "add_reservation" do
-
-  
 
 end

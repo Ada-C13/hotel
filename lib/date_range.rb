@@ -14,7 +14,6 @@ module HotelBooking
 
       raise ArgumentError.new("Start date cannot be in the past!") if start_date < Date.today
 
-   
         
     end
 
