@@ -30,18 +30,8 @@ module Hotel
         date_range: requested_dates,
       )
       @reservations.push(new_reservation)
-      populate_calendar(new_reservation)
+      # populate_calendar(new_reservation)
       return new_reservation
-    end
-
-    def populate_calendar(reservation)
-      reservation.date_range.dates.each do |date|
-        value_array = []
-        if !@calendar.key?(date)
-          @calendar[date] = value_array
-        end
-        value_array << reservation
-      end
     end
 
     # User: I can access the list of reservations for a specific date, so that I can track reservations by date

@@ -2,10 +2,13 @@ require_relative "test_helper"
 
 describe Hotel::Reservation do
   before do
-    test_range = Hotel::DateRange.new(start_date: Date.new(2021, 01, 01), end_date: Date.new(2021, 01, 04))
+    date_instance = Hotel::DateRange.new(
+      start_date: Date.new(2021, 01, 01), 
+      end_date: Date.new(2021, 01, 04)
+    )
 
     @res_instance = Hotel::Reservation.new(
-      date_range: test_range,
+      date_range: date_instance,
       room: 2
     )
   end
