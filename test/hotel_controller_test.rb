@@ -78,7 +78,7 @@ describe "Hotel::HotelController" do
 
     # Access the list of reservations for a specific date to track reservations by date
     describe "reservations_by_date" do
-      it "takes a Date and returns a list of Reservations" do
+      it "takes a date and returns a list of reservations" do
         @hotel.reserve_room(dt(1), dt(4))
         @hotel.reserve_room(dt(1), dt(4))
         reservations_ondate = @hotel.reservations_by_date(dt(1))
@@ -91,7 +91,7 @@ describe "Hotel::HotelController" do
         end
       end
 
-      it "returns the reservation when you ask for the start date" do
+      it "returns reservation when asked for start date" do
         # create a reservation from 2020/01/01 to 2020/01/04, than get a list of reservations for 2020/01/01, should return 1
         @hotel.reserve_room(dt(1), dt(4))
         reservations_ondate = @hotel.reservations_by_date(dt(1))
@@ -106,7 +106,7 @@ describe "Hotel::HotelController" do
         expect(reservations_ondate.size).must_equal 1
       end
 
-      it "returns the reservation when you ask for a date in the middle" do
+      it "returns reservation when ask for date in the middle" do
         # create a reservation from 2020/01/01 to 2020/01/10, than get a list of reservations for 2020/01/05. It should return 1
         @hotel.reserve_room(dt(1), dt(10))
         expect(@hotel.reservations_by_date(dt(5)).size).must_equal 1
@@ -118,7 +118,7 @@ describe "Hotel::HotelController" do
         expect(@hotel.reservations_by_date(dt(5)).size).must_equal 2
       end
 
-      it "does not return a reservation when you ask for the end date" do
+      it "does not return reservation when ask for end date" do
         # create a reservation from 2020/01/01 to 2020/01/10, than get a list of reservations for 2020/01/10. It should return 0
         @hotel.reserve_room(dt(1), dt(10))
         expect(@hotel.reservations_by_date(dt(10)).size).must_equal 0
@@ -146,7 +146,7 @@ describe "Hotel::HotelController" do
         expect(@hotel.available_rooms(dt(1), dt(5)).size).must_equal 18
       end
 
-      it "does not show the room available if there is an overlaping reservation" do
+      it "room not available if overlaping reservation" do
         # create a reservation from 2020/01/05 to 2020/01/15.
         @hotel.reserve_room(dt(5), dt(15))
         # Check overlap with same range
@@ -288,7 +288,7 @@ describe "Hotel::HotelController" do
     # Check if the Rooms for a Block are Available in the Date Range
     # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot create another hotel block that includes that specific room for that specific date, because it is unavailable
     describe "block_rooms_available?" do
-      it "returns true if the rooms are available in that date range" do
+      it "returns true if rooms are available in date range" do
         @hotel.reserve_room(dt(1), dt(4)) # this will reserve room number 1
         expect(@hotel.block_rooms_available?(dt(1), dt(4), [2, 3, 4])).must_equal true # different rooms
         expect(@hotel.block_rooms_available?(dt(4), dt(8), [1, 2, 3])).must_equal true # different dates
@@ -297,7 +297,7 @@ describe "Hotel::HotelController" do
         expect(@hotel.block_rooms_available?(dt(4), dt(8), [1, 2, 3, 4])).must_equal true # different dates
       end
 
-      it "returns false if the rooms are not available in that date range" do
+      it "returns false if rooms not available in date range" do
         @hotel.reserve_room(dt(1), dt(4)) # this will reserve room number 1
         expect(@hotel.block_rooms_available?(dt(1), dt(4), [1, 2, 3])).must_equal false # room 1 in both
         expect(@hotel.block_rooms_available?(dt(3), dt(6), [1, 2, 3])).must_equal false # overlapping dates
@@ -309,13 +309,13 @@ describe "Hotel::HotelController" do
 
     # Check if a Room is Not blocked in a Specific Date Range
     describe "is_room_unblocked?" do
-      it "returns true if the room is not blocked in that date range" do
+      it "returns true if room is not blocked in date range" do
         @hotel.create_block(dt(1), dt(4), [1, 2, 3, 4], 150)
         expect(@hotel.is_room_unblocked?(dt(1), dt(4), 5)).must_equal true # different room
         expect(@hotel.is_room_unblocked?(dt(4), dt(8), 1)).must_equal true # different dates
       end
 
-      it "returns false if the room is blocked in that date range" do
+      it "returns false if room is blocked in date range" do
         @hotel.create_block(dt(1), dt(4), [1, 2, 3, 4], 150)
         expect(@hotel.is_room_unblocked?(dt(1), dt(4), 3)).must_equal false # room 3 is both
         expect(@hotel.is_room_unblocked?(dt(3), dt(8), 3)).must_equal false # overlapping dates

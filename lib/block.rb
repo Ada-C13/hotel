@@ -1,5 +1,7 @@
 module Hotel
+
   class Block
+    # Generator
     attr_reader :range, :rooms, :rate
 
     # Constructor
@@ -14,10 +16,12 @@ module Hotel
       @rate  = rate
     end
 
+    # Calculate cost
     def cost
       return @rate * @range.nights * @rooms.size
     end
   end
+
 end
 
 ## Hotel Block

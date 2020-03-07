@@ -11,7 +11,7 @@ describe "Hotel::Block" do
   end
 
   describe "constructor" do
-    it "can be initialized with two dates, an array of rooms and a rate" do
+    it "initialize with two dates, array of rooms and rate" do
       expect(@block).must_be_kind_of Hotel::Block
       expect(@block.range.start_date).must_equal @start_date
       expect(@block.range.end_date).must_equal @end_date
@@ -49,7 +49,7 @@ describe "Hotel::Block" do
       # start date can not be the same as end date
       expect{ Hotel::Block.new(@start_date, @start_date, @rooms, @rate) }.must_raise ArgumentError
     end
-  end
+  end # describe "constructor"
 
   describe "cost" do
     it "returns a number" do
@@ -60,6 +60,6 @@ describe "Hotel::Block" do
       # block cost for 3 nights, 3 rooms, at $150 room rate
       expect(@block.cost).must_equal 1350
     end
-  end
+  end # describe "cost"
   
-end
+end # describe "Hotel::Block"
