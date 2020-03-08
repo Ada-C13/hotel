@@ -112,8 +112,7 @@ describe "FrontDesk class" do
       check_in = Date.parse("3rd Mar 2020")
       check_out = Date.parse("5th Mar 2020")
       front_desk = Hotel::FrontDesk.new
-      expect(front_desk.reserve_room(range).rooms.number).must_equal 1
-      expect(front_desk.reserve_room(range).rooms).must_be_instance_of Hotel::Room
+      expect(front_desk.reserve_room(range).rooms.first).must_be_instance_of Hotel::Room
       expect(front_desk.reserve_room(range).date_range.start_date).must_equal check_in
       expect(front_desk.reserve_room(range).date_range.end_date).must_equal check_out
       expect(front_desk.reserve_room(range).cost).must_equal 400
@@ -126,8 +125,8 @@ describe "FrontDesk class" do
       front_desk = Hotel::FrontDesk.new
       front_desk.reserve_room(range)
       expect(front_desk.reservations.size).must_equal 1
-      expect(front_desk.reserve_room(range).rooms.number).must_equal 2
-      expect(front_desk.reserve_room(range).rooms).must_be_instance_of Hotel::Room
+      expect(front_desk.reserve_room(range).rooms.first.number).must_equal 2
+      expect(front_desk.reserve_room(range).rooms.first).must_be_instance_of Hotel::Room
       expect(front_desk.reserve_room(range).date_range.start_date).must_equal check_in
       expect(front_desk.reserve_room(range).date_range.end_date).must_equal check_out
       expect(front_desk.reserve_room(range).cost).must_equal 400
@@ -161,6 +160,15 @@ describe "FrontDesk class" do
       end
       expect(front_desk.reserve_room(range2)).must_be_instance_of Hotel::Reservation
     end
+
+    it "doesn't let reserve a room booked in a hotel block for a specific date" do
+      range = Hotel::DateRange.new(start_date: "3 Mar 2020", end_date: "5 Mar 2020")
+      front_desk = Hotel::FrontDesk.new
+      4.times do
+        front_desk.reserve_block(range, 5, 100)
+      end
+      expect{front_desk.reserve_room("4 Mar 2020")}.must_raise ArgumentError
+    end
   end
 
   describe "#reserve_block" do
@@ -168,14 +176,60 @@ describe "FrontDesk class" do
       front_desk = Hotel::FrontDesk.new
       range = Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
       front_desk.reserve_block(range, 4, 150)
-      expect(front_desk.reservations.size).must_equal 4
-      expect(front_desk.reservations.first.rooms.number).must_equal 1
+      expect(front_desk.reservations.size).must_equal 1
+      expect(front_desk.reservations.first.rooms.first.number).must_equal 1
+    end
+
+    it "reserves a hotel block for a specific date" do
+      front_desk = Hotel::FrontDesk.new
+      booking = front_desk.reserve_block("3 Mar 2020", 2, 150)
+      expect(booking.date_range.start_date).must_equal Date.parse("3 Mar 2020")
+      expect(booking.date_range.end_date).must_equal Date.parse("4 Mar 2020")
+      expect(booking.rooms.length).must_equal 2
+      expect(booking.cost).must_equal 300
     end
 
     it "returns an instance of a new HotelBlock" do
       front_desk = Hotel::FrontDesk.new
       range = Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
       expect(front_desk.reserve_block(range, 3, 150)).must_be_instance_of Hotel::HotelBlock
+    end
+
+    it "doesn't let reserve another block with already reserved rooms" do
+      front_desk = Hotel::FrontDesk.new
+      range = Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
+      3.times do
+        front_desk.reserve_block(range, 5, 150)
+      end
+      front_desk.reserve_block(range, 2, 150)
+      expect{front_desk.reserve_block(range, 4, 150)}.must_raise ArgumentError
+    end
+
+    it "doesn't let reserve a room reserved in a hotel block for date range" do
+      front_desk = Hotel::FrontDesk.new
+      range = Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
+      4.times do
+        front_desk.reserve_block(range, 5, 150)
+      end
+      expect{front_desk.reserve_room(range)}.must_raise ArgumentError
+    end
+
+    it "doesn't let reserve a block for specific date if another block was created" do
+      front_desk = Hotel::FrontDesk.new
+      range = Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
+      4.times do
+        front_desk.reserve_block(range, 5, 150)
+      end
+      expect{front_desk.reserve_room("2 Apr 2020")}.must_raise ArgumentError
+    end
+
+    it "shows a reservation made from a hotel block from the list of reservations" do
+      front_desk = Hotel::FrontDesk.new
+      range = Hotel::DateRange.new(start_date: "1st Apr 2020", end_date: "3rd Apr 2020")
+      front_desk.reserve_block(range, 5, 150)
+      date = "2 Apr 2020"
+      expect(front_desk.get_bookings(date).length).must_equal 1
+      expect(front_desk.get_bookings(date).first.cost).must_equal 1500
     end
   end
 end

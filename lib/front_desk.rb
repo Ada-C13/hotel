@@ -27,46 +27,56 @@ module Hotel
 
     def get_room_bookings(number, range)
       range_bookings = get_range_bookings(range)
-      return range_bookings.find_all{ |reservation| reservation.rooms.number == number }
+      return range_bookings.find_all{ |reservation| 
+        reservation.rooms.each do |room|
+          room.number == number
+        end }
     end
 
     def get_reserved_rooms(range)
-      range_bookings = get_range_bookings(range)
-      reserved_rooms = range_bookings.map do |reservation|
+      if range.is_a? String
+        bookings = get_bookings(range)
+      else
+        bookings = get_range_bookings(range)
+      end
+      reserved_rooms = bookings.map do |reservation|
         reservation.rooms
       end
-      return reserved_rooms
+      return reserved_rooms.flatten
     end
 
     def get_available_rooms(range)
       reserved_rooms = get_reserved_rooms(range)
       available_rooms = @rooms - reserved_rooms
+      raise ArgumentError, "No available rooms for this date range" if available_rooms.empty?
       return available_rooms
     end
 
     def reserve_room(range)
-      available_rooms = get_available_rooms(range)
-      raise ArgumentError, "No available rooms for this date range" if available_rooms.empty?
-      new_reservation = Reservation.new(rooms: available_rooms.first, date_range: range)
+      available_room = [get_available_rooms(range).first]
+      range = date_or_range?(range)
+      new_reservation = Reservation.new(rooms: available_room, date_range: range)
       @reservations << new_reservation
       return new_reservation
     end
 
     def reserve_block(range, rooms_count, discounted_rate)
       available_rooms = get_available_rooms(range)
-      raise ArgumentError, "No available rooms for this date range" if available_rooms.empty?
       raise ArgumentError, "Not enough rooms available" if available_rooms.size < rooms_count
-      rooms = available_rooms[0..rooms_count]
+      rooms = available_rooms[0..(rooms_count-1)]
+      range = date_or_range?(range)
       new_block = HotelBlock.new(rooms: rooms, date_range: range, discounted_rate: discounted_rate)
-      add_block_to_reservations(new_block)
+      @reservations << new_block
       return new_block
     end
 
     private
 
-    def add_block_to_reservations(block)
-      (block.rooms.length - 1).times do |i|
-        @reservations << Reservation.new(rooms: block.rooms[i], date_range: block.date_range)
+    def date_or_range?(range)
+      if range.is_a? String
+        return range = DateRange.new(start_date: range, end_date: range)
+      else
+        return range
       end
     end
   end
