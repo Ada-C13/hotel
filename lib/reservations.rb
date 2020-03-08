@@ -7,7 +7,7 @@ module Hotel
     def initialize(date_range:, room: nil)
       @date_range = date_range
       @room = room
-      @block_reservation = true || false
+      @block_reservation = block_reservation
     end
 
   end

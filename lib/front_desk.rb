@@ -82,28 +82,43 @@ module Hotel
     end 
 
 
-    # def available_rooms_in_block(hotel_block)
-    #  available_rooms = hotel_block.rooms.select {|room| room.reservations.empty? == true} 
-  
-    # end
+    def available_rooms_in_block(hotel_block) #TODO write test
+     available_rooms = hotel_block.rooms.select{|room| room.reservations.empty? == true || room.reservations.any?{|reservation| reservation.date_range.overlap?(hotel_block.date_range) == false}}
+     return available_rooms
+    end
 
-
+    def add_reservation_to_room_in_block(hotel_block) #TODO write test
+      available_rooms = available_rooms_in_block(hotel_block)
+      chosen_room = available_rooms[0]
+      new_reservation = Hotel::Reservation.new(date_range: hotel_block.date_range, room: chosen_room)
+      new_reservation.block_reservation = true
+      @reservations << new_reservation
+      chosen_room.add_room_reservation(new_reservation)
+    end
     
     # @date_range = Hotel::DateRange.new(start_date: @start_date, end_date: @end_date)
     # hotel_block = Hotel::HotelBlock.new(block_count: 3, date_range: @date_range)
     # hotel_block.find_room_4_block(block_count: 3, date_range: @date_range)
 
-    start_date = Date.today + 2
-    end_date = Date.today + 6
-    dates = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
-    dates2 = Hotel::DateRange.new(start_date: (start_date - 2), end_date: (end_date - 5))
-    front_desk = Hotel::FrontDesk.new
-    p front_desk.request_block(3,dates, 0.2) 
-    puts "\n"
-    2.times do
-      p front_desk.add_reservation(dates)
-    end
-    puts "\n"
-    p front_desk.request_block(4,dates2, 0.2)
+    # start_date = Date.today + 2
+    # end_date = Date.today + 6
+    # dates = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
+    # dates2 = Hotel::DateRange.new(start_date: (start_date - 2), end_date: (end_date - 5))
+    # front_desk = Hotel::FrontDesk.new
+    # p front_desk.request_block(3,dates, 0.2) 
+    # puts "\n"
+    # 2.times do
+    #   p front_desk.add_reservation(dates)
+    # end
+    # puts "\n"
+    # p block1 = front_desk.request_block(4,dates2, 0.2)
+    # puts "\n"
+    # p front_desk.available_rooms_in_block(block1)
+    # puts "\n"
+    # p front_desk.add_reservation_to_room_in_block(block1)
+    # puts "\n"
+    # p front_desk.available_rooms_in_block(block1)
+    # puts "\n"
+    # p front_desk.reservations
   end
 end
