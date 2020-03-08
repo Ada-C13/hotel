@@ -33,6 +33,10 @@ describe Hotel::FrontDesk do
       expect(@desk_instance.calendar).must_be_kind_of Hash
     end
 
+    it "calendar is a type of Hash" do
+      expect(@desk_instance.calendar).must_be_kind_of Hash
+    end
+
     it "rooms is a type of array" do
       expect(@desk_instance.rooms).must_be_kind_of Array
     end
@@ -42,22 +46,17 @@ describe Hotel::FrontDesk do
     end
   end  
 
-  describe "list_rooms" do
-    it "takes date range and returns a list" do
-      expect(@desk_instance.list_rooms).must_be_kind_of Array
-    end
-  end
+
  
 
   describe "wave 1" do
 
-    describe "reserve_room" do
-      it "creates a Reservation" do
-        expect(@reserved).must_be_kind_of Hotel::Reservation
+    describe "list_rooms" do
+      it "takes date range and returns a list" do
+        expect(@desk_instance.list_rooms).must_be_kind_of Array
       end
-      
     end
-    
+
     describe "populate_calendar" do
       before do
         @cal_instance = @desk_instance.populate_calendar(@res_instance)
@@ -74,10 +73,17 @@ describe Hotel::FrontDesk do
         expect(@cal_instance).must_be_kind_of Hash
       end
 
-      it "creates a hash key for every date" do
+      it "creates the same number of hash keys as there are dates in the range" do
         expect(@cal_instance.length).must_equal 3 
       end
 
+    end
+
+    describe "reserve_room" do
+      it "creates a Reservation" do
+        expect(@reserved).must_be_kind_of Hotel::Reservation
+      end
+      
     end
 
     describe "date_reservations" do
@@ -90,18 +96,48 @@ describe Hotel::FrontDesk do
         # ! TODO
       end
 
-      it "raises an argumenterror if date is not a date" do
+      it "raises an ArgumentError if date is not a date" do
         # ! TODO
       end
 
-      it "takes a Date and returns an array" do
+      it "takes a single Date and returns an array" do
         expect(@date_res).must_be_kind_of Array
 
         @date_res.each do |res|
           res.must_be_kind_of Hotel::Reservation
         end
       end
+
     end
+
+    describe "range_reservations" do
+      before do
+        @range_res = @desk_instance.range_reservations(@date_instance)
+      end
+      
+      it "takes an instance of DateRange and returns an array of hotel reservations" do
+        expect(@range_res).must_be_kind_of Array
+
+        @range_res.each do |item|
+          item.must_be_kind_of Hotel::Reservation
+        end
+      end
+
+      it "raises an ArgumentError if no reservations for date" do
+        # ! TODO
+      end
+
+      it "raises an ArgumentError if date is not a date" do
+        # ! TODO
+      end
+
+      it "removes duplicates" do
+        # ! TODO
+      end
+
+    end
+
+
   end
 
   describe "wave 2" do
