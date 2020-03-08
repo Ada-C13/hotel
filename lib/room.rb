@@ -1,5 +1,3 @@
-require_relative 'date_range'
-
 module Hotel
   class Room
     attr_reader :reservations, :number, :cost

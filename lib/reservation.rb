@@ -1,7 +1,3 @@
-require 'date'
-require_relative 'date_range'
-require_relative 'hotel_manager'
-
 module Hotel
   class Reservation
     attr_reader :date_range, :id, :room_number, :nights, :cost
