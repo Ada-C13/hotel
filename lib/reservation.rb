@@ -40,26 +40,14 @@ module Hotel
       #Total cost for a given reservation
       #returns total_cost (float)
       def total_cost()
-        #TODO check if room exists
-        total_cost = @room.price.to_f * @number_of_days
+        total_cost = nil
+        if @room != nil
+          total_cost = @room.price.to_f * @number_of_days
+        end
         return total_cost
       end  
   #****************************************************************
 
-      #list of reservations for a specific date
-      #input: date (Date)
-      #return: list_of_reservations_date ([Resevation])
-      def get_reservations(date) 
-        list_of_reservations_date = []
-        @reservations.each do |reservation|
-          if check_in == reservation.check_in
-            list_of_reservations_date.push(reservation)   
-          end
-        end
-        return list_of_reservations_date
-      end
-  #****************************************************************
-  
       # checks if aDate is within the check_in and check_out
       # aDate (Date)
       # returns true or false 
@@ -69,39 +57,39 @@ module Hotel
         end
         return false
       end
-  #****************************************************************
-  #Helper method to def are_reservations_overlapped(aReservations)
-  #Checks if this reservation (self) overlaps, with aReservation passed in
-  #input: aReservation (Reservation)
-  #return: isOverlapped (boolean)
-  def is_overlapped(aReservation)
-    is_overlapped = true
-    #check self reservation overlaps with aReservation
-    if (self.check_out <= aReservation.check_in) || (self.check_in >= aReservation.check_out)
-      is_overlapped = false
-    else 
-      is_overlapped = true
-    end
-    return is_overlapped
-  end
-  #****************************************************************
-
-  #Checks if this reservation (self) overlaps, with reservations passed in
-  #input: aReservations ([Reservations])
-  #return: isOverlapped (boolean)
-  def are_reservations_overlapped(aReservations)
-    are_overlapped = false
-    #loop through aReservations
-    aReservations.each do |reservation|
-     #check if self reservation overlaps with reservation in loop
-      if self.is_overlapped(reservation)
-        return true
+      #****************************************************************
+      #Helper method to def are_reservations_overlapped(aReservations)
+      #Checks if this reservation (self) overlaps, with aReservation passed in
+      #input: aReservation (Reservation)
+      #return: isOverlapped (boolean)
+      def is_overlapped(aReservation)
+        is_overlapped = true
+        #check self reservation overlaps with aReservation
+        if (self.check_out <= aReservation.check_in) || (self.check_in >= aReservation.check_out)
+          is_overlapped = false
+        else 
+          is_overlapped = true
+        end
+        return is_overlapped
       end
-    end
-    return are_overlapped
-  end
+      #****************************************************************
 
-  #****************************************************************
+      #Checks if this reservation (self) overlaps, with reservations passed in
+      #input: aReservations ([Reservations])
+      #return: isOverlapped (boolean)
+      def are_reservations_overlapped(aReservations)
+        are_overlapped = false
+        #loop through aReservations
+        aReservations.each do |reservation|
+        #check if self reservation overlaps with reservation in loop
+          if self.is_overlapped(reservation)
+            return true
+          end
+        end
+        return are_overlapped
+      end
+
+      #****************************************************************
 
       def self.load_all_reservations() #what to get
         reservations = CSV.parse(File.read(__dir__ + "/../support/reservations.csv"), headers: true, header_converters: :symbol) #relative to HOTEL & reading csv file
@@ -118,27 +106,7 @@ module Hotel
         end
         return all_reservations #return all the rooms
       end
-  #****************************************************************
-
-          # #valid date
-    # def validate_date(date)
-    #   if date.class == String
-    #     date = Date.parse(date)
-    #   elsif date.class != Date
-    #     raise ArgumentError.new("You entered #{date}. Invalid, try again using this format '2020-03-04'")
-    #   end
-    #   return date
-    # end
-
-    # #validate stay
-    # def validate_stay(check_in, number_of_days)
-    #   check_in = validate_date(check_in)
-    #   check_out = validate_date(check_out)
-    #   if check_in > check_out
-    #     raise ArgumentError.new("Invalid. This check-out date: #{check_out} is before the check-in date: #{check_in}")
-    #   end
-    # end
-
+      #****************************************************************
     end #class
 end #module
 
@@ -147,7 +115,7 @@ end #module
 
 # date = Date.parse("2020-02-01")
 # # puts date
-# room = Hotel::Room.new(10,200)
+
 # res = Hotel::Reservation.new(1, date, 7, "confirmed", room)
 # puts res.is_within_stay(Date.parse("2020-02-01"))
 
