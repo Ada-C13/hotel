@@ -13,6 +13,8 @@ class HotelManager < Date_Range
   end
 
   # - The hotel has 20 rooms, and they are numbered 1 through 20
+  # - In this method we make a rooms spanning 1 - 20 
+  # - Each room is placed in an array which because an room array
   def make_rooms
     room_array = []
     (1..20).each do |room_num|
@@ -28,6 +30,11 @@ class HotelManager < Date_Range
   # return aval room or no room aval
   # - When reserving a room, the user provides only the start and end dates - the library should determine which room to use for the reservation
   # - I can view a list of rooms that are not reserved for a given date range, so that I can see all available rooms for that day
+
+  # Here we check the room availability by taking in the check in and out date as parms
+  # Those parms are then used to create a new Instantation of a date range
+  # By setting that new instantion of a date range as a variable we can then 
+  # Go into each room and check that said date range
   def check_room_available?(check_in_date, check_out_date)
     date_range = Date_Range.new(check_in_date, check_out_date)
     @rooms.each do |room|
