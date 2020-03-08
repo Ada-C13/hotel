@@ -14,5 +14,28 @@ module Stayappy
     def stay()
       return @check_in..@check_out
     end
+    
+    def in_range?(start_date, end_date)
+      # Permit start or end same as check_in or out
+      if @check_in >= start_date && @check_in <= end_date
+        return true
+      elsif @check_out >= start_date && @check_out <= end_date
+        return true
+      end
+
+      return false
+    end
+
+    def stay_overlaps?(other_check_in:, other_check_out:)
+      # Ensure check_in does not overlap
+      if other_check_in >= @check_in && other_check_in < @check_out
+        return true
+      elsif other_check_out > @check_in && other_check_out <= @check_out
+        return true
+      end
+
+      return false
+    end
+
   end
 end
