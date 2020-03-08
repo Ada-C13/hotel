@@ -26,7 +26,7 @@ module HotelBooking
       
       hotel_block = HotelBlock.new(name: name, date_range: date_range, room_count: room_count, discount_rate: discount_rate)
       block_rooms = available_rooms(date_range).sample(room_count)
-      hotel_block.rooms.push(block_rooms)
+      hotel_block.rooms.concat(block_rooms)
       hotel_blocks << hotel_block
       return hotel_block
     end
@@ -53,13 +53,12 @@ module HotelBooking
     def make_block_reservation(name)
       wanted_block = @hotel_blocks.find { |block| block.name == name }
       raise.ArgumentError.new("there is no such hotel blcok") if wanted_block.nil?
-
       block_room = (wanted_block.rooms.reject { |b_room| list_room_reservations(b_room, wanted_block.date_range).length != 0 }).first
       raise.ArgumentError.new("all rooms of this block have been reserved") if block_room.nil?
- 
+      
       block_reservation = Reservation.new(date_range: wanted_block.date_range, room: block_room, block: wanted_block)
       @rooms.each do |room|
-        room.in_block = true if room = block_room
+        room.in_block = true if room == block_room
       end
       @reservations << block_reservation
       return block_reservation

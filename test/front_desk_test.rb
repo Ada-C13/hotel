@@ -167,12 +167,14 @@ describe "Front Desk" do
 
     it "I can check whether a given block has any rooms available" do
       block_res = front_desk.make_block_reservation("your wedding")
-      available_rooms = block_b.rooms.reject { |block_room| front_desk.list_room_reservations(block_room, block_b.date_range).length != 0 }
+      available_rooms = @block_b.rooms.reject { |block_room| front_desk.list_room_reservations(block_room, @block_b.date_range).length != 0 }
       expect(available_rooms.length != 0).must_equal true
     end
 
     it "can only reserve that room from a hotel block for the full duration of the block" do
       block_res = front_desk.make_block_reservation("your wedding")
+      expect(block_res.date_range).must_equal @block_b.date_range
+      
     end
   end
 
@@ -195,6 +197,20 @@ describe "Front Desk" do
       end
       expect(overlapping.include?(res)).must_equal true
     end
+
+    it "raises argument eror if the room is not available" do
+      front_desk.make_room_reservation(date_range, room)
+      overlapping = []
+      front_desk.reservations.each do |reserv|
+        if reserv.date_range.overlap?(date_range) && reserv.room == room
+          overlapping << reserv
+        end
+      end
+      if overlapping != 0
+        expect { front_desk.make_room_reservation(date_range, room)}.must_raise ArgumentError
+      end
+    end
+
   end
 
   describe "list room reservations" do
