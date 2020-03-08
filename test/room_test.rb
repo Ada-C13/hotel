@@ -76,7 +76,7 @@ describe "room" do
     end 
 
     it "correctly books a reservation" do 
-      # expect(@room3.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))).must_be_instance_of Hotel::Reservation
+      expect(@room3.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))).must_be_instance_of Hotel::Reservation
     end 
 
     it "correctly adds new reservation to rm's reservations" do 

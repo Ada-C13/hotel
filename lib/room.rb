@@ -62,6 +62,7 @@ module Hotel
         end_date: end_date, 
         rm_num: @rm_num)
       @rm_reservations << @reservation
+      return @reservation
     end
 
   end 
