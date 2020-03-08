@@ -1,7 +1,4 @@
 # Add simplecov
-require "minitest"
-require "minitest/autorun"
-require "minitest/reporters"
 require 'simplecov'
 
 SimpleCov.start do
@@ -9,6 +6,11 @@ SimpleCov.start do
   add_filter 'test/reservation_test'
   add_filter 'test/room_test'
 end
+
+require "minitest"
+require "minitest/autorun"
+require "minitest/reporters"
+
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
