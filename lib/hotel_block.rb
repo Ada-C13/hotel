@@ -7,11 +7,19 @@ module Hotel
     attr_reader :date_range, :rooms, :discount_rate
 
     def initialize(date_range, rooms, discount_rate)
-      @date_range = date_range.validate_date()
+      @date_range = date_range
       @rooms = rooms
+      check_availability()
       @discount_rate = discount_rate
     end
 
+    def check_availability()
+      @rooms.each do |room|
+        room_available = room.check_availability(@date_range)
+        raise ArgumentError.new("Not all rooms have availability") if !room_available
+      end
+      return true
+    end
   end
 end
 
