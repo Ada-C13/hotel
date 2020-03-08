@@ -85,8 +85,8 @@ describe "list reservations by room number" do
     expect(@front_desk.find_reservations_by_room("2").length).must_equal 1
   end
   
-  it "returns nil if there are no reservations" do
-    expect(@front_desk.find_reservations_by_room("3")).must_be_nil
+  it "returns empty array if there are no reservations" do
+    expect(@front_desk.find_reservations_by_room("3")).must_be_empty
   end
   
 end 
@@ -223,3 +223,46 @@ describe "list reservations on a single date" do
   
 end
 
+describe "instantiate a block of rooms" do
+  before do 
+    @front_desk = Hotel::FrontDesk.new(5)
+    @front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,4))
+    @front_desk.create_reservation(Date.new(2020,2,2),Date.new(2020,2,6))
+  end
+
+  it 'creates a block of rooms' do
+    date_range1 = Hotel::DateRange.new(Date.new(2020,2,1), Date.new(2020,2,4))
+    block = front_desk.create_block(date_range1, 150, ["3", "4", "5"])
+    
+    expect(block).must_be_instance_of Hotel::block
+    expect(block.date_range).must_equal date_range1
+    expect(block.discount_rate).must_equal 150
+  end
+
+  it 'does not create a block of rooms for rooms with reservations' do
+    
+  end
+
+end
+
+
+describe "available for block?" do
+  before do 
+    @front_desk = Hotel::FrontDesk.new(5)
+    @front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,4))
+    @front_desk.create_reservation(Date.new(2020,2,2),Date.new(2020,2,6))
+  end
+  
+  it "returns true if room is available for a given date range" do
+    date_range2 = Hotel::DateRange.new(Date.new(2020,2,1), Date.new(2020,2,4))
+    
+    expect(@front_desk.available_for_block?(["3", "4", "5"], date_range2)).must_equal true
+  end
+  
+  it 'raises an argument error if room is not available for a given date range' do
+    date_range2 = Hotel::DateRange.new(Date.new(2020,2,1), Date.new(2020,2,4))
+
+    expect{ @front_desk.available_for_block?(["2", "3"], date_range2) }.must_raise NoAvailableRoomsError
+  end
+  
+end

@@ -33,7 +33,7 @@ describe "validate rooms" do
     block.rooms = ["3", "4"]
     expect{ block.validate_rooms }.must_be_silent
   end
-
+  
 end
 
 describe "total block cost" do

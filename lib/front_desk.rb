@@ -48,7 +48,7 @@ module Hotel
       reservations = room.reservations 
       
       if reservations.empty?
-        return nil
+        return []
       end
       
       return reservations
@@ -91,7 +91,7 @@ module Hotel
       date_range = Hotel::DateRange.new(check_in,check_out)
       
       reservation = Hotel::Reservation.new(date_range)
-
+      
       reservation.room_number = room_number
       
       room.reservations << reservation
@@ -112,6 +112,31 @@ module Hotel
       end
       
       return reservations_on_date
+    end
+    
+    
+    def create_block(daterange, discount, rooms)
+      
+      # available_for_block?(rooms, daterange)
+      
+      # block = Hotel::Block.new(daterange, discount, rooms)
+      
+    end
+    
+    
+    def available_for_block?(rooms, daterange) # takes collection
+      
+      rooms.each do |room_num| # look at each room number
+        reservations = find_reservations_by_room(room_num) # returns an array of reservations
+        
+        reservations.each do |reservation|
+          if reservation.date_range.overlap?(daterange) # if this returns true
+            raise NoAvailableRoomsError.new("This block is not available for this date range.")
+          end
+        end
+      end
+      
+      return true
     end
     
   end   
