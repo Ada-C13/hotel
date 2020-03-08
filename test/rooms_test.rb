@@ -35,33 +35,33 @@ describe "rooms" do
     end
   end
 
-  describe "change_block_status" do
-    it "changes the block status to in block" do
-      expect(@room.block_status).must_equal :not_in_block
+  # describe "change_block_status" do
+  #   it "changes the block status to in block" do
+  #     expect(@room.block_status).must_equal :not_in_block
 
-      @room.change_block_status
-      expect(@room.block_status).must_equal :in_block
-    end
+  #     @room.change_block_status
+  #     expect(@room.block_status).must_equal :in_block
+  #   end
     
-  end
+  # end
 
-  describe "change_availability_in_block" do
-    it "changes the availabilty of the room in the block to :unavailable" do
-      expect(@room.availability_in_block).must_equal :available
+  # describe "change_availability_in_block" do
+  #   it "changes the availabilty of the room in the block to :unavailable" do
+  #     expect(@room.availability_in_block).must_equal :available
       
-      @room.change_availability_in_block
-      expect(@room.availability_in_block).must_equal :unavailable
-    end
+  #     @room.change_availability_in_block
+  #     expect(@room.availability_in_block).must_equal :unavailable
+  #   end
     
-  end
+  # end
 
-  describe "change_cost" do
-    it "changes the cost of the room" do
-      expect(@room.cost).must_equal 200
+  # describe "change_cost" do
+  #   it "changes the cost of the room" do
+  #     expect(@room.cost).must_equal 200
       
-      @room.change_cost(180)
-      expect(@room.cost).must_equal 180
-    end
+  #     @room.change_cost(180)
+  #     expect(@room.cost).must_equal 180
+  #   end
     
-  end
+  # end
 end

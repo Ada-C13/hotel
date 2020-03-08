@@ -45,6 +45,12 @@ describe "front desk" do
       expect(@front_desk.reservations[0].room).must_be_instance_of Hotel::Room
     end
 
+    it "does not add a reservation to a room if the room is not in a block" do 
+      @front_desk.request_block(3, @dates, 180) 
+      @front_desk.add_reservation(@dates)
+      expect(@front_desk.reservations[1].room.room_number).must_equal 5
+    end
+
     it "adds a reservation object to collection of reservations" do
       expect(@front_desk.reservations[0]).must_be_instance_of Hotel::Reservation
     end
@@ -125,22 +131,25 @@ describe "front desk" do
 
     it "calculates total cost of the reservation " do
       expect(@front_desk.total_cost(@new_reservation)).must_equal 600
+
+      block_count = 3
+      discount_cost = 0.2
+
+      @front_desk.request_block( block_count, @dates, discount_cost)
+
     end
   end
 
   describe "request_block" do
     before do
       @block_count = 3
-      @discount_cost = 180
+      @discount_cost = 0.2
     end
 
     it "reserves the correct number of rooms for the hotel block for given date range" do
       @front_desk.request_block( @block_count, @dates, @discount_cost)
 
       expect(@front_desk.hotel_blocks[0].rooms.count).must_equal 3
-      # expect(Hotel::HotelBlock.new(block_count: 2, date_range: @dates).rooms.count).must_equal 2
-      # expect(Hotel::HotelBlock.new(block_count: 4, date_range: @dates).rooms.count).must_equal 4
-      # expect(Hotel::HotelBlock.new(block_count: 5, date_range: @dates).rooms.count).must_equal 5
     
     end
 
@@ -152,7 +161,33 @@ describe "front desk" do
       expect{@front_desk.request_block(@block_count, @dates, @discount_cost)}.must_raise NoAvailableRoomError 
 
     end
+
+
+    it "does not add room to a block for a given date range if that room is already in a block" do
+      @front_desk.request_block( @block_count, @dates, @discount_cost)
+
+      expect(@front_desk.request_block( @block_count, @dates, @discount_cost).rooms[0].room_number).must_equal 4
+      expect(@front_desk.request_block( @block_count, @dates, @discount_cost).rooms[0].room_number).must_equal 7
+      expect(@front_desk.request_block( @block_count, @dates, @discount_cost).rooms[0].room_number).must_equal 10
+    
+    end
   
+  end
+
+  describe "check_block_status" do
+    before do
+      @block_count = 3
+      @discount_cost = 0.2
+    end
+
+    it "deletes rooms in block from available rooms if there is overlap" do
+      @front_desk.request_block( @block_count, @dates, @discount_cost)
+      new_dates = Hotel::DateRange.new(start_date: Date.today + 6, end_date: Date.today + 10)
+
+      expect(@front_desk.check_block_status(@dates).count).must_equal 17
+      expect(@front_desk.check_block_status(new_dates).count).must_equal 20
+  
+    end
   end
 
 end
