@@ -140,7 +140,13 @@ module Hotel
       return hotel_block
     end
 
-    
-
+    # check whether a given block has any rooms available
+    def available_rooms_of_block(hotel_block) 
+      if hotel_block.rooms.empty?
+        raise ArgumentError.new("The hotel block cannot be made without having a room")
+      else
+        return hotel_block.rooms
+      end
+    end
   end
 end

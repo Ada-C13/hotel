@@ -149,6 +149,7 @@ describe Hotel::HotelController do
         @room5 = @hotel_controller.rooms[4]
         @rooms_array = [@room1, @room2]
         @rooms_array1 = [@room1, @room2, @room3, @room4]
+        @rooms_array_empty = []
         @discount_rate = 0.1
       end
       describe "#create a HotelBock with given date_range, rooms, and discount_rate" do
@@ -193,6 +194,20 @@ describe Hotel::HotelController do
           expect(@hotel_controller.hotel_blocks.length).must_equal 2
           expect(rooms_list_for_hotel_block).must_be_kind_of Array
           expect(rooms_list_for_hotel_block.length).must_equal 6
+        end
+      end
+      describe "available_rooms_of_block" do
+        it "check whether a given block has any rooms available" do
+          new_hotel_block = @hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate)
+          available_rooms_of_block = @hotel_controller.available_rooms_of_block(new_hotel_block)
+          expect(@hotel_controller.rooms).must_be_kind_of Array
+          expect(new_hotel_block.rooms.length).must_equal 2
+          expect(available_rooms_of_block).must_equal @rooms_array
+        end
+
+        it "check whether a given block has any rooms available - if @rooms_array is empty print There is no room available" do
+          
+          expect{(@hotel_controller.create_hotel_block(@date_range, @rooms_array_empty, @discount_rate))}.must_raise ArgumentError 
         end
       end
       describe "reserve_from_hotel_block" do
