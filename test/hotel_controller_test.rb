@@ -87,7 +87,6 @@ describe Hotel::HotelController do
 
   describe "wave 2" do
     before do
-      @hotel_controller = Hotel::HotelController.new
       @start_date = Date.new(2020, 8, 10)
       @end_date = @start_date + 4
       @date_range = Hotel::DateRange.new(@start_date,@end_date)
@@ -138,6 +137,101 @@ describe Hotel::HotelController do
         end
       end
     end
+    describe "Wave 3" do
+      before do
+        @start_date = Date.new(2020, 8, 10)
+        @end_date = @start_date + 4
+        @date_range = Hotel::DateRange.new(@start_date,@end_date)
+        @room1 = @hotel_controller.rooms[0]
+        @room2 = @hotel_controller.rooms[1]
+        @room3 = @hotel_controller.rooms[2]
+        @room4 = @hotel_controller.rooms[3]
+        @room5 = @hotel_controller.rooms[4]
+        @rooms_array = [@room1, @room2]
+        @rooms_array1 = [@room1, @room2, @room3, @room4]
+        @discount_rate = 0.1
+      end
+      describe "#create a HotelBock with given date_range, rooms, and discount_rate" do
+        it "create a HotelBlock when all the rooms of rooms_array are avaible " do
+          new_hotel_block = @hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate)
+          expect(new_hotel_block).must_be_kind_of Hotel::HotelBlock
+          expect(@hotel_controller.hotel_blocks).must_be_kind_of Array
+          expect(@hotel_controller.hotel_blocks.length).must_equal 1
+          
+      end
+
+        it "raise an ArgumentEorror if at least one of the rooms is unavailable for the given date range - by checking the reservations list " do 
+          # Make a reservation so it will take the first room, so the first room is no longer available
+          reservation1 = @hotel_controller.reserve_room(@start_date, @end_date)
+
+          # Now, when we try to create a block that has room_id = 1, it will raise ArgumentError 
+          expect{(@hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate))}.must_raise ArgumentError
+        end
+        it "raise an ArgumentEorror if at least one of the rooms is unavailable for the given date range - by checking the existing hotel_blocks" do 
+        
+          new_hotel_block1 = @hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate)
+          
+          # Cannot create a hotel block that any existing block includes that specific room for that specific date
+          expect{(@hotel_controller.create_hotel_block(@date_range, @rooms_array1, @discount_rate))}.must_raise ArgumentError
+        end
+      end
+      describe "rooms_list_for_hotel_block" do
+        it "return a room_list_of_hotel_block for a given data range" do
+          start_date2 = Date.new(2020, 8, 16)
+          end_date2 = start_date2 + 5
+          date_range2 = Hotel::DateRange.new(start_date2, end_date2)
+          new_hotel_block1 = @hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate)
+          new_hotel_block2 = @hotel_controller.create_hotel_block(date_range2, @rooms_array1, @discount_rate)
+           
+          # serching the room_list_for_hotel_block for the whole month
+          # we have two hotel_blocks that over lap for the whole month in Aguest 
+          test_start_date = Date.new(2020, 8, 01)
+          test_end_date = test_start_date + 29
+          rooms_list_for_hotel_block = @hotel_controller.rooms_list_for_hotel_block(test_start_date, test_end_date)
+          
+          expect(@hotel_controller.hotel_blocks).must_be_kind_of Array
+          expect(@hotel_controller.hotel_blocks.length).must_equal 2
+          expect(rooms_list_for_hotel_block).must_be_kind_of Array
+          expect(rooms_list_for_hotel_block.length).must_equal 6
+        end
+      end
+      describe "reserve_from_hotel_block" do
+
+        it "can reserve a room form a hotel block for a full duration of the block" do
+        end
+
+        it "See a reservation made from a hotel block from the list of reservations for that date" do
+          
+        end
+
+        it "remove the specific room from the rooms_array once it is reserverse" do
+ 
+        
+        end
+
+        it "create a new reservation based on the hotel_block and added to reservations list" do
+          
+        end
+        
+        it "cannot reserve a specific room the HotelBock where the date is not exact macth the full duration of the block " do
+          
+        end
+
+        it "When a room is reserved from a block of rooms, the reservation dates will always match the date range of the block" do
+          
+        end
+        
+
+      describe "can check whether a given block has any rooms available" do
+      
+      end
+
+  
+          
+        
+      end
+    end
+    
   end
 
 
