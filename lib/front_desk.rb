@@ -12,7 +12,9 @@ module Hotel
     end
 
     def populate_calendar(reservation)
-      reservation.date_range.dates.each do |date|
+      temp = reservation.date_range.dates
+      temp.pop
+      temp.each do |date|
         if !@calendar.key?(date)
           @calendar[date] =[]
         end

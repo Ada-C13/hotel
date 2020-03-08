@@ -4,7 +4,7 @@ require_relative "test_helper"
 describe Hotel::DateRange do
   before do
     @start_date = Date.new(2021, 01, 01)
-    @end_date = Date.new(2021, 01, 04)
+    @end_date = Date.new(2021, 01, 03)
 
     @range_inst = Hotel::DateRange.new(start_date: @start_date, end_date: @end_date)
   end
@@ -87,21 +87,27 @@ describe Hotel::DateRange do
 
   xdescribe "include?" do
     it "returns false if the date is clearly out" do
+      date = Date.new(2022,1,1)
+      expect(@range_inst.include?(date)).must_equal false
     end
 
     it "returns true for dates in the range" do
+      date = @start_date
+      expect(@range_inst.include?(date)).must_equal true
     end
 
     it "returns false for the end_date date" do
+      date = @end_date
+      expect(@range_inst.include?(date)).must_equal false
     end
   end
 
   describe "nights" do
     it "returns the correct number of nights" do
-      expect(@range_inst.nights).must_equal 3
+      expect(@range_inst.nights).must_equal 2
     end
 
-    it "returns the correct number of nights" do
+    it "returns a number" do
       expect(@range_inst.nights).must_be_kind_of Numeric
     end
   end

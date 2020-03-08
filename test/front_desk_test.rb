@@ -4,8 +4,8 @@ describe Hotel::FrontDesk do
   before do
     @desk_instance = Hotel::FrontDesk.new
     @date_instance = Hotel::DateRange.new(
-      start_date: Date.today + 1,
-      end_date: Date.today + 3
+      start_date: Date.new(2021, 01, 01),
+      end_date: Date.new(2021, 01, 03)
     )
     @res_instance = Hotel::Reservation.new(
       date_range: @date_instance,
@@ -13,6 +13,8 @@ describe Hotel::FrontDesk do
     )
     @room_list = @desk_instance.available_rooms(@date_instance)
     @reserved = @desk_instance.reserve_room(@date_instance)
+    @range_res = @desk_instance.range_reservations(@date_instance)
+    @room_res = @desk_instance.find_room_res(2, @range_res)
   end
 
   describe "initialize" do
@@ -64,6 +66,7 @@ describe Hotel::FrontDesk do
 
       it "takes a reservation and loops through date ranges" do
         @desk_instance.populate_calendar(@res_instance)
+
           @res_instance.date_range.dates.each do |date|
             date.must_be_kind_of Date
           end
@@ -73,8 +76,9 @@ describe Hotel::FrontDesk do
         expect(@cal_instance).must_be_kind_of Hash
       end
 
-      it "creates the same number of hash keys as there are dates in the range" do
-        expect(@cal_instance.length).must_equal 3 
+      it "creates the same number of hash keys as there are nights in the range" do
+        nights = @date_instance.nights
+        expect(@cal_instance.length).must_equal 2 
       end
 
     end
@@ -88,7 +92,7 @@ describe Hotel::FrontDesk do
 
     describe "date_reservations" do
       before do
-        date = Date.today + 1
+        date = Date.new(2021, 01, 01)
         @date_res = @desk_instance.date_reservations(date)
       end
 
@@ -100,27 +104,17 @@ describe Hotel::FrontDesk do
         # ! TODO
       end
 
-      it "takes a single Date and returns an array" do
+      it "returns an array of reservations for a single date" do
         expect(@date_res).must_be_kind_of Array
-
-        @date_res.each do |res|
-          res.must_be_kind_of Hotel::Reservation
-        end
+        expect(@date_res[0]).must_be_kind_of Hotel::Reservation
       end
 
     end
 
-    describe "range_reservations" do
-      before do
-        @range_res = @desk_instance.range_reservations(@date_instance)
-      end
-      
-      it "takes an instance of DateRange and returns an array of hotel reservations" do
+    describe "range_reservations" do 
+      it "returns an array of reservations for a range of reservations" do
         expect(@range_res).must_be_kind_of Array
-
-        @range_res.each do |item|
-          item.must_be_kind_of Hotel::Reservation
-        end
+        expect(@range_res[0]).must_be_kind_of Hotel::Reservation
       end
 
       it "raises an ArgumentError if no reservations for date" do
@@ -136,6 +130,22 @@ describe Hotel::FrontDesk do
       end
 
     end
+
+    xdescribe "find_room_res" do
+      it "returns a list of reservations" do
+        temp = nil
+        @room_res.each do |res|
+          temp = res
+          puts temp.length
+        end
+        
+        expect(@room_res).must_be_kind_of Array
+        @room_res[0].must_be_kind_of Hotel::Reservation
+
+
+      end
+    end
+    
 
 
   end
