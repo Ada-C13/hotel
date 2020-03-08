@@ -8,7 +8,8 @@ module Hotel
     attr_reader :start_date, :end_date, :room, :date_range
     
     def initialize(start_date, end_date, room)
-      # raise ArgumentError.new("room must be an instance of room") if room.class != Hotel::Room
+      raise ArgumentError.new("room must be an instance of room") if room.class != Hotel::Room
+
       @start_date = start_date
       @end_date = end_date
       @room = room # instance of room class
@@ -18,10 +19,6 @@ module Hotel
     def cost
       return Hotel::DateRange.new(@start_date, @end_date).nights * @room.cost
     end
-
-    # def date_range_for_reservation
-    #   return Hotel::DateRange.new(@start_date,@end_date)
-    # end
 
   end
 end
