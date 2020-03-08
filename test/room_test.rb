@@ -5,8 +5,6 @@ describe "Room class" do
     before do
       @room = Hotel::Room.new(
         room_num: 10,
-
-
       )
     end #before do end
   
@@ -22,25 +20,7 @@ describe "Room class" do
       expect(@room.room_num).must_equal 10
     end
 
-    it 'has a reservations attribute that is an array' do
-      expect(@room.reservations).must_be_kind_of Array
-    end
-
-    describe "date_range" do
-      before do
-        start_date= "March 1, 2019"
-        end_date = "March 5, 2019"
-        @room = Hotel::Room.new(
-          room_num: 13,
-          date_range: [start_date, end_date], 
-        )
-      end #before do end
-
-      # it "expect date_range to NOT be empty" do
-      #   expect(@room.date_range.empty?).must_equal false
-      # end
-      
-    end #describe block end
+  
 
   end #describe initialize
 end #Room class describe end
