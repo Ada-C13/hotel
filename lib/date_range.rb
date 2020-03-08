@@ -34,8 +34,9 @@ module Hotel
         return true
       end
     end
-
-    # def include?(date)
-    # end
+   
+    def equals?(other)
+      @start_date == other.start_date && @end_date == other.end_date
+    end
   end
 end
