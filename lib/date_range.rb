@@ -15,13 +15,18 @@ module Hotel
     
     end
 
-    def overlap?(requested_dates)
-      overlap = (self.dates & requested_dates.dates).empty? || (requested_dates.start_date >= self.end_date) ? false : true
+    def overlap?(daterange_instance)
+      overlap = !(daterange_instance.start_date >= end_date || daterange_instance.end_date <= start_date)
       return overlap
     end
 
     def include?(date)
-      return false
+      if date >= @start_date && date < @end_date 
+        return true 
+      else 
+        return false
+      end 
+
     end
 
     # calculate the number of nights for a reservation (end date is not a night)

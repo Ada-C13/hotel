@@ -30,8 +30,7 @@ module Hotel
     # User: I want an exception raised if I try to reserve a room during a date range when all rooms are reserved, so that I cannot make two reservations for the same room that overlap by date
 
     def reserve_room(requested_dates)
-       # empty_rooms = available_rooms(requested_dates)
-       available_rooms = @rooms # wave 1
+       available_rooms = available_rooms(requested_dates)
        book_room = available_rooms.first
        new_reservation = Hotel::Reservation.new(
         room: book_room, 
@@ -85,7 +84,23 @@ module Hotel
       # empty_rooms = @rooms.reject do |room|
       #   @reservations.any?{ |reservation| reservation.requested_dates.overlap?(requested_dates) == true }
       # end
-      return rooms
-    end
+      
+      return @rooms if @reservations == []
+      occupied_rooms = []
+
+      reservations.each do |reservation|
+        if reservation.date_range.date_overlap?(date_range)
+          occupied_rooms << reservation.room 
+        end 
+      end 
+
+      empty_rooms = [] 
+      rooms.each do |room|
+        unless empty_rooms.include?(room)
+          empty_rooms << room
+        end 
+      end 
+      return empty_rooms 
+    end 
   end
 end
