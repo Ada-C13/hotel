@@ -16,9 +16,6 @@ module Hotel
       return cost - (cost * (@discount_rate/100.0))
     end
 
-
-
-
     private
 
     def validate_input(date_range, room_collection, discount_rate)
@@ -51,7 +48,7 @@ module Hotel
       if discount_rate < 0 || discount_rate > 50
         raise ArgumentError.new("Invalid discont rate #{discount_rate}. Discount cannot be less that 0 or greater than 50.")
       end
-
     end
+
   end
 end
