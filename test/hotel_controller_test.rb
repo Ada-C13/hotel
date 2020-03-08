@@ -258,7 +258,7 @@ describe Hotel::HotelController do
       it "reserves rooms in a date range" do
         date_range = DateRange.new(@date,(@date + 3))
         collection_of_rooms = [1, 2, 3, 4, 5]
-        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms)
+        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms, "id1")
   
         expect(@hotel_controller.reservation_array).must_be_kind_of Array 
         expect(@hotel_controller.reservation_array.length).must_equal 5
@@ -267,7 +267,7 @@ describe Hotel::HotelController do
       it "does not reserve rooms in a block if a reservation comes in with the same date." do
         date_range = DateRange.new(@date,(@date + 3))
         collection_of_rooms = [1, 2, 3, 4, 5]
-        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms)
+        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms, "id1")
         
         new_res = @hotel_controller.res_with_valid_dates(DateRange.new(@date,@date + 3))
         
@@ -278,7 +278,7 @@ describe Hotel::HotelController do
       it "reserves room on end date of block" do
         date_range = DateRange.new(@date,(@date + 3))
         collection_of_rooms = [1, 2, 3, 4, 5]
-        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms)
+        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms, "id1")
   
         new_res = @hotel_controller.res_with_valid_dates(DateRange.new(@date + 3,(@date + 6))) #reserving room on block end date
 
@@ -290,43 +290,121 @@ describe Hotel::HotelController do
       it "cannot make a block on a block" do
         date_range = DateRange.new(@date,(@date + 3))
         collection_of_rooms = [1, 2, 3, 4, 5]
-        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms)
+        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms, "id1")
 
-        expect{@hotel_controller.set_aside_block(date_range, collection_of_rooms)}.must_raise ArgumentError
+        expect{@hotel_controller.set_aside_block(date_range, collection_of_rooms, "id1")}.must_raise ArgumentError
+      end
+
+      it "raises argument error if block has an unavailable room" do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1, 2, 3, 4, 5]
+
+        new_res = @hotel_controller.res_with_valid_dates(DateRange.new(@date,(@date + 3))) 
+
+        expect{@hotel_controller.set_aside_block(date_range, collection_of_rooms, "id1")}.must_raise ArgumentError
       end
 
       it "cannot make a block on with one overlap in room" do
         date_range = DateRange.new(@date,(@date + 3))
         collection_of_rooms = [1, 2, 3, 4, 5]
-        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms)
+        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms, "id1")
 
         collection_of_rooms2 = [5, 6, 7, 8, 9]
 
-        expect{@hotel_controller.set_aside_block(date_range, collection_of_rooms2)}.must_raise ArgumentError
+        expect{@hotel_controller.set_aside_block(date_range, collection_of_rooms2, "id1")}.must_raise ArgumentError
       end
 
       it "cannot make a block on with one day overlap" do
         date_range = DateRange.new(@date,(@date + 3))
         collection_of_rooms = [1, 2, 3, 4, 5]
-        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms)
+        block = @hotel_controller.set_aside_block(date_range, collection_of_rooms, "id1")
 
         date_range2 = DateRange.new(@date + 2,(@date + 4))
 
-        expect{@hotel_controller.set_aside_block(date_range2, collection_of_rooms)}.must_raise ArgumentError
+        expect{@hotel_controller.set_aside_block(date_range2, collection_of_rooms, "id1")}.must_raise ArgumentError
       end
 
       it "cannot make a block with 6 rooms" do
         date_range = DateRange.new(@date,(@date + 3))
         collection_of_rooms = [1, 2, 3, 4, 5, 6]
         
-        expect{@hotel_controller.set_aside_block(date_range, collection_of_rooms)}.must_raise ArgumentError
+        expect{@hotel_controller.set_aside_block(date_range, collection_of_rooms, "id1")}.must_raise ArgumentError
       end
 
       it "cannot make a block with 1 rooms" do
         date_range = DateRange.new(@date,(@date + 3))
         collection_of_rooms = [1]
         
-        expect{@hotel_controller.set_aside_block(date_range, collection_of_rooms)}.must_raise ArgumentError
+        expect{@hotel_controller.set_aside_block(date_range, collection_of_rooms, "id1")}.must_raise ArgumentError
+      end
+    end
+
+    describe "block_status_by_id" do
+  
+      it " returns true if there is an available room in a block" do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1, 2, 3, 4, 5]
+        block_id = "ada"
+        @hotel_controller.set_aside_block(date_range, collection_of_rooms, block_id)
+
+        expect(@hotel_controller.block_status_by_id("ada")).must_equal true
+      end
+
+      it " returns true if the 5th room is the only availble room" do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1, 2, 3, 4, 5]
+        block_id = "ada"
+        @hotel_controller.set_aside_block(date_range, collection_of_rooms, block_id)
+
+        @hotel_controller.reserve_block_room("ada",1)
+        @hotel_controller.reserve_block_room("ada",2)
+        @hotel_controller.reserve_block_room("ada",3)
+        @hotel_controller.reserve_block_room("ada",4)
+
+        expect(@hotel_controller.block_status_by_id("ada")).must_equal true
+      end
+
+      it " returns false if no rooms are available" do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1, 2, 3, 4, 5]
+        block_id = "ada"
+        @hotel_controller.set_aside_block(date_range, collection_of_rooms, block_id)
+
+        @hotel_controller.reserve_block_room("ada",1)
+        @hotel_controller.reserve_block_room("ada",2)
+        @hotel_controller.reserve_block_room("ada",3)
+        @hotel_controller.reserve_block_room("ada",4)
+        @hotel_controller.reserve_block_room("ada",5)
+
+        expect(@hotel_controller.block_status_by_id("ada")).must_equal false
+      end
+    end
+
+    describe "reserve_block_room" do
+  
+      it "Makes set aside block room unavailable" do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1, 2, 3, 4, 5]
+        block_id = "ada"
+        @hotel_controller.set_aside_block(date_range, collection_of_rooms, block_id)
+        @hotel_controller.reserve_block_room("ada",3)
+
+        expect(@hotel_controller.reservation_array[2].blocks_room_status).must_equal "unavilable"
+      end
+
+      it "returns an error if no block rooms are available" do
+        date_range = DateRange.new(@date,(@date + 3))
+        collection_of_rooms = [1, 2, 3, 4, 5]
+        block_id = "ada"
+        @hotel_controller.set_aside_block(date_range, collection_of_rooms, block_id)
+        
+        @hotel_controller.reserve_block_room("ada",1)
+        @hotel_controller.reserve_block_room("ada",2)
+        @hotel_controller.reserve_block_room("ada",3)
+        @hotel_controller.reserve_block_room("ada",4)
+        @hotel_controller.reserve_block_room("ada",5)
+
+        expect{@hotel_controller.reserve_block_room("ada",3)}.must_raise ArgumentError
       end
     end
   end
