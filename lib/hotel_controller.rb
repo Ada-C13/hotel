@@ -69,13 +69,13 @@ module Hotel
       # get all the room that have been reserved for the given date range 
       all_reserved_rooms = reserved_rooms_list(start_date, end_date)
       # get all rooms that are in the hotel blocks
-      rooms_list_for_hotel_block = rooms_list_for_hotel_block(start_date, end_date) 
+      all_rooms_hotel_block = rooms_list_for_hotel_block(start_date, end_date) 
 
       # get the aviable_rooms_list
       avialable_rooms_list = rooms.reject do |room|
-        all_reserved_rooms.any? do |reserved_room|
-          reserved_room.id == room.id 
-        end
+        all_reserved_rooms.any? {|res_room| res_room.id == room.id} && all_rooms_hotel_block.any? {|block_room| block_room.id == room.id}
+        
+          
       end
       return avialable_rooms_list
     end
@@ -102,18 +102,22 @@ module Hotel
     def add_hotel_block(hotel_block)
       @hotel_blocks << hotel_block
     end
-
-    # Get the rooms_list_for_hotel_block
-    def rooms_list_for_hotel_block(start_date, end_date) 
+    # Get the hotel_block_list for a given date
+    def hotel_block_list(start_date, end_date)
       given_date_range = Hotel::DateRange.new(start_date, end_date)
       # get the list of the hotel_block for the given date
       hotel_block_list = hotel_blocks.select do |hotel_block|
         hotel_block.date_range.overlap?(given_date_range)
       end
+      return hotel_block_list
+    end
 
+    # Get the rooms_list_for_hotel_block
+    def rooms_list_for_hotel_block(start_date, end_date) 
+      hotel_block_list = hotel_block_list(start_date, end_date)
       # get all arrays of rooms from the hotel_block_list for the given date 
-      rooms_hotel_block_arrays = hotel_block_list.map do |res|
-        res.rooms
+      rooms_hotel_block_arrays = hotel_block_list.map do |hotel_block|
+        hotel_block.rooms
       end
       # get all the rooms from the list of 
       all_rooms_hotel_block =  rooms_hotel_block_arrays.flatten
@@ -131,7 +135,7 @@ module Hotel
       # and at least one of the rooms is unavailable for the given date range
 
       rooms_array.each do |room|
-        if all_reserved_rooms.any?(room) || all_rooms_hotel_block.any?(room)
+        if all_reserved_rooms.any? {|r|r == room} || all_rooms_hotel_block.any? {|r| r == room}
           raise ArgumentError.new("There is reservation conflict")
         end
       end
@@ -140,6 +144,8 @@ module Hotel
       return hotel_block
     end
 
+
+    ####################################
     # check whether a given block has any rooms available
     def available_rooms_of_block(hotel_block) 
       if hotel_block.rooms.empty?
@@ -147,6 +153,76 @@ module Hotel
       else
         return hotel_block.rooms
       end
+    end
+
+
+  # Get the list of the hotel_block for a specific full date range (exact match the full date range)
+    def hotel_blocks_for_specific_date_range(start_date, end_date)
+      specific_date_range = Hotel::DateRange.new(start_date, end_date)
+      hotel_blocks_for_specific_date_range = hotel_blocks.select do |hotel_block|
+        hotel_block.date_range == specific_date_range
+      end
+      return hotel_blocks_for_specific_date_range
+    end
+
+  # Get available_rooms_of_hotel_blocks for a specific full date range (exact match the full date range)
+    def available_rooms_of_hotel_blocks(start_date, end_date)
+      hotel_blocks_for_specific_date_range = hotel_blocks_for_specific_date_range(start_date, end_date)
+      if hotel_blocks_for_specific_date_range.empty? 
+        raise ArgumentError.new ("no hotel_block for the given date range.")
+      end
+      available_rooms_of_hotel_blocks = hotel_blocks_for_specific_date_range.map do |hotel_block|
+        hotel_block.rooms
+      end
+      all_available_rooms_of_hotel_blocks = available_rooms_of_hotel_blocks.flatten
+    end
+
+  # get specific hotel_block with a given room, start_date, and end_date
+  def specific_hotel_block(room, start_date, end_date)
+    specific_date_range = Hotel::DateRange.new(start_date, end_date)
+    # Check to see which hotel_block the room lives in (one room can be assigned to only one hotel_block for a specific date range )
+    specific_hotel_block = hotel_blocks.select do |hotel_block|
+      hotel_bock.date_range == specific_date_range && hotel_block.rooms.any?(room)
+    end
+    return specific_hotel_block
+  end
+
+  # remove the room from the hotel_block for a specific date_range
+  def remove_room_from_hotel_block(room, start_date, end_date)
+    specific_hotel_block = specific_hotel_block(room, start_date, end_date)
+    specific_hotel_block.delete(room)
+    return specific_hotel_block
+  end
+
+  # remove/delete the whole hotel block 
+  def delete_hotel_block(hetel_block)
+    hotel_blocks.delete(hotel_block)
+  end
+    
+    
+    # Once know the which hotel_block, then remove the room from that hotel_block
+  
+  # I can reserve a specific room from a hotel block
+  #   I can only reserve that room from a hotel block for the full duration of the block
+  # I can see a reservation made from a hotel block from the list of reservations for that date (see wave 1 requirements)
+    def reserve_room_from_hotel_block(room,start_date, end_date)
+      given_date_range = Hotel::DateRange.new(start_date, end_date)
+      all_available_rooms_of_hotel_blocks = available_rooms_of_hotel_blocks(start_date, end_date)
+      if all_available_rooms_of_hotel_blocks.empty?
+        raise NoRoomAvailableError.new("there is no available room.")
+      end 
+      if all_available_rooms_of_hotel_blocks.any?(room)
+        id = reservations.length + 1      
+        reservation = Hotel::Reservation.new(id,given_date_range,room)
+        # Add the reservation to the reservation list 
+        add_reservation(reservation)
+        # remove the room from the all_available_rooms_of_hotel_blocks
+        hotel_block_after_reservation = remove_room_from_hotel_block(room, start_date, end_date)
+        if hotel_block_after_reservation.rooms.empty?
+          delete_hotel_block(hotel_block_after_reservation)
+        end
+      end
+      return reservations
     end
   end
 end

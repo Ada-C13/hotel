@@ -26,8 +26,8 @@ module Hotel
       start_date <= date && end_date > date 
     end
 
-    # def include?(other) # other is an instance of date_range
-    #   start_date <= other.start_date && end_date > other.end_date 
+    # def include?(date_range) # other is an instance of date_range
+    #   start_date <= date_range.start_date && end_date > date_range.end_date 
     # end
 
     def count_nights

@@ -176,6 +176,29 @@ describe Hotel::HotelController do
           expect{(@hotel_controller.create_hotel_block(@date_range, @rooms_array1, @discount_rate))}.must_raise ArgumentError
         end
       end
+      describe "hotel_block_list" do
+        it "return an empty array of hotel_block_list if there is no hotel_block created" do
+          test_start_date = Date.new(2020, 8, 01)
+          test_end_date = test_start_date + 29
+          hotel_block_list = @hotel_controller.hotel_block_list(test_start_date, test_end_date)
+
+          expect(hotel_block_list).must_equal []
+        end
+        it "return a hotel_block_list for a given date range" do
+          start_date2 = Date.new(2020, 8, 16)
+          end_date2 = start_date2 + 5
+          date_range2 = Hotel::DateRange.new(start_date2, end_date2)
+          new_hotel_block1 = @hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate)
+          new_hotel_block2 = @hotel_controller.create_hotel_block(date_range2, @rooms_array1, @discount_rate)
+          
+          test_start_date = Date.new(2020, 8, 01)
+          test_end_date = test_start_date + 29
+          hotel_block_list = @hotel_controller.hotel_block_list(test_start_date, test_end_date)
+          
+          expect(hotel_block_list).must_be_kind_of Array
+          expect(hotel_block_list.length).must_equal 2
+        end
+      end
       describe "rooms_list_for_hotel_block" do
         it "return a room_list_of_hotel_block for a given data range" do
           start_date2 = Date.new(2020, 8, 16)
@@ -183,7 +206,8 @@ describe Hotel::HotelController do
           date_range2 = Hotel::DateRange.new(start_date2, end_date2)
           new_hotel_block1 = @hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate)
           new_hotel_block2 = @hotel_controller.create_hotel_block(date_range2, @rooms_array1, @discount_rate)
-           
+          
+          
           # serching the room_list_for_hotel_block for the whole month
           # we have two hotel_blocks that over lap for the whole month in Aguest 
           test_start_date = Date.new(2020, 8, 01)
