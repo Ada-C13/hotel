@@ -55,10 +55,36 @@ describe "hotel reception" do
     end
 
     it "will list an empty array if there are no avail rooms for dates" do
-      # TODO
+      my_reception = Hotel::HotelReception.new
+
+      check_in_time = Date.new(2020, 2, 14)
+      check_out_time = Date.new(2020, 2, 15)
+      20.times do |i|
+        room = my_reception.rooms[i]
+        my_reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
+      end
+
+      avail = my_reception.available_rooms(check_in_time, check_out_time)
+
+      expect(my_reception.reservations.length).must_equal 20
+      expect(avail).must_be_empty
+      expect(avail).must_be_instance_of Array
     end
 
-    it "will"
+    it "will not include rooms that are in blocks, but not reserved" do
+      check_in_time = Date.new(2020, 2, 14)
+      check_out_time = Date.new(2020, 2, 16)
+
+      rooms = []
+      rooms << @reception.rooms[-1]
+      rooms << @reception.rooms[-2]
+      rooms << @reception.rooms[-3]
+
+      @reception.blocks << Hotel::HotelBlock.new(rooms, check_in_time, check_out_time)
+
+      #TODO: write tests!
+      expect(@reception.available_rooms(check_in_time, check_out_time)).wont_include rooms[0]
+    end
   end
 
   describe "find reservation" do
@@ -181,6 +207,12 @@ describe "hotel reception" do
       expect{
         my_reception.make_reservation(check_in_time, check_out_time)
       }.must_raise ArgumentError
+    end
+
+    describe "make block method" do
+      # @reception.make_block()
+
+
     end
   end
 end

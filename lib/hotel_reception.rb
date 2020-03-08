@@ -1,6 +1,6 @@
 module Hotel
   class HotelReception
-    attr_accessor :rooms, :reservations
+    attr_accessor :rooms, :reservations, :blocks
 
     def initialize
       @rooms = []
@@ -8,6 +8,7 @@ module Hotel
         @rooms << Hotel::Room.new(i + 1, 200)
       end
       @reservations = []
+      @blocks = []
     end
 
     def find_reservation(id)
@@ -15,10 +16,21 @@ module Hotel
     end
 
     def available_rooms(check_in_time, check_out_time)
-      dates = Hotel::DateRange.new(check_in_time, check_out_time)
-      unavail = reservations.select { |res| res.dates.overlap?(dates) }
+      my_dates = Hotel::DateRange.new(check_in_time, check_out_time)
+      #get the reservations that overlap with these dates
+      unavail = reservations.select { |res| res.dates.overlap?(my_dates) }
+      #get the room object for that reservation
       unavail.map! { |res| res.room }
-      return rooms.difference(unavail)
+      #get blocks that overlap with these dates
+      unavail_in_block = blocks.select { |block| block.dates.overlap?(my_dates) }
+      #map this array of blocks to the arrays of rooms
+      unavail_in_block.map! { |block| block.rooms }
+      #convert the array of arrays to a single array
+      unavail_in_block.flatten!
+
+      avail_rooms = rooms.difference(unavail)
+
+      return avail_rooms.difference(unavail_in_block)
     end
     
     def list_reservations(date:, room_id: nil)
@@ -39,6 +51,18 @@ module Hotel
         return reservations.last
       else
         raise ArgumentError, "There are no rooms available on that date."
+      end
+    end
+
+    def make_block(my_rooms, check_in_time, check_out_time)
+      avail = available_rooms(check_in_time, check_out_time)
+      all_rooms = my_rooms.select { |room| avail.include?(room) }
+
+      if all_rooms.length == my_rooms.length
+        @blocks << Hotel::HotelBlock.new(all_rooms, check_in_time, check_out_time)
+        return @blocks.last
+      else
+        raise ArgumentError, "It looks like those rooms aren't all available right now. #{my_rooms}"
       end
     end
   end
