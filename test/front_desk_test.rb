@@ -38,51 +38,6 @@ describe "FrontDesk" do
     end
   end
 
-  describe "#select_available_room" do
-    it "returns a room if there are no reservations made for it" do
-      front_desk = Hotel::FrontDesk.new
-      selected_room = front_desk.select_available_room(Date.new(2020, 3, 1), Date.new(2020, 3, 5))
-      puts "selected room: #{selected_room}"
-      expect(selected_room).must_equal 1
-    end
-
-    it "returns a room which reservation date range doesn't conflict with the current one" do
-      front_desk = Hotel::FrontDesk.new
-      date_range = Hotel::DateRange.new(Date.new(2020, 3, 1), Date.new(2020, 3, 5))
-      reservation_one = Hotel::Reservation.new(date_range, 1)
-      front_desk.reservations << reservation_one
-      puts "reservations: #{front_desk.reservations}"
-      selected_room = front_desk.select_available_room(Date.new(2020, 3, 6), Date.new(2020, 3, 8))
-
-      expect(selected_room).must_equal 1
-
-      date_range_two = Hotel::DateRange.new(Date.new(2020, 3, 6), Date.new(2020, 3, 8))
-      reservation_two = Hotel::Reservation.new(date_range_two, selected_room)
-      front_desk.reservations << reservation_two
-      puts "reservations = #{front_desk.reservations}"
-
-      room_selected = front_desk.select_available_room(Date.new(2020, 3, 7), Date.new(2020, 3, 9))
-      expect(room_selected).must_equal 2
-
-      date_range_three = Hotel::DateRange.new(Date.new(2020, 3, 7), Date.new(2020, 3, 9))
-      reservation_three = Hotel::Reservation.new(date_range_three, room_selected)
-      front_desk.reservations << reservation_three
-      puts "reservations = #{front_desk.reservations}"
-
-    end
-
-    it "raises an error when reserving a room during a date range when all rooms are reserved" do
-      front_desk = Hotel::FrontDesk.new
-      20.times do
-        front_desk.make_reservation(Date.new(2020, 4, 10), Date.new(2020, 4, 15))
-      end
-
-      expect{
-        front_desk.make_reservation(Date.new(2020, 4, 10), Date.new(2020, 4, 15))
-      }.must_raise ArgumentError 
-    end
-  end
-
   describe "#make_reservation" do
     it "raises ArgumentError for passing invalid arguments" do
       front_desk = Hotel::FrontDesk.new
@@ -112,14 +67,14 @@ describe "FrontDesk" do
     end
   end
 
-  describe "#reservation_by_room" do
+  describe "#reservations_by_room" do
     it "returns reservation(s) for a particular room" do
       front_desk = Hotel::FrontDesk.new
       front_desk.make_reservation(Date.new(2020, 3, 1), Date.new(2020, 3, 5))
       front_desk.make_reservation(Date.new(2020, 3, 5), Date.new(2020, 3, 8))
       front_desk.make_reservation(Date.new(2020, 3, 9), Date.new(2020, 3, 12))
 
-      room_reservations = front_desk.reservation_by_room(1)
+      room_reservations = front_desk.reservations_by_room(1)
       expect(room_reservations).must_be_kind_of Array
       expect(room_reservations.length).must_equal 3
       room_reservations.each do |reservation|
@@ -130,7 +85,7 @@ describe "FrontDesk" do
 
     it "returns an empty array if no reservations made for a room" do
       front_desk = Hotel::FrontDesk.new
-      room_reservations = front_desk.reservation_by_room(1)
+      room_reservations = front_desk.reservations_by_room(1)
       expect(room_reservations).must_be_kind_of Array
       expect(room_reservations.length).must_equal 0
     end
@@ -138,12 +93,12 @@ describe "FrontDesk" do
     it "raises ArgumnetError for passing an invalid argument" do
       front_desk = Hotel::FrontDesk.new
       expect{
-        front_desk.reservation_by_room("five")
+        front_desk.reservations_by_room("five")
       }.must_raise ArgumentError
     end
   end
 
-  describe "#reservation_by_start_date" do
+  describe "#reservations_by_start_date" do
     it "returns reservations for a particular date" do
       front_desk = Hotel::FrontDesk.new
       front_desk.make_reservation(Date.new(2020, 3, 10), Date.new(2020, 3, 14))
@@ -151,7 +106,7 @@ describe "FrontDesk" do
       front_desk.make_reservation(Date.new(2020, 3, 10), Date.new(2020, 3, 15))
       front_desk.make_reservation(Date.new(2020, 3, 10), Date.new(2020, 3, 11))
 
-      date_reservations = front_desk.reservation_by_start_date(Date.new(2020, 3, 10))
+      date_reservations = front_desk.reservations_by_start_date(Date.new(2020, 3, 10))
       expect(date_reservations).must_be_kind_of Array
       expect(date_reservations.length).must_equal 4
       date_reservations.each do |reservation|
@@ -164,7 +119,7 @@ describe "FrontDesk" do
       front_desk = Hotel::FrontDesk.new
       front_desk.make_reservation(Date.new(2020, 3, 10), Date.new(2020, 3, 14))
       front_desk.make_reservation(Date.new(2020, 3, 10), Date.new(2020, 3, 12))
-      date_reservations = front_desk.reservation_by_start_date(Date.new(2020, 3, 13))
+      date_reservations = front_desk.reservations_by_start_date(Date.new(2020, 3, 13))
       expect(date_reservations).must_be_kind_of Array
       expect(date_reservations.length).must_equal 0
     end
@@ -172,7 +127,7 @@ describe "FrontDesk" do
     it "raises ArgumentError for passing an invalid argument" do
       front_desk = Hotel::FrontDesk.new
       expect{
-        front_desk.reservation_by_start_date("2020, 3, 4")
+        front_desk.reservations_by_start_date("2020, 3, 4")
       }.must_raise ArgumentError
     end
   end
@@ -226,21 +181,15 @@ describe "FrontDesk" do
     end
   end
 
-  describe "#not_reserved_rooms" do
+  describe "#available_rooms_for" do
     it "returns a list of rooms that are not reserved for a given date range" do
       front_desk = Hotel::FrontDesk.new
       5.times do
         front_desk.make_reservation(Date.new(2020, 4, 10), Date.new(2020, 4, 14))
       end
-      puts "reservations = #{front_desk.reservations}"
 
       given_date_range = Hotel::DateRange.new(Date.new(2020, 4, 10), Date.new(2020, 4, 14))
-      puts "given date range = #{given_date_range}"
-      puts "given date range = #{given_date_range.start_date}"
-      puts "given date range = #{given_date_range.end_date}"
-
-      unreserved_rooms = front_desk.not_reserved_rooms(given_date_range)
-      puts "unreseved rooms = #{unreserved_rooms}"
+      unreserved_rooms = front_desk.available_rooms_for(given_date_range)
 
       expect(unreserved_rooms).must_be_kind_of Array
       expect(unreserved_rooms.length).must_equal 15
@@ -259,7 +208,7 @@ describe "FrontDesk" do
       end
 
       given_date_range = Hotel::DateRange.new(Date.new(2020, 5, 10), Date.new(2020, 5, 12))
-      unreserved_rooms = front_desk.not_reserved_rooms(given_date_range)
+      unreserved_rooms = front_desk.available_rooms_for(given_date_range)
       expect(unreserved_rooms).must_be_kind_of Array
       expect(unreserved_rooms.length).must_equal 20
     end
@@ -272,9 +221,84 @@ describe "FrontDesk" do
 
       given_date_range = Hotel::DateRange.new(Date.new(2020, 4, 10), Date.new(2020, 4, 15))
 
-      unreserved_rooms = front_desk.not_reserved_rooms(given_date_range)
-      puts "UNRESERVED ROOMS: #{unreserved_rooms}"
+      unreserved_rooms = front_desk.available_rooms_for(given_date_range)
       expect(unreserved_rooms.length).must_equal 0
+    end
+  end
+
+  describe "#make_block" do
+    default_discount = 50
+
+    before do
+      @front_desk = Hotel::FrontDesk.new
+      @default_date_range = Hotel::DateRange.new(Date.new(2020, 4, 10), Date.new(2020, 4, 15))
+    end
+    
+    it "Raises exception when number of rooms is invalid" do
+      expect {
+        @front_desk.make_block(@default_date_range, 6, default_discount)
+      }.must_raise ArgumentError
+
+      expect {
+        @front_desk.make_block(@default_date_range, -1, default_discount)
+      }.must_raise ArgumentError
+    end
+
+    it "Raises exception when number of rooms is greater than available rooms" do
+      18.times do
+        @front_desk.make_reservation(@default_date_range.start_date, @default_date_range.end_date)
+      end
+
+      expect{
+        @front_desk.make_reservation(@default_date_range, 3, default_discount)
+      }.must_raise ArgumentError
+    end
+
+    it "Creates blocks successfully when all arguments are valid" do
+      first_block_id = @front_desk.make_block(@default_date_range, 3, default_discount)
+      second_block_id = @front_desk.make_block(@default_date_range, 4, default_discount)
+      expect(@front_desk.blocks).must_be_kind_of Hash
+      expect(@front_desk.blocks.length).must_equal 2
+      expect(@front_desk.blocks[first_block_id].room_collection.length).must_equal 3
+      expect(@front_desk.blocks[second_block_id].room_collection.length).must_equal 4
+    end
+  end
+
+  describe "#create_reservation_for_block" do
+    default_discount = 50
+
+    before do
+      @front_desk = Hotel::FrontDesk.new
+      @default_date_range = Hotel::DateRange.new(Date.new(2020, 4, 10), Date.new(2020, 4, 15))
+    end
+
+    it "Raises exception when block id is not present in blocks" do
+      expect{
+        @front_desk.create_reservation_for_block("twyutr456", 12)
+      }.must_raise ArgumentError
+    end
+
+    it "Raises exception if a given room is not present in the block" do
+      block_id = @front_desk.make_block(@default_date_range, 4, default_discount)
+      expect{
+        @front_desk.create_reservation_for_block(block_id, 20)
+      }.must_raise ArgumentError
+    end
+
+    it "Creates block reservation sucessfully when all arguments are valid" do 
+      block_id = @front_desk.make_block(@default_date_range, 4, default_discount)
+      reservations_before = @front_desk.reservations.length
+      @front_desk.create_reservation_for_block(block_id, 4)
+      reservations_after = @front_desk.reservations.length
+      expect(reservations_before + 1).must_equal reservations_after
+    end
+
+    it "Raises exception if room is already reserved" do
+      block_id = @front_desk.make_block(@default_date_range, 4, default_discount)
+      @front_desk.create_reservation_for_block(block_id, 4)
+      expect{
+        @front_desk.create_reservation_for_block(block_id, 4)
+      }.must_raise ArgumentError
     end
   end
 end
