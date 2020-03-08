@@ -7,6 +7,9 @@ require "date"
 class Date_Range
   attr_reader :check_in_date, :check_out_date
 
+  # this is were we will handle the date, taking in the check in date and out date
+  # if the check out date is more higher that checking in date the date is invalide
+  # Example 2001,2 3 > 2001 2,4
   def initialize(check_in_date, check_out_date)
     unless check_out_date > check_in_date
       raise ArgumentError, "These dates are invalid."
@@ -15,9 +18,12 @@ class Date_Range
     @check_out_date = check_out_date
   end
 
-  # - The last day of a reservation is the checkout day, so the guest should not be charged for that night
+  # every time Date_Range is called it takes in check in and out dates as parms
+  # setting check_in and check_out allows me to compare two date ranges for overlap
+  # if there is no overlap then return false
+  # Example 2001,2 3 2001 2,4
   def overlaps_in_reservations?(new_date_range)
-    if (new_date_range.check_out_date <= @check_in_date) || (new_date_range.check_in_date >= @check_out_date)
+    if (new_date_range.check_in_date >= @check_out_date) || (new_date_range.check_out_date <= @check_in_date)
       return false
     else
       return true

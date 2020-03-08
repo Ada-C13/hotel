@@ -19,6 +19,7 @@ describe "HotelDispatcher class" do
       expect(room_array.length).must_equal 20
     end
   end
+
   describe "Checks room for availablility" do
     let(:check_in_date) { Date.new(2001, 2, 3) }
     let(:check_out_date) { Date.new(2001, 2, 6) }
@@ -27,5 +28,9 @@ describe "HotelDispatcher class" do
       room_check = hotel_dispatcher.check_room_available?(check_in_date, check_out_date)
       expect(room_check).must_equal true
     end
+     it "takes in the start and end date" do
+      hotel_dispatcher = build_test_dispatcher
+      room_check = hotel_dispatcher.check_room_available?(check_in_date, check_out_date)
+      expect(room_check).must_equal true
   end
 end

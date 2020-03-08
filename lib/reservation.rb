@@ -3,17 +3,21 @@ require_relative "date_range"
 class Reservation < Date_Range
   attr_accessor :room_num, :check_in_date, :check_out_date
 
-  def initialize(room_num, check_in_date, check_out_date)
+  def initialize(room_num, check_in_date, check_out_date, hotel_block_reservation = false)
     @room = room_num
     @check_in_date = check_in_date
     @check_out_date = check_out_date
+    @hotel_block_reservation = hotel_block_reservation
   end
 
   #each time the employee creates a reservation it is created here
 
-# Every room is identical, and a room always costs $200/night
+  # Every room is identical, and a room always costs $200/night
   def total_cost_for_stay
     number_of_nights? * 200
+  end
+
+  def check_overlap(checkin, checkout)
   end
 end
 
