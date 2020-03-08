@@ -1,22 +1,14 @@
-require_relative 'reservation'
+# require_relative 'reservation'
 
-module Stayappy
-  class Block_Res < Reservation
-    def init(num_rooms_requested, total)
-      @num_rooms_requested = num_rooms_requested
-      @total = apply_discount()
-    end 
+# module Stayappy
+#   class BlockRes < Reservation
+#     def init(num_rooms_requested, total)
+#       @num_rooms_requested = num_rooms_requested
+#       @total = apply_discount(@reservation.receipt)
+#     end 
 
-    def available?(rooms)
-      #Checks rooms to see if a given rooms are available
-      #Raises ArgErr for invalid date range 
-    end
-
-    def apply_discount
-      # applies discount for creating a block reservation 
-    end
-
-
-  end
-end 
-
+#     def apply_discount
+#       discount = 0.15 * @reservation.receipt 
+#     end
+#   end
+# end 
