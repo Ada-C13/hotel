@@ -24,7 +24,7 @@ module Hotel
     
     def res_duration
       res_duration = @end_date - @start_date
-      return res_duration -1  # (-1) accounts for the checkout day - no charge
+      return res_duration - 1  # (-1) accounts for the checkout day - no charge
     end
 
     def find_total_cost
@@ -32,22 +32,6 @@ module Hotel
        return @total_cost
     end
 
-
-
-
-
-  #  def is_room_available
-   # end
-
   end #class Reservation end
   
 end #Hotel end
-
-
-
-
-
-
-
-
-# create loop to 

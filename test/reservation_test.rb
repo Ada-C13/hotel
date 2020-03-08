@@ -9,7 +9,6 @@ describe "Reservation class" do
 
       room = Hotel::Room.new(
         room_num: 13,
-        # date_range: [start_date, end_date], 
       )
 
       @res_data = Hotel::Reservation.new(
@@ -17,9 +16,7 @@ describe "Reservation class" do
           start_date: start_date,
           end_date: end_date,
           room: room
-          
-        
-      )
+        )
       
     end #before do end
 
@@ -52,10 +49,3 @@ describe "Reservation class" do
 
 
 end #Reservation class describe block end
-
-
-
-
-# DATE constants which are arrays of month names and day names
-# Date::MONTHNAMES # (index 0 = nil)
-# Date::DAYNAMES starts on Sunday. use .rotate(1) to change to Monday. 
