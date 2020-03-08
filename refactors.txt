@@ -1,0 +1,9 @@
+Changes I could make:
+1. Gem Money for all costs and prices
+2. Make some methods private
+3. Better methods names
+4. Make price per night in Reservation class constant and/or
+5. Make Cost_per_night in Reservation class, similar to Hotel Block
+6. Consider removing Room class
+7. Change rooms attribute for Reservation class as there can be only 1 room for 1 Reservation
+
