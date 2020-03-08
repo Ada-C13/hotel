@@ -8,44 +8,66 @@ SimpleCov.start do
 end
 
 describe "room" do 
+  before do 
+    @room1 = Hotel::Room.new(rm_num: 1)
+    @room2 = Hotel::Room.new(rm_num: 2)
+    @room1.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
+    @room1.book_room(Date.new(2014, 4, 1), Date.new(2014, 4,2))
+  end
+
   describe "initialze" do 
     it "creates an instance of Room" do 
-      room = Hotel::Room.new(rm_num: 3)
-      room.must_be_kind_of Hotel::Room
+      @room1.must_be_kind_of Hotel::Room
     end 
-
+    
     it "verifies rm_num is valid" do
-    rm_num = 3
-    room = Hotel::Room.new(rm_num: rm_num)
-    room.must_respond_to :rm_num
-    room.rm_num.must_be_instance_of Integer
-    room.rm_num.must_equal rm_num
+      rm_num = 3
+      room = Hotel::Room.new(rm_num: rm_num)
+      room.must_respond_to :rm_num
+      room.rm_num.must_be_instance_of Integer
+      room.rm_num.must_equal rm_num
     end
-
+    
     it "raises argument error if invalid rm_num" do 
       expect{Hotel::Room.new(rm_num: -3)}.must_raise ArgumentError
       expect{Hotel::Room.new(rm_num: nil)}.must_raise ArgumentError
     end 
   end 
-
+  
   describe "is_available" do 
-    it "checks if a room is available on a given date" do 
+    it "checks if a room is_available on a given date" do 
       # expect if room has no reservations returns true
+      expect(@room2.is_available(Date.new(2014, 4, 7))).must_equal true
       # expect if not available returns false 
+      expect(@room1.is_available(Date.new(2014, 4, 3))).must_equal false
+      expect(@room1.is_available(Date.new(2014, 4, 1))).must_equal false
       # expect if available returns true 
+      expect(@room1.is_available(Date.new(2014, 4, 12))).must_equal true
+      expect(@room1.is_available(Date.new(2014, 4, 7))).must_equal true
       # invalid date returns argument error?
+      expect{@room1.is_available(Date.new(2014, 45, 1))}.must_raise ArgumentError
     end 
   end 
-
+  
   describe "is_available_range" do 
     it "checks if a room is available on a range of dates" do 
+      # expect if room has no reservations returns true
+      expect(@room2.is_available_range(Date.new(2014, 4, 3), Date.new(2014, 4, 7))).must_equal true
+      #expect if room has no conflicts returns true
+      expect(@room1.is_available_range(Date.new(2014, 3, 25), Date.new(2014, 3, 29))).must_equal true
+      #edge case, rm is technically available even tho both dates are involved in reservations 
+      expect(@room1.is_available_range(Date.new(2014, 4, 2), Date.new(2014, 4, 3))).must_equal true
+      #expect if room has conflict returns false
+      expect(@room1.is_available_range(Date.new(2014, 4, 3), Date.new(2014, 4, 7))).must_equal false
+      expect(@room1.is_available_range(Date.new(2014, 3, 25), Date.new(2014, 4, 2))).must_equal false
+    end 
+  end 
+  
+  describe "book_room" do
+    it "correctly books a reservation" do 
+      # expect(@room1.book_room(Date.new(2014, 3, 25), Date.new(2014, 3, 27))).must_be_kind_of Hotel::Reservation
       
     end 
   end 
-  describe "book_room" do 
-    it "correctly makes a reservation for available room" do 
-      # expect new instance of Reservation is created
-    end 
-  end 
-
+  
 end
