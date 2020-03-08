@@ -21,14 +21,17 @@ module Hotel
     end
 
     def list_rooms
-      return @rooms
+      rooms.each do |room|
+        puts "Room ID: #{room.room_id} | Rate: #{room.cost}"
+      end
+      return rooms
     end
 
 
     def find_reservations_by_date(date)
       reservations_by_date = []
 
-      @rooms.each do |room|
+      rooms.each do |room|
         room.bookings.each do |reservation|
           reservations_by_date << reservation if reservation.date_range.include_date(date)
         end
@@ -48,7 +51,7 @@ module Hotel
     def find_reservations_range(given_range)
       reservations_range = []
 
-      @rooms.each do |room|
+      rooms.each do |room|
         room.bookings.each do |reservation|
           reservations_range << reservation if reservation.date_range.overlapping(given_range)
         end
@@ -58,18 +61,18 @@ module Hotel
     end
 
 
-    def find_availabile_rooms(given_range)
+    def find_available_rooms(given_range)
       available_rooms = []
       
-      @rooms.each do |room|
+      rooms.each do |room|
         if room.bookings.empty?
           available_rooms << room
         else
           status = true
           room.bookings.each do |item|
-            if item.class == Hotel::Block 
+            if item.block >= 0  #item.class == Hotel::Block 
               status = false if item.date_range.overlapping(given_range) && false == item.date_range.exactly_matching(given_range) #it is not an exact match #method
-            elsif item.class == Hotel::Reservation
+            elsif item.block < 0  #item.class == Hotel::Reservation
               status = false if item.date_range.overlapping(given_range)
             end
           end
@@ -84,7 +87,7 @@ module Hotel
        
     def make_reservation(start_date, end_date)
       range_created = Hotel::DateRange.new(start_date,end_date)
-      available_rooms = find_availabile_rooms(range_created)
+      available_rooms = find_available_rooms(range_created)
       
       chosen_room = available_rooms.shift
       new_reservation = Hotel::Reservation.new(range_created, chosen_room.room_id)
@@ -96,7 +99,7 @@ module Hotel
 
 
     def find_block_rooms(given_range)
-      available_rooms = @rooms.reject do |room|
+      available_rooms = rooms.reject do |room|
         room.bookings.any? do |reservation|   #returns true if there are overlapping reservations
           reservation.date_range.overlapping(given_range) == true
         end
@@ -149,7 +152,7 @@ module Hotel
 
 
     def find_room(given_room_id)
-      room_found = @rooms.find{|room|room.room_id == given_room_id}
+      room_found = rooms.find{|room|room.room_id == given_room_id}
       return room_found
     end
    
@@ -157,9 +160,9 @@ module Hotel
     def check_block_availability(block_id)
       rooms_in_block = []
       blocks = []
-      @rooms.each do |room|
+      rooms.each do |room|
         room.bookings.each do |item|
-          if item.class == Hotel::Block && item.block == block_id
+          if item.block > 0 && item.block == block_id
             blocks << item
             rooms_in_block << room
           end
@@ -167,33 +170,7 @@ module Hotel
       end
 
       date_range = blocks[0].date_range
-      rooms_in_block.any?{|room|room.is_available(date_range)}
+      rooms_in_block.any?{|room|room.is_available(date_range)} #returns true or false
     end
   end
 end
-
-
-      # handle/ rescue exceptions 
-      # edge cases i.e. what happens if no match?
-
-      # what returns if no match?!!!!! rescue an raised exception????????
-      # I want an exception raised if I try to reserve a room during a date range when all rooms are reserved, 
-      # so that I cannot make two reservations for the same room that overlap by date
-      # I want exception raised when an invalid date range is provided, 
-      # so that I can't make a reservation for an invalid date range
-
-
-          # ####################################
-    # def rm_available(room, given_range)   
-    #   return true if room.bookings.empty?
-
-    #   room.bookings.each do |item|
-    #     if item.class == Hotel::Block 
-    #       return false if item.date_range.overlapping(given_range) && item.date_range.exactly_matching(given_range)== false #it is not an exact match #method
-    #     elsif item.class == Hotel::Reservation
-    #       return false if item.date_range.overlapping(given_range)
-    #     end
-    #   end
-
-    #   return true
-    # end
