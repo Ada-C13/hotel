@@ -6,13 +6,12 @@ require_relative 'reservation'
 
 module Hotel
   class Manager
-    attr_reader :num #:rm_reservations
+    attr_reader :num, :all_rooms, :rm_reservations
     attr_writer
     attr_accessor  
 
     def initialize(num: 20)
-      all_rooms = Manager.create_rooms
-      return all_rooms
+      Manager.create_rooms
     end
 
     def self.create_rooms(num: 20)
@@ -27,7 +26,7 @@ module Hotel
   
     def show_all_rooms
       list_rooms = []
-      @all_rooms.each do |room|
+      all_rooms.each do |room|
         list_rooms << room.rm_num
       end 
       return list_rooms
@@ -63,12 +62,32 @@ module Hotel
     # return new array 
     end 
 
-    def total_cost(recloc)
-    # gives the total cost of a given reservation 
-    # accesses reservation 
-    # returns total cost 
+    def rooms_available_by_date(start_date, end_date)
+    # I can view a list of rooms that are not reserved for a given date range, 
+    # so that I can see all available rooms for that day
+    # make empty temporary array 
+    # loop through all rooms 
+    # call room's is_available method 
+    # if == true 
+    # push rm_num into temporary array 
+    # return new array 
     end
 
+    def find_total_cost(recloc)
+    # gives the total cost of a given reservation 
+    # loop through all rooms reservations to look for recloc? 
+    # accesses reservation 
+    # # 
+    # @all_rooms.select do |room|
+
+    #   # driver = @drivers.select {|driver| driver.status == :AVAILABLE}.first
+
+    # end
+    #   @reservation = Hotel::Reservation(recloc: recloc)
+    #   total_cost = @reservation.total_cost
+    # # returns total cost 
+    #   return total_cost
+    end
 
   end
 end
