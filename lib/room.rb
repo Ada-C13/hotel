@@ -6,10 +6,17 @@ module Hotel
   attr_reader :room_number
   attr_accessor :price
 
-    def initialize(room_number, price = 200)
+    def initialize(room_number, price = 200.00)
+      if room_number.class != Integer
+        raise ArgumentError.new("Invalid room number, must be an Integer.")
+      end
       @room_number = room_number
+
+      if ![Float, Integer].include?(price.class)
+        raise ArgumentError.new("Invalid price, must be a Float.")
+      end
       @price = price
-    end
+    end #initialize
 
     def self.load_all_rooms() #what to get
       rooms = CSV.parse(File.read(__dir__ + "/../support/rooms.csv"), headers: true, header_converters: :symbol) #relative to HOTEL & reading csv file
@@ -23,8 +30,8 @@ module Hotel
     return all_rooms #return all the rooms
     end
 
-  end
-end
+  end #class
+end #module
 
 
 # test = Hotel::Room.new("1A")

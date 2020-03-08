@@ -20,6 +20,14 @@ module Hotel
     # date (Date)
     # returns Array of Reservations
     def find_reservations(aDate, aRoom_number = nil) 
+      if aDate.class != Date
+        raise ArgumentError.new("Invalid date, must be Date.")
+      end
+
+      if (aRoom_number != nil) && (aRoom_number.class != Integer)
+        raise ArgumentError.new("Invalid, room number must be nil or an Integer.")
+      end 
+
       reservations = []
       # search through reservations
       @reservations.each do |reservation|
@@ -42,8 +50,13 @@ module Hotel
     #****************************************************************
 
     # find room based on id
+    # input: aRoom_number (int)
     # returns Room
     def find_room(aRoom_number)
+      if aRoom_number.class != Integer
+        raise ArgumentError.new("Invalid, room number needs to be an Integer")
+      end
+
       found_room = nil
       @rooms.each do |room|
         if room.room_number == aRoom_number
@@ -59,12 +72,16 @@ module Hotel
     # input : aRoom object of class (Room)
     # returns found_reservations [Reservation]
     def find_reservations(aRoom)
+      if aRoom.class != Hotel::Room
+        raise ArgumentError.new("Invalid input of a Room.")
+      end
+
       found_reservations = []
       #loop through reservations
       @reservations.each do |reservation|
       #check if reservation room_number matches the Rooms room_number
       #check if reservation is confirmed
-        if (reservation.room_number == aRoom.room_number) && (reservation.status == :confirmed)
+        if reservation.room_number != nil && reservation.room_number.class == Integer && (reservation.room_number == aRoom.room_number) && (reservation.status == :confirmed)
           #if matches, add to reservations[]
           found_reservations.push(reservation)
         end
@@ -78,15 +95,17 @@ module Hotel
     # aReservationRequest (Reservation) - the reservation request (by reference, modifying reservation will modify original)
     # returns aReservationRequest with its status updated to :confirmed or :denied
     def reserve_room(aReservationRequest)
+      if aReservationRequest.class != Hotel::Reservation
+        raise ArgumentError.new("Invalid input of a Reservation Request.")
+      end
       #loop through rooms
       @rooms.each do |room|
       #check if room is available for reservation dates
       #find reservations for this room (write method elsewhere then use here)
-        found_reservations = self.find_reservations(room)
-        are_overlapped = true
-      #aReservation overalapping with found_reservation[]
-        areOverlapped = aReservationRequest.are_reservations_overlapped(found_reservations)
-      # check if overlaps
+        confirmed_reservations = self.find_reservations(room)
+        #aReservation overalapping with found_reservation[]
+        areOverlapped = aReservationRequest.are_reservations_overlapped(confirmed_reservations)
+        # check if overlaps
         if !areOverlapped 
           # Not overlap, reserve room!
           #change reservation status to confirmed
@@ -98,36 +117,43 @@ module Hotel
           @reservations.push(aReservationRequest)
           return aReservationRequest
         end
-        # true go to next room
+        # else go to next room
       end
+      # no rooms available
+      # change status to denied
+      aReservationRequest.status = :denied
+      raise Exception.new "Reservation request is overlapping with confirmed reservations."
       return aReservationRequest
     end
     #****************************************************************
-    
+    #rooms available based on aReservationRequest
+    #input:aReservationRequest
+    #return: list of rooms[]
+
+    def rooms_available(aReservationRequest)
+      if aReservationRequest.class != Hotel::Reservation
+        raise ArgumentError.new("Invalid input of a Reservation Request.")
+      end
+
+      rooms_available = []
+      #loop through the array of rooms
+      @rooms.each do |room|
+        #get reservations by room 
+        confirmed_reservations = self.find_reservations(room)
+        #check if reservationrequest overlaps with confirmed reservations (are_res_overlapped)
+        if aReservationRequest.are_reservations_overlapped(confirmed_reservations) 
+          next #go to next room
+        else
+          # add to rooms_available []
+          rooms_available.push(room) 
+        end
+      end
+      return rooms_available
+    end
+
+    #****************************************************************
   end # Class
 end # Module
-
-
-
-    #unavailable rooms
-
-    #available rooms
-    
-    #reserve room
-
-    #cancel room
-
-    #reservation for given date
-
-    #reservation for date range
-
-    #validate room
-
-    #assign room
-
-    #validate date again?
-
-
 
   # #Wave 1
   # test = Hotel::ReservationSystem.new
@@ -137,18 +163,27 @@ end # Module
   # date = Date.today
   # res = Hotel::ReservationSystem.getReservations(date, 5)
 
-  hotelsystem = Hotel::ReservationSystem.new
-  # puts hotelsystem.rooms.class
-  # puts hotelsystem.reservations.class
-  # room = hotelsystem.find_room(7)
+  # hotelsystem = Hotel::ReservationSystem.new
+  # # puts hotelsystem.rooms.class
+  # # puts hotelsystem.reservations.class
+  # # room = hotelsystem.find_room(7)
 
-  date1 = Date.parse("2020-10-04")
-  res1 = Hotel::Reservation.new(1, date1, 20)
-  puts res1.status
-  hotelsystem.reserve_room(res1) 
-  #puts confirmed.status
+  # date1 = Date.parse("2020-10-04")
+  # res1 = Hotel::Reservation.new(1, date1, 20)
+  # puts res1.status
+  # puts Hotel::Reservation.class
+  # rooms = hotelsystem.rooms_available(res1)
+  # puts rooms.length
+  # hotelsystem.reserve_room(res1) 
+  # #puts confirmed.status
 
-  puts res1.status
+  # puts res1.status
+
+  # rooms = hotelsystem.rooms_available(res1)
+  # puts rooms.length
+  # rooms.each do |room|
+  # #  puts room.room_number
+  # end
   # puts "here"
   # this_res = hotelsystem.find_reservations(room)
 

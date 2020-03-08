@@ -11,8 +11,18 @@ module Hotel
 
       def initialize(reservation_id, check_in, number_of_days, status = :pending, room = nil, room_number = nil)
         @reservation_id = reservation_id
+        
+        if check_in.class != Date
+          raise ArgumentError.new("Invaid, check-in date must be Date.")
+        end
         @check_in = check_in
+
+
+        if number_of_days <= 0
+          raise ArgumentError.new("Invalid, number of days must be greater than 0")
+        end
         @number_of_days = number_of_days
+        
         @status = status
         @check_out = check_in + number_of_days 
 
@@ -23,10 +33,7 @@ module Hotel
           @room = room
           @room_number = room_number
         end
-
-        if number_of_days <= 0
-            raise ArgumentError.new("Invalid, number of days must be greater than 0")
-        end
+        
       end #initialize
   #****************************************************************
 
@@ -70,9 +77,6 @@ module Hotel
   def is_overlapped(aReservation)
     is_overlapped = true
     #check self reservation overlaps with aReservation
-    # if (self.check_out > aReservation.check_in) ||
-    #   (self.check_in < aReservation.check_in) ||
-    #   (self.check_out > aReservation.check_out)
     if (self.check_out <= aReservation.check_in) || (self.check_in >= aReservation.check_out)
       is_overlapped = false
     else 
@@ -141,13 +145,13 @@ end #module
 
 
 
-date = Date.parse("2020-02-01")
-# puts date
-room = Hotel::Room.new("10A",200)
-res = Hotel::Reservation.new(1, date, 7, "confirmed", room)
-puts res.is_within_stay(Date.parse("2020-02-01"))
+# date = Date.parse("2020-02-01")
+# # puts date
+# room = Hotel::Room.new(10,200)
+# res = Hotel::Reservation.new(1, date, 7, "confirmed", room)
+# puts res.is_within_stay(Date.parse("2020-02-01"))
 
-puts res.total_cost
+# puts res.total_cost
 # puts test.reservation_id
 # puts test.check_in
 # puts test.number_of_days
@@ -167,19 +171,19 @@ puts res.total_cost
 #     puts res.reservation_id
 #     puts res.status
 # end
-date1 = Date.parse("2020-01-10")
-res1 = Hotel::Reservation.new(1, date1, 20, "confirmed", room)
-puts "New Res: #{res1.check_in} - #{res1.check_out}"
+# date1 = Date.parse("2020-01-10")
+# res1 = Hotel::Reservation.new(1, date1, 20, "confirmed", room)
+# puts "New Res: #{res1.check_in} - #{res1.check_out}"
 
-date2 = Date.parse("2020-01-05")
-res2 = Hotel::Reservation.new(2, date2, 5, "confirmed", room)
-puts "Res2: #{res2.check_in} - #{res2.check_out}"
+# date2 = Date.parse("2020-01-05")
+# res2 = Hotel::Reservation.new(2, date2, 5, "confirmed", room)
+# puts "Res2: #{res2.check_in} - #{res2.check_out}"
 
-date3 = Date.parse("2020-01-20")
-res3 = Hotel::Reservation.new(2, date3, 5, "confirmed", room)
-puts "Res3: #{res3.check_in} - #{res3.check_out}"
+# date3 = Date.parse("2020-01-20")
+# res3 = Hotel::Reservation.new(2, date3, 5, "confirmed", room)
+# puts "Res3: #{res3.check_in} - #{res3.check_out}"
 
-res_array = [res2, res3]
+# res_array = [res2, res3]
 
-# puts res1.is_overlapped(res2)
-puts res1.are_reservations_overlapped(res_array)
+# # puts res1.is_overlapped(res2)
+# puts res1.are_reservations_overlapped(res_array)
