@@ -114,9 +114,9 @@ end #module
 
 
 # date = Date.parse("2020-02-01")
-# # puts date
+# puts date
 
-# res = Hotel::Reservation.new(1, date, 7, "confirmed", room)
+# res = Hotel::Reservation.new(1, date, 7, "confirmed")
 # puts res.is_within_stay(Date.parse("2020-02-01"))
 
 # puts res.total_cost
