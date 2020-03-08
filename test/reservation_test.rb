@@ -100,5 +100,4 @@ describe "Reservation class" do
       expect(Hotel::Reservation.load_all_reservations().length).must_equal 10
     end
   end
-
 end #class

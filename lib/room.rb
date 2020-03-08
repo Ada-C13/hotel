@@ -18,6 +18,10 @@ module Hotel
       @price = price
     end #initialize
 
+    #*******************************************
+
+    # loads all rooms
+    # returns all rooms ([Room])
     def self.load_all_rooms() #what to get
       rooms = CSV.parse(File.read(__dir__ + "/../support/rooms.csv"), headers: true, header_converters: :symbol) #relative to HOTEL & reading csv file
       all_rooms = [] #save all rooms to this array
@@ -29,22 +33,5 @@ module Hotel
         end
     return all_rooms #return all the rooms
     end
-
   end #class
 end #module
-
-
-# test = Hotel::Room.new("1A")
-# puts test.room_number
-# puts test.price
-
-# rooms = Hotel::Room.load_all_rooms
-# rooms.each do |room|
-#   room_number = room.room_number
-#   price = room.price
-#   puts "#{room_number}, #{price}"
-# end
-
-
-
-

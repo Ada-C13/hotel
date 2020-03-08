@@ -13,8 +13,6 @@ describe "ReservationSystem class" do
 
     temp_date2 = Date.parse("2020-10-21")
     @reservation_request2 = Hotel::Reservation.new(1, temp_date2, 3)
-
-    
   end 
 
   describe "Reservation System Instantiation" do
@@ -40,7 +38,6 @@ describe "ReservationSystem class" do
       expect(@ressystem1.find_reservations_by_date(@date_yesreservation, 5).length).must_equal 1
     end
   end
-
 
   describe "find room based on room number method" do
     it "validates room number" do
@@ -97,5 +94,4 @@ describe "ReservationSystem class" do
      expect(@ressystem1.rooms_available(@reservation_request2).length).must_equal 17
     end
   end
-
 end #class
