@@ -17,7 +17,8 @@ module Hotel
     def get_bookings(date)
       check_date = Date.parse(date)
       return @reservations.find_all{ |reservation| 
-      reservation.date_range.includes?(date)}
+        reservation.date_range.includes?(date)
+      }
     end
 
     def get_range_bookings(range)
@@ -34,11 +35,7 @@ module Hotel
     end
 
     def get_reserved_rooms(range)
-      if range.is_a? String
-        bookings = get_bookings(range)
-      else
-        bookings = get_range_bookings(range)
-      end
+      bookings = get_range_bookings(range)
       reserved_rooms = bookings.map do |reservation|
         reservation.rooms
       end
@@ -54,7 +51,6 @@ module Hotel
 
     def reserve_room(range)
       available_room = [get_available_rooms(range).first]
-      range = date_or_range?(range)
       new_reservation = Reservation.new(rooms: available_room, date_range: range)
       @reservations << new_reservation
       return new_reservation
@@ -64,20 +60,12 @@ module Hotel
       available_rooms = get_available_rooms(range)
       raise ArgumentError, "Not enough rooms available" if available_rooms.size < rooms_count
       rooms = available_rooms[0..(rooms_count-1)]
-      range = date_or_range?(range)
-      new_block = HotelBlock.new(rooms: rooms, date_range: range, discounted_rate: discounted_rate)
+      new_block = HotelBlock.new(
+        rooms: rooms, 
+        date_range: range, 
+        discounted_rate: discounted_rate)
       @reservations << new_block
       return new_block
-    end
-
-    private
-
-    def date_or_range?(range)
-      if range.is_a? String
-        return range = DateRange.new(start_date: range, end_date: range)
-      else
-        return range
-      end
     end
   end
 end

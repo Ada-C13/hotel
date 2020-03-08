@@ -130,14 +130,6 @@ describe "FrontDesk class" do
       end
       expect(@front_desk.reserve_room(range2)).must_be_instance_of Hotel::Reservation
     end
-
-    it "doesn't let reserve a room booked in a hotel block for a specific date" do
-      @front_desk = Hotel::FrontDesk.new
-      4.times do
-        @front_desk.reserve_block(@range, 5, 100)
-      end
-      expect{@front_desk.reserve_room("2 Apr 2020")}.must_raise ArgumentError
-    end
   end
 
   describe "#reserve_block" do
@@ -145,14 +137,6 @@ describe "FrontDesk class" do
       @front_desk.reserve_block(@range, 4, 150)
       expect(@front_desk.reservations.size).must_equal 1
       expect(@front_desk.reservations.first.rooms.first.number).must_equal 1
-    end
-
-    it "reserves a hotel block for a specific date" do
-      booking = @front_desk.reserve_block("3 Apr 2020", 2, 150)
-      expect(booking.date_range.start_date).must_equal Date.parse("3 Apr 2020")
-      expect(booking.date_range.end_date).must_equal Date.parse("4 Apr 2020")
-      expect(booking.rooms.length).must_equal 2
-      expect(booking.cost).must_equal 300
     end
 
     it "returns an instance of a new HotelBlock" do
@@ -167,25 +151,11 @@ describe "FrontDesk class" do
       expect{@front_desk.reserve_block(@range, 4, 150)}.must_raise ArgumentError
     end
 
-    it "doesn't let reserve a room reserved in a hotel block for date range" do
+    it "doesn't let reserve a room reserved in a hotel block" do
       4.times do
         @front_desk.reserve_block(@range, 5, 150)
       end
       expect{@front_desk.reserve_room(@range)}.must_raise ArgumentError
-    end
-
-    it "doesn't let reserve a block for specific date if another block was created" do
-      4.times do
-        @front_desk.reserve_block(@range, 5, 150)
-      end
-      expect{@front_desk.reserve_room("2 Apr 2020")}.must_raise ArgumentError
-    end
-
-    it "shows a reservation made from a hotel block from the list of reservations" do
-      @front_desk.reserve_block(@range, 5, 150)
-      date = "2 Apr 2020"
-      expect(@front_desk.get_bookings(date).length).must_equal 1
-      expect(@front_desk.get_bookings(date).first.cost).must_equal 1500
     end
   end
 end
