@@ -18,6 +18,41 @@ describe "Room Class" do
       expect(@room.reservations).must_be_kind_of Array
       expect(@room.reservations.empty?).must_equal true
     end
+
+    it "starts with an empty array for block participation" do
+      expect(@room.block_participation).must_be_kind_of Array
+      expect(@room.block_participation.empty?).must_equal true
+    end
+  end
+
+  describe "reserved?" do
+    before do
+      @room = Hotel::Room.new(1)
+      @room.reserve(start_date: "2020-3-1", end_date: "2020-3-10")
+    end
+
+    it "returns true if the room is reserved for requested dates" do
+      expect(@room.reserved?(start_date: "2020-3-2", end_date: "2020-3-25")).must_equal true
+    end
+
+    it "returns false if the room is not reserved for requested dates" do
+      expect(@room.reserved?(start_date: "2020-3-22", end_date: "2020-3-25")).must_equal false
+    end
+  end
+
+  describe "in_block?" do
+    before do
+      @room = Hotel::Room.new(1)
+      @room.reserve(start_date: "2020-3-1", end_date: "2020-3-10", block: 2)
+    end
+
+    it "returns true if the room is in a block for requested dates" do
+      expect(@room.in_block?(start_date: "2020-3-2", end_date: "2020-3-25")).must_equal true
+    end
+
+    it "returns false if the room is not in a block for requested dates" do
+      expect(@room.in_block?(start_date: "2020-3-22", end_date: "2020-3-25")).must_equal false
+    end
   end
 
   describe "available?" do
