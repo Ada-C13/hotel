@@ -1,6 +1,4 @@
 require "date"
-require_relative "individual_reservation"
-require_relative "block_reservation"
 
 module Hotel
   class DateRange
@@ -15,15 +13,14 @@ module Hotel
       @end_date = Date.parse(end_date) 
     end
 
+    # check if the provided start and end dates are both a valid date (ie "2020-01-32")
     def date_validation(start_date, end_date)
-     # check if the provided start and end dates are both a valid date (ie "2020-01-32")
      first_date = start_date.split("-").map {|item| item.to_i}
      last_date = end_date.split("-").map {|item| item.to_i}
       if !(Date.valid_date?(first_date[0], first_date[1], first_date[2])) || !(Date.valid_date?(last_date[0], last_date[1], last_date[2]))
         raise ArgumentError.new("Date(s) you provided is/are invalid")
       end
     end
-
 
     def nights
       return self.dates_exclude_last.length
@@ -38,7 +35,7 @@ module Hotel
     end
     
     # use when booking the room
-    def overlap_exclude_last?(other) # (another existing instance of DateRange class)
+    def overlap_exclude_last?(other) # (instance)
       (self.dates_exclude_last).each do |date|
         if (other.dates_exclude_last).include? date
           return true
@@ -48,7 +45,7 @@ module Hotel
     end
 
     # use when checking the room reservation in a date range
-    def overlap_include_last?(other) # (another existing instance of DateRange class)
+    def overlap_include_last?(other) # (instance)
       (self.all_dates).each do |date|
         if (other.all_dates).include? date
           return true 

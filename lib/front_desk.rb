@@ -40,15 +40,15 @@ module Hotel
       return lists
     end
 
-    def is_room_avaiable_for_entire_date_range?(date_range, room_num) # (instance of DateRange class, num )
+    def is_room_avaiable_for_entire_date_range?(date_range, room_num) # (instance, num)
       if @reservations[room_num] == nil
         return true
       else
         @reservations[room_num].each do |reservation|
           if reservation.date_range.overlap_exclude_last? date_range
-            return false # the room will not be available
+            return false
           else
-            return true # the room will be available
+            return true
           end
         end
       end
@@ -79,7 +79,7 @@ module Hotel
       return reservation
     end
 
-    def add_reservation(reservation) # instance of Reservation class
+    def add_reservation(reservation)
       if !(@reservations.key?(reservation.room_num))
         @reservations[reservation.room_num] = [reservation]
       else
@@ -88,5 +88,35 @@ module Hotel
       return @reservations[reservation.room_num] # return a list of reservations of that specific room number
     end
 
+    def reserve_block(name, start_date, end_date, num_of_rooms, discount_rate)
+      raise StandardError.new("A block can only contain a maximum of 5 rooms! (got #{num_of_rooms})") if num_of_rooms > 5
+
+      blocks = []
+      num_of_rooms.times do |time|
+        date_range = Hotel::DateRange.new(start_date, end_date)
+        room_num = available_rooms(start_date, end_date)
+        raise StandardError.new("There's no available room in this date range!") if room_num.length == 0
+        block_reservation = Hotel::BlockReservation.new(
+          name = name, 
+          date_range = date_range, 
+          room_num = room_num.first, 
+          discount_rate = discount_rate, 
+          status = :AVAILABLE
+        ) 
+        blocks << block_reservation
+        add_reservation(block_reservation)
+      end
+      return blocks
+    end
+
+    def reserve_room_in_block(blocks, room_num)
+      blocks.each do |block|
+        if block.room_num == room_num
+          return block.change_room_status
+        else
+          raise ArgumentError.new("Room #{room_num} isn't an options in the block")
+        end
+      end
+    end
   end
 end

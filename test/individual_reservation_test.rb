@@ -1,6 +1,6 @@
 require_relative "test_helper"
 
-describe "Reservation" do
+describe "IndividualReservation" do
   describe "#initialize" do
     before do
       date_range = Hotel::DateRange.new("2020-3-13", "2020-3-15")
@@ -16,10 +16,11 @@ describe "Reservation" do
     end
 
     it "Raise ArgumentError when room number isn't between 1 to 20" do
+      reservation = Hotel::IndividualReservation.new(
+        date_range = Hotel::DateRange.new("2020-3-13", "2020-3-15"),
       room_num = -100
-      expect{Hotel::IndividualReservation.new(@reservation)}.must_raise ArgumentError
-      room_num = 25
-      expect{Hotel::IndividualReservation.new(@reservation)}.must_raise ArgumentError
+      )
+      expect{Hotel::IndividualReservation.new(reservation)}.must_raise ArgumentError
     end
 
     it "room_num must be integer between 1 to 20" do
