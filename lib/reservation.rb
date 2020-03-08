@@ -2,11 +2,11 @@ require 'Date'
 
 module Hotel
   class Reservation 
-    attr_accessor :start_date, :end_date, :room
+    attr_accessor :start_date, :end_date, :room, :block_id, :blocks_room_status
 
-    def initialize(start_date, end_date, room)  #is a third item needed here an id?
+    def initialize(start_date, end_date, room, block_id = nil, blocks_room_status = nil)  #is a third item needed here an id?
      @room = room
-
+     @block_id = block_id
       if start_date.class == String
         start_date = Date.parse(start_date)
       end
@@ -24,6 +24,8 @@ module Hotel
       if @end_date && (@end_date == @start_date)
         raise ArgumentError, "You cannot have a 0 length date range."
       end
+      @block_id = block_id
+      @blocks_room_status = blocks_room_status
     end
 
     def cost(start_date, end_date)

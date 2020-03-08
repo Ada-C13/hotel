@@ -32,29 +32,22 @@ module Hotel
       elsif  @end_date < test_range.start_date #range after
         return false
       elsif @start_date <= test_range.start_date && 
-        @end_date <= test_range.end_date #contained range(@range inside test),same
+        @end_date <= test_range.end_date #contained range(@range inside test),same rang too
        return true
       elsif  @start_date > test_range.end_date #range before
         return false
-      elsif test_range.start_date < @end_date #back overlap
-        return true
-      elsif @start_date <= test_range.start_date && 
-        @end_date > test_range.end_date #containing range
-        return true
       elsif @start_date > test_range.start_date && 
         @end_date > test_range.end_date #front overlap
         return true
-      elsif @start_date == test_range.start_date && 
-        @end_date == test_range.end_date #same range
+      elsif test_range.start_date < @end_date #back overlap
         return true
-      else
-        return false
       end
     end
 
-    def include?(date)
-      return false
-    end
+  #   def include?(date)
+
+  #   #   return false
+  #  end
 
     def nights
       nights = (@end_date - @start_date) - 1
