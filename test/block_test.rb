@@ -19,4 +19,11 @@ describe 'Block class' do
       expect(@new_block.num_of_rooms).must_equal @three_rooms
     end
   end
+
+  describe 'Block make_id method' do
+    it 'Block creates a unique 4 digit ID' do
+      #TODO change this to equal a range of 1111-9999 
+      expect(@new_block.make_id).must_equal 1234
+    end
+  end
 end
