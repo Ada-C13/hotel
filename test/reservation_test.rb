@@ -8,13 +8,6 @@ describe Hotel::Reservation do
       reservation.must_be_kind_of Hotel::Reservation
     end
 
-    # it "Keeps track of room id" do
-    #   id = 1
-    #   reservation = Hotel::Reservation.new(id, Date.today, Date.today + 1, Hotel::Room.new(1))
-    #   reservation.must_respond_to :id
-    #   reservation.id.must_equal id
-    # end
-
     it "Keeps track of date_range" do
       start_date = Date.today
       end_date = Date.today + 1
@@ -22,7 +15,7 @@ describe Hotel::Reservation do
   
       reservation = Hotel::Reservation.new(start_date, end_date, Hotel::Room.new(1))
       reservation.must_respond_to :date_range
-      # reservation.date_range.must_equal date_range
+      reservation.date_range.must_equal date_range
     end
 
   end

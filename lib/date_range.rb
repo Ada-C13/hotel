@@ -39,7 +39,7 @@ module Hotel
     def calculate_nights
       nights = (end_date - start_date).to_i
       return nights
-    end
+    end 
 
   end
 end

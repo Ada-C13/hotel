@@ -39,15 +39,39 @@ describe Hotel::HotelController do
       end
     end
 
+    describe "total_cost" do
+      it "takes a reservation and returns the cost for that reservation" do
+        today = Date.today
+        room_one = @hotel_controller.rooms.first
+       
+        new_reservation = Hotel::Reservation.new(today + 6, today + 9, room_one)
+
+        total_cost_for_reservation = @hotel_controller.total_cost(new_reservation)
+        expect(total_cost_for_reservation).must_be_kind_of Numeric
+
+      end
+    end
+    
+
     describe "reserve_room" do
       it "takes two Date objects and returns a Reservation" do
         today = Date.today
 
-        reservation = @hotel_controller.reserve_room(today + 1, today + 2)
-        room_one = Hotel::Room.new(1)
+        new_reservation = @hotel_controller.reserve_room(today + 6, today + 9)
+        expect(new_reservation).must_be_kind_of Hotel::Reservation
+      end
 
-        expect(reservation).must_be_kind_of Hotel::Reservation
+      it "is an NoRoomAvalable if avalable_room is nil" do
+        start_date = Date.new(2020, 4, 10)
+        end_date = Date.new(2020, 4, 12)
+        room_number = 0
+        while room_number < 20 do
+          @hotel_controller.reserve_room(start_date, end_date)
+          room_number += 1
+        end
 
+        #avalable_room = @hotel_controller.reserve_room(start_date, end_date)
+        expect{(@hotel_controller.reserve_room(start_date, end_date))}.must_raise Hotel::NoRoomAvailable
       end
     end
 
@@ -80,27 +104,20 @@ describe Hotel::HotelController do
           start_date = Date.new(2020, 4, 10)
           end_date = Date.new(2020, 4, 12)
 
-          # room_one = Hotel::Room.new(1)
-          room_one = @hotel_controller.rooms.first
+          room_one = @hotel_controller.rooms[0]
+          room_two = @hotel_controller.rooms[1]
+    
           
           @hotel_controller.reservations = [
             Hotel::Reservation.new(start_date, end_date, room_one),
-            # Hotel::Reservation.new(start_date, end_date, room_two)
+            Hotel::Reservation.new(start_date, end_date, room_two),
           ]
-          # puts "reservations = #{@hotel_controller.reservations}"
 
-          room_list = @hotel_controller.available_rooms(start_date, end_date)
-          puts "ROOM LIST = #{room_list}"
-
-          # puts"/n/n"
-
-          # puts "rooms - reservatoins = #{@rooms - @hotel_controller.reservations}"
+          room_list = @hotel_controller.available_rooms(start_date + 1 , end_date + 1)
 
           expect(room_list).must_be_kind_of Array
-          expect(room_list.length).must_equal 19
+          expect(room_list.length).must_equal 18
           expect(room_list[-1].room_nr).must_equal 20
-          # expect(room_list[0].room_nr).must_equal 3
-
         end
       end
     end

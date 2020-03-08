@@ -8,16 +8,11 @@ module Hotel
       @date_range = Hotel::DateRange.new(start_date, end_date)
       @room = room
     end
-    
-    # def ==(other)
-    #   id == other.id 
-    # end
 
     def cost
       total = date_range.calculate_nights * 200.00
       return total
     end
     
-    #cost DateRange.calculate_nights * 200
   end
 end
