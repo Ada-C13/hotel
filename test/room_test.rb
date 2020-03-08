@@ -81,7 +81,7 @@ describe Hotel::Room do
     end
   end
 
-  describe "is_available" do
+  describe "#is_available" do
     before do
       @coordinator01 = Hotel::SystemCoordinator.new
       @start_date = Date.today + 5
@@ -123,6 +123,25 @@ describe Hotel::Room do
       @room01.add_booking_to_room(reservation01)
       expect(@room01.is_available(@date_range)).must_equal false
       expect(@room01.bookings.length).must_equal 1
+    end
+  end
+
+  describe "#change_rate" do
+    it "returns a float of the new rate" do
+      expect(@room01.change_rate(100)).must_be_instance_of Float
+      expect(@room01.change_rate(100)).must_equal 100.00
+    end
+
+    it "changes the room the correct new rate" do
+      expect(@room01.cost).must_equal 200.00
+      new_rate = 100
+      @room01.change_rate(new_rate)
+      expect(@room01.cost).must_equal new_rate
+    end
+
+    it "raises an exception if the new rate is < 0" do
+      expect{@room01.change_rate(-99)}.must_raise ArgumentError
+      expect{@room01.change_rate("free")}.must_raise ArgumentError
     end
   end
 end
