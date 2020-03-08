@@ -11,8 +11,4 @@ module HotelBooking
       @rooms = []
     end
   end
- 
-  # calculating cost might come here
-
-  
 end

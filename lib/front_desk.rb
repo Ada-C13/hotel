@@ -22,16 +22,10 @@ module HotelBooking
 
     def create_hotel_block(name, date_range, room_count, discount_rate = 1)
       raise ArgumentError.new("maximum rooms you could reserve for a block are 5") if room_count > 5
-      raise ArgumentError.new("the hotel does not have #{room_count} rooms available for that time period") if self.available_rooms(date_range).lenght < room_count
+      raise ArgumentError.new("the hotel does not have #{room_count} rooms available for that time period") if available_rooms(date_range).length < room_count
       
       hotel_block = HotelBlock.new(name: name, date_range: date_range, room_count: room_count, discount_rate: discount_rate)
-      block_rooms = self.available_rooms(date_range).sample(room_count)
-      rooms.each do |room|
-        if block_rooms.include? (room)
-          room.in_block = true
-        end
-      end
-      # how do I take the rooms out of the true in block status after the block date has finished?
+      block_rooms = available_rooms(date_range).sample(room_count)
       hotel_block.rooms.push(block_rooms)
       hotel_blocks << hotel_block
       return hotel_block
@@ -44,17 +38,12 @@ module HotelBooking
         reservation.room
       end
 
-      block_rooms = rooms.select do |room|
-        room.in_block == true
-      end
-
-      return @rooms.reject do |room|
-        (overlapping_rooms.include? room) || (block_rooms.include? room)
-      end
+      @hotel_blocks.each { |block| overlapping_rooms.push(block.rooms) if block.date_range.overlap?(test_range) }
+      return @rooms.reject { |room| (overlapping_rooms.include? room) }
     end
 
     def make_reservation(date_range)
-      available_room = self.available_rooms(date_range).first
+      available_room = available_rooms(date_range).first
       raise.ArgumentError.new("no rooms available in this date") if available_room.nil? 
       reservation = Reservation.new(date_range: date_range, room: available_room)
       @reservations << reservation
@@ -62,13 +51,16 @@ module HotelBooking
     end
 
     def make_block_reservation(name)
-      hotel_block = @hotel_blocks.find { |block| block.name == name }
-      raise.ArgumentError.new("there is no such hotel blcok") if hotel_block.nil?
+      wanted_block = @hotel_blocks.find { |block| block.name == name }
+      raise.ArgumentError.new("there is no such hotel blcok") if wanted_block.nil?
 
-      block_room = hotel_block.rooms.reject { |b_room| list_room_reservations(b_room, hotel_block.date_range).lenght != 0 }.first
-      raise.ArgumentError.new("all rooms of this block have been reserved") if available_block_rooms.lenght == 0
+      block_room = (wanted_block.rooms.reject { |b_room| list_room_reservations(b_room, wanted_block.date_range).length != 0 }).first
+      raise.ArgumentError.new("all rooms of this block have been reserved") if block_room.nil?
  
-      block_reservation = Reservation.new(date_range: hotel_block.date_range, room: block_room, block: hotel_block )
+      block_reservation = Reservation.new(date_range: wanted_block.date_range, room: block_room, block: wanted_block)
+      @rooms.each do |room|
+        room.in_block = true if room = block_room
+      end
       @reservations << block_reservation
       return block_reservation
     end
