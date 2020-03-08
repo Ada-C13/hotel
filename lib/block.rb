@@ -4,7 +4,7 @@ require_relative "date_range"
 
 module Hotel
   class Block
-    attr_reader :date_range, :rooms, :discounted_rate
+    attr_reader :date_range, :rooms, :discounted_rate, :reservations
 
     def initialize(date_range:, rooms:, discounted_rate:)
       @date_range = date_range

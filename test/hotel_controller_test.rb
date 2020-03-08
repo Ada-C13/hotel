@@ -13,6 +13,7 @@ describe "HotelController class" do
     @list_available_rooms = @controller.find_available_rooms(@a, @b)
     @all_rooms = @controller.show_all_rooms
     @res = @reservations[0]
+    @blocks[0].reserve_room(3)
   end
 
   describe "Initializer" do
@@ -54,9 +55,9 @@ describe "HotelController class" do
     end
   end
   describe "find_by_date" do
-    it "returns array of reservations for that date" do
+    it "returns array of reservations for that date, including reservations from block" do
       expect(@controller.find_by_date(@a)).must_be_kind_of Array
-      expect(@controller.find_by_date(@a).length).must_equal 1
+      expect(@controller.find_by_date(@a).length).must_equal 2
     end
   end
 
