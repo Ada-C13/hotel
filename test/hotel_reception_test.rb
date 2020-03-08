@@ -86,7 +86,7 @@ describe "hotel reception" do
   describe "list reservations method" do
     before do
       check_in_time = Date.new(2020, 2, 1)
-      check_out_time = Datenew(2020, 2, 3)
+      check_out_time = Date.new(2020, 2, 3)
       room = @reception.rooms[0]
       @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
 

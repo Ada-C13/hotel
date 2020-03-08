@@ -15,6 +15,7 @@ module Hotel
     end
 
     def available_rooms(check_in_time, check_out_time)
+      dates = Hotel::DateRange.new(check_in_time, check_out_time)
       unavail = reservations.select { |res| res.date_range.overlap?(dates) }
       unavail.map! { |res| res.room }
       return rooms.difference(unavail)
