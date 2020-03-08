@@ -52,10 +52,6 @@ describe "Reservation" do
       expect { Hotel::Reservation.new(start_date: Date.new(2020, 5, 5), end_date: Date.new(2020, 5, 6), num_rooms: 1, block: :BLOCK) }.must_raise ArgumentError
     end
 
-    xit "raises an ArgumentError if block_key is not a string" do
-      expect { Hotel::Reservation.new(start_date: Date.new(2020, 5, 5), end_date: Date.new(2020, 5, 6), num_rooms: 2, block_key: 7) }.must_raise ArgumentError
-    end
-
     it "raises an ArgumentError if a block_key is given for a single room" do
       expect { Hotel::Reservation.new(start_date: Date.new(2020, 5, 5), end_date: Date.new(2020, 5, 6), num_rooms: 1, block_key: 7) }.must_raise ArgumentError
     end

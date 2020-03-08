@@ -2,9 +2,10 @@ require 'date'
 
 
 require_relative 'frontdesk.rb'
+require_relative 'date.rb'
 
 module Hotel
-  class Reservation
+  class Reservation < DateRange
     attr_accessor :start_date, :end_date, :num_rooms, :assigned_room, :discount, :block, :block_key
     
     COST = 200.00
@@ -25,7 +26,7 @@ module Hotel
       raise ArgumentError.new("Invalid room request: requested #{@num_rooms} rooms, #{@num_rooms-5} too many.") if @num_rooms > 5
 
       raise ArgumentError.new("Invalid block key. Not valid for single room reservations") if @num_rooms == 1 && block_key != nil
-
+      
       raise ArgumentError.new("Status and room argument: #{@num_rooms} room, should not be noted as a block") if (@num_rooms == 1 && @block == :BLOCK)
 
       raise ArgumentError.new("Invalid status. Please choose: single or block.") unless [:SINGLE, :BLOCK].include? block
@@ -36,16 +37,16 @@ module Hotel
       return final_bill
     end
 
-    def contains(date)
-      (date >= @start_date && date < @end_date) ? true : false
-    end
+    # def contains(date)
+    #   (date >= @start_date && date < @end_date) ? true : false
+    # end
 
-    def conflict?(new_start, new_end)
-      if new_start >= @start_date && new_start < @end_date || new_end > @start_date
-        return false
-      elsif @end_date = new_start || new_start > @end_date || new_end < @start_date || new_end == @start_date
-        return true
-      end
-    end
+    # def conflict?(new_start, new_end)
+    #   if new_start >= @start_date && new_start < @end_date || new_end > @start_date
+    #     return false
+    #   elsif @end_date = new_start || new_start > @end_date || new_end < @start_date || new_end == @start_date
+    #     return true
+    #   end
+    # end
   end
 end

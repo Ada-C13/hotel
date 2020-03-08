@@ -1,6 +1,6 @@
 require 'date'
 
-
+require_relative 'date.rb'
 require_relative 'reservation.rb'
 
 module Hotel
@@ -17,7 +17,7 @@ module Hotel
       taken_rooms = []
       all_rooms = @rooms.dup
       @all_reservations.each do |reservation|
-        reservation.conflict?(new_reservation.start_date, new_reservation.end_date) ? taken_rooms << reservation.assigned_room : next
+        reservation.no_conflict?(new_reservation.start_date, new_reservation.end_date) ? taken_rooms << reservation.assigned_room : next
       end
       room_to_assign = (all_rooms - taken_rooms.flatten)
       assigning = room_to_assign.sample(new_reservation.num_rooms)
@@ -57,11 +57,29 @@ module Hotel
       available_rooms = (all_rooms - taken.flatten)
     end
 
-    def reserve_from_block(date, block_key)
+    def find_block_by_block_key(date, block_key)
       reservations_on_day = find_reservation_by_date(date)
       in_block = reservations_on_day.select {|reservation| reservation.block_key == block_key}
       return in_block
-      p in_block
+    end
+
+    def update_block(date, block_key)
+      found_block = find_block_by_block_key(date, block_key)
+      if found_block[0].num_rooms == 0
+        raise ArgumentError.new("Invalid room reservation request: all rooms in this block have been reserved.")
+      else
+        found_block[0].num_rooms -= 1
+      end
+      return found_block[0]
+    end
+    
+    # * I can reserve a specific room from a hotel block
+    # * I can only reserve that room from a hotel block for the full duration of the block
+    def reserve_from_block(date, block_key)
+      book_room = update_block(date, block_key)
+      book_room.assigned_room = book_room.assigned_room[0]
+      book_room.num_rooms = 1
+      return book_room
     end
   end
 end
