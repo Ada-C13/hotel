@@ -4,7 +4,6 @@ describe Hotel::Block do
   before do
     @start_date = Date.new(2020,03,07)
     @end_date = @start_date + 5
-    @date_range = Hotel::DateRange.new(@start_date,@end_date)
 
     @collection_of_rooms = []
     [6,10,13,16].each do |room_num|
@@ -13,7 +12,7 @@ describe Hotel::Block do
 
     @disc_rate = 0.2
 
-    @hotel_block = Hotel::Block.new(@date_range,@collection_of_rooms,@disc_rate)   
+    @hotel_block = Hotel::Block.new(@start_date,@end_date,@collection_of_rooms,@disc_rate)   
   end
 
 

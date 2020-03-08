@@ -21,7 +21,7 @@ describe Hotel::HotelController do
 
         reservation = @hotel_controller.reserve_room(start_date, end_date)
 
-        expect(reservation).must_be_instance_of Hotel::Reservation
+        expect(reservation).must_be_instance_of Hotel::RoomReservation
       end
 
       describe "make a reservation of a room for given date range" do
@@ -59,7 +59,7 @@ describe Hotel::HotelController do
       it "takes a Date and returns a list of Reservations" do
         expect(@reservation_list).must_be_instance_of Array
         @reservation_list.each do |res|
-          res.must_be_instance_of Hotel::Reservation
+          res.must_be_instance_of Hotel::RoomReservation
         end
       end
 

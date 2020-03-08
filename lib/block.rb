@@ -8,10 +8,8 @@ module Hotel
   class Block < Reservation
     attr_reader
 
-    def initialize(date_range, collection_of_rooms, disc_rate)
-      raise ArgumentError if date_range.class != Hotel::DateRange
-
-      @date_range = date_range
+    def initialize(start_date, end_date, collection_of_rooms, disc_rate)
+      super(start_date, end_date)
       @collection_of_rooms = collection_of_rooms
       @disc_rate = disc_rate
     end

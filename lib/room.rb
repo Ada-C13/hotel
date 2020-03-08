@@ -4,6 +4,7 @@ module Hotel
 
     def initialize(room_number, cost: 200)
       raise ArgumentError if room_number.class != Integer
+
       @room_number = room_number
       @cost = cost
     end

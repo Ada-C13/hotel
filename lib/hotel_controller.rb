@@ -1,6 +1,7 @@
 require 'date'
 
 require_relative 'reservation.rb'
+require_relative 'room_reservation.rb'
 require_relative 'date_range.rb'
 require_relative 'room.rb'
 
@@ -22,7 +23,7 @@ module Hotel
     def reserve_room(start_date, end_date, room=@rooms.sample)
       raise RuntimeError.new("room #{room.room_number} isn't available for those dates") unless available_rooms(start_date,end_date).include?(room)
 
-      new_reservation = Reservation.new(start_date, end_date, room)
+      new_reservation = RoomReservation.new(start_date, end_date, room)
       @reservations.push(new_reservation)
       return new_reservation
     end
