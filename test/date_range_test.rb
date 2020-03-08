@@ -118,14 +118,27 @@ describe Hotel::DateRange do
     end
   end
 
-  xdescribe "include?" do
+  describe "include?" do
+    before do
+      start_date = Date.new(2017, 01, 01)
+      end_date = start_date + 3
+
+      @range = Hotel::DateRange.new(start_date, end_date)
+    end
+
     it "returns false if the date is clearly out" do
+      date = @range.end_date + 1
+      expect(@range.include?(date)).must_equal false
     end
 
     it "returns true for dates in the range" do
+      date = @range.end_date - 2
+      expect(@range.include?(date)).must_equal true
     end
 
     it "returns false for the end_date date" do
+      date = @range.end_date
+      expect(@range.include?(date)).must_equal false
     end
   end
 
