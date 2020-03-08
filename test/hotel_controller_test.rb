@@ -73,7 +73,6 @@ describe Hotel::HotelController do
         expect(reservation_list2[0].start_date).must_equal Date.parse("2020-08-04")
       end
       
-
       it "takes a date and room and returns the correct reservation and room" do
         reservation1 = @hotel_controller.reserve_room("2020-08-04", "2020-08-10",1)
         reservation2 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",2)
@@ -101,7 +100,7 @@ describe Hotel::HotelController do
         expect(room_list).must_be_kind_of Array
       end
     
-      it "takes two dates and returns a list" do
+      it "takes two dates and returns and array with the first entry of room one" do
         start_date = @date
         end_date = start_date + 3
 
@@ -119,18 +118,24 @@ describe Hotel::HotelController do
         expect(room_list.length).must_equal 20
       end
 
-      it "takes two dates and returns the correct rooms when dates overlap" do
-        reservation1 = @hotel_controller.reserve_room("2020-08-04", "2020-08-10",1)
-        reservation2 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",2)
-        reservation3 = @hotel_controller.reserve_room("2020-08-09", "2020-08-12",3)
+      it "takes two dates and returns the correct rooms when dates overlap or are before or after" do
+        reservation1 = @hotel_controller.reserve_room("2020-08-01", "2020-08-10",1) #front overlap
+        reservation2 = @hotel_controller.reserve_room("2020-08-04", "2020-08-08",2) #inside/contained
+        reservation3 = @hotel_controller.reserve_room("2020-08-09", "2020-08-19",3) #back overlap
+        reservation4 = @hotel_controller.reserve_room("2020-08-04", "2020-08-14",4) #same
+        reservation5 = @hotel_controller.reserve_room("2020-08-02", "2020-08-20",6) #containing- note also skipped room 5!
+        reservation6 = @hotel_controller.reserve_room("2020-08-14", "2020-08-20",5) #starts on end date, room 5 should be available
+        reservation7 = @hotel_controller.reserve_room("2020-08-01", "2020-08-04",7) #res ends on a start date
+        reservation8 = @hotel_controller.reserve_room("2020-07-24", "2020-08-01",8) #before
+        reservation9 = @hotel_controller.reserve_room("2020-08-24", "2020-08-27",8) #after
 
         start_date = @date #2020-08-04
         end_date = start_date + 10
 
         room_list = @hotel_controller.available_rooms(DateRange.new(start_date, end_date))
 
-        expect(room_list.length).must_equal 17
-        expect(room_list).must_equal [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+        expect(room_list.length).must_equal 15
+        expect(room_list).must_equal [5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
       end
 
       it "takes two dates and returns the correct rooms when range starts on an end date" do
@@ -249,9 +254,9 @@ describe Hotel::HotelController do
 
         expect{@hotel_controller.res_with_valid_dates(DateRange.new(start_date, end_date))}.must_raise ArgumentError
       end
-
     end
   end
+
   describe "wave 3" do
     describe "set_aside_block" do
   
@@ -285,7 +290,6 @@ describe Hotel::HotelController do
         expect(@hotel_controller.reservation_array.length).must_equal 6
         expect(@hotel_controller.reservation_array[5].room).must_equal 1
       end
-
 
       it "cannot make a block on a block" do
         date_range = DateRange.new(@date,(@date + 3))

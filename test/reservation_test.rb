@@ -25,7 +25,7 @@ describe Hotel::Reservation do
    
     end
 
-    it "returns a error when @end_date && (@end_date == @start_date)" do
+    it "returns a error when (@end_date == @start_date)" do
       start_date = Date.new(2017, 01, 01)
       end_date = start_date 
       expect{Reservation.new(start_date, end_date,1)}.must_raise ArgumentError

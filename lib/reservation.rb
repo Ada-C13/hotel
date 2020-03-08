@@ -4,7 +4,7 @@ module Hotel
   class Reservation 
     attr_accessor :start_date, :end_date, :room, :block_id, :blocks_room_status
 
-    def initialize(start_date, end_date, room, block_id = nil, blocks_room_status = nil)  #is a third item needed here an id?
+    def initialize(start_date, end_date, room, block_id = nil, blocks_room_status = nil)  
      @room = room
      @block_id = block_id
       if start_date.class == String

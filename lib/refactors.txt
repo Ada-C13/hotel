@@ -1,0 +1,9 @@
+Things to consider refactoring:
+1- Using "before" and "let" in tests.
+2- Many of my test are doubled. I often tryed to hit somethings multiple times/ways because I was having trouble in various areas.
+   These tests were kept even though they are not needed. 
+3- I have a reserve_room method and a res_with_valid_dates method. Part of me thinks I should refactor these into one.
+4- The scaffolding had two methods in the DateRange class (overlap? and include?) that I did not use. I still don't think I need them since I fulfilled
+   their function somewhere else, but since I don't know what the next project will be I just want to remind future Chelsea  that
+   they were there. In fact I made and tested overlap? but commented them out to save them.
+5- There is probably more items/functions to move from Hotel Controller to Block but currently I am not 100% sure. Future/smarter Chelsea can figure that out.

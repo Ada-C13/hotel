@@ -13,12 +13,13 @@ module Hotel
       return rooms    # You might want to replace this method with an attr_reader
     end
 
+
+    #NOTE the reserve_room below often works with the res_with_valid_dates function further below which validates dates
     def reserve_room(start_date, end_date, room, block_id = nil, blocks_room_status = nil)
-      new_res = Reservation.new(start_date, end_date, room, block_id ) #is nil needed?
+      new_res = Reservation.new(start_date, end_date, room, block_id )
       @reservation_array << new_res
       return new_res
     end
-
 
     def reservations(date)
       if date.class == String
@@ -28,7 +29,7 @@ module Hotel
       res_by_date = []
 
       @reservation_array.each do |res| 
-        if date.between?(res.start_date,(res.end_date)-1)  # note to me! added the minus one here!!!!
+        if date.between?(res.start_date,(res.end_date)-1)
           res_by_date << res
         end 
       end
@@ -36,8 +37,7 @@ module Hotel
       return res_by_date
     end
 
-    
-    def reservation_by_date_room(date,room_num) # may need to add block room here?
+    def reservation_by_date_room(date,room_num) 
       res_array = reservations(date)
       room_res_array = []
 
@@ -49,7 +49,7 @@ module Hotel
       return room_res_array
     end
 
-    def available_rooms(range) #putting in dates gives you all available rooms
+    def available_rooms(range) #putting in range gives you all available rooms
   
       start_date = range.start_date
       end_date = range.end_date
@@ -59,17 +59,17 @@ module Hotel
       not_available = []   #collects
 
       range_length.to_i.times do |i|
-        res_by_date_array = reservations(start_date + i)  #a loop that goes over every day in the range and pulls in reservations 
+        res_by_date_array = reservations(start_date + i)  #a loop that goes over every day in the range and pulls in reservations for that day
 
         res_by_date_array.each do |res|
-          not_available << res.room      #takes just the room of the reservations for a date and puts them in an array
+          not_available << res.room      #takes just the room of the reservations for a date and puts them in an array of unavailable rooms
         end
       end
 
       rooms_available_for_range = []
 
       20.times do |i|
-        if not_available.include?(i+1)   #take the array made above and looks for each room number 1-20
+        if not_available.include?(i+1)   #takes the array made above and looks for each room number 1-20. Note! if the room number shows up just once it is not available. The range may be 5 days but if a room is unavailable for one day it is unavailable for all
           nil
         else
           rooms_available_for_range << (i + 1)  # if the room number is not in the not_available array the room number gets added to the rooms_available array.
@@ -84,7 +84,7 @@ module Hotel
     end
 
     def res_with_valid_dates(range)
-      room = available_rooms(range)[0]
+      room = available_rooms(range)[0] #takes first available room
       
       reserve_room(range.start_date, range.end_date, room)
     end
@@ -102,7 +102,7 @@ module Hotel
           raise ArgumentError, "Room #{room} is not available for that date range :("
         end
       end
-      true  #returning true is all the blocks rooms are available.
+      true  #returning true if all the blocks rooms are available.
     end
 
     def set_aside_block (date_range, collection_of_rooms, block_id) 
@@ -115,16 +115,15 @@ module Hotel
       end
     end
 
-    def block_status_by_id(block_id)  #I can check whether a given block has any rooms available
+    def block_status_by_id(block_id)        #I can check whether a given block has any rooms available
       @reservation_array.each do |res|
         if (res.block_id == block_id) && (res.blocks_room_status == nil)
-          return true  #check this if block because it is returing a vlaue so only go throug it once
+          return true        #returning true once one block is available
         else
            nil
         end  
       end
       return false
-
     end
 
     def reserve_block_room(block_id, room)
@@ -136,6 +135,5 @@ module Hotel
       end
       raise ArgumentError, "No rooms in the block are available"
     end
-
   end
 end

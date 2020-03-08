@@ -25,6 +25,7 @@ describe Hotel::Block do
       
       expect{Block.new(date_range, collection_of_rooms, discount_rate, @hotel_controller)}.must_raise ArgumentError
     end
+
     it "Will raise error if more than one room is unavailable " do
       reservation1 = @hotel_controller.reserve_room("2020-08-04", "2020-08-10",3)
       reservation1 = @hotel_controller.reserve_room("2020-08-04", "2020-08-10",5)
@@ -36,7 +37,7 @@ describe Hotel::Block do
       expect{Block.new(date_range, collection_of_rooms, discount_rate, @hotel_controller)}.must_raise ArgumentError
     end
 
-    it "Will pass if date_range and rooms dont overlap with other reservations" do
+    it "Will pass if date_range and rooms don't overlap with other reservations" do
       reservation1 = @hotel_controller.reserve_room("2020-08-10", "2020-08-14",3) 
 
       date_range = DateRange.new(@date,(@date + 3))
@@ -56,24 +57,5 @@ describe Hotel::Block do
       expect(Block.new(date_range, collection_of_rooms, discount_rate, @hotel_controller)).must_be_instance_of Block
     end
  
-  end
-
-  xdescribe "" do
-    
-
-    it " " do
-      
-    end
-
-    xit " " do
-    end
-
-    
-  end
-
-  xdescribe " " do
-    it " " do
-      
-    end
   end
 end
