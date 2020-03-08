@@ -22,6 +22,7 @@ describe 'Reservation class' do
     end
 
     it 'can take a block parameter if reservation is part of a block' do
+      #TODO change this to equal a range of 1111-9999
       expect(@block_reservation.block.block_id).must_equal 1234
     end
   end
