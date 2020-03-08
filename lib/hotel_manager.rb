@@ -1,3 +1,5 @@
+require_relative "hotel_block"
+
 module Hotel
   class HotelManager
     attr_reader :rooms, :total_reservations
@@ -37,6 +39,15 @@ module Hotel
 
       find_room(reservation.room_number).reservations << reservation
       return reservation
+    end
+
+    def reserve_block(date_range, rooms, discount_rate)
+      found_rooms = []
+      rooms.each do |room|
+        found_rooms << find_room(room)
+      end
+
+      return Hotel::HotelBlock.new(date_range, found_rooms, discount_rate)
     end
 
     def find_room(id)

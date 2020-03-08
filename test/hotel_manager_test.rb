@@ -114,6 +114,23 @@ describe "HotelManager" do
     end
   end
 
+  describe "reserve_block" do
+    before do
+      date_range = Hotel::DateRange.new(Date.new(2020,5,10), Date.new(2020,5,14))
+
+      @reserve_block = @hotel_manager.reserve_block(date_range, (1..4).to_a, 0.15)
+    end
+
+    it "creates an instance of HotelBlock" do
+      expect(@reserve_block).must_be_kind_of Hotel::HotelBlock
+    end
+
+    it "contains an array of Room instances" do
+      expect(@reserve_block.rooms).must_be_kind_of Array
+      expect(@reserve_block.rooms[0]).must_be_kind_of Hotel::Room
+    end
+  end
+
   describe "find_room" do
     it "returns correct room" do
       expect(@hotel_manager.find_room(2).cost).must_equal 200
