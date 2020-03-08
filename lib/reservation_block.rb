@@ -5,11 +5,11 @@ module Hotel
     attr_reader :date_range, :discount_rate
     attr_accessor :rooms, :total_cost
     
-    def initialize(date_range, rooms = [], discount_rate)
+    def initialize(date_range, discount_rate, rooms: [])
       @date_range = date_range
       
-      # validate_rooms
-      @rooms = []
+      @rooms = rooms
+      validate_rooms
       
       @discount_rate = discount_rate
       @total_block_cost = total_block_cost
