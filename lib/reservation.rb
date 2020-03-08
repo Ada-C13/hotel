@@ -1,17 +1,25 @@
 module Hotel
   class Reservation < DateRange
-    attr_reader :room_num, :nights, :total_cost, :block_id
+    attr_reader :room_num, :nights, :total_cost, :block
 
-    def initialize(arrive, depart, room, block_id = nil)
+    def initialize(arrive, depart, room, block = nil)
       super(arrive, depart)
       @room_num = room.room_num
       @nights = nights
-      @total_cost = @nights * room.rate
-      @block_id = block_id
+      @total_cost = get_total_cost(room, block)
+      @block = block
     end
 
     def nights
       @depart - @arrive
+    end
+
+    def get_total_cost(room, block)
+      if block.nil?
+        room.rate * @nights
+      else
+        block.rate * @nights
+      end
     end
 
   end
