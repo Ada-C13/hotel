@@ -1,10 +1,11 @@
 module Hotel
   class HotelController
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :blocks
 
     def initialize
       @rooms = []
       @reservations = []
+      @blocks = []
     end
 
     def add_room(room)
@@ -31,18 +32,33 @@ module Hotel
       return available_rooms
     end
     
-    def reserve_room(arrive, depart)
+    def reserve_room(arrive, depart, block = nil)
       raise ArgumentError, "End date must be after start date" if depart < arrive || depart == arrive
       raise ArgumentError, "Arrival must be today or after today's date" if arrive < Date.today
 
       rooms = find_available_rooms(arrive, depart)
       raise ArgumentError, "Reservation can't be made, no available rooms" if rooms.empty?
 
-
-      new_reservation = Hotel::Reservation.new(arrive, depart, rooms.first)
+      if block.nil?
+        new_reservation = Hotel::Reservation.new(arrive, depart, rooms.first)
+      else
+        new_reservation = Hotel::Reservation.new(arrive, depart, rooms.pop, block)
+      end
       @reservations << new_reservation
   
       return new_reservation
+    end
+
+    def make_block(arrive, depart, rate, num_of_rooms)
+      raise ArgumentError,"Max number of rooms is 5" if num_of_rooms > 5
+      new_block = Hotel::Block.new(arrive, depart, rate, num_of_rooms)
+      @blocks << new_block
+
+      num_of_rooms.times do 
+        reserve_room(arrive, depart, new_block)
+      end
+
+      return new_block
     end
 
     def reservations_by_date(given_date, second_date =given_date)
