@@ -123,8 +123,45 @@ describe 'HotelController class' do
     end
   end
 
-  describe 'make a block' do 
-    it 'should make a block with a date range and rate' do
+  describe 'HotelController make_block' do 
+    it 'should make a block with a date range and rate and number of rooms' do
+      expect(@new_hotel.make_block(@start_date, @end_date, 150, 3)).must_be_instance_of Hotel::Block
+    end
+
+    it 'should add the block to a list of all block reservations' do 
+      @new_block = @new_hotel.make_block(@start_date, @end_date, 150, 3)
+      expect(@new_hotel.blocks.first).must_be_instance_of Hotel::Block
+      expect(@new_hotel.blocks.first.date_range.arrive).must_equal @start_date
+      expect(@new_hotel.blocks.first.date_range.depart).must_equal @end_date
+      expect(@new_hotel.blocks.first.rate).must_equal 150
+      expect(@new_hotel.blocks.first.num_of_rooms).must_equal 3
+    end
+
+    it 'should make x number of reservations for block' do
+      @new_hotel.make_block(@start_date, @end_date, 150, 3)
+      expect(@new_hotel.reservations.length).must_equal 4
+      #TODO check that each room number is different
+    end
+
+    it 'given a range of dates determine if x amount of rooms can be booked' do
+      
+    end
+  end
+
+  xdescribe 'HotelController raising ArrgumentError for invalid new block' do
+    it 'raises an exception if more than 5 rooms are entered for block' do
+      expect{@new_hotel.make_block(@start_date, @end_date, 150, 6)}.must_raise ArgumentError
+    end
+
+    it 'raises an excetion if less than 2 rooms are enterd for a block' do
+      
+    end
+
+    it 'raises an exception if x amount of rooms cannot be booked for given date range' do
+      17.times do 
+        @new_hotel.reserve_room(Date.new(2021, 3, 6), Date.new(2021, 3, 8))
+      end
+      expect{@new_hotel.make_block(@start_date, @end_date, 150, 5)}.must_raise ArgumentError
     end
   end
 end
