@@ -43,7 +43,11 @@ module Hotel
     end
 
     def include?(date)
-      return false
+      # compare date with @start_date and @end_date
+      if date > @end_date || date == @end_date || date < @start_date
+        return false
+      end
+      return true
     end
 
     def nights

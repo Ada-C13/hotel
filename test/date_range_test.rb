@@ -128,7 +128,9 @@ describe Hotel::DateRange do
 
     it "returns false if the date is clearly out" do
       date = @range.end_date + 1
+      date_2 = @range.start_date - 1
       expect(@range.include?(date)).must_equal false
+      expect(@range.include?(date_2)).must_equal false
     end
 
     it "returns true for dates in the range" do
