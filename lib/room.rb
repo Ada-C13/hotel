@@ -7,7 +7,6 @@ module Hotel
       raise ArgumentError if room_number.class != Integer
       @room_number = room_number
       @cost = cost
-      @reservations_for_room = []
     end
 
   end
