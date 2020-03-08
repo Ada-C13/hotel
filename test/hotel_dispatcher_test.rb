@@ -1,5 +1,5 @@
 require_relative 'test_helper'
-require 'pry'
+
 
 describe "HotelDispatcher class" do
   describe "initialize" do
@@ -59,7 +59,7 @@ describe "HotelDispatcher class" do
       expect(dispatcher.find_all_res_for_room(1, Date.new(2020, 02, 28), Date.new(2020, 03, 03)).length).must_equal 1
     end
 
-    it "does NOT return a reservation when the given date_ranges do NOT overlap" do 
+    it "does NOT return a reservation when the given date_range does NOT overlap with reservation date range" do 
       dispatcher = Hotel::HotelDispatcher.new()
       dispatcher.make_reservation(Date.new(2020, 03, 01), Date.new(2020, 03, 05))
       expect(dispatcher.find_all_res_for_room(1, Date.new(2020, 03, 07), Date.new(2020, 03, 10))).must_be_empty
@@ -84,47 +84,50 @@ describe "HotelDispatcher class" do
       dispatcher = Hotel::HotelDispatcher.new()
       expect(dispatcher.find_available_rooms(Date.new(2020, 03, 06), Date.new(2020, 03, 10)).length).must_equal 20
     end
-  #   it "will return 19 available rooms only if there is one existing reservation that falls within the given date range" do 
-  #     dispatcher = Hotel::HotelDispatcher.new()
-  #     dispatcher.make_reservation(Date.new(2019, 03, 01), Date.new(2019, 03, 05))
-  #     expect(dispatcher.find_available_rooms(Date.new(2019, 03, 01), Date.new(2019, 03, 10)).length).must_equal 20
 
+    it "returns 19 rooms when input_s_date >= res_s_date && input_e_date < res_e_date" do 
+      dispatcher = Hotel::HotelDispatcher.new()
+      dispatcher.make_reservation(Date.new(2020, 03, 01), Date.new(2020, 03, 05))
+      expect(dispatcher.find_available_rooms(Date.new(2020, 03, 02), Date.new(2020, 03, 04)).length).must_equal 19
+    end
 
-  #   end
+    it "returns 19 rooms when input_s_date < res_s_date && input_e_date < res_e_date" do 
+      dispatcher = Hotel::HotelDispatcher.new()
+      dispatcher.make_reservation(Date.new(2020, 04, 04), Date.new(2020, 04, 14))
+      expect(dispatcher.find_available_rooms(Date.new(2020, 04, 01), Date.new(2020, 04, 06)).length).must_equal 19
+    end
 
-    # it "when the date ranges for the reservation and the args for the make_res_method do not overlap" do
-    #   dispatcher = Hotel::HotelDispatcher.new()
-    #   dispatcher.make_reservation(Date.new(2019, 03, 01), Date.new(2019, 03, 05))
-    #   expect(dispatcher.find_available_rooms(Date.new(2019, 03, 06), Date.new(2019, 03, 10)).length).must_equal 1
-    # end
-
-    # it "finds available rooms by open dates" do
-    #   dispatcher = Hotel::HotelDispatcher.new()
-    #   dispatcher.make_reservation(Date.new(2019, 03, 01), Date.new(2019, 03, 05))
-    #   expect(dispatcher.find_available_rooms(Date.new(2019, 02, 27), Date.new(2019, 03, 01)).length).must_equal 1
-    # end
-
-    # it "finds available rooms by open dates" do
-    #   dispatcher = Hotel::HotelDispatcher.new()
-    #   dispatcher.make_reservation(Date.new(2019, 03, 01), Date.new(2019, 03, 05))
-    #   expect(dispatcher.find_available_rooms(Date.new(2019, 03, 05), Date.new(2019, 03, 10)).length).must_equal 1
-    # end
-
-    # it "finds available rooms by open dates" do
-    #   dispatcher = Hotel::HotelDispatcher.new()
-    #   dispatcher.make_reservation(Date.new(2019, 03, 01), Date.new(2019, 03, 05))
-    #   expect(dispatcher.find_available_rooms(Date.new(2019, 02, 27), Date.new(2019, 03, 01)).length).must_equal 1
-    # end
-
-   
-
-   
-
+    it "returns 19 rooms when input_s_date < res_e_date && input_e_date > res_e_date" do
+      dispatcher = Hotel::HotelDispatcher.new()
+      dispatcher.make_reservation(Date.new(2019, 03, 01), Date.new(2019, 03, 05))
+      expect(dispatcher.find_available_rooms(Date.new(2019, 03, 03), Date.new(2019, 03, 06)).length).must_equal 19
+    end
 
   end # describe block end
 
+  describe "book available room with date range" do
 
+    it "will book a specific room on specific dates" do
+      dispatcher = Hotel::HotelDispatcher.new()
 
+      dispatcher.make_reservation(Date.new(2020, 03, 01), Date.new(2020, 03, 05))
+      expect(dispatcher.reservations.length).must_equal 1
+
+      dispatcher.make_reservation(Date.new(2020, 04, 01), Date.new(2020, 04, 12))
+      expect(dispatcher.reservations.length).must_equal 2
+      
+      dispatcher.book_avail_room_w_date_range(5, Date.new(2020, 03, 15), Date.new(2020, 03, 20))
+      expect(dispatcher.reservations.length).must_equal 3
+
+    end
+
+    it "will raise an ArgumentError if room is unavailable for specific date" do
+      dispatcher = Hotel::HotelDispatcher.new()
+
+      dispatcher.book_avail_room_w_date_range(5, Date.new(2020, 03, 16), Date.new(2020, 03, 19))
+      expect{ dispatcher.book_avail_room_w_date_range(5, Date.new(2020, 03, 15), Date.new(2020, 03, 01)) }.must_raise ArgumentError
+    end
   
-  
+  end # book available room with date range end
+
 end #HotelDispatcher class end
