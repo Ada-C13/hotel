@@ -5,9 +5,9 @@ Congratulations! You're submitting your assignment. Please reflect on the assign
 ## Reflection
 Question | Answer
 :------------- | :-------------
-What was a design challenge that you encountered on this project? | 
-What was a design decision you made that changed over time over the project? | 
-What was a concept you gained clarity on, or a learning that you'd like to share? | 
-What is an example of a _nominal test_ that you wrote for this assignment? What makes it a nominal case? | 
-What is an example of an _edge case test_ that you wrote for this assignment? What makes it an edge case? | 
-How do you feel you did in writing pseudocode first, then writing the tests and then the code? | 
+What was a design challenge that you encountered on this project? | Determining how many classes I would actually need and what those classes actually were. Visualizing how the classes would interact was also difficult at first given the data was as abstract as the classes themselves. Reviewing the project with classmates also posed challenges with confidence in what classes I already had given that what others had done made such beautiful sense as well. This made me want to redo my project over each day. |
+What was a design decision you made that changed over time over the project? | Initially, I wanted to make a class Date, but felt that a reservation has a date rather than reservation is a date. This was a result of deciding not to have any class inheritance just to simplify the project to clearly understand what was happening between classes. For the future, I may use inheritance to refactor some of the code. | 
+What was a concept you gained clarity on, or a learning that you'd like to share? | I learned that I learned a lot more when I took the time to pseudocode my methods. Also, the physical process of writing methods, writing the tests to go with those methods. |
+What is an example of a _nominal test_ that you wrote for this assignment? What makes it a nominal case? | Checking if an instance of a Room oject returned a Room. |
+What is an example of an _edge case test_ that you wrote for this assignment? What makes it an edge case? | Validating bad inputs to return Argument Errors. For example, making sure that room number parameter is an integer and not a string. |
+How do you feel you did in writing pseudocode first, then writing the tests and then the code? | It helped when I knew what I needed to do for that specific part, but it is still difficult to determine the next steps of the entire project, what data is available, what data I needed to get, and the overall flow of the project. |
