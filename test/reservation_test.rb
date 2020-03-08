@@ -1,20 +1,12 @@
 require_relative 'test_helper'
 
 describe 'Reservation class' do 
-  before do 
-    # Makes a new instance of hotel
-    @new_hotel = Hotel::HotelController.new
-
-    # Makes 20 rooms in hotel
-    20.times do |room_num|
-      room = Hotel::Room.new(room_num + 1)
-      @new_hotel.add_room(room)
-    end
-
-    # Makes reservations for hotel
-    @start_date = Date.new(2021, 2, 24)
-    @end_date = Date.new(2021, 2, 26)
-    @reservation = @new_hotel.reserve_room(@start_date, @end_date)
+  before do
+    start_date = Date.new(2021, 2, 24)
+    end_date = Date.new(2021, 2, 26)
+    room = Hotel::Room.new(20)
+    @reservation = Hotel::Reservation.new(start_date, end_date, room)
+    @block_reservation = Hotel::Reservation.new(start_date, end_date, room, 123)
   end
 
   describe 'Reservation instantiation' do
@@ -26,6 +18,10 @@ describe 'Reservation class' do
       expect(@reservation.room_num).must_be_kind_of Integer
       expect(@reservation.nights).must_equal 2
       expect(@reservation.total_cost).must_equal 400
+    end
+
+    it 'can take a block_id parameter if reservation is part of a block' do
+      expect(@block_reservation.block_id).must_equal 123
     end
   end
 
