@@ -72,12 +72,10 @@ module Hotel
       all_rooms_hotel_block = rooms_list_for_hotel_block(start_date, end_date) 
 
       # get the aviable_rooms_list
-      avialable_rooms_list = rooms.reject do |room|
-        all_reserved_rooms.any? {|res_room| res_room.id == room.id} && all_rooms_hotel_block.any? {|block_room| block_room.id == room.id}
-        
-          
+      available_rooms_list = rooms.reject do |room|
+        all_reserved_rooms.any? {|res_room| res_room.id == room.id} || all_rooms_hotel_block.any? {|block_room| block_room.id == room.id}  
       end
-      return avialable_rooms_list
+      return available_rooms_list
     end
 
     # I can make a reservation of a room for a given date range, 
@@ -222,7 +220,7 @@ module Hotel
           delete_hotel_block(hotel_block_after_reservation)
         end
       end
-      return reservations
+      return reservation
     end
   end
 end

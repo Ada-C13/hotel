@@ -93,9 +93,17 @@ describe Hotel::HotelController do
     end 
 
     describe "available_rooms" do
+      before do 
+        @room1 = @hotel_controller.rooms[0]
+        @room2 = @hotel_controller.rooms[1]
+        @room3 = @hotel_controller.rooms[2]
+        @room4 = @hotel_controller.rooms[3]
+        @room5 = @hotel_controller.rooms[4]
+        @rooms_array = [@room2, @room3]
+        @discount_rate = 0.1
+      end
       it "takes two dates and returns a list" do
-        room = @hotel_controller.rooms.first
-        reservation = Hotel::Reservation.new(1, @date_range,room)
+        reservation = Hotel::Reservation.new(1, @date_range,@room1)
         @hotel_controller.add_reservation(reservation)
         
         test_start_date = Date.new(2020, 8, 01)
@@ -104,6 +112,24 @@ describe Hotel::HotelController do
     
         expect(room_list).must_be_kind_of Array
         expect(room_list.length).must_equal 19
+      end
+
+      it "available_rooms should not already been reserved in reservations or in the hotel block for those specific date range" do
+        start_date = Date.new(2020, 8, 20)
+        end_date = start_date + 5
+        block_date_range = Hotel::DateRange.new(start_date, end_date)
+        reservation = Hotel::Reservation.new(1, @date_range,@room1)
+        @hotel_controller.add_reservation(reservation)
+        new_hotel_block = @hotel_controller.create_hotel_block(block_date_range, @rooms_array, @discount_rate)
+
+        test_start_date = Date.new(2020, 8, 01)
+        test_end_date = test_start_date + 29
+        room_list = @hotel_controller.available_rooms(test_start_date, test_end_date)
+        
+        expect(room_list).must_be_kind_of Array
+        expect(room_list.length).must_equal 17
+
+        
       end
 
       describe "reserve_room" do
