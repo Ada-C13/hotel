@@ -106,6 +106,7 @@ module Hotel
       return Hotel::DateRange.new(start_date, end_date)
     end
 
+    # Took this from https://stackoverflow.com/questions/1117584/generating-guids-in-ruby
     def generate_block_id
       return SecureRandom.uuid
     end
