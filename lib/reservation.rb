@@ -1,7 +1,8 @@
 require 'date'
 require 'time'
-require './lib/date_range.rb'
-require './lib/hotel_controller.rb'
+require_relative 'reservation'
+require_relative 'date_range'
+require_relative 'hotel_block'
 
 module Hotel
   class Reservation
@@ -25,6 +26,15 @@ module Hotel
         @cost = ((@date_range.duration)* 200).to_f
       end
       return  @cost
+    end
+
+    # trial
+    def check_status 
+      if self.status == :open_hotel_block
+        return true
+      else 
+        return false
+      end
     end
   end
 end

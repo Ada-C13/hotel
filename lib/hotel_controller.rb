@@ -10,7 +10,8 @@ module Hotel
     attr_accessor :room_list, :specific_date_reservation, :hotel_block_list
 
     # Wave 1
-    def initialize(number_of_room)
+    # default number of room in the hotel is 20 
+    def initialize(number_of_room = 20)
     @reservation_list = Hash.new
     @room_list = Array.new
     @hotel_block_list = Hash.new
@@ -51,6 +52,7 @@ module Hotel
           specific_date_reservation << reservation
         end
       end
+      
       if specific_date_reservation.empty?
         raise ArgumentError.new("There is no reservation on this day!")
       else
@@ -123,7 +125,7 @@ module Hotel
       raise ArgumentError.new("Not a valid Hotel Block ID!") if !(hotel_block_list.keys.include? hotel_block_id)
       available_rooms_in_block = Array.new
       hotel_block_list[hotel_block_id].block_reservations.each do |reservation|
-        if reservation.status == :open_hotel_block
+        if reservation.check_status
           available_rooms_in_block << reservation.room_num
         end
       end
@@ -138,14 +140,15 @@ module Hotel
     def reserve_room_hotel_block(hotel_block_id, customer_name, specific_room) 
       raise ArgumentError.new("Not a valid Hotel Block ID!") if !(hotel_block_list.keys.include? hotel_block_id)
       hotel_block_list[hotel_block_id].block_reservations.each do |reservation|
-        if (reservation.room_num == specific_room) && (reservation.status != :reserved_hotel_block)
+        # check if the specific room requested in within the hotel block and not booked by another guests
+        if hotel_block_list[hotel_block_id].check_valid_room(specific_room) && reservation.check_status  
+        #if (reservation.room_num == specific_room) && (reservation.status != :reserved_hotel_block)
           booking_room = reservation
           booking_room.customer_name = customer_name
           booking_room.status = :reserved_hotel_block
         end  
-
-      # ???????? raise ArgumentError.new("This is not a reserved room for the hotel block guest!")
       end
+    # raise ArgumentError.new("This is not a reserved room for the hotel block guest!")
     end
   end
 end
