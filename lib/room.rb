@@ -1,16 +1,17 @@
-
 module Hotel
   class Room
     ROOMS = 20
-    attr_reader :id, :nightly_rate, :reservations
+    attr_reader :id, :nightly_rate
 
     def initialize(id)
-      if id <= 0 || id > 20
-        raise ArgumentError.new("Not a real room")
-      end
+      raise ArgumentError.new("Not a real room") if id <= 0 || id > 20
+  
       @id = id
       @nightly_rate = 200
-      @reservations = []
+    end
+
+    def reservations
+      @reservations ||= []
     end
 
     def self.all

@@ -1,4 +1,3 @@
-
 module Hotel
   class ReservationManager
     attr_reader :all_rooms, :all_reservations
@@ -25,13 +24,7 @@ module Hotel
 
     # List available rooms
     def available_rooms(start_date, end_date)
-      available_rooms = Array.new
-
-      all_rooms.each do |room|
-        result = available?(start_date, end_date, room)
-        available_rooms << room if result
-        end       
-      return available_rooms
+      all_rooms.select { |room| available?(start_date, end_date, room) }     
     end
 
     # Make a new reservation
@@ -48,12 +41,11 @@ module Hotel
 
     # Look-up a reservation by date
     def find_reservation(date)
-      by_date_reservation = all_reservations.select do |reservation|
+      all_reservations.select do |reservation|
         first_day = reservation.start_date
         last_day = reservation.end_date
         (first_day...last_day).include? Date.parse(date)
       end
-      return by_date_reservation
     end
   end
 end
