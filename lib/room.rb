@@ -15,7 +15,7 @@ module Hotel
       rooms = CSV.parse(File.read(__dir__ + "/../support/rooms.csv"), headers: true, header_converters: :symbol) #relative to HOTEL & reading csv file
       all_rooms = [] #save all rooms to this array
         rooms.each do |record| #loop through each record
-          room_number = record[:room_number]
+          room_number = record[:room_number].to_i
           price = record[:price].to_i
           temp_room = Room.new(room_number, price)
           all_rooms.push(temp_room) #push Room into all_rooms

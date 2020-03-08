@@ -14,18 +14,17 @@ module Hotel
         @check_in = check_in
         @number_of_days = number_of_days
         @status = status
-        @check_out = check_in + number_of_days
+        @check_out = check_in + number_of_days 
 
         if room
           @room = room
           @room_number = room.room_number
-        elsif room_number
-          @room_number = room_number
         else
-          raise ArgumentError, 'Room or room_number is required'
+          @room = room
+          @room_number = room_number
         end
 
-        if number_of_days < 0
+        if number_of_days <= 0
             raise ArgumentError.new("Invalid, number of days must be greater than 0")
         end
       end #initialize
@@ -41,6 +40,8 @@ module Hotel
   #****************************************************************
 
       #list of reservations for a specific date
+      #input: date (Date)
+      #return: list_of_reservations_date ([Resevation])
       def get_reservations(date) 
         list_of_reservations_date = []
         @reservations.each do |reservation|
@@ -61,17 +62,52 @@ module Hotel
         end
         return false
       end
-#****************************************************************
+  #****************************************************************
+  #Helper method to def are_reservations_overlapped(aReservations)
+  #Checks if this reservation (self) overlaps, with aReservation passed in
+  #input: aReservation (Reservation)
+  #return: isOverlapped (boolean)
+  def is_overlapped(aReservation)
+    is_overlapped = true
+    #check self reservation overlaps with aReservation
+    # if (self.check_out > aReservation.check_in) ||
+    #   (self.check_in < aReservation.check_in) ||
+    #   (self.check_out > aReservation.check_out)
+    if (self.check_out <= aReservation.check_in) || (self.check_in >= aReservation.check_out)
+      is_overlapped = false
+    else 
+      is_overlapped = true
+    end
+    return is_overlapped
+  end
+  #****************************************************************
+
+  #Checks if this reservation (self) overlaps, with reservations passed in
+  #input: aReservations ([Reservations])
+  #return: isOverlapped (boolean)
+  def are_reservations_overlapped(aReservations)
+    are_overlapped = false
+    #loop through aReservations
+    aReservations.each do |reservation|
+     #check if self reservation overlaps with reservation in loop
+      if self.is_overlapped(reservation)
+        return true
+      end
+    end
+    return are_overlapped
+  end
+
+  #****************************************************************
 
       def self.load_all_reservations() #what to get
         reservations = CSV.parse(File.read(__dir__ + "/../support/reservations.csv"), headers: true, header_converters: :symbol) #relative to HOTEL & reading csv file
         all_reservations = [] #save all rooms to this array
         reservations.each do |record| #loop through each record in reservations csv
-          reservation_id = record[:reservation_id]
+          reservation_id = record[:reservation_id].to_i
           check_in = Date.parse(record[:check_in])
           number_of_days = record[:number_of_days].to_i
           status = record[:status].to_sym
-          room_number = record[:room_number]
+          room_number = record[:room_number].to_i
 
           temp_reservation = Reservation.new(reservation_id, check_in, number_of_days, status,nil, room_number)
           all_reservations.push(temp_reservation) #push Room into all_rooms
@@ -131,5 +167,19 @@ puts res.total_cost
 #     puts res.reservation_id
 #     puts res.status
 # end
+date1 = Date.parse("2020-01-10")
+res1 = Hotel::Reservation.new(1, date1, 20, "confirmed", room)
+puts "New Res: #{res1.check_in} - #{res1.check_out}"
 
+date2 = Date.parse("2020-01-05")
+res2 = Hotel::Reservation.new(2, date2, 5, "confirmed", room)
+puts "Res2: #{res2.check_in} - #{res2.check_out}"
 
+date3 = Date.parse("2020-01-20")
+res3 = Hotel::Reservation.new(2, date3, 5, "confirmed", room)
+puts "Res3: #{res3.check_in} - #{res3.check_out}"
+
+res_array = [res2, res3]
+
+# puts res1.is_overlapped(res2)
+puts res1.are_reservations_overlapped(res_array)
