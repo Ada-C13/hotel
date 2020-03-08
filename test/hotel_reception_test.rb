@@ -31,20 +31,20 @@ describe "hotel reception" do
 
   describe "available rooms method" do
     before do
-      check_in_time = [2020, 2, 1]
-      check_out_time = [2020, 2, 3]
+      check_in_time = Date.new(2020, 2, 1)
+      check_out_time = Date.new(2020, 2, 3)
       room = @reception.rooms[0]
       @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
 
-      check_in_time = [2020, 2, 14]
-      check_out_time = [2020, 2, 15]
+      check_in_time = Date.new(2020, 2, 14)
+      check_out_time = Date.new(2020, 2, 15)
       room = @reception.rooms[1]
       @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
     end
 
     it "will list an array of the available rooms for a given dates" do
-      check_in_time = [2020, 2, 1]
-      check_out_time = [2020, 2, 2]
+      check_in_time = Date.new(2020, 2, 1)
+      check_out_time = Date.new(2020, 2, 2)
       my_rooms = @reception.available_rooms(check_in_time, check_out_time)
       my_room_ids = my_rooms.map { |room| room.id }
 
@@ -63,13 +63,13 @@ describe "hotel reception" do
 
   describe "find reservation" do
     before do
-      check_in_time = [2020, 2, 1]
-      check_out_time = [2020, 2, 3]
+      check_in_time = Date.new(2020, 2, 1)
+      check_out_time = Date.new(2020, 2, 3)
       room = @reception.rooms[0]
       @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
 
-      check_in_time = [2020, 2, 14]
-      check_out_time = [2020, 2, 15]
+      check_in_time = Date.new(2020, 2, 14)
+      check_out_time = Date.new(2020, 2, 15)
       room = @reception.rooms[1]
       @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
     end
@@ -85,13 +85,13 @@ describe "hotel reception" do
 
   describe "list reservations method" do
     before do
-      check_in_time = [2020, 2, 1]
-      check_out_time = [2020, 2, 3]
+      check_in_time = Date.new(2020, 2, 1)
+      check_out_time = Datenew(2020, 2, 3)
       room = @reception.rooms[0]
       @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
 
-      check_in_time = [2020, 2, 14]
-      check_out_time = [2020, 2, 16]
+      check_in_time = Date.new(2020, 2, 14)
+      check_out_time = Date.new(2020, 2, 16)
       room = @reception.rooms[1]
       @reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)
     end
@@ -145,8 +145,8 @@ describe "hotel reception" do
 
   describe "make reservation method" do
     before do
-      check_in_time = [2020, 2, 1]
-      check_out_time = [2020, 2, 3]
+      check_in_time = Date.new(2020, 2, 1)
+      check_out_time = Date.new(2020, 2, 3)
       @reception.make_reservation(check_in_time, check_out_time)
     end
     it "edits the reservations array" do
@@ -156,8 +156,8 @@ describe "hotel reception" do
     end
 
     it "will reserve the first room available" do
-      check_in_time = [2020, 2, 2]
-      check_out_time = [2020, 2, 3]
+      check_in_time = Date.new(2020, 2, 2)
+      check_out_time = Date.new(2020, 2, 3)
       @reception.make_reservation(check_in_time, check_out_time)
       my_reservations = @reception.reservations
 
@@ -170,8 +170,8 @@ describe "hotel reception" do
     it "will raise an exception if there are no rooms available" do
       my_reception = Hotel::HotelReception.new
 
-      check_in_time = [2020, 2, 14]
-      check_out_time = [2020, 2, 15]
+      check_in_time = Date.new(2020, 2, 14)
+      check_out_time = Date.new(2020, 2, 15)
       20.times do |i|
         room = my_reception.rooms[i]
         my_reception.reservations << Hotel::Reservation.new(check_in_time, check_out_time, room)

@@ -2,8 +2,8 @@ require_relative 'test_helper'
 
 describe "date_range class" do
   before do
-    day1 = [2020, 1, 28]
-    day2 = [2020, 1, 30]
+    day1 = Date.new(2020, 1, 28)
+    day2 = Date.new(2020, 1, 30)
     @date = Hotel::DateRange.new(day1, day2)
   end
   describe "initialize" do
@@ -20,8 +20,8 @@ describe "date_range class" do
     end
     it "will not create instance if check out time is before check in time" do
       expect {
-        day1 = [2020, 1, 28]
-        day2 = [2020, 1, 27]
+        day1 = Date.new(2020, 1, 28)
+        day2 = Date.new(2020, 1, 27)
         Hotel::DateRange.new(day1, day2)
       }.must_raise ArgumentError
     end
@@ -55,12 +55,12 @@ describe "date_range class" do
 
   describe "overlap? method" do
     it "will return true if another date range overlaps more than one day" do
-      day1 = [2020, 1, 29]
-      day2 = [2020, 1, 31]
+      day1 = Date.new(2020, 1, 29)
+      day2 = Date.new(2020, 1, 31)
       my_days = Hotel::DateRange.new(day1, day2)
 
-      other_day1 = [2020, 1, 1]
-      other_day2 = [2020, 2, 1]
+      other_day1 = Date.new(2020, 1, 1)
+      other_day2 = Date.new(2020, 2, 1)
       my_other_days = Hotel::DateRange.new(other_day1, other_day2)
 
       expect(@date.overlap?(my_days)).must_equal true
@@ -68,20 +68,20 @@ describe "date_range class" do
     end
 
     it "will return false if another date range has no dates in common" do
-      day1 = [2020, 1, 5]
-      day2 = [2020, 1, 6]
+      day1 = Date.new(2020, 1, 5)
+      day2 = Date.new(2020, 1, 6)
       my_days = Hotel::DateRange.new(day1, day2)
 
       expect(@date.overlap?(my_days)).must_equal false
     end
 
     it "will return false if the first/end days overlap" do
-      day1 = [2020, 1, 27]
-      day2 = [2020, 1, 28]
+      day1 = Date.new(2020, 1, 27)
+      day2 = Date.new(2020, 1, 28)
       my_days = Hotel::DateRange.new(day1, day2)
 
-      other_day1 = [2020, 1, 30]
-      other_day2 = [2020, 1, 31]
+      other_day1 = Date.new(2020, 1, 30)
+      other_day2 = Date.new(2020, 1, 31)
       my_other_days = Hotel::DateRange.new(other_day1, other_day2)
 
       expect(@date.overlap?(my_days)).must_equal false

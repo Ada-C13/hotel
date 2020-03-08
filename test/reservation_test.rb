@@ -2,8 +2,8 @@ require_relative 'test_helper'
 
 describe "initialize" do
   before do
-    check_in_time = [2020, 1, 28]
-    check_out_time = [2020, 1, 30]
+    check_in_time = Date.new(\d{4}, \d, \d\d?)
+    check_out_time = Date.new(\d{4}, \d, \d\d?)
     room = Hotel::Room.new(1, 200)
     @reservation = Hotel::Reservation.new(check_in_time, check_out_time, room)
   end
@@ -31,8 +31,8 @@ end
 
 describe "cost method" do
   before do
-    check_in_time = [2020, 1, 28]
-    check_out_time = [2020, 1, 30]
+    check_in_time = Date.new(\d{4}, \d, \d\d?)
+    check_out_time = Date.new(\d{4}, \d, \d\d?)
     room = Hotel::Room.new(1, 200)
     @reservation = Hotel::Reservation.new(check_in_time, check_out_time, room)
   end

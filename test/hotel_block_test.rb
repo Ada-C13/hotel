@@ -6,15 +6,18 @@ describe 'hotel block' do
   end
 
   describe 'initialize' do
-    my_rooms = []
-    3.times do |i|
-      my_rooms << @reception.rooms
-    end
-    first_date = [2020, 3, 20]
-    last_date = [2020, 3, 25]
-    my_dates = Hotel::DateRange.new(first_date, last_date)
+    before do 
+      my_rooms = []
+      3.times do |i|
+        my_rooms << @reception.rooms[i]
+      end
 
-    @my_block = Hotel::HotelBlock.new(my_rooms, my_dates)
+      first_date = Date.new(\d{4}, \d, \d\d?)
+      last_date = Date.new(\d{4}, \d, \d\d?)
+      my_dates = Hotel::DateRange.new(first_date, last_date)
+
+      @my_block = Hotel::HotelBlock.new(rooms: my_rooms, dates: my_dates)
+    end
 
     it "can be initialized" do
       expect(@my_block).must_be_instance_of Hotel::HotelBlock
@@ -25,10 +28,10 @@ describe 'hotel block' do
       expect(@my_block.id).must_be_instance_of Integer
       expect(@my_block).must_respond_to :rooms
       expect(@my_block.rooms).must_be_instance_of Array
-      expect(@my_block).must_respond_to :reservations
-      expect(@my_block.reservations).must_be_instance_of Array
-      expect(@my_block).must_respond_to :date_range
-      expect(@my_block.date_range).must_be_instance_of Hotel::DateRange
+      expect(@my_block).must_respond_to :reserved_rooms
+      expect(@my_block.reserved_rooms).must_be_instance_of Array
+      expect(@my_block).must_respond_to :dates
+      expect(@my_block.dates).must_be_instance_of Hotel::DateRange
     end
 
     it "will have 1 to 5 rooms objects" do
@@ -39,8 +42,8 @@ describe 'hotel block' do
 
     it "will only have available rooms" do
       my_rooms = @my_block.rooms
-      check_in = @my_block.date_range.check_in_time
-      check_out = @my_block.date_range.check_out_time
+      check_in = @my_block.dates.check_in_time
+      check_out = @my_block.dates.check_out_time
       avail_rooms = @reception.available_rooms(check_in, check_out)
       #check the array of room objects against the array of avail room objects for our date range
       expect(avail_rooms & my_rooms).must_be_empty

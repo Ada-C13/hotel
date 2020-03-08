@@ -4,8 +4,8 @@ module Hotel
   class DateRange
     attr_reader :check_in_time, :check_out_time
     def initialize(check_in_time, check_out_time)
-      @check_in_time = Date.new(check_in_time[0], check_in_time[1], check_in_time[2])
-      @check_out_time = Date.new(check_out_time[0], check_out_time[1], check_out_time[2])
+      @check_in_time = check_in_time
+      @check_out_time = check_out_time
 
       if @check_in_time.class != Date
         raise ArgumentError, "The check in time #{check_in_time} is not a valid time."
