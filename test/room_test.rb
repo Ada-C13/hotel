@@ -62,11 +62,27 @@ describe "room" do
       expect(@room1.is_available_range(Date.new(2014, 3, 25), Date.new(2014, 4, 2))).must_equal false
     end 
   end 
+
+  describe "overlap" do 
+    it "" do 
+      
+    end 
+  end 
   
   describe "book_room" do
+    before do 
+      @room3 = Hotel::Room.new(rm_num: 3)
+      @room4 = Hotel::Room.new(rm_num: 4)
+    end 
+
     it "correctly books a reservation" do 
-      # expect(@room1.book_room(Date.new(2014, 3, 25), Date.new(2014, 3, 27))).must_be_kind_of Hotel::Reservation
-      
+      # expect(@room3.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))).must_be_instance_of Hotel::Reservation
+    end 
+
+    it "correctly adds new reservation to rm's reservations" do 
+      @room4.book_room(Date.new(2014, 3, 25), Date.new(2014, 3, 27))
+      @room4.book_room(Date.new(2014, 5, 10), Date.new(2014, 6, 27))
+      expect(@room4.rm_reservations.length).must_equal 2
     end 
   end 
   

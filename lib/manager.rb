@@ -6,16 +6,16 @@ require_relative 'reservation'
 
 module Hotel
   class Manager
-    attr_reader :num :rm_reservations
+    attr_reader :num #:rm_reservations
     attr_writer
     attr_accessor  
 
-    def initialize
-      @all_rooms = Manager.create_rooms(20)
-      return @all_rooms
+    def initialize(num: 20)
+      all_rooms = Manager.create_rooms
+      return all_rooms
     end
 
-    def self.create_rooms(num)
+    def self.create_rooms(num: 20)
       all_rooms = []
       i = 1
       num.times do 
@@ -25,9 +25,12 @@ module Hotel
       return all_rooms
     end
   
-    def self.show_all_rooms
-      # shows user list of all rooms in hotel
-      # puts @all_rooms
+    def show_all_rooms
+      list_rooms = []
+      @all_rooms.each do |room|
+        list_rooms << room.rm_num
+      end 
+      return list_rooms
     end 
 
     def book_res(start_date, end_date)
@@ -40,15 +43,32 @@ module Hotel
           raise ArgumentError "No rooms available"
     end
 
+    def res_by_room(rm_num, start_date, end_date)
+    # all res for a specific room, on a certain date range 
+    # make empty temporary array
+    # access the room
+    # loop through all reservations 
+    # if date matches
+    # push res object into new array 
+    # return new array
+    end 
+
     def res_by_date(date) 
-      #gives all reservations for a specific date 
+    # gives all reservations for a specific date 
+    # make empty temporary array
+    # loop through all rooms 
+    # each room loop through reservation 
+    # if date contains reservation 
+    # push reservation into new array 
+    # return new array 
     end 
 
     def total_cost(recloc)
-      #gives the total cost of a given reservation 
+    # gives the total cost of a given reservation 
+    # accesses reservation 
+    # returns total cost 
     end
 
-    #must raise arugment error for invalid date 
 
   end
 end
