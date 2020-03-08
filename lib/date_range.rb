@@ -25,17 +25,24 @@ module Hotel
       @start_date <= date && @end_date > date
     end 
 
-    # https://makandracards.com/makandra/984-test-if-two-date-ranges-overlap-in-ruby-or-rails
-    # TO DO
+    # Reference: https://makandracards.com/makandra/984-test-if-two-date-ranges-overlap-in-ruby-or-rails
+
+    # @start_date <= other.end_date && @end_date >= other.start_date   
+
     # When booking
-    def overlap?(other)    
-      # TO DO: Check below
-      # 6/8                 6/8          6/15           6/2 
-      # @start_date <= other.end_date && @end_date >= other.start_date   #AS IS
-      @start_date < other.end_date && @end_date > other.start_date  #TO BE
+    def overlap?(other)  #6/8 ~ 6/15    <=> 6/5 ~ 6/10
+      # question
+      # 6/5    <  6/15         &&   6/10    >     6/8 
+      
+      @start_date < other.end_date && @end_date > other.start_date  
     end
 
+    def same?(other)
+      (@start_date == other.start_date) && (@end_date == other.end_date)
+    end 
+
     # attribute
+    private
     def check_valid_date
       if @start_date >= @end_date || @start_date.class != Date || @end_date.class != Date
         raise ArgumentError, "An invalid date range"

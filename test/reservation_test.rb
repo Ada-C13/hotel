@@ -8,18 +8,18 @@ describe "Reservation class" do
 
     hotel_manager = Hotel::HotelManager.new()
 
-    room_number = hotel_manager.available_room_ids(date_range)[0]
-    room = hotel_manager.find_room_by_number(room_number)
+    room_id = hotel_manager.available_room_ids(date_range)[0]
+    room = hotel_manager.find_room_by_id(room_id)
 
-    @reservation = Hotel::Reservation.new(date_range, room)
+    @reservation = Hotel::Reservation.new(date_range, room: room)
   end
 
   describe "#initialize" do 
-    it "creates date_range, room instance, id, is_block" do 
+    it "creates date_range, room instance, id, block" do 
       expect(@reservation).must_respond_to :date_range
       expect(@reservation).must_respond_to :room
       expect(@reservation).must_respond_to :id
-      expect(@reservation).must_respond_to :is_block
+      expect(@reservation).must_respond_to :block
 
       expect(@reservation.date_range).must_be_kind_of Hotel::DateRange
       expect(@reservation.room).must_be_kind_of Hotel::Room
@@ -29,30 +29,37 @@ describe "Reservation class" do
       expect(@reservation.room.id).must_equal 1
       expect(@reservation.id).must_be_kind_of String
       expect(@reservation.id.length).must_equal 6
-      expect(@reservation.is_block).must_equal false
+      expect(@reservation.block).must_be_nil
     end 
   end 
 
 
    # I can get the total cost for a given reservation
-   describe "#total_cost (regular price)" do 
-     it "returns the total cost for a given reservation" do
-       expect(@reservation.total_cost).must_be_instance_of Float
+   describe "#individual_total_cost" do 
+     it "returns the correct total cost for a given reservation" do
+       expect(@reservation.individual_total_cost).must_be_instance_of Float
 
-       expect(@reservation.total_cost).must_be_close_to (7 * 200.00), 0.01
+       expect(@reservation.individual_total_cost).must_be_close_to (7 * 200.00), 0.01
      end 
     end 
 
-   describe "#total_cost (block)" do 
-  #  (date_range, room, id: nil, is_block: false)
+   describe "#block_total_cost" do 
      it "returns the correct total cost for a given block reservation" do 
 
-       date_range = Hotel::DateRange.new(Date.new(2020, 5, 6), Date.new(2020, 5, 11))
-       room = Hotel::Room.new(id: 20)
+       date_range = Hotel::DateRange.new(Date.new(2020, 5, 6), Date.new(2020, 5, 12))
 
-       block_reservation = Hotel::Reservation.new(date_range, room, is_block: true) 
+       
+       rooms = []
+       5.times do |i|
+        room = Hotel::Room.new(id: i + 1)
+        rooms << room
+       end 
 
-       expect(block_reservation.total_cost).must_be_close_to (5 * 160.00), 0.01   
+       block = Hotel::Block.new(date_range, rooms: rooms)
+
+       reservation = Hotel::Reservation.new(date_range, block: block) 
+
+       expect(reservation.block_total_cost).must_be_close_to (160.00 * 5 * 6), 0.01   
      end 
    end 
 

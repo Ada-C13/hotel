@@ -6,24 +6,32 @@ module Hotel
 
     # date_range is an instance of DateRange class
     # room is an instance of Room class
-    attr_reader :date_range, :room, :id, :is_block
+    attr_reader :date_range, :room, :id, :block
 
-    def initialize(date_range, room, id: nil, is_block: false)
+    def initialize(date_range, id: nil, room: nil, block: nil)
 
       @date_range = date_range
-      @room = room  #room_number TO DO
-      
+
       @id = Reservation.generate_id  # Invoke class method
-      @is_block = is_block
+
+      if block == nil 
+        @room = room  #room_number TO DO  
+      else 
+        @block = block
+      end       
     end 
 
-    def total_cost 
-      if @is_block == true 
-        total_cost = @date_range.nights * (@room.cost * DISCOUNT)
-        return total_cost.to_f.round(2)
-      end 
+    def individual_total_cost 
+      return (room.cost * @date_range.nights).to_f.round(2) 
+    end 
 
-      return (@date_range.nights * @room.cost).to_f.round(2) 
+    def block_total_cost 
+      cost_per_room = block.rooms[0].cost * DISCOUNT
+      number_of_rooms = block.rooms.length
+
+      total_cost = (cost_per_room * number_of_rooms) * @date_range.nights
+
+      return total_cost.to_f.round(2)
     end 
 
 
