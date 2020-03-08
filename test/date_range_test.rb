@@ -107,4 +107,3 @@ describe "Instanitates a new Date Range" do
     end
   end # inside describe
 end # top describe
-

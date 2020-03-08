@@ -1,7 +1,9 @@
 require "date"
+require "pry"
 require_relative "date_range"
 require_relative "reservation"
 require_relative "room"
+require_relative "hotel_block"
 
 class HotelManager < Date_Range
   attr_accessor :reservations
@@ -13,7 +15,7 @@ class HotelManager < Date_Range
   end
 
   # - The hotel has 20 rooms, and they are numbered 1 through 20
-  # - In this method we make a rooms spanning 1 - 20 
+  # - In this method we   make a rooms spanning 1 - 20
   # - Each room is placed in an array which because an room array
   def make_rooms
     room_array = []
@@ -23,17 +25,9 @@ class HotelManager < Date_Range
     return room_array
   end
 
-  # - When reserving a room, the user provides only the start and end dates - the library should determine which room to use for the reservation
-
-  # check all rooms booked dates (if date in array unavilable)
-  # for each room.all loop
-  # return aval room or no room aval
-  # - When reserving a room, the user provides only the start and end dates - the library should determine which room to use for the reservation
-  # - I can view a list of rooms that are not reserved for a given date range, so that I can see all available rooms for that day
-
   # Here we check the room availability by taking in the check in and out date as parms
   # Those parms are then used to create a new Instantation of a date range
-  # By setting that new instantion of a date range as a variable we can then 
+  # By setting that new instantion of a date range as a variable we can then
   # Go into each room and check that said date range
   def check_room_available?(check_in_date, check_out_date)
     date_range = Date_Range.new(check_in_date, check_out_date)
@@ -55,9 +49,6 @@ class HotelManager < Date_Range
       end
     end
     return all_res
-    # reservation_array = Reservation.all
-    # reservation_array.each do |reservation|
-    #   return reservation if reservation.room_num == @room_num
   end
 
   def create_reservation(check_in_date, check_out_date)
@@ -65,22 +56,28 @@ class HotelManager < Date_Range
 
     # Iterate over list of rooms.
     # Find room that has availability.
-    # First room that has not time conflict is the room, we choose to use for the reservation.
+    # First room that has no time conflict is the room, we choose to use for the reservation.
     # If no rooms have availability during the checkin_date to checkout_date, we should return an error/ raise an error.
 
     date_range = Date_Range.new(check_in_date, check_out_date)
     @rooms.each do |room|
       # If no res has any overlap return true #
-      if !room.check_overlap_with_room_reservations(date_range)
+      if room.check_overlap_with_room_reservations(date_range)
         room.create_new_reservation(check_in_date, check_out_date)
-        return
+        return true
       end
     end
 
-    # Raise exception as no room is available during the requested date_range.
+    # # Raise exception as no room is available during the requested date_range.
     raise Exception.new "There are no rooms available for this date range"
   end
 
+  # This method is used to create a Hotel Block
+  # Takes in Room Ids and check in and check out date
+  # inside the method we create a method we create a variable called new requested_date_range which uses the Date_Range class
+  # room_ids is the number of rooms
+  # need to raise error if more than 5 rooms
+  # using the make rooms we
   def create_room_block(room_ids, check_in_date, check_out_date, room_rate)
     requested_date_range = Date_Range.new(check_in_date, check_out_date)
     room_ids.each do |room_id|
@@ -103,3 +100,11 @@ class HotelManager < Date_Range
 end
 
 # - For this wave, any room can be reserved at any time, and you don't need to check whether reservations conflict with each other (this will come in wave 2!)
+
+# - When reserving a room, the user provides only the start and end dates - the library should determine which room to use for the reservation
+
+# check all rooms booked dates (if date in array unavilable)
+# for each room.all loop
+# return aval room or no room aval
+# - When reserving a room, the user provides only the start and end dates - the library should determine which room to use for the reservation
+# - I can view a list of rooms that are not reserved for a given date range, so that I can see all available rooms for that day
