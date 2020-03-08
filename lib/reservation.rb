@@ -2,17 +2,17 @@ require_relative 'date_range'
 
 module Hotel
   class Reservation
-    attr_reader :id, :room, :date_range
+    attr_reader :id, :room, :dates
 
     def initialize(check_in_time, check_out_time, room)
       @id = rand(111111..999999)
-      @date_range = Hotel::DateRange.new(check_in_time, check_out_time)
+      @dates = Hotel::DateRange.new(check_in_time, check_out_time)
       @room = room
       @cost = 0
     end
 
     def cost
-      return room.cost * date_range.nights
+      return room.cost * dates.nights
     end
   end
 end

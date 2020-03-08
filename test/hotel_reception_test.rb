@@ -163,7 +163,7 @@ describe "hotel reception" do
 
       expect(my_reservations.length).must_equal 2
       expect(my_reservations.last.id).wont_equal @reception.reservations.first.id
-      expect(my_reservations.last.date_range.overlap?(my_reservations.first.date_range)).must_equal true
+      expect(my_reservations.last.dates.overlap?(my_reservations.first.dates)).must_equal true
       expect(my_reservations.last.room.id).wont_equal @reception.reservations.first.room.id
     end
 

@@ -16,13 +16,13 @@ module Hotel
 
     def available_rooms(check_in_time, check_out_time)
       dates = Hotel::DateRange.new(check_in_time, check_out_time)
-      unavail = reservations.select { |res| res.date_range.overlap?(dates) }
+      unavail = reservations.select { |res| res.dates.overlap?(dates) }
       unavail.map! { |res| res.room }
       return rooms.difference(unavail)
     end
     
     def list_reservations(date:, room_id: nil)
-      res_by_date = reservations.select { |res| res.date_range.include?(date) }
+      res_by_date = reservations.select { |res| res.dates.include?(date) }
       if room_id
         res_by_room = reservations.select { |res| res.room.id == room_id }
         res_by_room.map! { |res| res.room.id }

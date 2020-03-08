@@ -1,6 +1,6 @@
 require_relative 'test_helper'
 
-describe "date_range class" do
+describe "date range class" do
   before do
     day1 = Date.new(2020, 1, 28)
     day2 = Date.new(2020, 1, 30)
