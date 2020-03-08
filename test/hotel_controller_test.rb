@@ -62,9 +62,59 @@ describe Hotel::HotelController do
           res.must_be_kind_of Hotel::Reservation
         end
 
-        expect(reservations_list_of_given_room_date_range.length).must_equal 2    #
+        expect(reservations_list_of_given_room_date_range.length).must_equal 2
       end
     end
+    describe "add_reservation" do 
+      it "add a new reservation to the reservations list" do
+        room = @hotel_controller.rooms[0]
+        start_date1 = Date.new(2017, 01, 03)
+        end_date1 = start_date1 + 3
+        date_range1 = Hotel::DateRange.new(start_date1,end_date1) 
+        reservation1 = Hotel::Reservation.new(1, date_range1,room) 
+
+        expect(@hotel_controller.reservations).must_equal []
+        @hotel_controller.add_reservation(reservation1)
+        expect(@hotel_controller.reservations.length).must_equal 1
+      end
+    end
+
+    # Access the list of reservations for a specific date (NOT a DATE RANGE), so that I can track reservations by date
+    describe "reservations_list" do
+      it "return a list of reservations for a specific date" do
+        room = Hotel::Room.new(1, 200)
+        start_date1 = Date.new(2017, 01, 03)
+        end_date1 = start_date1 + 3
+        date_range1 = Hotel::DateRange.new(start_date1,end_date1) 
+        reservation1 = Hotel::Reservation.new(1, date_range1,room)  
+        @hotel_controller.add_reservation(reservation1)
+
+        # reservation with data_range2
+      
+        start_date2 = Date.new(2017, 01, 10)
+        end_date2 = start_date2 + 4
+        date_range2 = Hotel::DateRange.new(start_date2,end_date2)
+        reservation2 = Hotel::Reservation.new(1, date_range2,room)
+        @hotel_controller.add_reservation(reservation2)
+
+        test_date1 = Date.new(2017, 01, 01)
+        test_date2 = Date.new(2017, 01, 03)
+        reservation_list1 = @hotel_controller.reservations_list(test_date1)
+        reservation_list2 = @hotel_controller.reservations_list(test_date2)
+
+        expect(reservation_list1).must_be_kind_of Array
+        reservation_list1.each do |res|
+          res.must_be_kind_of Hotel::Reservation
+        end
+        expect(reservation_list1.length).must_equal 0
+        expect(reservation_list2).must_be_kind_of Array
+        reservation_list2.each do |res|
+          res.must_be_kind_of Hotel::Reservation
+        end
+        expect(reservation_list2.length).must_equal 1
+      end 
+    end
+
     describe "total_cost" do
       it "return a total cost of a given reservation" do
         start_date = Date.today
@@ -73,16 +123,37 @@ describe Hotel::HotelController do
         expect(reservation.cost).must_equal 800
       end  
     end
-    describe "reservations" do
-      it "takes a Date and returns a list of Reservations" do
-        reservation_list = @hotel_controller.reservations_list(@date)
 
-        expect(reservation_list).must_be_kind_of Array
-        reservation_list.each do |res|
+    # Get reserved_rooms_list for a given date range
+    describe "reservations_list_by_date_range" do
+      it "return a reservations_list_by_date_range for a given date range" do
+        room = Hotel::Room.new(1, 200)
+        start_date1 = Date.new(2017, 01, 03)
+        end_date1 = start_date1 + 3
+        date_range1 = Hotel::DateRange.new(start_date1,end_date1) 
+        reservation1 = Hotel::Reservation.new(1, date_range1,room)  
+        @hotel_controller.add_reservation(reservation1)
+
+        # reservation with data_range2
+      
+        start_date2 = Date.new(2017, 01, 28)
+        end_date2 = start_date2 + 11
+        date_range2 = Hotel::DateRange.new(start_date2,end_date2)
+        reservation2 = Hotel::Reservation.new(1, date_range2,room)
+        @hotel_controller.add_reservation(reservation2)
+
+        test_start_date = Date.new(2017, 01, 01 )
+        test_end_date = test_start_date + 30
+        reservations_list_by_date_range = @hotel_controller.reservations_list_by_date_range(test_start_date, test_end_date)
+
+        expect(reservations_list_by_date_range).must_be_kind_of Array
+        reservations_list_by_date_range.each do |res|
           res.must_be_kind_of Hotel::Reservation
         end
+
+        expect(reservations_list_by_date_range.length).must_equal 2
       end
-    end  
+    end
   end
 
   describe "wave 2" do
@@ -102,7 +173,7 @@ describe Hotel::HotelController do
         @rooms_array = [@room2, @room3]
         @discount_rate = 0.1
       end
-      it "takes two dates and returns a list" do
+      it "takes two dates and returns a list of available_rooms" do
         reservation = Hotel::Reservation.new(1, @date_range,@room1)
         @hotel_controller.add_reservation(reservation)
         
@@ -112,6 +183,8 @@ describe Hotel::HotelController do
     
         expect(room_list).must_be_kind_of Array
         expect(room_list.length).must_equal 19
+        expect(@hotel_controller.hotel_blocks).must_equal []
+        expect(@hotel_controller.hotel_blocks.length).must_equal 0
       end
 
       it "available_rooms should not already been reserved in reservations or in the hotel block for those specific date range" do
@@ -125,11 +198,10 @@ describe Hotel::HotelController do
         test_start_date = Date.new(2020, 8, 01)
         test_end_date = test_start_date + 29
         room_list = @hotel_controller.available_rooms(test_start_date, test_end_date)
-        
+
         expect(room_list).must_be_kind_of Array
         expect(room_list.length).must_equal 17
 
-        
       end
 
       describe "reserve_room" do
@@ -137,6 +209,7 @@ describe Hotel::HotelController do
           reservation = @hotel_controller.reserve_room(@start_date, @end_date)
   
           expect(reservation).must_be_kind_of Hotel::Reservation
+          expect(@hotel_controller.reservations.length).must_equal 1
         end
   
         it "The ability to reserve room when there are reservations with the same start_date and end_date" do
@@ -148,7 +221,7 @@ describe Hotel::HotelController do
           expect(@hotel_controller.reservations.length).must_equal 2
           expect(reservation2.room.id).must_equal 2
         end 
-  
+
         it "raise ArgumentError when there is no room available" do 
           start_date = Date.today
           end_date = start_date + 4
@@ -163,6 +236,7 @@ describe Hotel::HotelController do
         end
       end
     end
+    
     describe "Wave 3" do
       before do
         @start_date = Date.new(2020, 8, 10)

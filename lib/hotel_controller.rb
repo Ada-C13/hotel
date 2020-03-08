@@ -38,24 +38,29 @@ module Hotel
         return reservation_list
     end
 
-     # can get the total cost for a given reservation
+     # Can get the total cost for a given reservation
     def total_cost(reservation)
       total_cost = reservation.cost
       return total_cost
     end
 
     # Wave 2
-    # Get reserved_rooms_list 
-
-    def reserved_rooms_list(start_date, end_date) #reserved_rooms from 
+    # Get reservations_list for a given date range
+    def reservations_list_by_date_range(start_date, end_date)
       given_date_range = Hotel::DateRange.new(start_date, end_date)
-      # get the reservations_list for the given date range
-      reservations_list = reservations.select do |res|
+      # Get the reservations_list for the given date range
+      reservations_list_by_date_range = reservations.select do |res|
       res.date_range.overlap?(given_date_range)
       end
+    end
 
-      # get all the room that have been reserved for the given date range 
-      all_reserved_rooms = reservations_list.map do |res|
+    def reserved_rooms_list(start_date, end_date) 
+      given_date_range = Hotel::DateRange.new(start_date, end_date)
+      # Get reservations_list for a given date range
+      reservations_list_by_date_range = reservations_list_by_date_range(start_date, end_date)
+
+      # Get all the room that have been reserved for the given date range 
+      all_reserved_rooms = reservations_list_by_date_range.map do |res|
         res.room
       end
       return all_reserved_rooms 
