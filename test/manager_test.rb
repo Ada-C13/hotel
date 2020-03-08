@@ -51,11 +51,33 @@ describe "manager" do
     end
   end 
 
-  # describe "book_res" do 
-  #   it "" do 
-    
-  #   end 
-  # end 
+  describe "book_res" do 
+    before do 
+      @new_hotel = Hotel::Manager.new(num: 2)
+      @room1 = @new_hotel.all_rooms[0]
+      @room2 = @new_hotel.all_rooms[1]
+    end
+
+    it "successfully runs" do
+      res = @new_hotel.book_res(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
+      expect{res}.wont_match ArgumentError
+    end 
+
+    it "correctly books available room " do  
+      @room1.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
+      @room1.book_room(Date.new(2014, 4, 1), Date.new(2014, 4,2))
+      res = @new_hotel.book_res(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
+      expect(res).must_be_instance_of Hotel::Reservation
+      expect(res.rm_num).must_equal 2
+    end
+
+    it "gives ArgumentError if no room available" do  
+      @room1.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
+      @room2.book_room(Date.new(2014, 4, 3), Date.new(2014, 4,7))
+      expect{@new_hotel.book_res(Date.new(2014, 4, 3), Date.new(2014, 4, 7))}.must_raise ArgumentError
+    end   
+
+  end 
 
   # describe "res_by_room" do 
   #   it "" do 
