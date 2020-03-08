@@ -5,9 +5,10 @@ module Hotel
     attr_reader :start_date, :end_date
 
     def initialize(start_date:, end_date:)
+      
       range_start = Date.parse(start_date)
       range_end = Date.parse(end_date)
-      raise ArgumentError, "Invalid date range" if range_end < range_start
+      raise ArgumentError, "Invalid date range" if range_end <= range_start
       @start_date = range_start
       @end_date = range_end
     end
