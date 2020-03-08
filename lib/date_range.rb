@@ -20,14 +20,6 @@ module Hotel
       return nights
     end
 
-    def including(other_range)
-      if other_range.start_date >= @start_date && other_range.end_date <= @end_date
-        return true
-      else
-        return false
-      end
-    end
-
     def include_date(date)
       return true if date >= @start_date && date < @end_date
       return false
@@ -43,6 +35,14 @@ module Hotel
 
     def exactly_matching(other_range)
       if @start_date == other_range.start_date && @end_date == other_range.end_date
+        return true
+      else
+        return false
+      end
+    end
+
+    def including(other_range)
+      if other_range.start_date >= @start_date && other_range.end_date <= @end_date
         return true
       else
         return false

@@ -1,6 +1,7 @@
 require_relative 'room'
 require_relative 'date_range'
 require_relative 'reservation'
+require_relative 'block'
 require_relative 'no_availability_error'
 
 module Hotel
