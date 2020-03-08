@@ -50,6 +50,7 @@ describe Hotel::HotelController do
         @rooms = @hotel_controller.rooms
         reservation = @hotel_controller.reserve_room(@date, (@date + 3))
         @rooms[0][:room1] << reservation
+        @rooms[3][:room4] << reservation
       end
 
       it "takes a Date and returns a list of Reservations" do
@@ -79,7 +80,6 @@ describe Hotel::HotelController do
 
       it "takes a room and date and returns a list of reservations" do
         reservation_list = @hotel_controller.reservations_by_room(:room5, Date.new(2020, 8, 5))
-        puts reservation_list
         expect(reservation_list).must_be_kind_of Array
         reservation_list.each do |res|
           res.must_be_kind_of Hotel::Reservation
@@ -93,13 +93,20 @@ describe Hotel::HotelController do
       it "returns an empty array if no match" do
         reservation_list = @hotel_controller.reservations_by_room(:room5, Date.new(2020, 9, 4))
         expect(@hotel_controller.reservations_by_room(:room5, Date.new(2020, 9, 4))).must_equal []
-        print reservation_list
       end
     end
   end
 
   describe "wave 2" do
     describe "available_rooms" do
+      before do
+        @rooms = @hotel_controller.rooms
+        reservation = @hotel_controller.reserve_room(@date, (@date + 3))
+    
+        @rooms[0][:room1] << reservation
+        @rooms[3][:room4] << reservation
+      end
+
       it "takes two dates and returns a list" do
         start_date = @date
         end_date = start_date + 3
@@ -108,6 +115,18 @@ describe Hotel::HotelController do
 
         expect(room_list).must_be_kind_of Array
       end
+
+      it "returns the correct available rooms" do
+        room_list = @hotel_controller.available_rooms(@date, (@date + 3))
+        available_rooms = ["room2", "room3", "room5", "room6", "room7", "room8", "room9", "room10", "room11", "room12", "room13", "room14", "room15", "room16", "room17", "room18", "room19", "room20"]
+        
+        expect(room_list).must_equal available_rooms
+      end
+
+      it "returns an empty array if there are no available rooms" do
+        
+      end
+
     end
   end
 

@@ -1,3 +1,5 @@
+require_relative 'date_range'
+
 module Hotel
   class HotelController
     # Wave 1
@@ -12,14 +14,8 @@ module Hotel
     end
 
     def reserve_room(start_date, end_date)
-      # start_date and end_date should be instances of class Date
-        # covered by having Reservation inherit from DateRange
-      # need to keep in mind implementation of room choice
-
-
       #TODO
       # room chosen is based on the method! not by the user! (see README.md)
-      # if nil, default will then redirect to be first available room
       # add reservation instance to @rooms array based off of room attribute
       # add date instance to @rooms array
       reserved_room = Hotel::DateRange.new(start_date, end_date)
@@ -44,42 +40,62 @@ module Hotel
 
     # method to lookup reservations by room and date
     def reservations_by_room(room, date)
-
-    valid_room_inputs = []
-    20.times do |i|
-      valid_room_inputs << ("room#{i+1}").to_sym
-    end
-
-    unless valid_room_inputs.include?(room)
-      raise ArgumentError.new("Not a valid room")
-    end
-
-    # room 1 - @rooms[0][:room1]
-    # room 5 - @rooms[4][:room5]
-    # use regex on room attribute, then turn into integer subtract 1 for the index to access
-    room_index = (((room.to_s).match('[0-9]')[0]).to_i) - 1
-    reservation_list = []
-
-
-    @rooms[room_index][room].each do |reservation_instance|
-      if date.between?(reservation_instance.start_date, reservation_instance.end_date)
-        reservation_list << reservation_instance
+      valid_room_inputs = []
+      20.times do |i|
+        valid_room_inputs << ("room#{i+1}").to_sym
       end
-    end
 
-    return reservation_list
+      unless valid_room_inputs.include?(room)
+        raise ArgumentError.new("Not a valid room")
+      end
+
+      # room 1 - @rooms[0][:room1]
+      # room 5 - @rooms[4][:room5]
+      # use regex on room attribute, then turn into integer subtract 1 for the index to access
+      room_index = (((room.to_s).match('[0-9]')[0]).to_i) - 1
+      reservation_list = []
+
+
+      @rooms[room_index][room].each do |reservation_instance|
+        if date.between?(reservation_instance.start_date, reservation_instance.end_date)
+          reservation_list << reservation_instance
+        end
+      end
+
+      return reservation_list
     end
 
     # Wave 2
     def available_rooms(start_date, end_date)
       # start_date and end_date should be instances of class Date
-      # available_rooms = []
+      unavailable_rooms = []
+      available_rooms = @rooms.map { |room| (room.keys).join }
+
+      test_range = Hotel::DateRange.new(start_date, end_date)
+
+      @rooms.each do |room|
+        room.each_value do |reservation|
+          reservation.each do |reservation_instance|
+            reservation_range = Hotel::DateRange.new(reservation_instance.start_date, reservation_instance.end_date)
+            if reservation_range.overlap?(test_range) == true
+              puts room.keys
+              unavailable_rooms << (room.keys).join
+            end
+          end
+        end
+      end
+
+
+       # use unless date.between?(reserv.start date, enddate)
+        # use overlap method if false, add the room to the list
+        # add the room# to the available rooms list
+
       # you'll return an array of keys which are the rooms
       # indicating the available rooms
       # use logic from reservations(date)
-        # use unless date.between?(reserv.start date, enddate)
-        # add the room# to the available rooms list
-      return []
+       
+      available_rooms = available_rooms - unavailable_rooms
+      return available_rooms
     end
   end
 end
