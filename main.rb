@@ -148,14 +148,14 @@ def main
   puts "\nWelcome to Hotel Ada Lovelace!"
   choice = ""
   while choice != "exit"
-    puts "\nMain menu:"
+    puts "\nHotel Main Menu:"
     puts "1 - Make Reservation (mr, r)"
     puts "2 - Make Block (mb, b)" 
     puts "3 - Make Block Reservation (mbr, br)"
     puts "4 - Show Reservations (sr, s)"
     puts "5 - Show Blocks (sb)"
     puts "6 - Exit (x, q)"
-    print "What would you like to do? "
+    print "\nWhat would you like to do? "
     choice = gets.chomp.downcase
     case choice
       when "make reservation", "reservation", "mr", "r", "1"

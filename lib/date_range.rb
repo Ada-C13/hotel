@@ -1,4 +1,5 @@
 module Hotel
+
   class DateRange
     # Generator
     attr_accessor :start_date, :end_date
@@ -41,4 +42,5 @@ module Hotel
     end
 
   end
+  
 end

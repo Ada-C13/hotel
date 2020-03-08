@@ -23,7 +23,3 @@ module Hotel
   end
 
 end
-
-## Hotel Block
-# I can create a Hotel Block if I give a date range, collection of rooms, and a discounted room rate
-# A block can contain a maximum of 5 rooms

@@ -120,4 +120,4 @@ module Hotel
 
   end # class HotelController
 
-end # module Hotel *** add to others
+end # module Hotel

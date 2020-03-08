@@ -1,4 +1,5 @@
 module Hotel
+
   class Reservation
     # Generator
     attr_reader :range, :room
@@ -16,4 +17,5 @@ module Hotel
       return ROOM_COST * @range.nights
     end
   end
+  
 end
