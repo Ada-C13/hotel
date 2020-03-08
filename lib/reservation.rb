@@ -9,7 +9,10 @@ module Hotel
     def initialize(start_date, end_date)
       @start_date = start_date
       @end_date = end_date
-      @date_range = Hotel::DateRange.new(start_date, end_date)
+    end
+
+    def get_date_range(start_date,end_date)
+      return Hotel::DateRange.new(start_date, end_date)
     end
 
   end
