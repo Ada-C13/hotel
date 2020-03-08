@@ -232,17 +232,18 @@ describe "instantiate a block of rooms" do
 
   it 'creates a block of rooms' do
     date_range1 = Hotel::DateRange.new(Date.new(2020,2,1), Date.new(2020,2,4))
-    block = front_desk.create_block(date_range1, 150, ["3", "4", "5"])
+    block = @front_desk.create_block(date_range1, 150, ["3", "4", "5"])
     
-    expect(block).must_be_instance_of Hotel::block
+    expect(block).must_be_instance_of Hotel::Block
     expect(block.date_range).must_equal date_range1
     expect(block.discount_rate).must_equal 150
   end
 
   it 'does not create a block of rooms for rooms with reservations' do
-    
-  end
+    date_range1 = Hotel::DateRange.new(Date.new(2020,2,1), Date.new(2020,2,4))
 
+    expect { @front_desk.create_block(date_range1, 150, ["2", "3"]) }.must_raise NoAvailableRoomsError
+  end
 end
 
 

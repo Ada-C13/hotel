@@ -15,6 +15,7 @@ module Hotel
       
       @rooms = []
       build_rooms
+      @blocks = []
     end
     
     
@@ -47,7 +48,7 @@ module Hotel
       
       reservations = room.reservations 
       
-      if reservations.empty?
+      if reservations == nil
         return []
       end
       
@@ -115,12 +116,15 @@ module Hotel
     end
     
     
+    
+
     def create_block(daterange, discount, rooms)
       
-      # available_for_block?(rooms, daterange)
+      available_for_block?(rooms, daterange)
       
-      # block = Hotel::Block.new(daterange, discount, rooms)
+      block = Hotel::Block.new(daterange, discount, rooms: rooms)
       
+      return block
     end
     
     
