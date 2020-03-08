@@ -62,9 +62,10 @@ describe "HotelController class" do
   end
 
   describe "find_by_date_and_room(room, date)" do
-    it "returns array of reservations for that date and room" do
+    it "returns array of reservations for that date and room, including reservations from block" do
       expect(@controller.find_by_date_and_room(1, @a)).must_be_kind_of Array
       expect(@controller.find_by_date_and_room(1, @a).length).must_equal 1
+      expect(@controller.find_by_date_and_room(3, @a).length).must_equal 1
     end
   end
 

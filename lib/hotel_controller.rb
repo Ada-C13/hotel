@@ -72,11 +72,20 @@ module Hotel
       return all_reservations_for_date
     end
 
-    def find_by_date_and_room(room, date) # add blocks
+    def find_by_date_and_room(room, date)
       all_reservations_for_date_and_room = []
       @reservations.each do |reservation|
         if reservation.date_range.include?(date) && reservation.room == room
           all_reservations_for_date_and_room << reservation
+        end
+      end
+      @blocks.each do |block|
+        if block.reservations.length > 0 && block.date_range.include?(date) == true
+          block.reservations.each do |reservation|
+            if reservation.room == room
+              all_reservations_for_date_and_room << reservation
+            end
+          end
         end
       end
     end
@@ -101,4 +110,3 @@ end
 # I can check whether a given block has any rooms available
 
 # All of the availability checking logic from Wave 2 should now respect room blocks as well as individual reservations
-
