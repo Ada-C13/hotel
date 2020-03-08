@@ -23,7 +23,11 @@ module Hotel
       @rm_num = rm_num
       res_length = (Date.parse("#{end_date}") - Date.parse("#{start_date}")).to_i 
       @total_cost = cost_per_day * res_length
-      @recloc = SecureRandom.alphanumeric(6)
+      if recloc == nil
+        @recloc = SecureRandom.alphanumeric(6)
+      else 
+        @recloc = recloc
+      end
     end
   end
 end

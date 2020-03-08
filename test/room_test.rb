@@ -25,7 +25,7 @@ describe "room" do
       room = Hotel::Room.new(rm_num: rm_num)
       room.must_respond_to :rm_num
       room.rm_num.must_be_instance_of Integer
-      room.rm_num.must_equal rm_num
+      room.rm_num.must_equal 3
     end
     
     it "raises argument error if invalid rm_num" do 
@@ -65,7 +65,7 @@ describe "room" do
 
   describe "overlap" do 
     it "" do 
-      
+
     end 
   end 
   

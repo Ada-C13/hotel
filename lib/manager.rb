@@ -6,27 +6,31 @@ require_relative 'reservation'
 
 module Hotel
   class Manager
-    attr_reader :num, :all_rooms, :rm_reservations
+    attr_reader :num, :all_rooms, :rm_reservations, :recloc
     attr_writer
     attr_accessor  
 
     def initialize(num: 20)
-      Manager.create_rooms
+      if num == nil || num == 20 
+        @all_rooms = Manager.create_rooms
+      else
+        @all_rooms = Manager.create_rooms(num: num)
+      end
     end
 
     def self.create_rooms(num: 20)
-      all_rooms = []
+      @all_rooms = []
       i = 1
       num.times do 
-        all_rooms << Room.new(rm_num: i)
-        i + 1
+        @all_rooms << Room.new(rm_num: i)
+        i += 1
       end
-      return all_rooms
+      return @all_rooms
     end
   
-    def show_all_rooms
+    def show_all_rooms  
       list_rooms = []
-      all_rooms.each do |room|
+      @all_rooms.each do |room|
         list_rooms << room.rm_num
       end 
       return list_rooms
@@ -39,7 +43,7 @@ module Hotel
             return
           end 
         end
-          raise ArgumentError "No rooms available"
+        raise ArgumentError "No rooms available"
     end
 
     def res_by_room(rm_num, start_date, end_date)
@@ -73,20 +77,12 @@ module Hotel
     # return new array 
     end
 
-    def find_total_cost(recloc)
+    def find_total_cost(rec_loc)
     # gives the total cost of a given reservation 
-    # loop through all rooms reservations to look for recloc? 
-    # accesses reservation 
-    # # 
-    # @all_rooms.select do |room|
-
-    #   # driver = @drivers.select {|driver| driver.status == :AVAILABLE}.first
-
-    # end
-    #   @reservation = Hotel::Reservation(recloc: recloc)
-    #   total_cost = @reservation.total_cost
-    # # returns total cost 
-    #   return total_cost
+      @all_rooms.each do |room|
+        res = @rm_reservations.select {|reservation| @reservation.recloc == rec_loc}.first
+        return res.recloc
+      end
     end
 
   end

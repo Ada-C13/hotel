@@ -12,18 +12,17 @@ describe "manager" do
     it "creates an instance of Manager" do 
       manager = Hotel::Manager.new
       expect(manager).must_be_kind_of Hotel::Manager
-      # expect(manager.length).must_equal 20
     end 
 
-    # it "creates 20 rooms if no other parameter passed in" do 
-    #   new_hotel = Hotel::Manager.new
-    #   expect(new_hotel.all_rooms.length).must_equal 20
-    # end
+    it "creates 20 rooms if no other parameter passed in" do 
+      new_hotel = Hotel::Manager.new
+      expect(new_hotel.all_rooms.length).must_equal 20
+    end
 
-    # it "creates correct number of rooms if parameter passed in" do 
-    #   all_rooms = Hotel::Manager.new(num: 30)
-    #   expect(@all_rooms.length).must_equal 30
-    # end
+    it "creates correct number of rooms if parameter passed in" do 
+      manager2 = Hotel::Manager.new(num: 30)
+      expect(manager2.all_rooms.length).must_equal 30
+    end
   end
 
   describe "create_rooms" do 
@@ -35,15 +34,22 @@ describe "manager" do
     it "creates correct number of rooms if parameter passed in" do 
       rooms = Hotel::Manager.create_rooms(num: 30)
       expect(rooms.length).must_equal 30
-    end
+    end  
+
+    it "correctly assigns room numbers" do 
+      new_hotel = Hotel::Manager.new(num: 2)
+      expect(new_hotel.all_rooms[0].rm_num).must_equal 1
+      expect(new_hotel.all_rooms[1].rm_num).must_equal 2
+    end 
   end 
 
-  # describe "show_all_rooms" do 
-  #   it "shows all rooms" do 
-  #     new_hotel = Hotel::Manager.new(num: 2)
-  #     expect(new_hotel.show_all_rooms.length).must_equal 20
-  #   end
-  # end 
+  describe "show_all_rooms" do   
+    it "shows all rooms" do 
+      new_hotel = Hotel::Manager.new(num: 2)
+      expect(new_hotel.show_all_rooms.length).must_equal 2
+      expect(new_hotel.show_all_rooms).must_equal [1, 2]
+    end
+  end 
 
   # describe "book_res" do 
   #   it "" do 
@@ -69,18 +75,20 @@ describe "manager" do
   #   end 
   # end 
 
-  # describe "find_total_cost" do 
-  #   before do 
-  #     @res1 = Hotel::Reservation.new(start_date: "3/4/2014", end_date: "7/4/2014")
-  #     @res2 = Hotel::Reservation.new(start_date: "1/4/2014", end_date: "2/4/2014")
-  #   end 
+  describe "find_total_cost" do 
+    before do 
+      @room3 = Hotel::Room.new(rm_num: 3)
+      @res1 = @room3.book_room(Date.new(2014, 3, 4), Date.new(2014, 3, 7))
+      # @res2 = Hotel::Room.book_room(Date.new(2014, 4, 1), Date.new(2014, 4, 2))
+        
+    end 
 
-  #   it "returns correct total cost" do 
-  #     expect(@res1.find_total_cost).must_equal 800
-  #     expect(@res2.find_total_cost).must_equal 200
-    
-  #   end 
-  # end 
+    it "returns correct total cost" do 
+      # expect(@manager.find_total_cost("#{@res1[6]}")).must_equal 4
+      # expect(@res1.find_total_cost("aaaaaa")).must_equal 800
+      # expect(@res2.find_total_cost("bbbbbb")).must_equal 200
+    end 
+  end 
 
     ## taken from old class
     # describe "create_rooms" do 

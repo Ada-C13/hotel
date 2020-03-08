@@ -40,6 +40,14 @@ describe "reservation" do
       res = Hotel::Reservation.new(start_date: "3/4/2014", end_date: "7/4/2014")
       res.recloc.must_be_instance_of String
       res.recloc.length.must_equal 6
+    end
+
+    it "accepts a recloc passed in" do 
+      res = Hotel::Reservation.new(start_date: "3/4/2014", end_date: "7/4/2014", recloc: "aaaaaa")
+      res.recloc.must_be_instance_of String
+      res.recloc.length.must_equal 6
+      res.recloc.must_equal "aaaaaa"
+      
     end 
   end
 end
