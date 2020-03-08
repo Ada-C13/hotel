@@ -61,8 +61,10 @@ describe "Reservation class" do
     #TODO
   end
 
-  describe "load all method" do
-   #TODO
+  describe "load_all_reservations method test" do
+    it "loads correct number of reservations" do
+      expect(Hotel::Reservation.load_all_reservations().length).must_equal 10
+    end
   end
 
 end #class
