@@ -81,7 +81,7 @@ module Hotel
       # .any returns true if at least one element meets the condition
       elsif (available_rooms.any? { |room_object| room_number == room_object.room_num })
         # .find returns the first element that satisfies the condition
-        found_room = available_rooms.find { |room_object| room_object.room_num == room_number } 
+        found_room = available_rooms.find { |room_object| room_object.room_num == room_number }
         new_reservation = Hotel::Reservation.new(start_date: start_date, end_date: end_date, room: found_room)
         @reservations << new_reservation
         return true
