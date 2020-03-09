@@ -34,25 +34,12 @@ module Hotel
       return true 
     end
   
-    def overlap(end_date) 
-      @rm_reservations.each do |res| 
-        if end_date <= res.start_date || end_date >= res.end_date
-          #loops again 
-        else
-          return false
-        end
-      end
-      return true 
-    end
-
     def is_available_range(start_date, end_date)
-      if overlap(end_date) == true
         (start_date..(end_date-1)).each do |date|
           if is_available(date) == false
             return false
           end
         end
-      end
       return true 
     end
     

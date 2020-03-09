@@ -46,7 +46,6 @@ module Hotel
     end
 
     def res_by_room(rm_num, start_date, end_date)
-    # all res for a specific room, on a certain date range 
       res_array = []
       @found_room = @all_rooms.find {|room| room.rm_num}
       (start_date..end_date).each do |date|
@@ -68,60 +67,16 @@ module Hotel
     end 
 
     def rooms_available_by_date(start_date, end_date)
-    # I can view a list of rooms that are not reserved for a given date range, 
-    # so that I can see all available rooms for that day
       room_array = []
-      
       @all_rooms.each do |room|
         if room.is_available_range(start_date, end_date) == true 
           room_array << room
         end 
       end
-      return room_array
-      
-      
-      
-      # @all_rooms.each do |room|
-      #   (start_date..end_date).each do |date|
-      #     if room.is_available(date) != true 
-      #       break
-      #     end
-      #   end 
-      #   room_array << room
-      # end
-
-
-
-    # room_array = []
-    # temp_array = []
-    # @all_rooms.each do |room|
-    #   # if room.is_available_range(start_date, end_date) == true # && room.overlap(end_date) == false
-    #   # room_array << room
-    #   # end
-    #   # temp_array = []
-    #   (start_date..end_date).each do |date|
-    #     avail_room = room.has_res_by_date(date)
-    #     if avail_room == false 
-    #       temp_array << false
-
-    #     end
-    #     if temp_array.include? false
-    #     else 
-    #       room_array << room
-    #     end
-    #   end
-    # end
-    # return room_array
-    # make empty temporary array 
-    # loop through all rooms 
-    # call room's is_available method 
-    # if == true 
-    # push rm_num into temporary array 
-    # return new array 
+      return room_array 
     end
 
     def find_total_cost(rec_loc)
-    # gives the total cost of a given reservation 
       res = ""
       @all_rooms.each do |room|
          if room.rm_reservations.find{|res| res.recloc[:recloc] == rec_loc}.class == Hotel::Reservation

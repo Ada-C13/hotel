@@ -113,33 +113,39 @@ describe "manager" do
     end 
   end 
 
-    # describe "rooms_available_by_date" do 
-  #   it "" do 
-    
-  #   end 
-  # end 
+    describe "rooms_available_by_date" do 
+      before do 
+        @new_hotel = Hotel::Manager.new(num: 3)
+        @room1 = @new_hotel.all_rooms[0]
+        @room2 = @new_hotel.all_rooms[1]
+        @room3 = @new_hotel.all_rooms[2]
+        @res1 = @room1.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
+        @res2 = @room2.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
+        @res3 = @room2.book_room(Date.new(2014, 4, 1), Date.new(2014, 4, 2))
+      end
+  
+      it "returns an array of all rooms available during a certain date range" do 
+        expect(@new_hotel.rooms_available_by_date(Date.new(2014, 4, 3), Date.new(2014, 4, 7))).must_be_instance_of Array
+        expect(@new_hotel.rooms_available_by_date(Date.new(2014, 4, 3), Date.new(2014, 4, 7)).include?(@room3)).must_equal true
+        expect(@new_hotel.rooms_available_by_date(Date.new(2014, 4, 3), Date.new(2014, 4, 4)).include?(@room2)).must_equal false
+        expect(@new_hotel.rooms_available_by_date(Date.new(2014, 4, 1), Date.new(2014, 4, 4)).include?(@room1)).must_equal false
+
+
+      end 
+  end 
 
   describe "find_total_cost" do 
+    
     before do 
-      @room3 = Hotel::Room.new(rm_num: 3)
-      @res1 = @room3.book_room(Date.new(2014, 3, 4), Date.new(2014, 3, 7))
-      # @res2 = Hotel::Room.book_room(Date.new(2014, 4, 1), Date.new(2014, 4, 2))
-        
+      @new_hotel = Hotel::Manager.new(num: 3)
+      @res1 = @new_hotel.all_rooms[0].book_room(Date.new(2014, 3, 4), Date.new(2014, 3, 7), recloc: "aaaaaa")
+      @res2 = @new_hotel.all_rooms[1].book_room(Date.new(2014, 4, 1), Date.new(2014, 4, 2), recloc: "bbbbbb")
     end 
 
     it "returns correct total cost" do 
-      # expect(@manager.find_total_cost("#{@res1[6]}")).must_equal 4
-      # expect(@res1.find_total_cost("aaaaaa")).must_equal 800
-      # expect(@res2.find_total_cost("bbbbbb")).must_equal 200
+      expect(@new_hotel.find_total_cost("aaaaaa")).must_equal 600
+      expect(@new_hotel.find_total_cost("bbbbbb")).must_equal 200
     end 
   end 
-
-    ## taken from old class
-    # describe "create_rooms" do 
-  #   it "creates the correct number of rooms" do 
-  #     all_rooms = Hotel::Room.create_rooms(20)
-  #     expect(all_rooms.length).must_equal 20
-  #   end
-  # end
 
 end
