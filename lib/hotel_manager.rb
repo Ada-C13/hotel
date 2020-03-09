@@ -35,9 +35,6 @@ module Hotel
         picked_room = find_room(room)
       end
 
-        # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot reserve that specific room for that specific date, because it is unavailable
-
-
       @total_reservations += 1
       reservation = Reservation.new(date_range, @total_reservations, picked_room.number, picked_room.cost)
 
