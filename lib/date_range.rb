@@ -12,7 +12,6 @@ module Hotel
       if @end_date < @start_date || @start_date == @end_date
         raise ArgumentError.new("Your check-out date must be after your check-in.")
       end
-    
     end
 
     def overlap?(daterange_instance)
@@ -26,13 +25,11 @@ module Hotel
       else 
         return false
       end 
-
     end
 
     # calculate the number of nights for a reservation (end date is not a night)
     def nights
       return @dates.length - 1
     end
-
   end
 end

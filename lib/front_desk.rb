@@ -29,11 +29,8 @@ module Hotel
     end
 
     # User: I can make a reservation of a room for a given date range, and that room will not be part of any other reservation overlapping that date range
-    # User: I want an exception raised if I try to reserve a room during a date range when all rooms are reserved, so that I cannot make two reservations for the same room that overlap by date
-
     def reserve_room(requested_dates)
        available_rooms = available_rooms(requested_dates)
-       # raise ArgumentError.new("Sorry, there are no rooms available. Please try other dates.") if available_rooms == nil || []
        
        book_room = available_rooms.first
        new_reservation = Hotel::Reservation.new(
@@ -47,8 +44,6 @@ module Hotel
 
     # User: I can access the list of reservations for a specific date, so that I can track reservations by date
     def date_reservations(date)
-      # ! TODO check if date is empty & raise argument error
-      # ! TODO check if date is date & raise argument error
       date_resv = @calendar[date]
       return date_resv
     end
@@ -65,6 +60,7 @@ module Hotel
         end
       end
       range_resv = range_resv.uniq
+  
       return range_resv
     end
 
@@ -96,7 +92,14 @@ module Hotel
         end 
       end 
       empty_rooms = empty_rooms.uniq
-      return empty_rooms 
+
+      # User: I want an exception raised if I try to reserve a room during a date range when all rooms are reserved, so that I cannot make two reservations for the same room that overlap by date
+      if empty_rooms.length > 0
+        return empty_rooms
+      else 
+        raise ArgumentError.new("Sorry, there are no rooms available. Please try other dates.") 
+      end
+       
     end 
   end
 end

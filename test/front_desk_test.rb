@@ -23,18 +23,6 @@ describe Hotel::FrontDesk do
       date_range: @date_instance,
       room: 2
     )
-    # @res_instance2 = Hotel::Reservation.new(
-    #   date_range: date_instance2,
-    #   room: 3
-    # )
-    # @res_instance3 = Hotel::Reservation.new(
-    #   date_range: date_instance3,
-    #   room: 6
-    # )
-    # @res_instance4 = Hotel::Reservation.new(
-    #   date_range: date_instance3,
-    #   room: 6
-    # )
     @room_list = @desk_instance.available_rooms(@date_instance)
     @reserved = @desk_instance.reserve_room(@date_instance)
     @range_res = @desk_instance.range_reservations(@date_instance)
@@ -67,7 +55,6 @@ describe Hotel::FrontDesk do
     end
   end  
  
-
     describe "list_rooms" do
       it "takes date range and returns a list" do
         expect(@desk_instance.list_rooms).must_be_kind_of Array
@@ -94,7 +81,6 @@ describe Hotel::FrontDesk do
       it "creates the same number of hash keys as there are nights in the range" do
         expect(@cal_instance.length).must_equal 2 
       end
-
     end
 
     describe "reserve_room" do
@@ -109,9 +95,7 @@ describe Hotel::FrontDesk do
         @desk_instance.reserve_room(@date_instance4)
         
         expect(@desk_instance.reservations.length).must_equal 4
-
-      end
-      
+      end 
     end
 
     describe "date_reservations" do
@@ -120,21 +104,10 @@ describe Hotel::FrontDesk do
         @date_res = @desk_instance.date_reservations(date)
       end
 
-      it "raises an ArgumentError if no reservations for date" do
-        # ! TODO
-
-        # expect { Hotel::DateRange.new(Date.new(2021, 01, 01),
-        #   # Date.new(2021, 01, 01)
-        #   ) }.must_raise ArgumentError
-      end
-
-
-
       it "returns an array of reservations for a single date" do
         expect(@date_res).must_be_kind_of Array
         expect(@date_res[0]).must_be_kind_of Hotel::Reservation
       end
-
     end
 
     describe "range_reservations" do 
@@ -142,19 +115,6 @@ describe Hotel::FrontDesk do
         expect(@range_res).must_be_kind_of Array
         expect(@range_res[0]).must_be_kind_of Hotel::Reservation
       end
-
-      it "raises an ArgumentError if no reservations for date" do
-        # ! TODO
-      end
-
-      it "raises an ArgumentError if date is not a date" do
-        # ! TODO
-      end
-
-      it "removes duplicates" do
-        # ! TODO
-      end
-
     end
 
     describe "find_room_res" do
@@ -169,18 +129,16 @@ describe Hotel::FrontDesk do
       end
     end
 
-
-
     describe "available_rooms" do
-      before do
-        
-      end
-
       it "takes date range and returns a list of numbers" do
         expect(@room_list).must_be_kind_of Array
         expect(@room_list[0]).must_be_kind_of Integer
       end
 
+      xit "raises an argument error if no rooms available" do
+        20.times { @desk_instance.reserve_room(@date_instance)}
+
+        expect{@desk_instance.available_rooms(@date_instance)}.must_raise ArgumentError
+      end
     end
-  
 end

@@ -7,13 +7,11 @@ describe Hotel::DateRange do
     @end_date = Date.new(2021, 01, 03)
     @start_date2 = Date.new(2021, 01, 01)
     @end_date2 = Date.new(2021, 01, 02)
-
     @range_inst = Hotel::DateRange.new(start_date: @start_date, end_date: @end_date)
     @range_inst2 = Hotel::DateRange.new(start_date: @start_date2, end_date: @end_date2)
   end
 
   describe "constructor" do
-
     it "is an instance of DateRange" do
       expect(@range_inst).must_be_kind_of Hotel::DateRange
     end
@@ -48,22 +46,16 @@ describe Hotel::DateRange do
         end_date: Date.new(2021, 01, 01)
         ) }.must_raise ArgumentError
     end
-
-    it "raises an ArgumentError if date is not a date" do
-      # ! TODO
-    end
-
-    # TODO add test for start_date or end_date is nil, raise argument error
-
-
   end
 
   describe "overlap?" do
-
     it "returns true for the same range" do
       start_date = Date.new(2021, 01, 01)
       end_date = Date.new(2021, 01, 03)
-      test_range = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
+      test_range = Hotel::DateRange.new(
+        start_date: start_date, 
+        end_date: end_date
+      )
 
       expect(@range_inst.overlap?(test_range)).must_equal true
     end
@@ -73,6 +65,7 @@ describe Hotel::DateRange do
         start_date: Date.new(2021, 01, 01),
         end_date: Date.new(2021, 01, 02)
       )
+
       expect(@range_inst.overlap?(test_range)).must_equal true
     end
 
@@ -81,6 +74,7 @@ describe Hotel::DateRange do
         start_date: Date.new(2020, 12, 01),
         end_date: Date.new(2021, 01, 02)
       )
+
       expect(@range_inst.overlap?(test_range)).must_equal true
     end
 
@@ -89,6 +83,7 @@ describe Hotel::DateRange do
         start_date: Date.new(2021, 1, 02),
         end_date: Date.new(2021, 01, 06)
       )
+
       expect(@range_inst.overlap?(test_range)).must_equal true
     end
 
@@ -97,6 +92,7 @@ describe Hotel::DateRange do
         start_date: Date.new(2020, 12, 01),
         end_date: Date.new(2021, 01, 12)
       )
+
       expect(@range_inst.overlap?(test_range)).must_equal true
     end
 
@@ -105,6 +101,7 @@ describe Hotel::DateRange do
         start_date: Date.new(2021, 01, 03),
         end_date: Date.new(2021, 01, 06)
       )
+
       expect(@range_inst.overlap?(test_range)).must_equal false
     end
 
@@ -113,6 +110,7 @@ describe Hotel::DateRange do
         start_date: Date.new(2020, 12, 03),
         end_date: Date.new(2021, 01, 01)
       )
+
       expect(@range_inst.overlap?(test_range)).must_equal false
     end
 
@@ -121,6 +119,7 @@ describe Hotel::DateRange do
         start_date: Date.new(2020, 01, 03),
         end_date: Date.new(2020, 01, 06)
       )
+
       expect(@range_inst.overlap?(test_range)).must_equal false
     end
 
@@ -129,6 +128,7 @@ describe Hotel::DateRange do
         start_date: Date.new(2022, 01, 03),
         end_date: Date.new(2022, 01, 06)
       )
+      
       expect(@range_inst.overlap?(test_range)).must_equal false
     end
   end
