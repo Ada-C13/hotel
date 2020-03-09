@@ -20,7 +20,7 @@ module Hotel
 
 
     # (1) list of reservations with a given date range & room id 
-    #  !overlap => (booking)
+    #  overlap => (booking)
     def reservations_per_room(date_range, room)
       # If the room number is the same
       # check the reservation inside of the room 
@@ -30,7 +30,7 @@ module Hotel
     end 
     
     
-    # (2) Find available rooms numbers (with given date range) 
+    # (2) Find available room numbers (with given date range) 
     #  and use the "reservations_per_room" from (1)
     def available_room_ids(date_range) 
  
@@ -80,11 +80,11 @@ module Hotel
 
       list = []
   
-      overlapped_reservation = @reservations[:block].select do |reservation|  
+      reservations_with_same_range = @reservations[:block].select do |reservation|  
         reservation.block.date_range.overlap?(date_range)
       end 
 
-       overlapped_reservation.each do |reservation| 
+      reservations_with_same_range.each do |reservation| 
         reservation.block.rooms.each do |block_room|
           if block_room.id == room.id
             list << reservation  

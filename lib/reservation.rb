@@ -13,7 +13,7 @@ module Hotel
       @date_range = date_range
 
       if block == nil 
-        @room = room  #room_number TO DO (Maybe I want to refactor as room numbers)
+        @room = room 
       else 
         @block = block
       end       

@@ -33,15 +33,14 @@ describe "HotelManager class" do
 
         expect(reservations).must_be_kind_of Array
 
-        # reservations.each do |reservation| 
-        #   expect(reservation).must_be_kind_of Hotel::Reservation
-        # end 
+        reservations.each do |reservation| 
+          expect(reservation).must_be_kind_of Hotel::Reservation
+        end 
 
-        # date_range = Hotel::DateRange.new(Date.new(2020, 8, 10), Date.new(2020, 8, 15))
+        date_range = Hotel::DateRange.new(Date.new(2020, 8, 10), Date.new(2020, 8, 15))
         
-        # reservation = Hotel::Reservation.new(date_range, room: Hotel::Room.new(id: 2))
-        # Hotel::HotelManager.new().add_reservation(reservation, type: :individual)
-
+        reservation = Hotel::Reservation.new(date_range, room: Hotel::Room.new(id: 2))
+        Hotel::HotelManager.new().add_reservation(reservation, type: :individual)
       end 
     end 
 
@@ -232,7 +231,7 @@ describe "HotelManager class" do
         expect(block_reservation.block.rooms[0]).must_be_kind_of Hotel::Room
       end 
 
-      it "raises an ArgumentError if the number of rooms are not between 1 and 5" do 
+      it "raises an ArgumentError if the number of rooms is not between 1 and 5" do 
 
         expect{@hotel_manager.make_block_reservation(@date_range, number_of_rooms: 6)}.must_raise ArgumentError
 
@@ -257,7 +256,7 @@ describe "HotelManager class" do
 
 
       # Need to refactor
-      # how to reserves a specific room from a hotel block
+      # how to reserve a specific room from a hotel block
       it "raises an ArgumentError if number of rooms does not match with a set of block" do
         date_range = Hotel::DateRange.new(Date.new(2020, 11, 5), Date.new(2020, 11, 11))
 
@@ -279,11 +278,8 @@ describe "HotelManager class" do
 
         found_reservations = @hotel_manager.find_block_reservations(date_range_1)
 
-        # Because 11/9 is the end_date for date_range_2.
         expect(found_reservations).must_be_instance_of Array
-
         expect(found_reservations.length).must_equal 1
-
         expect(found_reservations[0].block.rooms.length).must_equal 5
       end  
     end 
@@ -297,7 +293,7 @@ describe "HotelManager class" do
         expect(block).must_be_instance_of Hotel::Block
       end 
 
-      it "raises an ArgumentError if the number of rooms are not between 1 and 5" do 
+      it "raises an ArgumentError if the number of rooms is not between 1 and 5" do 
         date_range = Hotel::DateRange.new(Date.new(2020, 11, 5), Date.new(2020, 11, 11))
 
         expect{@hotel_manager.set_block(date_range, number_of_rooms: 6)}.must_raise ArgumentError
@@ -305,7 +301,7 @@ describe "HotelManager class" do
         expect{@hotel_manager.set_block(date_range, number_of_rooms: 7)}.must_raise ArgumentError
       end 
 
-      it "raises an ArgumentError if the requested number of rooms are less than available rooms" do 
+      it "raises an ArgumentError if the requested number of rooms is less than available rooms" do 
 
         date_range = Hotel::DateRange.new(Date.new(2020, 11, 5), Date.new(2020, 11, 11))
 

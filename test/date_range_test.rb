@@ -25,7 +25,7 @@ describe "DateRange class" do
     end 
 
 
-    # I want exception raised when an invalid date range is provided, so that I can't make a reservation for an invalid date range
+    # I want an exception raised when an invalid date range is provided, so that I can't make a reservation for an invalid date range
     it "raises an ArugmentError if start date is after end date" do 
 
       expect{Hotel::DateRange.new(Date.new(2020, 3, 20), Date.new(2020, 3, 15))}.must_raise ArgumentError

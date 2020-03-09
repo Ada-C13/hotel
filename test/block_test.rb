@@ -16,7 +16,7 @@ describe "Block class" do
 
 
   describe "#initialize" do 
-    it "creates date_range, rooms and reservation" do
+    it "creates date_range, rooms" do
 
       expect(@block).must_respond_to :date_range
       expect(@block).must_respond_to :rooms

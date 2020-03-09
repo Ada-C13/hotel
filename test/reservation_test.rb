@@ -45,7 +45,6 @@ describe "Reservation class" do
 
        date_range = Hotel::DateRange.new(Date.new(2020, 5, 6), Date.new(2020, 5, 12))
 
-       
        rooms = []
        5.times do |i|
         room = Hotel::Room.new(id: i + 1)
