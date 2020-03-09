@@ -1,0 +1,45 @@
+require_relative 'date_range'
+require_relative 'reservation'
+module Hotel
+  class HotelController
+    attr_reader :reservations, :rooms
+    def initialize
+      @reservations = []
+      @rooms = []
+      @rooms = []
+      (1..20).each do |room|
+        @rooms << room
+      end
+    end
+    # Wave 1
+    def rooms
+      return @rooms
+    end
+
+    def reserve_room(start_date, end_date)
+      reservation = Reservation.new(start_date, end_date)
+      if start_date.class != Date || end_date.class != Date
+        raise ArgumentError.new("Please input valid dates")
+      else
+      @reservations << reservation
+      return reservation
+    end
+  end
+
+    def reservations(date)
+      reservation_list = []
+      @reservations.each do |room|
+      if room.date_range.include?(date)
+        reservation_list << room
+      end
+        return reservation_list
+    end
+
+    # # Wave 2
+    # def available_rooms(start_date, end_date)
+    #   # start_date and end_date should be instances of class Date
+    #   return []
+    # end
+  end
+end
+end
