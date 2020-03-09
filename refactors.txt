@@ -1,0 +1,30 @@
+In that file, make a short list of the changes that you could make, such as naming conventions, etc.
+
+These notes will be used by you in a few weeks, so make sure that they are detailed enough that someone else could understand your thinking and follow your directions
+Commit and push this file to your project repo
+
+Do not make any further changes to your code at this time
+
+1. DateRange => instead using strings as the parameters, I can just use Date class directly.
+
+2. FrontDesk:
+2-1.Initialize with 20 rooms as keys in the @reservations. This way, I don't have to rely on add_reservation method to gradually create each room
+2-2. When reserving a room, frontdesk can decide which avaiable room they want to assign
+2-3. When creating a block, frontdesk can pick any avaiable rooms they want to add to the block 
+
+3. BlockReservation
+3-1. Currently, my design of BlockReservation is too similar to the IndividualReservation, they are both considered a single reservation along with ONE room. I might have to redesign the BlockReservation so that it contains a list of rooms.
+ie: initialize(name, date_range, collection_of_rooms, discount_rate)
+3-2. In BlockReservation, create a method to reserve a specific room # (by calling the InidividualReservation)
+3-3. Create a method to update the @reservations hash in the FrontDesk once a room got reserved (meaning a new InidividualReservation was created.) => (attr_writer :reservations in the FrontDesk will be needed)
+
+
+4. IndividualReservation => Make the rate to be optional and default to 200, so that the discounted reate can be applied when calling IndividualReservation in BlockReservation.
+
+
+
+
+
+
+
+
