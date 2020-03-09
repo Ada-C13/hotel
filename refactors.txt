@@ -1,0 +1,25 @@
+Potential changes to make re: refactors: 
+
+- Investigate eliminating Hotel::DateRange class and use Ruby's Range object - and get methods like .cover? for free. :)
+
+- Move the DateRange overlap? method into the Reservation class to take out 1 unnecessary layer of interaction. (Would be beneficial for Reservation to have that functionality.)
+
+- Instead of each loops, use enumerables, especially in Hotel::Controller and Hotel::Room.
+	- .any, .filter, .select for use in the conflict? method
+	- same for find_by_range method
+
+- Investigate cutting down on use of attr_readers to reduce exposing unnecessary parts of the public interface.
+
+- Include Hotel Module in files to cut down use of "Hotel::" prefix for classes
+
+
+Re: Wave 3
+
+- For the Hotel Block class, have it know:
+	- an array of Room objects (require_relative 'Room')
+	- a discounted room rate
+	- a date range for all rooms (require_relative 'DateRange')
+
+- Hotel::Controller would need to know about Hotel::Block
+- Hotel::Controller find_available_rooms method logic would need to case for new Block class.
+- Hotel::Block would need to be able to raise an exception if any rooms are unavailable (would need to create a method to check all rooms for unavailability)
