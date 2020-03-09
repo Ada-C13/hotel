@@ -35,8 +35,6 @@ describe Hotel::RoomReservation do
       rm_number = 5
       expect{Hotel::RoomReservation.new(@start_date, @end_date, rm_number)}.must_raise ArgumentError
     end
-
-    
   end
 
   describe "cost" do
@@ -48,7 +46,6 @@ describe Hotel::RoomReservation do
     it "calculates the correct cost of a reservation" do
       expect(@room_reservation.cost).must_equal 1350
     end
-
+    
   end
-
 end
