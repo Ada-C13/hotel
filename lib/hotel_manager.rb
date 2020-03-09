@@ -64,6 +64,7 @@ module Hotel
       end
     end
 
+    # check whether a given block has any rooms available
     def check_block_availability(date_range, rooms)
       available_rooms = list_available_rooms(date_range)
 
@@ -72,11 +73,13 @@ module Hotel
       return rooms
     end
 
-    def create_block_reservation(room, block)
+    # reserve a specific room from a hotel block
+    def reserve_block_room(room, block)
       found_block = find_block(block)
-      @total_reservations += 1
-      reservation = Hotel::Reservation.new(found_block.date_range, @total_reservations, room.number, room.cost, found_block.discount_rate, @blocks.length + 1)
-      return reservation
+      found_room = find_room(room)
+      found_reservation = found_room.reservations.find { |reservation| reservation.hotel_block == block}
+      found_reservation.available == false
+      return found_reservation
     end
 
     def find_block(id)

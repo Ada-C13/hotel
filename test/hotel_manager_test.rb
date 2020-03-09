@@ -197,25 +197,22 @@ describe "HotelManager" do
       end
     end
 
-    describe "create_block_reservation" do
+    describe "reserve_block_room" do
       before do
         reserve_block
-        @room = @hotel_manager.find_room(1)
-        @block_reservation = @hotel_manager.create_block_reservation(@room, 1)
+        @block_reservation = @hotel_manager.reserve_block_room(1, 1)
       end
       
-      it "creates a Reservation" do
-        room = @hotel_manager.find_room(1)
-        expect(@block_reservation).must_be_kind_of Hotel::Reservation
-      end
+      # it "creates a Reservation" do
+      #   room = @hotel_manager.find_room(1)
+      #   expect(@block_reservation).must_be_kind_of Hotel::Reservation
+      # end
 
       it "reserves room with correct information" do
-        @hotel_manager.create_block_reservation(@room, 1)
-
-        expect(@room.reservations[-1].date_range).must_equal date_range
-        expect(@room.reservations[-1].id).must_equal 1
-        expect(@room.reservations[-1].room_number).must_equal 1
-        expect(@room.reservations[-1].hotel_block).must_equal 1
+        expect(@block_reservation.date_range).must_equal date_range
+        expect(@block_reservation.id).must_equal 1
+        expect(@block_reservation.room_number).must_equal 1
+        expect(@block_reservation.hotel_block).must_equal 1
       end
     end
 
@@ -285,6 +282,10 @@ describe "HotelManager" do
     end
 
     describe "list_reservations_by_date" do
+      let(:date) do
+        date = Date.new(2020,5,25)
+      end
+      
       it "returns an Array of Reservations" do
         date = Date.new(2020,5,25)
         expect(@hotel_manager.list_reservations_by_date(date)).must_be_kind_of Array
@@ -303,6 +304,18 @@ describe "HotelManager" do
         date = Date.new(2020,5,26)
 
         expect(@hotel_manager.list_reservations_by_date(date).length).must_equal 2
+      end
+
+      it "includes reservations from hotel blocks" do
+        date_range = Hotel::DateRange.new(Date.new(2020,6,10), Date.new(2020,6,14))
+        room1 = @hotel_manager.rooms[0]
+        room2 = @hotel_manager.rooms[1]
+        room3 = @hotel_manager.rooms[2]
+        rooms = [room1, room2, room3]
+        reserve_block = @hotel_manager.reserve_block(date_range, rooms, 15)
+        date = Date.new(2020,6,12)
+
+        expect(@hotel_manager.list_reservations_by_date(date).length).must_equal 3
       end
     end
 
