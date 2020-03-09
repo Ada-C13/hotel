@@ -33,13 +33,17 @@ module Hotel
     end
 
     private
+    
+
 
     def self.validate_date?(start_date, end_date)
 
       date_format = '%Y-%m-%d'
       if !DateTime.strptime(start_date.to_s, date_format) || !DateTime.strptime(end_date.to_s, date_format)
-        return rescue ArgumentError
-      elsif start_date > end_date || start_date - end_date == 0
+        raise ArgumentError
+      end
+
+      if start_date > end_date || start_date - end_date == 0
         raise ArgumentError.new("The end time is before the start time.")
       end
     end
