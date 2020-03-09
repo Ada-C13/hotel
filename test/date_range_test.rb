@@ -16,7 +16,6 @@ describe Hotel::DateRange do
       start_date = Date.new(2020,03,03)
       end_date = start_date - 3
       expect{Hotel::DateRange.new(start_date, end_date)}.must_raise ArgumentError
-
     end
 
     it "is an error to create a 0-length range" do
@@ -49,7 +48,6 @@ describe Hotel::DateRange do
       
       new_test_range = Hotel::DateRange.new(contained_start_date, contained_end_date)
       expect(@range.overlap?(new_test_range)).must_equal true
-
     end
 
     it "returns true for a range that overlaps in front" do
