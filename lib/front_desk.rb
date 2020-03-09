@@ -82,7 +82,6 @@ module Hotel
       return hotel_block
     end 
 
-
     def available_rooms_in_block(hotel_block)
      available_rooms = hotel_block.rooms.select{|room| room.reservations.empty? == true || room.reservations.any?{|reservation| reservation.date_range.overlap?(hotel_block.date_range) == false}}
      return available_rooms
@@ -90,6 +89,7 @@ module Hotel
 
     def add_reservation_to_room_in_block(hotel_block) 
       available_rooms = available_rooms_in_block(hotel_block)
+      raise NoAvailableRoomError.new("there are no available rooms left in this block")if available_rooms.empty? == true
       chosen_room = available_rooms[0]
       new_reservation = Hotel::Reservation.new(date_range: hotel_block.date_range, room: chosen_room)
       new_reservation.block_reservation = true

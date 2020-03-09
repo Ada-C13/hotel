@@ -205,5 +205,13 @@ describe "front desk" do
       expect(block1.rooms[0].reservations[0].date_range).must_equal @dates
       
     end
+
+    it "raises exception if there are no rooms left to add a reservation to" do
+      block1 = @front_desk.request_block( @block_count, @dates, @discount_cost)
+      3.times do
+      @front_desk.add_reservation_to_room_in_block(block1)
+      end
+      expect{@front_desk.add_reservation_to_room_in_block(block1)}.must_raise NoAvailableRoomError
+    end
   end
 end
