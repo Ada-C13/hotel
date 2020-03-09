@@ -1,0 +1,13 @@
+My program has 5 classes: room, date range, reservation, hotel block and front desk.
+most of what user needs to get/do is done at front desk, except cost that is calculated in reservation.
+non of the classes are parent or child to another (no class inheritance) but classes are relate as below:
+1- reservation has a date range and a room.
+2- hotel block also has date range and a bunch of rooms.
+3- reservation is consisted of a room a date range and whether or not it belongs to a block.
+4- front desk works with all other classes.
+
+If I wanted to refactor 
+1- I would have start date and end date arguments for some methods instead of date range.
+2- I would create a database for collected data. (perhaps a CSV file)
+3- I might have made a helper method to find reservations overlapping with a date range (not just one date)
+
