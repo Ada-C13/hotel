@@ -1,0 +1,7 @@
+To refactor:
+- I think some of my methods are too complicated and too much dependency within methods. 
+  I would love to spend some time to clean that up
+- try to follow the single responsibility 
+- Dry it up!
+- would like to add more stuff in each class so it would be small methods 
+- maybe I should have a room class? 
