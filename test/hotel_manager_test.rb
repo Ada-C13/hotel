@@ -21,6 +21,13 @@ describe Hotel::HotelController do
     end
 
     describe "reserve_room" do
+      before do
+        @rooms = @hotel_controller.rooms
+        reservation = Hotel::Reservation.new(@date, (@date + 3))
+        @rooms[0][:room1] << reservation
+        @rooms[3][:room4] << reservation
+      end
+      
       it "takes two Date objects and returns a Reservation" do
         start_date = @date
         end_date = start_date + 3
@@ -48,7 +55,7 @@ describe Hotel::HotelController do
     describe "reservations" do
       before do
         @rooms = @hotel_controller.rooms
-        reservation = @hotel_controller.reserve_room(@date, (@date + 3))
+        reservation = Hotel::Reservation.new(@date, (@date + 3))
         @rooms[0][:room1] << reservation
         @rooms[3][:room4] << reservation
       end
@@ -74,7 +81,7 @@ describe Hotel::HotelController do
     describe  "reservations_by_room" do
       before do
         @rooms = @hotel_controller.rooms
-        reservation = @hotel_controller.reserve_room(@date, (@date + 3))
+        reservation = Hotel::Reservation.new(@date, (@date + 3))
         @rooms[4][:room5] << reservation
       end
 
@@ -99,9 +106,10 @@ describe Hotel::HotelController do
 
   describe "wave 2" do
     describe "available_rooms" do
+      #TODO add more tests
       before do
         @rooms = @hotel_controller.rooms
-        reservation = @hotel_controller.reserve_room(@date, (@date + 3))
+        reservation = Hotel::Reservation.new(@date, (@date + 3))
     
         @rooms[0][:room1] << reservation
         @rooms[3][:room4] << reservation
@@ -127,6 +135,9 @@ describe Hotel::HotelController do
         
       end
 
+      it "raises an error if an invalid date range is provided" do
+        
+      end
     end
   end
 
