@@ -19,34 +19,40 @@ class Calendar
   end
 
 
-  def list_of_available_rooms_entire_stay(reservation)
+  def list_available_rooms_entire_stay(reservation)
     date_range = []
     available_rooms_all_dates = []
 
+
+    if (reservation.total_nights == 1) && (@date_store[(reservation.start_date).iso8601].all_available_rooms.length == 20)
+      available_rooms = [1]
+      return available_rooms
+    end
+
     reservation.total_nights.times do |i|
-      date_range << (reservation.start_date + i).available_rooms
-      raise NoRoomError.new "There are no rooms available for the duration of this stay." if (reservation.start_date + i).unavailable?
+      date_range << (@date_store[(reservation.start_date + i).iso8601]).all_available_rooms
+      
+      raise NoRoomsError.new "There are no rooms available for the duration of this stay." if @date_store[(reservation.start_date + i).iso8601].unavailable?
     end
 
-    if date_range.length == 1
-      return date_range[0]
-    end
 
-    date_range.each do |i, j|
+    date_range.each do |i|
       if (date_range[0] & date_range[i]).any?
         available_rooms_all_dates << (date_range[0] & date_range[i])
       end
     end
 
-    raise NoRoomError.new "There are no rooms available for the duration of this stay." if available_rooms_all_dates.empty?   
+    raise NoRoomsError.new "There are no rooms available for the duration of this stay." if available_rooms_all_dates.empty?   
 
-    return available_rooms_all_dates.flatten.uniq!
+    available_rooms = available_rooms_all_dates.flatten.uniq!
+
+    return available_rooms
   end
 
 
   def is_available?(room_number, date)
     date = Date.parse(date).iso8601
-    return @date_store[date].available_rooms(room_number)
+    return @date_store[date].is_available?(room_number)
   end
 
 
@@ -94,6 +100,7 @@ class Calendar
         @date_store[(reservation.start_date + i).iso8601] = date
       else
         @date_store[(reservation.start_date + i).iso8601].add_reservation(reservation)
+        raise NoRoomError.new "Sorry, there is no availability on that date." if @date_store[(reservation.start_date + i).iso8601].unavailable?
       end
     end
   end

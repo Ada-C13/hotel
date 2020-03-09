@@ -14,17 +14,28 @@ class Reservation
     @total_nights = (@end_date - @start_date).to_i
     @cost = @total_nights * 200
     @room_number = room_number
+
+    # def valid_date?(date)
+    #   date_format = '%Y-%m-%d'
+    #   DateTime.strptime(date, date_format)
+    #   true
+    # rescue ArgumentError
+    #   false
+    # end
+
+    # valid_date?(start_date)
+    # valid_date?(end_date)
+
+    # raise InvalidDateRangeError.new ("The given date range is invalid.") if (@end_date - @start_date) <= 0
   end
 
-  def assign_room_number(reservation)
-    room = list_of_available_rooms_entire_stay(reservation)
-    room_number = room[0]
-    
+  def assign_room_number
+    room_number = available_rooms[0]
     return room_number
   end
   
   def details
-   return resdeets = {
+   {
       :id => @id,
       :start_date => @start_date.iso8601, 
       :end_date => @end_date.iso8601, 
