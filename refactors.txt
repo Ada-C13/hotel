@@ -1,0 +1,6 @@
+Possible Refactors:
+1. Only tracking reservation in either my front desk or my rooms, but not both
+2. Refactor my block check status so that time and space are not O(n**2)
+3. Write more test that cover more edge cases for the methods in my front desk
+4. Don't track discount cost in my rooms
+  a. figure out a better way to account for discount costs for rooms in block
