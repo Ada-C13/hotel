@@ -39,7 +39,7 @@ describe "Reservation" do
       start_date = "March 5, 2020"
       end_date = "March 3, 2020"
       # Assert
-      expect{ Hotel::Reservation.new(1, block_room_3, start_date, end_date) }.must_raise ArgumentError
+      expect{ Hotel::Reservation.new(1, block_room_3, start_date, end_date) }.must_raise StandardError
     end
     # Act
     it "Discount tracker" do

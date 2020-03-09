@@ -55,8 +55,8 @@ describe "RoomBlock" do
     # Act
     it "Raise error for blocks of rooms that don't meet requirements" do
       # Assert
-      expect { Hotel::RoomBlock.new("Anaya", "March 3, 2020", "March 5, 2020", 50, 0, [block_room_1]) }.must_raise ArgumentError
-      expect { Hotel::RoomBlock.new("Anaya", "March 3, 2020", "March 5, 2020", 50, 6, [block_room_1]) }.must_raise ArgumentError
+      expect { Hotel::RoomBlock.new("Anaya", "March 3, 2020", "March 5, 2020", 50, 0, [block_room_1]) }.must_raise StandardError
+      expect { Hotel::RoomBlock.new("Anaya", "March 3, 2020", "March 5, 2020", 50, 6, [block_room_1]) }.must_raise StandardError
     end
     # Act
     it "list_rooms' tracker" do

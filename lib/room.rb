@@ -5,7 +5,7 @@ module Hotel
 
     def initialize(id)
       # (Guard clause) raise error if requirement not met
-      raise ArgumentError.new("Not a real room") if id <= 0 || id > 20
+      raise StandardError.new("Not a real room") if id <= 0 || id > 20
   
       @id = id
       @nightly_rate = 200

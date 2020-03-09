@@ -11,11 +11,11 @@ module Hotel
       @list_rooms = list_rooms
     
       # Check for requirements and raise error if not met for dates
-      raise ArgumentError.new("The end date cannot be before the start date") if @start_date >= @end_date
+      raise StandardError.new("The end date cannot be before the start date") if @start_date >= @end_date
       # Check for requirements and raise error if block of rooms does not pass
-      raise ArgumentError.new("Invalid amount of rooms for block") if how_many_rooms <= 0 || how_many_rooms > 5
+      raise StandardError.new("Invalid amount of rooms for block") if how_many_rooms <= 0 || how_many_rooms > 5
       # Check that requested rooms match block
-      raise ArgumentError.new("Room amount is invalid") if list_rooms.length != how_many_rooms
+      raise StandardError.new("Room amount is invalid") if list_rooms.length != how_many_rooms
     end
 
     # Set as empty array if no instance variable was instantiated

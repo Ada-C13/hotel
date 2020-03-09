@@ -12,7 +12,7 @@ module Hotel
       @status = status
 
       # Check for requirementsand raise error if not met
-      raise ArgumentError.new("The end date cannot be before the start date") if @start_date >= @end_date
+      raise StandardError.new("The end date cannot be before the start date") if @start_date >= @end_date
     end
 
     # Calculate total reservation cost based on nightly rate with discount if applied

@@ -20,10 +20,10 @@ describe "Room" do
       expect(Hotel::Room.new(20).id).must_equal 20
     end
 
-    it "Raises an ArgumentError if id is outside of 1 - 20" do
+    it "Raises an StandardError if id is outside of 1 - 20" do
       # Assert
-      expect{Hotel::Room.new(0)}.must_raise ArgumentError
-      expect{Hotel::Room.new(21)}.must_raise ArgumentError
+      expect{Hotel::Room.new(0)}.must_raise StandardError
+      expect{Hotel::Room.new(21)}.must_raise StandardError
     end
 
     it "Same nightly cost for all" do
