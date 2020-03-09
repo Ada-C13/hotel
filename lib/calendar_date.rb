@@ -4,7 +4,8 @@ require_relative 'room'
 require_relative 'reservation'
 
 class CalendarDate
-
+  attr_accessor :day_reservation_store, :available_rooms
+  
   def initialize
     @day_reservation_store = []
     @available_rooms = Rooms.new
@@ -16,7 +17,7 @@ class CalendarDate
 
 
   def unavailable?
-    return @reservation_store.length == 20 
+    return @day_reservation_store.length == 20 
   end
 
 
@@ -31,7 +32,7 @@ class CalendarDate
 
   
   def add_reservation(reservation)
-    @day_reservation_store << reservation.reservation_details
+    @day_reservation_store << reservation.details
     @available_rooms.room_reserved(reservation.room_number)
 
     return @day_reservation_store
