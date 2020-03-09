@@ -1,8 +1,8 @@
 require_relative "test_helper"
 
 describe "Reservation" do
-  let (:block_room_3) { Hotel::Room.new(3) }
-  let (:reservation) { Hotel::Reservation.new(1, block_room_3, "March 3, 2020", "March 5, 2020")}
+  let (:room) { Hotel::Room.new(3) }
+  let (:reservation) { Hotel::Reservation.new(1, room, "March 3, 2020", "March 5, 2020")}
   # Arrange
   describe "initialize" do
     #Act
@@ -20,7 +20,7 @@ describe "Reservation" do
     it "Keeps track of room" do
       # Assert
       expect(reservation).must_respond_to :room
-      expect(reservation.room).must_equal block_room_3
+      expect(reservation.room).must_equal room
     end
     # Act
     it "Keeps track of the first day" do
@@ -39,11 +39,11 @@ describe "Reservation" do
       start_date = "March 5, 2020"
       end_date = "March 3, 2020"
       # Assert
-      expect{ Hotel::Reservation.new(1, block_room_3, start_date, end_date) }.must_raise StandardError
+      expect{ Hotel::Reservation.new(1, room, start_date, end_date) }.must_raise StandardError
     end
     # Act
     it "Discount tracker" do
-      reservation = Hotel::Reservation.new(1, block_room_3, "March 3, 2020", "March 5, 2020", 0.50, :HOLD)
+      reservation = Hotel::Reservation.new(1, room, "March 3, 2020", "March 5, 2020", 0.50, :CONFIRMED)
       # Assert
       expect(reservation).must_respond_to :discount
       expect(reservation.discount).must_equal 0.50
@@ -76,7 +76,7 @@ describe "Reservation" do
     # Act
     it "Returns total_cost with discount if processed" do
       room = Hotel::Room.new(3)
-      reservation = Hotel::Reservation.new(1, room, "March 3, 2020", "March 5, 2020", 0.50, :HOLD)
+      reservation = Hotel::Reservation.new(1, room, "March 3, 2020", "March 5, 2020", 0.50, :CONFIRMED)
       # Assert
       expect(reservation.total_cost).must_equal 200
     end

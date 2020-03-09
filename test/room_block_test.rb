@@ -72,6 +72,9 @@ describe "RoomBlock" do
       # Assert
       expect(block).must_respond_to :reservations
       expect(block.reservations).must_be_kind_of Array
+      block.reservations.each do |reservation|
+        expect(reservation).must_be_kind_of Hotel::Reservation
+      end
     end
   end
 end
