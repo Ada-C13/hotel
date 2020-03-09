@@ -50,7 +50,7 @@ module Hotel
     def reserve_room_from_block(block,room)
       raise ArgumentError.new("#{room.room_number} is not available") unless block.available_rooms.include?(room)
 
-      block.reserve_room_from_block(room)
+      block.reserve_room(room)
     end
 
     def reservations(date)

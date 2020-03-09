@@ -16,7 +16,7 @@ describe Hotel::Block do
     @disc_rate = 0.2
 
     @hotel_block = Hotel::Block.new(@start_date,@end_date,@collection_of_rooms,@disc_rate)
-    @hotel_block.reserve_room_from_block(@room1)
+    @hotel_block.reserve_room(@room1)
    
   end
 
@@ -36,14 +36,14 @@ describe Hotel::Block do
 
   end
 
-  describe "reserve_room_from_block" do
+  describe "reserve_room" do
     it "successfully reserves from block" do
       expect(@hotel_block.reserved_rooms[0]).must_equal @room1
       expect(@hotel_block.available_rooms.include?(@room1)).must_equal false
     end
 
     it "raises an exception if I try to reserve a room from the block that isn't available" do 
-      expect{@hotel_block.reserve_room_from_block(@room1)}.must_raise RuntimeError
+      expect{@hotel_block.reserve_room(@room1)}.must_raise RuntimeError
     end
 
   end

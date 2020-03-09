@@ -1,0 +1,5 @@
+Changes I could have made:
+-I could have somehow changed the hotel controller class and/or block class in order to keep track of room reservations for blocks once they're made
+-I could have had the number of rooms be something that could be changed (a parameter with a default value?)
+-I could have done the structure of the reservation, room reservation, and block reservation classes differently -- currently the reservation class is the parent class, while the room reservation and block reservation classes are children classes. 
+-I could have added functionality that allows for different rates for different rooms (this would make the block discounted rate actually work)

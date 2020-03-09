@@ -1,9 +1,5 @@
 require 'date'
 
-require_relative 'date_range.rb'
-require_relative 'room.rb'
-require_relative 'reservation.rb'
-
 module Hotel
   class Block < Reservation
     attr_reader :start_date, :end_date, :date_range, :disc_rate, :available_rooms, :reserved_rooms
@@ -17,7 +13,7 @@ module Hotel
       @reserved_rooms = []
     end
 
-    def reserve_room_from_block(room)
+    def reserve_room(room)
       raise RuntimeError.new("room is not available in hotel block") unless @available_rooms.include?(room)
 
       @available_rooms.delete(room)
