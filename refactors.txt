@@ -1,0 +1,3 @@
+changes I would make
+1. add a date range class to clean my hotel_manager class, and room class
+2. make sure what I call date_in and date_out is consistent in all tests and methods

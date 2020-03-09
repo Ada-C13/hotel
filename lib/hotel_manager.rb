@@ -71,8 +71,6 @@ module Hotel
       else
         rooms_added = 0
         rooms.each do |room| 
-          # reservation = @Hotel::Reservations.new(date_in: hotelblock.date_in, date_out:hotelblock.date_out, room_id: room.id , room: room )
-          # room.reservations << reservation
           if room.test_overlap(hotelblock.date_in,hotelblock.date_out) == :AVAILABLE 
           hotelblock.rooms_block<< room
           rooms_added +=1
