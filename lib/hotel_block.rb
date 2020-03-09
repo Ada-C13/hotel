@@ -5,6 +5,7 @@ module Hotel
     def initialize(date_range, rooms, discount_rate, id)
       @date_range = date_range
       @rooms = rooms
+      raise ArgumentError.new("Max of 5 rooms can be reserved in a block") if rooms.length > 5
       @discount_rate = discount_rate
       calculate_discounted_rate()
       @id = id
@@ -19,14 +20,21 @@ module Hotel
       end
     end
 
+    def check_availability
+      available_rooms = []
+      find_reservations.each do |reservation|
+        available_rooms << reservation.room_number if reservation.available == true
+      end
+      return available_rooms
+    end
+
+    def find_reservations
+      reservations = []
+      @rooms.each do |room|
+        reservations << room.reservations.find { |reservation| reservation.hotel_block == @id }
+      end
+      return reservations
+    end
+
   end
 end
-
-  # I can check whether a given block has any rooms available
-  # I can reserve a specific room from a hotel block
-  # I can only reserve that room from a hotel block for the full duration of the block
-  # I can see a reservation made from a hotel block from the list of reservations for that date (see wave 1 requirements)
-# Details
-  # A block can contain a maximum of 5 rooms
-  # When a room is reserved from a block of rooms, the reservation dates will always match the date range of the block
-  # All of the availability checking logic from Wave 2 should now respect room blocks as well as individual reservations
