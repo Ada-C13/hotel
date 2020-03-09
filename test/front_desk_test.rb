@@ -91,7 +91,6 @@ describe "list reservations by room number" do
   
 end 
 
-
 describe "list all available rooms" do
   let (:front_desk) {
     Hotel::FrontDesk.new(5)
@@ -162,6 +161,28 @@ describe "find single available room" do
   
 end
 
+describe "check for blocks" do
+  before do 
+    @front_desk = Hotel::FrontDesk.new(5)   
+  end
+  
+  it "returns true if there are no block reservations for a given daterange" do
+    daterange = Hotel::DateRange.new(Date.new(2020,2,2),Date.new(2020,2,6))
+    @front_desk.create_block(daterange, 150, ["2", "3", "4"])  
+    
+    block_check = @front_desk.check_for_blocks(Date.new(2020,2,2),Date.new(2020,2,6), "1")
+    
+    expect(block_check).must_equal true
+  end
+  
+  it "raises an argument error if requested room overlaps with a current block" do
+    daterange = Hotel::DateRange.new(Date.new(2020,2,2),Date.new(2020,2,6))
+    @front_desk.create_block(daterange, 150, ["1", "2", "3"])  
+    
+    expect{ @front_desk.check_for_blocks(Date.new(2020,2,2),Date.new(2020,2,6), "1") }.must_raise NoAvailableRoomsError
+  end
+end
+
 describe "create reservation" do
   let (:front_desk) {
     Hotel::FrontDesk.new(5)
@@ -182,17 +203,15 @@ describe "create reservation" do
     expect(reservation.room_number).must_equal "2"
   end
   
-  # it 'raises an argument error if reservation attempts to book over existing reservation' do
-  #   front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
-  #   front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
-  #   front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
-  #   front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
-  #   front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
+  it 'raises an argument error if reservation attempts to book over existing reservation' do
+    front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
+    front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
+    front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
+    front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
+    front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
   
-  #   reservation = front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
-  
-  #   expect(reservation).must_raise ArgumentError
-  # end 
+    expect{ front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3)) }.must_raise NoAvailableRoomsError
+  end 
 end
 
 describe "list reservations on a single date" do
@@ -229,23 +248,22 @@ describe "instantiate a block of rooms" do
     @front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,4))
     @front_desk.create_reservation(Date.new(2020,2,2),Date.new(2020,2,6))
   end
-
+  
   it 'creates a block of rooms' do
     date_range1 = Hotel::DateRange.new(Date.new(2020,2,1), Date.new(2020,2,4))
     block = @front_desk.create_block(date_range1, 150, ["3", "4", "5"])
     
-    expect(block).must_be_instance_of Hotel::Block
-    expect(block.date_range).must_equal date_range1
-    expect(block.discount_rate).must_equal 150
+    expect(block[0]).must_be_instance_of Hotel::Block
+    expect(block[0].date_range).must_equal date_range1
+    expect(block[0].discount_rate).must_equal 150
   end
-
+  
   it 'does not create a block of rooms for rooms with reservations' do
     date_range1 = Hotel::DateRange.new(Date.new(2020,2,1), Date.new(2020,2,4))
-
+    
     expect { @front_desk.create_block(date_range1, 150, ["2", "3"]) }.must_raise NoAvailableRoomsError
   end
 end
-
 
 describe "available for block?" do
   before do 
@@ -262,7 +280,7 @@ describe "available for block?" do
   
   it 'raises an argument error if room is not available for a given date range' do
     date_range2 = Hotel::DateRange.new(Date.new(2020,2,1), Date.new(2020,2,4))
-
+    
     expect{ @front_desk.available_for_block?(["2", "3"], date_range2) }.must_raise NoAvailableRoomsError
   end
   

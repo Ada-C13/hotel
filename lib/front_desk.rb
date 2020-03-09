@@ -83,7 +83,27 @@ module Hotel
     end
     
     
-    # TODO: Edge case testing
+    def check_for_blocks(check_in, check_out, room_number)
+      potential_range = Hotel::DateRange.new(check_in, check_out)
+      
+      possible_overlaps = @blocks.select { |block| block.rooms.include?(room_number) }
+      
+      if possible_overlaps.empty?
+        return true
+      else
+        possible_overlaps.reject! do |block|
+          block.date_range.overlap?(potential_range) == true
+        end
+      end
+      
+      if possible_overlaps.empty?
+        raise NoAvailableRoomsError.new("This room is part of a block and cannot be reserved for this date")
+      end
+      
+      return true
+    end
+    
+    
     def create_reservation(check_in, check_out)
       room = find_available_room(check_in, check_out)
       
@@ -94,6 +114,8 @@ module Hotel
       reservation = Hotel::Reservation.new(date_range)
       
       reservation.room_number = room_number
+      
+      check_for_blocks(check_in, check_out, room_number)
       
       room.reservations << reservation
       
@@ -116,15 +138,13 @@ module Hotel
     end
     
     
-    
-
     def create_block(daterange, discount, rooms)
       
       available_for_block?(rooms, daterange)
       
       block = Hotel::Block.new(daterange, discount, rooms: rooms)
       
-      return block
+      @blocks << block
     end
     
     
