@@ -15,6 +15,8 @@ describe "Reservation" do
       expect(@reservation).must_respond_to :total_cost
       expect(@reservation).must_respond_to :id
       expect(@reservation).must_respond_to :room_number
+      expect(@reservation).must_respond_to :available
+      expect(@reservation).must_respond_to :hotel_block
     end
 
     it "determines total number of nights correctly" do
