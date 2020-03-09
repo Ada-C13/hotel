@@ -120,7 +120,7 @@ module Hotel
     end
 
     # check if a given block has any rooms available
-    # if there is available room - will return the rooms that are open
+    # if there is available room - will return the list of rooms that are open
     # else will raise argument
     
     def check_hotel_block_list_availability(hotel_block_id)

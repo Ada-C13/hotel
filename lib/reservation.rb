@@ -28,10 +28,12 @@ module Hotel
       return  @cost
     end
 
+    # for hotel blocks - to check if request room is within the block
     def check_valid_room(request_room)
       return self.room_num == request_room
     end
 
+    # for hotel blocks - to make sure it is still open for hotel block guests
     def check_status 
       return self.status == :open_hotel_block
     end
