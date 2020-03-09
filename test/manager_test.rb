@@ -79,11 +79,23 @@ describe "manager" do
 
   end 
 
-  # describe "res_by_room" do 
-  #   it "" do 
-    
-  #   end 
-  # end 
+  describe "res_by_room" do 
+    before do 
+      @new_hotel = Hotel::Manager.new(num: 2)
+      @room1 = @new_hotel.all_rooms[0]
+      @room2 = @new_hotel.all_rooms[1]
+      @res1 = @room1.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
+      @res2 = @room1.book_room(Date.new(2014, 4, 1), Date.new(2014, 4,2))
+    end
+
+    it "returns an array of reservations" do 
+      expect(@new_hotel.res_by_room(1, Date.new(2014, 4, 3), Date.new(2014, 4, 7))).must_be_instance_of Array
+      expect(@new_hotel.res_by_room(1, Date.new(2014, 4, 3), Date.new(2014, 4, 7)).include?(@res1)).must_equal true
+      expect(@new_hotel.res_by_room(1, Date.new(2014, 4, 1), Date.new(2014, 4, 7)).include?(@res1)).must_equal true
+      expect(@new_hotel.res_by_room(1, Date.new(2014, 4, 1), Date.new(2014, 4, 7)).include?(@res2)).must_equal true
+    end 
+
+  end 
 
   # describe "res_by_date" do 
   #   it "" do 

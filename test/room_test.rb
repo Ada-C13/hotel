@@ -84,6 +84,25 @@ describe "room" do
       @room4.book_room(Date.new(2014, 5, 10), Date.new(2014, 6, 27))
       expect(@room4.rm_reservations.length).must_equal 2
     end 
+  end
+
+  describe "has_res_by_date" do
+    before do 
+      @room1 = Hotel::Room.new(rm_num: 1)
+      @room2 = Hotel::Room.new(rm_num: 2)
+      @room1.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
+      @room1.book_room(Date.new(2014, 4, 1), Date.new(2014, 4,2))
+    end 
+
+    it "returns nil if no reservations" do 
+      expect(@room2.has_res_by_date(Date.new(2014, 8, 3))).must_equal false
+    end 
+
+    it "returns reservation if it has one" do 
+      expect(@room1.has_res_by_date(Date.new(2014, 4, 3))).must_be_instance_of Hotel::Reservation
+      expect(@room1.has_res_by_date(Date.new(2014, 8, 3))).must_equal false
+    end 
+    
   end 
   
 end

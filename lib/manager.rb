@@ -47,12 +47,15 @@ module Hotel
 
     def res_by_room(rm_num, start_date, end_date)
     # all res for a specific room, on a certain date range 
-    # make empty temporary array
-    # access the room
-    # loop through all reservations 
-    # if date matches
-    # push res object into new array 
-    # return new array
+      res_array = []
+      @found_room = @all_rooms.find {|room| room.rm_num}
+      (start_date..end_date).each do |date|
+        res = @found_room.has_res_by_date(date)
+          if res != false && res_array.include?(res) == false
+            res_array << res
+          end
+      end
+      return res_array
     end 
 
     def res_by_date(date) 

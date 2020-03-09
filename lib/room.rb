@@ -65,5 +65,17 @@ module Hotel
       return @reservation
     end
 
+    def has_res_by_date(date) 
+      if @rm_reservations == [] 
+        return false
+      else
+        @rm_reservations.each do |res| 
+          if date >= res.start_date && date <= res.end_date
+            return res
+          end
+        end 
+      end
+      return false
+    end
   end 
 end
