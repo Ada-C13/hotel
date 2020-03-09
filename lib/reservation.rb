@@ -5,22 +5,18 @@ module Hotel
     attr_reader :start_date, :end_date, :room
 
     def initialize(
-      # these are mandatory parameters - keyword arguments - for Reservation.new 
       start_date:, 
       end_date:,
       room:
       
     )
-      # these are instance variables
       @room = room
       @start_date = start_date
       @end_date = end_date
       @total_cost = find_total_cost
 
 
-    end #initialize end
-
-    
+    end 
     
     def res_duration
       res_duration = @end_date - @start_date
@@ -32,6 +28,6 @@ module Hotel
        return @total_cost
     end
 
-  end #class Reservation end
+  end 
   
-end #Hotel end
+end 

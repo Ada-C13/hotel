@@ -18,7 +18,7 @@ describe "Reservation class" do
           room: room
         )
       
-    end #before do end
+    end 
 
     it "is an instance of Reservation" do
       expect(@res_data).must_be_kind_of Hotel::Reservation
@@ -44,8 +44,6 @@ describe "Reservation class" do
       expect(@res_data.find_total_cost).must_equal 600
     end
 
+  end 
 
-  end #Describe initialize end
-
-
-end #Reservation class describe block end
+end 
