@@ -14,7 +14,7 @@ describe "HotelBlock" do
     discount_rate = 0.15
   }
   let(:hotel_block) {
-    hotel_block = Hotel::HotelBlock.new(date_range, rooms, discount_rate)
+    hotel_block = Hotel::HotelBlock.new(date_range, rooms, discount_rate, 1)
   }
 
   describe "initialize" do
@@ -31,18 +31,18 @@ describe "HotelBlock" do
     end
   end
 
-  describe "check_availability" do
-    it "returns true if all rooms are available" do
-      expect(hotel_block.check_availability).must_equal true
-    end
+  # describe "check_availability" do
+  #   it "returns true if all rooms are available" do
+  #     expect(hotel_block.check_availability).must_equal true
+  #   end
 
-    it "raises ArgumentError if not all rooms in block are available" do
-      reservation = Hotel::Reservation.new(date_range, 1, 3, 200)
-      rooms[2].reservations.push(reservation)
+  #   it "raises ArgumentError if not all rooms in block are available" do
+  #     reservation = Hotel::Reservation.new(date_range, 1, 3, 200)
+  #     rooms[2].reservations.push(reservation)
 
-      expect{hotel_block}.must_raise ArgumentError
-    end
-  end
+  #     expect{hotel_block}.must_raise ArgumentError
+  #   end
+  # end
 
   describe "calculate_discounted_rate" do
     

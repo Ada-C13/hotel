@@ -35,6 +35,9 @@ module Hotel
         picked_room = find_room(room)
       end
 
+        # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot reserve that specific room for that specific date, because it is unavailable
+
+
       @total_reservations += 1
       reservation = Reservation.new(date_range, @total_reservations, picked_room.number, picked_room.cost)
 
@@ -48,10 +51,20 @@ module Hotel
         found_rooms << find_room(room)
       end
 
-      block = Hotel::HotelBlock.new(date_range, found_rooms, discount_rate)
+      available_rooms = list_available_rooms(date_range)
+
+      raise ArgumentError.new("Not all rooms have availability") if !(found_rooms - available_rooms).empty?
+
+      block = Hotel::HotelBlock.new(date_range, found_rooms, discount_rate, @blocks.length + 1)
       @blocks << block
 
       return block
+    end
+
+    def create_block_reservation(date_range, room, discount_rate, block)
+      @total_reservations += 1
+      reservation = Hotel::Reservation.new(date_range, @total_reservations, room.number, room.cost, discount_rate, @blocks.length + 1)
+      return reservation
     end
 
     def find_room(id)

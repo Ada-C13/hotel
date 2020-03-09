@@ -119,28 +119,49 @@ describe "HotelManager" do
     # end
   end
 
-  describe "reserve_block" do
-    before do
+  describe "blocks" do
+    let(:date_range) do
       date_range = Hotel::DateRange.new(Date.new(2020,5,10), Date.new(2020,5,14))
-
-      @reserve_block = @hotel_manager.reserve_block(date_range, (1..4).to_a, 0.15)
     end
-
-    it "creates an instance of HotelBlock" do
-      expect(@reserve_block).must_be_kind_of Hotel::HotelBlock
-    end
-
-    it "contains an array of Room instances" do
-      expect(@reserve_block.rooms).must_be_kind_of Array
-      expect(@reserve_block.rooms[0]).must_be_kind_of Hotel::Room
-    end
-
-    it "adds HotelBlock to blocks array" do
-      blocks = @hotel_manager.blocks.length
-      date_range = Hotel::DateRange.new(Date.new(2020,5,16), Date.new(2020,5,18))
+    let(:reserve_block) do
       reserve_block = @hotel_manager.reserve_block(date_range, (1..4).to_a, 0.15)
+    end
 
-      expect(@hotel_manager.blocks.length).must_equal blocks + 1
+    describe "reserve_block" do
+      it "creates an instance of HotelBlock" do
+        expect(reserve_block).must_be_kind_of Hotel::HotelBlock
+      end
+
+      it "contains an array of Room instances" do
+        expect(reserve_block.rooms).must_be_kind_of Array
+        expect(reserve_block.rooms[0]).must_be_kind_of Hotel::Room
+      end
+
+      it "adds HotelBlock to blocks array" do
+        blocks = @hotel_manager.blocks.length
+        date_range = Hotel::DateRange.new(Date.new(2020,5,16), Date.new(2020,5,18))
+        reserve_block = @hotel_manager.reserve_block(date_range, (1..4).to_a, 0.15)
+
+        expect(@hotel_manager.blocks.length).must_equal blocks + 1
+      end
+
+      it "creates reservations for each Room" do
+        
+      end
+
+      it "raises ArgumentError if not all rooms in block are available" do
+        reservation = Hotel::Reservation.new(date_range, 1, 3, 200)
+        @hotel_manager.rooms[2].reservations << reservation
+
+        expect{reserve_block}.must_raise ArgumentError
+      end
+    end
+
+    describe "create_block_reservation" do
+      it "creates a Reservation" do
+        room = @hotel_manager.find_room(1)
+        expect(@hotel_manager.create_block_reservation(date_range, room, 0.15, 1))
+      end
     end
   end
 

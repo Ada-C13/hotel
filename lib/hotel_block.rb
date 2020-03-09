@@ -4,27 +4,28 @@
 
 module Hotel
   class HotelBlock
-    attr_reader :date_range, :rooms, :discount_rate
+    attr_reader :date_range, :rooms, :discount_rate, :id
 
-    def initialize(date_range, rooms, discount_rate)
+    def initialize(date_range, rooms, discount_rate, id)
       @date_range = date_range
       @rooms = rooms
-      check_availability()
       @discount_rate = discount_rate
+      @id = id
     end
 
-    def check_availability()
-      @rooms.each do |room|
-        room_available = room.check_availability(@date_range)
-        raise ArgumentError.new("Not all rooms have availability") if !room_available
-      end
-      return true
-    end
+    # def check_availability()
+    #   @rooms.each do |room|
+    #     room_available = room.check_availability(@date_range)
+    #       # I want an exception raised if I try to create a Hotel Block and at least one of the rooms is unavailable for the given date range
+    #     raise ArgumentError.new("Not all rooms have availability") if !room_available
+    #   end
+    #   return true
+    # end
+
+
   end
 end
 
-  # I want an exception raised if I try to create a Hotel Block and at least one of the rooms is unavailable for the given date range
-  # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot reserve that specific room for that specific date, because it is unavailable
   # Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot create another hotel block that includes that specific room for that specific date, because it is unavailable
   # I can check whether a given block has any rooms available
   # I can reserve a specific room from a hotel block
