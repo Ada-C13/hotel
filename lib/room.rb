@@ -11,9 +11,9 @@ module Hotel
       @room_num = room_num
       @cost = 200
 
-    end #initialize end
-  end #class Room end
+    end 
+  end 
   
-end #module Hotel end
+end 
 
 

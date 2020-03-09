@@ -4,9 +4,9 @@ describe "Room class" do
   describe "initialize" do 
     before do
       @room = Hotel::Room.new(
-        room_num: 10,
+        room_num: 10
       )
-    end #before do end
+    end 
   
     it "is an instance of Room" do
       expect(@room).must_be_kind_of Hotel::Room
@@ -20,10 +20,6 @@ describe "Room class" do
       expect(@room.room_num).must_equal 10
     end
 
-  
+  end 
 
-  end #describe initialize
-end #Room class describe end
-
-
-
+end 
