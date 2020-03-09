@@ -1,0 +1,26 @@
+## Before Submission: `refactors.txt` Requirement
+
+
+A short list of the changes that I could make:
+
+Reservation.rb: 
+(1)Instead of having `room instances` in a `rooms` array, I may want to change to room numbers to make it easier to access.
+
+
+HotelManager.rb:
+I need to refactor the 'Block' part. 
+Now I'm able to set a block and make a block reservation. However, I'm unable to sort available rooms from block reservations.
+ 
+
+(1) By using `block_reservations_per_room(date_range, room)` method, I need to create a method where I can get reserved room lists for blocks. Once I have the room numbers, I will be able to get the sorted available room numbers. 
+Not having this funciton, I have the following problems. (a) ~ (b)
+
+  (a)I need to refactor `make_block_reservation` method to assign the right room number. 
+    (AS IS: Block 1 => room 20, 19, 18, Block 2 => room 20, 19, 18, 17, 16) 
+    (TO BE: Block 1 => room 20, 19, 18, Block 2 => room 17, 16, 15, 14, 13)
+
+  (b)I need to refactor to raise an ArgumentError if all rooms are taken by a block when trying to reserve an individual room.
+
+(2) I need to decide whether or not I want to reserve a specific room from a hotel block or not. As it is currently, I can reserve the same amount of rooms from a block that I set originally.
+
+      
