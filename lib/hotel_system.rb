@@ -76,12 +76,12 @@ module Hotel
 		end
 
 		# Create a block.
-		def make_block(rooms, range, cost)
+		def make_block(rooms, range, discount)
 			possible_rooms = room_finder(range) # Returns available rooms in the given range.
 			
 			rooms.each do |room|
 				if possible_rooms.include?(room)
-					new_reservation = Hotel::Reservation.new(room, range)
+					new_reservation = Hotel::Reservation.new(room, range, discount)
 					@reservations << new_reservation
 					room.reservations << new_reservation
 				else
@@ -89,7 +89,7 @@ module Hotel
 				end
 			end
 
-			return Hotel::Block.new(rooms, range, cost)
+			return Hotel::Block.new(rooms, range, discount)
 		end
 
 		# Checks the availability of a block of rooms for a given range.

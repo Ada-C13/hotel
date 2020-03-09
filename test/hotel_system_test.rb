@@ -185,10 +185,10 @@ describe Hotel::HotelSystem do
 
 			rooms = [@hotel.rooms[19], @hotel.rooms[18], @hotel.rooms[17]]
 			@range = Hotel::DateRange.new(Date.new(2019, 12, 23), Date.new(2019, 12, 28))
-			@cost = 0.80
+			@discount = 0.80
 			@length_list = @hotel.reservations.length
 			@length_list_room = @hotel.rooms[19].reservations.length
-			@new_block = @hotel.make_block(rooms, @range, @cost)
+			@new_block = @hotel.make_block(rooms, @range, @discount)
 		end
 
 		it "return an instance of block" do
@@ -198,6 +198,14 @@ describe Hotel::HotelSystem do
 		it "assigns new reservations to reservations list in Hotel" do
 			expect(@hotel.reservations.length).must_equal (@length_list + 3)
 		end
+		
+		it "calculates cost of the BLOCK correctly" do
+
+		end
+
+		it "calculates cost of the individual RESERVATION made from BLOCK correctly" do
+
+		end
 
 		it "correctly adds Reservation to Room's list of reservations" do
 			expect(@hotel.rooms[19].reservations.length).must_equal (@length_list_room + 1)
@@ -206,7 +214,7 @@ describe Hotel::HotelSystem do
 		it "raises an exception if one of the rooms is already booked for range" do
 			inval_rooms = [@hotel.rooms[15], @hotel.rooms[16], @hotel.rooms[17]]
 
-			expect{@hotel.make_block(inval_rooms, @range, @cost)}.must_raise ArgumentError
+			expect{@hotel.make_block(inval_rooms, @range, @discount)}.must_raise ArgumentError
 		end
 
 	end

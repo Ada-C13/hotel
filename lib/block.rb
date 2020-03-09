@@ -8,7 +8,7 @@ module Hotel
 
 		attr_reader :room, :cost, :range, :length_of_stay
 		
-		def initialize(room, range, cost)
+		def initialize(room, range, discount)
 			super(room, range)
 
 			if room.length > 5 || room.length < 2
@@ -18,10 +18,8 @@ module Hotel
 			end
 
 			@length_of_stay = (@range.end_date - @range.start_date).to_i
-			@cost = (cost * PRICE * @length_of_stay).to_i
+			@cost = (discount * PRICE * @length_of_stay).to_i
 		end
-
-
 
 	end
 
