@@ -14,10 +14,7 @@ module Hotel
     end
 
     def total_price 
-      # if @occupancy.length > 1 #block
         return @occupancy.sum { |occupancy| occupancy[:room].price * @dates.nights_spent }
-      # end
-      # return @dates.nights_spent * @occupancy[0][:room].price
     end
 
   end

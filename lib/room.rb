@@ -1,5 +1,3 @@
-require_relative 'reservation'
-
 module Hotel
   class Room
     attr_reader :id, :price, :type
