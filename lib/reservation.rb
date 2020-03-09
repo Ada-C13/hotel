@@ -9,7 +9,7 @@ module Hotel
     end
 
     def cost
-      cost = ((@end_date - @start_date) - 1) * 200
+      cost = (@end_date - @start_date) * 200
       return cost
     end
   end

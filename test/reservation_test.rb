@@ -20,6 +20,7 @@ describe Hotel::Reservation do
     before do 
       start_date = Date.new(2017, 01, 01)
       end_date = start_date + 3
+      puts end_date
       @reservation = Hotel::Reservation.new(start_date, end_date)
     end
 
@@ -28,7 +29,7 @@ describe Hotel::Reservation do
     end
 
     it "returns the correct cost" do
-      expect(@reservation.cost).must_equal 400
+      expect(@reservation.cost).must_equal 600
     end
   end
 end

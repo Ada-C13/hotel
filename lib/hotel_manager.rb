@@ -14,16 +14,6 @@ module Hotel
     end
 
     def reserve_room(start_date, end_date)
-      #TODO
-      # room chosen is based on the method! not by the user! (see README.md)
-      # add date instance to @rooms array
-      
-      
-      # chosen room
-      # chosen_room = (available_rooms.sample).to_sym
-      # room_index = (((chosen_room.to_s).match('[0-9]')[0]).to_i) - 1
-
-      reserved_room = Hotel::DateRange.new(start_date, end_date)
       available_rooms = available_rooms(start_date, end_date)
 
       if available_rooms.empty?
@@ -33,12 +23,13 @@ module Hotel
         chosen_room = (available_rooms.sample.to_sym)
         room_index = (((chosen_room.to_s).match('[0-9]')[0]).to_i) - 1
 
-        # add reservation to master room list collection
-        reserved_room = Hotel::Reservation.new(reserved_room.start_date, reserved_room.end_date)
-        @rooms[room_index][chosen_room] << reserved_room
-
-        return Hotel::Reservation.new(reserved_room.start_date, reserved_room.end_date)
+        # add reservation to master room list (@rooms)
+        reserved_room = Hotel::DateRange.new(start_date, end_date)
+        reserved = Hotel::Reservation.new(reserved_room.start_date, reserved_room.end_date)
+        @rooms[room_index][chosen_room] << reserved
       end
+
+      return @rooms
     end
 
     def reservations(date)
@@ -68,12 +59,8 @@ module Hotel
         raise ArgumentError.new("Not a valid room")
       end
 
-      # room 1 - @rooms[0][:room1]
-      # room 5 - @rooms[4][:room5]
-      # use regex on room attribute, then turn into integer subtract 1 for the index to access
       room_index = (((room.to_s).match('[0-9]')[0]).to_i) - 1
       reservation_list = []
-
 
       @rooms[room_index][room].each do |reservation_instance|
         if date.between?(reservation_instance.start_date, reservation_instance.end_date)
@@ -86,7 +73,6 @@ module Hotel
 
     # Wave 2
     def available_rooms(start_date, end_date)
-      # start_date and end_date should be instances of class Date
       unavailable_rooms = []
       available_rooms = @rooms.map { |room| (room.keys).join }
 

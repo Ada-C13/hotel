@@ -116,6 +116,7 @@ describe Hotel::DateRange do
 
       expect(@range.overlap?(test_range)).must_equal false
     end
+
   end
 
   describe "include?" do
@@ -133,7 +134,7 @@ describe Hotel::DateRange do
       expect(@range.include?(date_2)).must_equal false
     end
 
-    it "returns true for dates in the range" do
+    it "returns true for dates within the range" do
       date = @range.end_date - 2
       expect(@range.include?(date)).must_equal true
     end
