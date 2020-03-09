@@ -3,10 +3,9 @@ require 'date'
 
 module Hotel
     class Room
-        attr_reader :id, :status, :reservations
-      def initialize(id:, status:, reservations:)
+        attr_accessor :id, :reservations
+      def initialize(id:, reservations:)
           @id = id
-          @status = status
           @reservations = []
       end
 
@@ -14,7 +13,7 @@ module Hotel
         rooms = []
         id = 1
         20.times do
-            room = Hotel::Room.new(id: id, status: true, reservations: [])
+            room = Hotel::Room.new(id: id, reservations: [])
             rooms << room 
             id += 1
         end
@@ -36,6 +35,14 @@ module Hotel
         return reservations.select do |reservation| 
             range = reservation.date_in...reservation.date_out
             range.include?(date)
+        end
+      end
+
+      def daterange_availability(date_in,date_out)
+        if list_of_reservations_for_data_range(date_in,date_out) == []
+          return :AVAILABLE 
+        else
+          return :UNAVAILABLE
         end
       end
 
@@ -61,10 +68,6 @@ module Hotel
             end
          end
          return false
-      end
-
-      def add_a_reservation(reservation)
-        @reservations<< reservation
       end
     end
 end  
