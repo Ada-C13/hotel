@@ -11,7 +11,7 @@ describe "HotelBlock" do
     rooms = [room1, room2, room3]
   }
   let(:discount_rate) {
-    discount_rate = 0.15
+    discount_rate = 15
   }
   let(:hotel_block) {
     hotel_block = Hotel::HotelBlock.new(date_range, rooms, discount_rate, 1)
@@ -31,20 +31,20 @@ describe "HotelBlock" do
     end
   end
 
-  # describe "check_availability" do
-  #   it "returns true if all rooms are available" do
-  #     expect(hotel_block.check_availability).must_equal true
-  #   end
-
-  #   it "raises ArgumentError if not all rooms in block are available" do
-  #     reservation = Hotel::Reservation.new(date_range, 1, 3, 200)
-  #     rooms[2].reservations.push(reservation)
-
-  #     expect{hotel_block}.must_raise ArgumentError
-  #   end
-  # end
-
   describe "calculate_discounted_rate" do
-    
-  end
+    it "calculates discounted rate correctly given an integer" do
+      hotel_block.rooms.each do |room|
+        expect(room.cost).must_equal 170
+      end
+    end
+
+    it "calculates discounted rate correctly given a float" do
+      discount_rate = 0.20
+      hotel_block = Hotel::HotelBlock.new(date_range, rooms, discount_rate, 1)
+      hotel_block.rooms.each do |room|
+        expect(room.cost).must_equal 160
+      end
+    end
+
+end
 end
