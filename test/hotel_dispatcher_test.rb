@@ -3,7 +3,6 @@ require_relative 'test_helper'
 
 describe "HotelDispatcher class" do
   describe "initialize" do
-    
     it "@rooms will have a length of 20" do
     dispatcher = Hotel::HotelDispatcher.new()
     expect(dispatcher.rooms.length).must_equal 20
@@ -14,8 +13,7 @@ describe "HotelDispatcher class" do
       expect(dispatcher.reservations).must_be_empty
       end
 
-  end #initialize end
-
+  end 
 
   describe "make a new reservation" do
     it "@reservations should be length one" do
@@ -27,8 +25,8 @@ describe "HotelDispatcher class" do
     end
 
     it "is an array" do
-    dispatcher = Hotel::HotelDispatcher.new()
-    expect(dispatcher.make_reservation(Date.new(2020, 03, 01), Date.new(2020, 03, 05))).must_be_kind_of Array
+      dispatcher = Hotel::HotelDispatcher.new()
+      expect(dispatcher.make_reservation(Date.new(2020, 03, 01), Date.new(2020, 03, 05))).must_be_kind_of Array
     end
 
     it "raises ArgumentError when start date is greater than end date" do
@@ -36,11 +34,9 @@ describe "HotelDispatcher class" do
       expect{ dispatcher.make_reservation(Date.new(2020, 03, 15), Date.new(2020, 03, 01)) }.must_raise ArgumentError
     end
 
-  end #make a new reservation end
-
+  end 
 
   describe "find all reservations by room num and date range" do
-
     it "finds all reservations for a room given room_num and date range" do
       dispatcher = Hotel::HotelDispatcher.new()
       dispatcher.make_reservation(Date.new(2020, 03, 01), Date.new(2020, 03, 05))
@@ -65,7 +61,7 @@ describe "HotelDispatcher class" do
       expect(dispatcher.find_all_res_for_room(1, Date.new(2020, 03, 07), Date.new(2020, 03, 10))).must_be_empty
     end
 
-  end # describ block end
+  end 
 
   describe "find all reservations for a single date" do
      it "finds all reservations for a single date" do
@@ -79,7 +75,6 @@ describe "HotelDispatcher class" do
   end
 
   describe "find available rooms" do
-
     it "will have 20 rooms on a new Hotel Dispatcher object and all rooms are available" do
       dispatcher = Hotel::HotelDispatcher.new()
       expect(dispatcher.find_available_rooms(Date.new(2020, 03, 06), Date.new(2020, 03, 10)).length).must_equal 20
@@ -103,13 +98,11 @@ describe "HotelDispatcher class" do
       expect(dispatcher.find_available_rooms(Date.new(2019, 03, 03), Date.new(2019, 03, 06)).length).must_equal 19
     end
 
-  end # describe block end
+  end
 
   describe "book available room with date range" do
-
     it "will book a specific room on specific dates" do
       dispatcher = Hotel::HotelDispatcher.new()
-
       dispatcher.make_reservation(Date.new(2020, 03, 01), Date.new(2020, 03, 05))
       expect(dispatcher.reservations.length).must_equal 1
 
@@ -123,11 +116,10 @@ describe "HotelDispatcher class" do
 
     it "will raise an ArgumentError if room is unavailable for specific date" do
       dispatcher = Hotel::HotelDispatcher.new()
-
       dispatcher.book_avail_room_w_date_range(5, Date.new(2020, 03, 16), Date.new(2020, 03, 19))
-      expect{ dispatcher.book_avail_room_w_date_range(5, Date.new(2020, 03, 15), Date.new(2020, 03, 01)) }.must_raise ArgumentError
+      expect{ dispatcher.book_avail_room_w_date_range(5, Date.new(2020, 03, 15), Date.new(2020, 03, 21)) }.must_raise ArgumentError
     end
   
-  end # book available room with date range end
+  end 
 
-end #HotelDispatcher class end
+end 

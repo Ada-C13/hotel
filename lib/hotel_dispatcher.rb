@@ -8,9 +8,9 @@ module Hotel
 
       @reservations = []
       create_rooms
-    end #initialize end
+    end 
 
-    # Wave 1
+    # Wave 1 - Create 20 rooms. 
     def create_rooms
       @rooms = []
         (1..20).each do |room_num|
@@ -19,9 +19,9 @@ module Hotel
           @rooms << room
         end
         return @rooms
-    end # create rooms end
+    end
 
-    # Wave 1
+    # Wave 1 - Make a new reservation.
     def make_reservation(start_date, end_date)
       if end_date < start_date
         raise ArgumentError
@@ -30,9 +30,9 @@ module Hotel
       new_reservation = Hotel::Reservation.new(start_date: start_date, end_date: end_date, room: room)
       @reservations << new_reservation
       return @reservations
-    end
+    end 
 
-    # Wave 1 Access all reservations for a specific room
+    # Wave 1 - Find all reservations for a given room and date range.
     def find_all_res_for_room(room_num, start_date, end_date)
       found_reservations = []
         @reservations.each  do |reservation| 
@@ -44,10 +44,9 @@ module Hotel
             end
         end
         return found_reservations
-    end # find_all_res_for_room end
+    end 
 
-
-    # Wave 1 - Access list of reservations for a specific date. 
+    # Wave 1 - Find all reservations for a given date. 
     def find_all_reservations(date)
       all_reservations_by_date = []
       @reservations.each do |reservation|
@@ -56,11 +55,9 @@ module Hotel
         end
       end
       return all_reservations_by_date
-    end #find_all_reservations by date end
+    end 
 
-
-
-      # Wave 2 -  View all available rooms for a given date range
+    # Wave 2 - Find available rooms for a given date range. 
     def find_available_rooms(start_date, end_date)
       found_rooms = @rooms.clone
       @reservations.each do |reservation|
@@ -73,14 +70,14 @@ module Hotel
         end
       end
       return found_rooms
-    end # find_available_rooms end
+    end
 
-
-    # Wave 2 Book available room with specific room number and date range.
+    # Wave 2 - Book available room with room number and date range. 
     def book_avail_room_w_date_range(room_number, start_date, end_date)
       available_rooms = find_available_rooms(start_date, end_date)
+      # if room is NOT available - throw error
       if (available_rooms.all? { |room_object| room_number != room_object.room_num })
-        raise ArgumentError, "The room number you have entered is unavailable"
+        raise ArgumentError, "The room number you entered is unavailable on the dates you entered."
       # .any returns true if at least one element meets the condition
       elsif (available_rooms.any? { |room_object| room_number == room_object.room_num })
         # .find returns the first element that satisfies the condition
@@ -91,18 +88,8 @@ module Hotel
       else
         return false
       end
-      
-    end
-    
+    end 
 
+  end 
 
-  end # class end
-end # module end
-
-
-# reservations that do not conflict
-# if (start_date >= reservation.end_date && end_date >= reservation.end_date) 
-#   (start_date < reservation.start_date && end_date <= reservation.start_date) ||
-#   (start_date >= reservation.end_date && end_date > reservation.end_date)
-#   found_rooms << reservation
-# else 
+end 
