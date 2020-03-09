@@ -1,0 +1,36 @@
+TO DO:
+
+Front Desk:
+
+date_reservations
+* Add raise argument error if date is not a date
+* Add raise argument error if there are no reservations for the date
+
+range_reservations
+* Add raise argument error if date range is not a date range
+* Add raise argument error if there are no reservations for the date range
+
+available_rooms
+* argument error if no rooms available isn't working in test
+
+Front Desk Test:
+
+available_rooms
+* argument error if no rooms available isn't working in test
+
+reserve_room
+* add more nominal and edge tests
+
+date_reservations
+* add more nominal and edge tests
+
+range_reservations
+* add more nominal and edge tests
+
+find_room_res
+* add more nominal and edge tests
+
+available_rooms
+* raise argument error test not working - currently skipped
+
+
