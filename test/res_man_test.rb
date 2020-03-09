@@ -47,6 +47,16 @@ describe "ReservationManager class" do
 
          expect{ @phillip.make_reservation(@check_in, @check_out) }.must_raise ArgumentError
       end
+
+      it "can book a room when someone else is checking out that day" do
+         reservations = []
+         reservations << @phillip.make_reservation(@check_in, @check_out)
+         reservations << @phillip.make_reservation(@check_out, @check_out + 1)
+         
+         reservations.each do |reservation|
+            expect(reservation.room.room_num).must_equal 1
+         end
+      end
    end
 
    describe "reservations_by_room method" do
@@ -90,7 +100,7 @@ describe "ReservationManager class" do
       end
    end
 
-   describe "reservations_by_date" do
+   describe "reservations_by_date method" do
       before do
          @check_in = Date.new(2020, 3, 10)
          @check_out = Date.new(2020, 3, 11)
@@ -115,4 +125,49 @@ describe "ReservationManager class" do
          expect(matching_reservations.length).must_equal 0
       end
    end 
+
+   describe "view_by_vacancy method" do
+      it "retrieves all rooms for a range with no bookings" do
+         check_in = Date.new(2020, 05, 1)
+         check_out = Date.new(2020, 05, 1)
+
+         vacancies = @phillip.view_by_vacancy(check_in, check_out)
+
+         expect(vacancies.length).must_equal 20
+         vacancies.each do |room|
+            expect(room).must_be_instance_of Stayappy::Room
+         end
+      end
+
+      it "excludes a reserved room when a booking is matched" do
+         @check_in = Date.new(2020, 3, 10)
+         @check_out = Date.new(2020, 3, 11)
+         @reservation = @phillip.make_reservation(
+            @check_in, 
+            @check_out
+         )
+
+         vacancies = @phillip.view_by_vacancy(@check_in, @check_out)
+
+         expect(vacancies.length).must_equal 19
+         vacancies.each do |room|
+            expect(room.room_num).wont_equal @reservation.room.room_num
+         end
+      end
+
+      it "returns no rooms when hotel is fully booked" do
+         @check_in = Date.new(2020, 3, 10)
+         @check_out = Date.new(2020, 3, 11)
+         20.times do
+            @phillip.make_reservation(
+               @check_in, 
+               @check_out
+            )
+         end
+
+         vacancies = @phillip.view_by_vacancy(@check_in, @check_out)
+
+         expect(vacancies.length).must_equal 0
+      end
+   end
 end 

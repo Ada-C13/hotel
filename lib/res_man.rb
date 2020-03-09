@@ -14,15 +14,9 @@ module Stayappy
     end
 
     def assign_room(check_in, check_out)
-      available_rooms = @rooms.clone
-      # Loop through all the bookings to see which rooms are taken
-      @bookings.each do |reservation|
-        if reservation.stay_overlaps?(check_in, check_out)
-          available_rooms.delete(reservation.room)
-          if available_rooms.length == 0
-            raise ArgumentError.new("No rooms available for reservation window #{check_in} to #{check_out}")
-          end
-        end
+      available_rooms = view_by_vacancy(check_in, check_out)
+      if available_rooms.length == 0
+        raise ArgumentError.new("No rooms available for reservation window #{check_in} to #{check_out}")
       end
       available_rooms[0]
     end
@@ -54,6 +48,20 @@ module Stayappy
         end
       end
       matching_reservations
+    end
+
+    def view_by_vacancy(check_in, check_out)
+      available_rooms = @rooms.clone
+      # Loop through all the bookings to see which rooms are taken
+      @bookings.each do |reservation|
+        if reservation.in_range?(check_in, check_out)
+          available_rooms.delete(reservation.room)
+          if available_rooms.length == 0
+            return []
+          end
+        end
+      end
+      available_rooms
     end
 
   end

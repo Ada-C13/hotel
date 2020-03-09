@@ -30,16 +30,5 @@ module Stayappy
       return false
     end
 
-    def stay_overlaps?(other_check_in, other_check_out)
-      # Ensure check_in does not overlap
-      if other_check_in >= @check_in && other_check_in < @check_out
-        return true
-      elsif other_check_out > @check_in && other_check_out <= @check_out
-        return true
-      end
-
-      return false
-    end
-
   end
 end
