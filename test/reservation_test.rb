@@ -18,6 +18,18 @@ describe "Reservation class" do
       expect(@new_reservation.cost).must_equal  600
     end
   end
-   
+
+  describe "check_valid_room(request_room)" do
+    it "will return true if the request room matches with the room the reservation itself" do
+      expect(@new_reservation.check_valid_room("Room 1")).must_equal true
+      expect(@new_reservation.check_valid_room("Room 10")).must_equal false
+    end
+  end
+ 
+  describe "check_status" do 
+    it "will return false is the status of the reservation is not equal to :open_hotel_block" do
+      expect(@new_reservation.check_status).must_equal false
+    end
+  end
 end
  

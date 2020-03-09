@@ -14,10 +14,9 @@ describe "Hotel Controller" do
       expect(@front_desk).must_be_kind_of Hotel::HotelController  
     end
 
-    #it "will create an array of rooms according to the number of room provided as an argument" do
-      # it is creating the room array we want but not able to create test for it
-      # expect(@front_desk.room_list.length).must_equal 20
-    #end
+    it "will create an array of rooms according to the number of room provided as an argument" do
+      expect(@front_desk.room_list.length).must_equal 20
+    end
   end
 
   describe "reserve_room" do
@@ -59,8 +58,10 @@ describe "Hotel Controller" do
     it "will create a hotel_block, create the correct amount of reservation according to the block" do
       hotel_block = @front_desk.create_hotel_block(Date.new(2020,06,20), Date.new(2020,06,25), 5)
       
+      
       expect(hotel_block).must_be_kind_of Hotel::BlockReservation 
       expect(@front_desk.reservations(Date.new(2020,06,20)).length).must_equal 5
+      expect{@front_desk.create_hotel_block(Date.new(2020,06,20), Date.new(2020,06,25), 10)}.must_raise ArgumentError
     end
   end
 
@@ -76,10 +77,16 @@ describe "Hotel Controller" do
 
   describe "reserve_room_hotel_block(hotel_block_id, customer_name, specific_room)" do
     it "will reserve room within the hotel block" do
-
-
-    #expect{@front_desk.reserve_room_hotel_block(1, "Hello Kitty", 1)}.must_raise ArgumentError
-    end
+    @front_desk.create_hotel_block(Date.new(2020,06,20), Date.new(2020,06,25), 5)
+    @front_desk.create_hotel_block(Date.new(2020,06,20), Date.new(2020,06,25), 4)
+    
+    @front_desk.reserve_room_hotel_block(1, "Lily", "Room 1")
+    
+    expect(@front_desk.get_list_of_reservations("Room 1",Date.new(2020,06,20), Date.new(2020,06,25))[0].status).must_equal :reserved_hotel_block 
+    expect(@front_desk.get_list_of_reservations("Room 1",Date.new(2020,06,20), Date.new(2020,06,25))[0].customer_name).must_equal "Lily"
+    expect{@front_desk.reserve_room_hotel_block(1, "Peter", "Room 1")}.must_raise ArgumentError
+    expect{@front_desk.reserve_room_hotel_block(5, "Hello Kitty", 1)}.must_raise ArgumentError
+    end 
   end
 end 
  
