@@ -167,7 +167,7 @@ module Hotel
       if type == :individual 
         @reservations[:individual] << reservation 
       elsif type == :block 
-        @reservations[:block]<< reservation 
+        @reservations[:block] << reservation 
       end 
     end
     
