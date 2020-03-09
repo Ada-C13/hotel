@@ -236,6 +236,7 @@ describe "ReservationDesk class" do
       @reservation_desk.make_block(room_ids: [1, 2, 3, 4], start_date: "2020-9-1", end_date: "2020-9-10")
       @reservation = @reservation_desk.reserve_from_block(room_id: 2, block_id: 1)
     end
+    
     it "returns true if reservation was successful" do
       expect(@reservation).must_equal true
     end
@@ -243,6 +244,12 @@ describe "ReservationDesk class" do
     it "raises ArgumentError if room ID was not valid or wasn't part of the block" do
       expect {
         @reservation_desk.reserve_from_block(room_id: 6, block_id: 1)
+      }.must_raise ArgumentError
+    end
+
+    it "raises ArgumentError if the block ID is invalid" do
+      expect {
+        @reservation_desk.reserve_from_block(room_id: 6, block_id: 1000)
       }.must_raise ArgumentError
     end
 
@@ -262,7 +269,7 @@ describe "ReservationDesk class" do
   describe "check_block_availability" do
     before do
       @reservation_desk.make_block(room_ids: [1, 2, 3, 4, 5], start_date: "2020-9-1", end_date: "2020-9-10")
-      # @reservation_desk.make_reservation()
+      @reservation_desk.reserve_from_block(room_id: 3, block_id: 1)
     end
 
     it "returns an Array" do
@@ -270,13 +277,25 @@ describe "ReservationDesk class" do
     end
 
     it "returns an array of unreserved rooms in requested block" do
-
+      expect(@reservation_desk.check_block_availability(1).length).must_equal 4
     end
 
     it "returns empty array if no rooms are available" do
+      @reservation_desk.reserve_from_block(room_id: 1, block_id: 1)
+      @reservation_desk.reserve_from_block(room_id: 2, block_id: 1)
+      @reservation_desk.reserve_from_block(room_id: 4, block_id: 1)
+      @reservation_desk.reserve_from_block(room_id: 5, block_id: 1)
+      expect(@reservation_desk.check_block_availability(1).empty?).must_equal true
     end
 
     it "throws an ArgumentError if there is no block with a given ID" do
+      expect { 
+        @reservation_desk.reserve_from_block(room_id: 1, block_id: 2)
+      }.must_raise ArgumentError
+
+      expect { 
+        @reservation_desk.reserve_from_block(room_id: 1, block_id: "Nataliya")
+      }.must_raise ArgumentError
     end
   end
 end

@@ -70,6 +70,7 @@ module Hotel
 
     def reserve_from_block(room_id: , block_id: )
       #TODO: block_id validation
+      raise ArgumentError.new("Invalid block ID.") unless blocks[block_id]
       blocks[block_id][:rooms].each do |room|
         if room.id == room_id
           start_date = blocks[block_id][:date_range][0]
@@ -88,17 +89,17 @@ module Hotel
       raise ArgumentError.new("Invalid room ID.")
     end
 
-    # def check_block_availability(block_id)
-    #   available_rooms = []
-    #   start_date = blocks[block_id][:date_range][0]
-    #   end_date = blocks[block_id][:date_range][1]
-    #   blocks[block_id][:rooms].each do |room|
-    #     available_rooms << room unless room.reserved?(start_date: start_date, end_date: end_date)
-    #   end
-    #   return available_rooms
-    # end
+    def check_block_availability(block_id)
+      raise ArgumentError.new("Invalid block ID.") unless blocks[block_id]
+      available_rooms = []
+      start_date = blocks[block_id][:date_range][0]
+      end_date = blocks[block_id][:date_range][1]
+      blocks[block_id][:rooms].each do |room|
+        available_rooms << room unless room.reserved?(start_date: start_date, end_date: end_date)
+      end
+      return available_rooms
+    end
     
-
     private
     def make_rooms
       rooms = []
