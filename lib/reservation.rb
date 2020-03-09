@@ -28,13 +28,12 @@ module Hotel
       return  @cost
     end
 
-    # trial
+    def check_valid_room(request_room)
+      return self.room_num == request_room
+    end
+
     def check_status 
-      if self.status == :open_hotel_block
-        return true
-      else 
-        return false
-      end
+      return self.status == :open_hotel_block
     end
   end
 end

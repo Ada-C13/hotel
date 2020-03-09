@@ -139,16 +139,22 @@ module Hotel
 
     def reserve_room_hotel_block(hotel_block_id, customer_name, specific_room) 
       raise ArgumentError.new("Not a valid Hotel Block ID!") if !(hotel_block_list.keys.include? hotel_block_id)
+      
+      error_status = true
+
       hotel_block_list[hotel_block_id].block_reservations.each do |reservation|
         # check if the specific room requested in within the hotel block and not booked by another guests
-        if hotel_block_list[hotel_block_id].check_valid_room(specific_room) && reservation.check_status  
-        #if (reservation.room_num == specific_room) && (reservation.status != :reserved_hotel_block)
+        #if hotel_block_list[hotel_block_id].check_valid_room(specific_room) && reservation.check_status  
+        if (reservation.check_valid_room(specific_room)) && (reservation.check_status)
           booking_room = reservation
           booking_room.customer_name = customer_name
           booking_room.status = :reserved_hotel_block
+          error_status = false
         end  
       end
-    # raise ArgumentError.new("This is not a reserved room for the hotel block guest!")
+      if error_status 
+        raise ArgumentError.new("This is not a reserved room for the hotel block guest! Or it is already reserved by another guest!")
+      end
     end
   end
 end
