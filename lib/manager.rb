@@ -8,7 +8,7 @@ module Hotel
   class Manager
     attr_reader :num, :all_rooms, :rm_reservations, :recloc
     attr_writer
-    attr_accessor  
+    attr_accessor    
 
     def initialize(num: 20)
       if num == nil || num == 20 
@@ -70,7 +70,48 @@ module Hotel
     def rooms_available_by_date(start_date, end_date)
     # I can view a list of rooms that are not reserved for a given date range, 
     # so that I can see all available rooms for that day
+      room_array = []
       
+      @all_rooms.each do |room|
+        if room.is_available_range(start_date, end_date) == true 
+          room_array << room
+        end 
+      end
+      return room_array
+      
+      
+      
+      # @all_rooms.each do |room|
+      #   (start_date..end_date).each do |date|
+      #     if room.is_available(date) != true 
+      #       break
+      #     end
+      #   end 
+      #   room_array << room
+      # end
+
+
+
+    # room_array = []
+    # temp_array = []
+    # @all_rooms.each do |room|
+    #   # if room.is_available_range(start_date, end_date) == true # && room.overlap(end_date) == false
+    #   # room_array << room
+    #   # end
+    #   # temp_array = []
+    #   (start_date..end_date).each do |date|
+    #     avail_room = room.has_res_by_date(date)
+    #     if avail_room == false 
+    #       temp_array << false
+
+    #     end
+    #     if temp_array.include? false
+    #     else 
+    #       room_array << room
+    #     end
+    #   end
+    # end
+    # return room_array
     # make empty temporary array 
     # loop through all rooms 
     # call room's is_available method 
@@ -81,11 +122,15 @@ module Hotel
 
     def find_total_cost(rec_loc)
     # gives the total cost of a given reservation 
+      res = ""
       @all_rooms.each do |room|
-        res = @rm_reservations.select {|reservation| @reservation.recloc == rec_loc}.first
-        return res.recloc
+         if room.rm_reservations.find{|res| res.recloc[:recloc] == rec_loc}.class == Hotel::Reservation
+          res = room.rm_reservations.find{|res| res.recloc[:recloc] == rec_loc}
+         end
       end
-    end
+      return res.total_cost
+    end 
+  
 
   end
 end

@@ -57,10 +57,11 @@ module Hotel
     end
     
 
-    def book_room(start_date, end_date)
+    def book_room(start_date, end_date, recloc = nil)
       @reservation = Reservation.new(start_date: start_date, 
         end_date: end_date, 
-        rm_num: @rm_num)
+        rm_num: @rm_num, 
+        recloc: recloc)
       @rm_reservations << @reservation
       return @reservation
     end
