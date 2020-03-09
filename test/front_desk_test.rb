@@ -4,6 +4,8 @@ describe "front desk" do
   before do
     @front_desk = Hotel::FrontDesk.new
     @dates = Hotel::DateRange.new(start_date: Date.today + 2, end_date: Date.today + 6)
+    @block_count = 3
+    @discount_cost = 0.2
   end
 
   describe "initialize FrontDesk" do
@@ -125,26 +127,21 @@ describe "front desk" do
   end
 
   describe " total_cost" do
-    before do
-      @new_reservation = Hotel::Reservation.new(date_range: Hotel::DateRange.new(start_date: Date.today + 2, end_date: Date.today + 5), room: Hotel::Room.new(room_number: 1, cost: 200))
+
+    it "calculates total cost of the reservation not in block " do
+      new_reservation = @front_desk.add_reservation(@dates)
+      expect(@front_desk.total_cost(new_reservation)).must_equal 800
     end
 
-    it "calculates total cost of the reservation " do
-      expect(@front_desk.total_cost(@new_reservation)).must_equal 600
-
-      block_count = 3
-      discount_cost = 0.2
-
-      @front_desk.request_block( block_count, @dates, discount_cost)
+    it "calculates total cost of a reservation in a block " do
+      block1 = @front_desk.request_block( @block_count, @dates, @discount_cost)
+      block_reservation = @front_desk.add_reservation_to_room_in_block(block1)
+      expect(@front_desk.total_cost(block_reservation)).must_equal 640
 
     end
   end
 
   describe "request_block" do
-    before do
-      @block_count = 3
-      @discount_cost = 0.2
-    end
 
     it "reserves the correct number of rooms for the hotel block for given date range" do
       @front_desk.request_block( @block_count, @dates, @discount_cost)
@@ -175,10 +172,6 @@ describe "front desk" do
   end
 
   describe "check_block_status" do
-    before do
-      @block_count = 3
-      @discount_cost = 0.2
-    end
 
     it "deletes rooms in block from available rooms if there is overlap" do
       @front_desk.request_block( @block_count, @dates, @discount_cost)
@@ -190,4 +183,27 @@ describe "front desk" do
     end
   end
 
+  describe "available_rooms_in_block" do
+    it "returns all rooms that are available for reservations" do
+      block1 = @front_desk.request_block( @block_count, @dates, @discount_cost)
+      expect(@front_desk.available_rooms_in_block(block1).count).must_equal 3
+      expect(@front_desk.available_rooms_in_block(block1)[0].room_number).must_equal 1
+      expect(@front_desk.available_rooms_in_block(block1)[1].room_number).must_equal 2
+      expect(@front_desk.available_rooms_in_block(block1)[2].room_number).must_equal 3
+
+      @front_desk.add_reservation_to_room_in_block(block1)
+      expect(@front_desk.available_rooms_in_block(block1).count).must_equal 2
+      expect(@front_desk.available_rooms_in_block(block1)[0].room_number).must_equal 2
+      expect(@front_desk.available_rooms_in_block(block1)[1].room_number).must_equal 3
+    end
+  end
+
+  describe "add_reservation_to_room_in_block" do
+    it "adds a reservation to the first availavle room in the block" do
+      block1 = @front_desk.request_block( @block_count, @dates, @discount_cost)
+      @front_desk.add_reservation_to_room_in_block(block1)
+      expect(block1.rooms[0].reservations[0].date_range).must_equal @dates
+      
+    end
+  end
 end

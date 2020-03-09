@@ -35,33 +35,13 @@ describe "rooms" do
     end
   end
 
-  # describe "change_block_status" do
-  #   it "changes the block status to in block" do
-  #     expect(@room.block_status).must_equal :not_in_block
-
-  #     @room.change_block_status
-  #     expect(@room.block_status).must_equal :in_block
-  #   end
-    
-  # end
-
-  # describe "change_availability_in_block" do
-  #   it "changes the availabilty of the room in the block to :unavailable" do
-  #     expect(@room.availability_in_block).must_equal :available
+  describe "change_cost" do
+    it "changes the discount cost rate" do
+      expect(@room.discount_cost).must_equal 0
       
-  #     @room.change_availability_in_block
-  #     expect(@room.availability_in_block).must_equal :unavailable
-  #   end
-    
-  # end
-
-  # describe "change_cost" do
-  #   it "changes the cost of the room" do
-  #     expect(@room.cost).must_equal 200
-      
-  #     @room.change_cost(180)
-  #     expect(@room.cost).must_equal 180
-  #   end
-    
-  # end
+      discount_cost = 0.2
+      @room.change_cost(discount_cost)
+      expect(@room.discount_cost).must_equal discount_cost
+    end
+  end
 end
