@@ -5,9 +5,9 @@ Congratulations! You're submitting your assignment. Please reflect on the assign
 ## Reflection
 Question | Answer
 :------------- | :-------------
-What was a design challenge that you encountered on this project? | 
-What was a design decision you made that changed over time over the project? | 
-What was a concept you gained clarity on, or a learning that you'd like to share? | 
-What is an example of a _nominal test_ that you wrote for this assignment? What makes it a nominal case? | 
-What is an example of an _edge case test_ that you wrote for this assignment? What makes it an edge case? | 
-How do you feel you did in writing pseudocode first, then writing the tests and then the code? | 
+What was a design challenge that you encountered on this project? | Try to think of each class and have each one follow the principle of single responsibility. It was very difficult to think if it was too big, or if I was giving responsibilities that were not of the class or the method.
+What was a design decision you made that changed over time over the project? | I thought of creating a class that would be called client but then I didn't use it. Also at the beginning I didn't have a room class and then I decided to include it.
+What was a concept you gained clarity on, or a learning that you'd like to share? | Interact with classes and understand what an instance looks like. 
+What is an example of a _nominal test_ that you wrote for this assignment? What makes it a nominal case? | Test out the list of rooms. It is nominal because It was the basic-minimun thing my hotel structure should show.
+What is an example of an _edge case test_ that you wrote for this assignment? What makes it an edge case? | Test out all the possible overlaps. Especially to test when an end_date reservation was the same as the start_date of a new reservation.
+How do you feel you did in writing pseudocode first, then writing the tests and then the code? | It was easy at the beginning, drawing the classes and their responsibility, was pretty useful. For the last methods to write the tests at first it became complicated, to think about what results I wanted and how to write a real test, that really test what I want or what I expect. 
