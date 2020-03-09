@@ -155,6 +155,24 @@ describe "ReservationManager class" do
          end
       end
 
+      it "excludes a reserved room when a booking is matched" do
+         @check_in = Date.new(2020, 3, 10)
+         @check_out = Date.new(2020, 3, 11)
+         @reservation = @phillip.make_block(
+            [1],
+            @check_in, 
+            @check_out,
+            125.00
+         )
+
+         vacancies = @phillip.view_by_vacancy(@check_in, @check_out)
+
+         expect(vacancies.length).must_equal 19
+         vacancies.each do |room|
+            expect(room.room_num).wont_equal 1
+         end
+      end
+
       it "returns no rooms when hotel is fully booked" do
          @check_in = Date.new(2020, 3, 10)
          @check_out = Date.new(2020, 3, 11)
@@ -170,4 +188,36 @@ describe "ReservationManager class" do
          expect(vacancies.length).must_equal 0
       end
    end
-end 
+   
+   describe "make block method" do 
+      before do 
+         @room_nums = [1,2,3,4,5]
+         @check_in = Date.new(2020, 10, 10)
+         @check_out = Date.new(2020, 10, 20)
+         @discounted_rate = 125.00
+      end
+
+      it "creates a block of rooms" do 
+         sample_block = @phillip.make_block(@room_nums, @check_in, @check_out, @discounted_rate)
+         expect(sample_block).must_be_instance_of Stayappy::BlockRes
+         expect(sample_block.block.length).must_equal @room_nums.length
+      end
+
+      it "raises an argument error if room is already in a block" do
+         @phillip.make_block(@room_nums, @check_in, @check_out, @discounted_rate)
+
+         expect { @phillip.make_block(@room_nums, @check_in, @check_out, @discounted_rate) }.must_raise ArgumentError
+      end
+
+      it "raises an argument error if room is already in a reservation" do
+         @phillip.make_reservation(@check_in, @check_out)
+
+         expect { @phillip.make_block(@room_nums, @check_in, @check_out, @discounted_rate) }.must_raise ArgumentError
+      end
+
+      it "raises an argument error if room number is invalid" do
+         expect { @phillip.make_block([99], @check_in, @check_out, @discounted_rate) }.must_raise ArgumentError
+      end
+   
+   end
+end

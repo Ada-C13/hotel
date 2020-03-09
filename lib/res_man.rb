@@ -1,7 +1,7 @@
 module Stayappy
   class ReservationManager
     
-    attr_reader :rooms, :bookings 
+    attr_reader :rooms, :bookings, :block_reservations 
     
     STANDARD_ROOM_COST = 200
 
@@ -11,6 +11,7 @@ module Stayappy
         @rooms << Room.new(room_num: room_num + 1, cost: STANDARD_ROOM_COST)
       end
       @bookings = []
+      @block_reservations = []
     end
 
     def assign_room(check_in, check_out)
@@ -61,8 +62,52 @@ module Stayappy
           end
         end
       end
+      @block_reservations.each do |reservation|
+        if reservation.in_range?(check_in, check_out)
+          reservation.block.each do |room|
+            available_rooms.delete(room)
+          end
+          if available_rooms.length == 0
+            return []
+          end
+        end
+      end
       available_rooms
     end
 
+    def get_block(room_nums)
+      block_rooms = []
+      room_nums.each do |room_num|
+        if room_num < 0 || room_num >= @rooms.length
+          raise ArgumentError.new("Invalid room number.")
+        end
+        block_rooms << @rooms[room_num -1]
+      end
+      block_rooms
+    end
+
+    def make_block(room_nums, check_in, check_out, discounted_rate)
+      block_rooms = get_block(room_nums)
+      @block_reservations.each do |block|
+        if !block.in_range?(check_in, check_out)
+          next
+        end 
+        if (block.block & block_rooms).length > 0
+          raise ArgumentError.new("At least one room is not available in the block.")
+        end 
+      end 
+
+      @bookings.each do |reservation|
+        if !reservation.in_range?(check_in, check_out)
+          next
+        end
+        if block_rooms.include?(reservation.room)
+          raise ArgumentError.new("That room is not available.")
+        end
+      end
+      block_reservation = BlockRes.new(block_rooms, check_in, check_out, discounted_rate)
+      @block_reservations << block_reservation
+      block_reservation
+    end
   end
 end
