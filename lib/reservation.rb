@@ -37,6 +37,7 @@ module Hotel
       return final_bill
     end
 
+    #DateRange class originally lived here as methods
     # def contains(date)
     #   (date >= @start_date && date < @end_date) ? true : false
     # end

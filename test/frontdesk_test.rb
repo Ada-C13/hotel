@@ -1,6 +1,3 @@
-require 'simplecov'
-SimpleCov.start
-
 require_relative 'test_helper'
 
 describe "Front Desk" do
@@ -89,8 +86,13 @@ describe "Front Desk" do
       expect(reservation).must_be_kind_of Hotel::Reservation
     end
 
-    xit "returns a single reservation for hotel blocks based on date" do
-    
+    it "returns a single reservation for hotel blocks based on date" do
+      @front_desk = Hotel::FrontDesk.new()
+      block_to_find = @front_desk.add_block_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 3, 0.10, "banana")
+
+      reservation = @front_desk.find_reservation_by_date(Date.new(2019, 1, 4))
+
+      expect(reservation).must_equal block_to_find
     end
 
   end
@@ -102,19 +104,6 @@ describe "Front Desk" do
       reservation = @front_desk.add_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 1)
       
       expect(reservation[0].assigned_room.empty?).must_equal false
-    end
-
-    xit "assigns a different room to each reservation" do
-      @front_desk = Hotel::FrontDesk.new()
-      20.times do @front_desk.add_reservation(Date.new(2019, 1, 4),Date.new(2019, 1, 7), 1) 
-        end
-      
-      room_numbers = []
-      @front_desk.all_reservations.each do |reservation|
-        room_numbers << reservation.assigned_room
-      end
-      #return @front_desk.all_reservations
-      expect(room_numbers.length).must_equal room_numbers.uniq.length
     end
 
     it "returns an error if no rooms are available" do
@@ -188,7 +177,7 @@ describe "Front Desk" do
   
     it "can return an accurate list of available rooms by date" do
       available_rooms = @front_desk.find_available_room_by_date(Date.new(2019, 1, 4))
-      expect(available_rooms.length).must_equal 16 || 17
+      expect(available_rooms.length).must_equal 16
     end
 
     it "can return an accurate list of available rooms by date when blocks are involved" do

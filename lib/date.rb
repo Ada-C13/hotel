@@ -15,8 +15,6 @@ module Hotel
           return true
         elsif new_start >= @start_date && new_start < @end_date || new_end > @start_date
           return false
-        # elsif @end_date == new_start || new_start > @end_date || new_end < @start_date || new_end == @start_date
-        #   return true
         end
       end
       

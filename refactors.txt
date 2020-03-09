@@ -1,0 +1,17 @@
+A few things to change moving forward:
+
+Tighter code
+  1. Refactor code with Enumerable methods where possible
+  2. Consider where ternary format could be used
+  3. Reconsider where other helper methods could be created
+
+Block class
+  1. Consider pulling out a separate Block class and using Reservation as it's super class -- that way, if you used super in intitialize, you'd only have to add on block: and block_key:
+
+DateRange class
+  1. Reconsider DateRange as it's own class (has no independent behaviors)
+
+Tighten up variable naming conventions
+  1. Make sure method naming conventions follow a pattern
+  2. Make sure method naming conventions logically build on one another IE reserve_from_block relies on update_block
+  3. Review and update variable names for clarity and replication
