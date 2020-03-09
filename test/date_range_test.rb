@@ -5,8 +5,11 @@ describe Hotel::DateRange do
   before do
     @start_date = Date.new(2021, 01, 01)
     @end_date = Date.new(2021, 01, 03)
+    @start_date2 = Date.new(2021, 01, 01)
+    @end_date2 = Date.new(2021, 01, 02)
 
     @range_inst = Hotel::DateRange.new(start_date: @start_date, end_date: @end_date)
+    @range_inst2 = Hotel::DateRange.new(start_date: @start_date2, end_date: @end_date2)
   end
 
   describe "constructor" do
@@ -53,39 +56,79 @@ describe Hotel::DateRange do
   describe "overlap?" do
 
     it "returns true for the same range" do
-      start_date = @range_inst.start_date
-      end_date = @range_inst.end_date
+      start_date = Date.new(2021, 01, 01)
+      end_date = Date.new(2021, 01, 03)
       test_range = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
 
       expect(@range_inst.overlap?(test_range)).must_equal true
     end
 
-    xit "returns true for a contained range" do
+    it "returns true for a contained range" do
+      test_range = Hotel::DateRange.new(
+        start_date: Date.new(2021, 01, 01),
+        end_date: Date.new(2021, 01, 02)
+      )
+      expect(@range_inst.overlap?(test_range)).must_equal true
     end
 
-    xit "returns true for a range that overlaps in front" do
+    it "returns true for a range that overlaps in front" do
+      test_range = Hotel::DateRange.new(
+        start_date: Date.new(2020, 12, 01),
+        end_date: Date.new(2021, 01, 02)
+      )
+      expect(@range_inst.overlap?(test_range)).must_equal true
     end
 
-    xit "returns true for a range that overlaps in the back" do
+    it "returns true for a range that overlaps in the back" do
+      test_range = Hotel::DateRange.new(
+        start_date: Date.new(2021, 1, 02),
+        end_date: Date.new(2021, 01, 06)
+      )
+      expect(@range_inst.overlap?(test_range)).must_equal true
     end
 
-    xit "returns true for a containing range" do
+    it "returns true for a containing range" do
+      test_range = Hotel::DateRange.new(
+        start_date: Date.new(2020, 12, 01),
+        end_date: Date.new(2021, 01, 12)
+      )
+      expect(@range_inst.overlap?(test_range)).must_equal true
     end
 
-    xit "returns false for a range starting on the end_date date" do
+    it "returns false for a range starting on the end_date date" do
+      test_range = Hotel::DateRange.new(
+        start_date: Date.new(2021, 01, 03),
+        end_date: Date.new(2021, 01, 06)
+      )
+      expect(@range_inst.overlap?(test_range)).must_equal false
     end
 
-    xit "returns false for a range ending on the start_date date" do
+    it "returns false for a range ending on the start_date date" do
+      test_range = Hotel::DateRange.new(
+        start_date: Date.new(2020, 12, 03),
+        end_date: Date.new(2021, 01, 01)
+      )
+      expect(@range_inst.overlap?(test_range)).must_equal false
     end
 
-    xit "returns false for a range completely before" do
+    it "returns false for a range completely before" do
+      test_range = Hotel::DateRange.new(
+        start_date: Date.new(2020, 01, 03),
+        end_date: Date.new(2020, 01, 06)
+      )
+      expect(@range_inst.overlap?(test_range)).must_equal false
     end
 
-    xit "returns false for a date completely after" do
+    it "returns false for a date completely after" do
+      test_range = Hotel::DateRange.new(
+        start_date: Date.new(2022, 01, 03),
+        end_date: Date.new(2022, 01, 06)
+      )
+      expect(@range_inst.overlap?(test_range)).must_equal false
     end
   end
 
-  xdescribe "include?" do
+  describe "include?" do
     it "returns false if the date is clearly out" do
       date = Date.new(2022,1,1)
       expect(@range_inst.include?(date)).must_equal false

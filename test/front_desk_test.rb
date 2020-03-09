@@ -7,9 +7,17 @@ describe Hotel::FrontDesk do
       start_date: Date.new(2021, 01, 01),
       end_date: Date.new(2021, 01, 03)
     )
+    date_instance2 = Hotel::DateRange.new(
+      start_date: Date.new(2021, 01, 02), 
+      end_date: Date.new(2021, 01, 03)
+    )
     @res_instance = Hotel::Reservation.new(
       date_range: @date_instance,
       room: 2
+    )
+    res_instance2 = Hotel::Reservation.new(
+      date_range: date_instance2,
+      room: 3
     )
     @room_list = @desk_instance.available_rooms(@date_instance)
     @reserved = @desk_instance.reserve_room(@date_instance)
@@ -131,18 +139,17 @@ describe Hotel::FrontDesk do
 
     end
 
-    xdescribe "find_room_res" do
+    describe "find_room_res" do
       it "returns a list of reservations" do
+        @desk_instance.reserve_room(@date_instance)
+
         temp = nil
         @room_res.each do |res|
           temp = res
-          puts temp.length
         end
         
         expect(@room_res).must_be_kind_of Array
         @room_res[0].must_be_kind_of Hotel::Reservation
-
-
       end
     end
     
@@ -156,8 +163,9 @@ describe Hotel::FrontDesk do
         
       end
 
-      it "takes date range and returns a list" do
+      it "takes date range and returns a list of numbers" do
         expect(@room_list).must_be_kind_of Array
+        expect(@room_list[0]).must_be_kind_of Integer
       end
     end
   end

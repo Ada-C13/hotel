@@ -79,7 +79,7 @@ module Hotel
 
     # Wave 2
 
-
+    # ! TODO - Redo to use @calendar instead of @reservations
     # User: I can view a list of rooms that are not reserved for a given date range, so that I can see all available rooms for that day
     def available_rooms(requested_dates)
       # start_date and end_date should be instances of class Date
@@ -91,7 +91,7 @@ module Hotel
       occupied_rooms = []
 
       reservations.each do |reservation|
-        if reservation.date_range.date_overlap?(date_range)
+        if reservation.date_range.overlap?(requested_dates)
           occupied_rooms << reservation.room 
         end 
       end 
