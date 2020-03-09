@@ -59,18 +59,18 @@ module Hotel
     end 
 
     def res_by_date(date) 
-    # gives all reservations for a specific date 
-    # make empty temporary array
-    # loop through all rooms 
-    # each room loop through reservation 
-    # if date contains reservation 
-    # push reservation into new array 
-    # return new array 
+      res_array = []
+      @all_rooms.each do |room|
+        res = room.has_res_by_date(date)
+        res_array << res
+      end
+      return res_array
     end 
 
     def rooms_available_by_date(start_date, end_date)
     # I can view a list of rooms that are not reserved for a given date range, 
     # so that I can see all available rooms for that day
+      
     # make empty temporary array 
     # loop through all rooms 
     # call room's is_available method 

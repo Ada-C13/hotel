@@ -88,7 +88,7 @@ describe "manager" do
       @res2 = @room1.book_room(Date.new(2014, 4, 1), Date.new(2014, 4,2))
     end
 
-    it "returns an array of reservations" do 
+    it "returns an array of reservations of a room for a date range" do 
       expect(@new_hotel.res_by_room(1, Date.new(2014, 4, 3), Date.new(2014, 4, 7))).must_be_instance_of Array
       expect(@new_hotel.res_by_room(1, Date.new(2014, 4, 3), Date.new(2014, 4, 7)).include?(@res1)).must_equal true
       expect(@new_hotel.res_by_room(1, Date.new(2014, 4, 1), Date.new(2014, 4, 7)).include?(@res1)).must_equal true
@@ -97,11 +97,21 @@ describe "manager" do
 
   end 
 
-  # describe "res_by_date" do 
-  #   it "" do 
-    
-  #   end 
-  # end 
+  describe "res_by_date" do 
+    before do 
+      @new_hotel = Hotel::Manager.new(num: 2)
+      @room1 = @new_hotel.all_rooms[0]
+      @room2 = @new_hotel.all_rooms[1]
+      @res1 = @room1.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
+      @res2 = @room2.book_room(Date.new(2014, 4, 3), Date.new(2014, 4,7))
+    end
+
+    it "returns an array of reservations from all rooms by one date" do 
+      expect(@new_hotel.res_by_date(Date.new(2014, 4, 3))).must_be_instance_of Array
+      expect(@new_hotel.res_by_date(Date.new(2014, 4, 3)).include?(@res2)).must_equal true
+      expect(@new_hotel.res_by_date(Date.new(2014, 4, 3)).include?(@res1)).must_equal true
+    end 
+  end 
 
     # describe "rooms_available_by_date" do 
   #   it "" do 
