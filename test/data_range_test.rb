@@ -37,17 +37,15 @@ describe Hotel::DateRange do
       
     end
 
-    it "Raises an error for incorrect dates format" do
-        start_date = Date.new(2)
-        end_date = Date.new(290,2)
+    it "raises an error for incorrect dates format" do
+        start_date = ""
+        end_date = ""
 
-        expect {
-          Hotel::DateRange.validate_date?(start_date)
-        }.must_raise ArgumentError
+        expect { Hotel::DateRange.new(start_date, end_date) }.must_raise ArgumentError
 
-        expect {
-          Hotel::DateRange.validate_date?(end_date)
-        }.must_raise ArgumentError
+        # expect {
+        #   Hotel::DateRange.validate_date?(end_date)
+        # }.must_raise ArgumentError
 
     end
   end
