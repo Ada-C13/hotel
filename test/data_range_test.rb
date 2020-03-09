@@ -41,11 +41,9 @@ describe Hotel::DateRange do
         start_date = ""
         end_date = ""
 
-        expect { Hotel::DateRange.new(start_date, end_date) }.must_raise ArgumentError
-
-        # expect {
-        #   Hotel::DateRange.validate_date?(end_date)
-        # }.must_raise ArgumentError
+        expect { 
+          Hotel::DateRange.new(start_date, end_date) 
+        }.must_raise ArgumentError
 
     end
   end
