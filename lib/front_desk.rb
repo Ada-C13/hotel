@@ -1,7 +1,7 @@
 
 module Hotel
   class FrontDesk
-    attr_reader :rooms, :datarange, :reservations
+    attr_reader :rooms, :date_range, :reservations
 
     def initialize
       @rooms = generate_rooms
@@ -24,29 +24,31 @@ module Hotel
       return @reservations
     end
 
-    def get_available_rooms(datarange)
+    def get_available_rooms(date_range)
       unavailable_rooms = []
     
       @reservations.each do |reservation|
-        if reservation.datarange.overlap?(datarange) == true
+        if reservation.daterange.overlap?(date_range) == true
           unavailable_rooms << reservation.room
         end
       end
+
       available_rooms = @rooms - unavailable_rooms
+
       return available_rooms
+
     end
 
-    def make_resevation(datarange)
+    def make_resevation(date_range)
 
-      available_rooms = get_available_rooms(datarange)
-
-      if available_rooms.empty?
-        return raise ArgumentError
-      else
-        new_reservation = Hotel::Reservation.new(datarange,available_rooms[0])
-        @reservations << new_reservation
-        return new_reservation
+      available_rooms = get_available_rooms(date_range)
+      if available_rooms.length < 1
+        raise ArgumentError
       end
+
+      new_reservation = Hotel::Reservation.new(date_range,available_rooms[0])
+      @reservations << new_reservation
+      return new_reservation
     end
 
     def reservations_by_date(date)
@@ -55,11 +57,30 @@ module Hotel
       end
       return total_by_date
     end
+    
+    def reservations_by_room_date (room, date_range)
+
+      rooms = @reservations.select do |reveservation|
+        reveservation.room.room_id == room
+      end
+
+      reservations_by_room = rooms.select do |reservation|
+        reservation.daterange == date_range
+      end
+
+      if reservations_by_room.empty?
+        raise ArgumentError
+      end
+
+      return reservations_by_room
+    end
 
     def cost_by_reservation(reservation_number)
      cost = nil
      @reservations.each do |reservation|
-        cost = reservation.total_cost
+        if reservation.id == reservation_number
+         cost = reservation.total_cost
+        end
       end
       return cost
     end
