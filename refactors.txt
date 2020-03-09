@@ -1,0 +1,6 @@
+refactors to make
+
+- Reservations should not inherit from a DateRange because they are two separate things
+- Reservations should have a date_range reader that calls on the DateRange class (like Block class)
+- Should make block ranges have an individual id number? Same way of tracking blocks
+- A block should have an individual id number
