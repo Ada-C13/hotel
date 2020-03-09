@@ -53,18 +53,52 @@ module Hotel
 
     def make_block(room_ids: nil, start_date:, end_date:, rate: :default)
       #TODO: nil scenario
+      #TODO: no rooms given?
       raise ArgumentError.new("Blocks can't contain more than 5 rooms.") if room_ids.length > 5
     
       block_id = generate_block_id
-      blocks[block_id] = []
+      blocks[block_id] = {}
+      blocks[block_id][:date_range] = [start_date, end_date]
+      blocks[block_id][:rooms] = []
       room_ids.each do |id|
         room = find_room_by_id(id)
         raise ArgumentError.new("Invalid room ID.") if room == nil
         room.reserve(start_date: start_date, end_date: end_date, block: block_id, rate: rate)
-        blocks[block_id] << id
+        blocks[block_id][:rooms] << room
       end
     end
-  
+
+    def reserve_from_block(room_id: , block_id: )
+      #TODO: block_id validation
+      blocks[block_id][:rooms].each do |room|
+        if room.id == room_id
+          start_date = blocks[block_id][:date_range][0]
+          end_date = blocks[block_id][:date_range][1] 
+          unless room.reserved?(start_date: start_date, end_date: end_date)
+            room.block_participation.each do |block_part|
+              if block_part.date_range.start_date == Date.parse(start_date)
+                room.reservations << block_part
+                return true
+              end
+            end
+          end
+          raise StandardError.new("This room has already been reserved.")
+        end
+      end
+      raise ArgumentError.new("Invalid room ID.")
+    end
+
+    # def check_block_availability(block_id)
+    #   available_rooms = []
+    #   start_date = blocks[block_id][:date_range][0]
+    #   end_date = blocks[block_id][:date_range][1]
+    #   blocks[block_id][:rooms].each do |room|
+    #     available_rooms << room unless room.reserved?(start_date: start_date, end_date: end_date)
+    #   end
+    #   return available_rooms
+    # end
+    
+
     private
     def make_rooms
       rooms = []

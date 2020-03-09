@@ -176,7 +176,7 @@ describe "ReservationDesk class" do
     end
   end
 
-  describe "make block" do
+  describe "make_block" do
     it "Room IDs provided: it creates Reservations and adds them to requested rooms' block_participation array" do
       @reservation_desk.make_block(room_ids: [1, 2, 3], start_date: "2020-9-1", end_date: "2020-9-10")
       expect(@reservation_desk.rooms[0].block_participation.length).must_equal 1
@@ -188,8 +188,8 @@ describe "ReservationDesk class" do
     it "Rooms IDs provided: it adds block information to the block hash" do
       @reservation_desk.make_block(room_ids: [1, 2, 3], start_date: "2020-9-1", end_date: "2020-9-10")
       expect(@reservation_desk.blocks.length).must_equal 1
-      expect(@reservation_desk.blocks[1].length).must_equal 3
-      expect(@reservation_desk.blocks[1]).must_equal [1, 2, 3]
+      expect(@reservation_desk.blocks[1][:rooms].length).must_equal 3
+      expect(@reservation_desk.blocks[1][:rooms][0]).must_be_kind_of Hotel::Room
     end
 
     it "Rooms IDs provided: raises an ArgumentError if any of IDs are invalid" do
@@ -228,6 +228,55 @@ describe "ReservationDesk class" do
       @reservation_desk.make_block(room_ids: [1, 2, 3], start_date: "2020-9-1", end_date: "2020-9-10", rate: 150)
       rate = @reservation_desk.rooms[0].block_participation[0].rate
       expect(rate).must_equal 150
+    end
+  end
+
+  describe "reserve_from_block" do
+    before do
+      @reservation_desk.make_block(room_ids: [1, 2, 3, 4], start_date: "2020-9-1", end_date: "2020-9-10")
+      @reservation = @reservation_desk.reserve_from_block(room_id: 2, block_id: 1)
+    end
+    it "returns true if reservation was successful" do
+      expect(@reservation).must_equal true
+    end
+
+    it "raises ArgumentError if room ID was not valid or wasn't part of the block" do
+      expect {
+        @reservation_desk.reserve_from_block(room_id: 6, block_id: 1)
+      }.must_raise ArgumentError
+    end
+
+    it "raises StandardError if the room has already been reserved" do
+      expect {
+        @reservation_desk.reserve_from_block(room_id: 2, block_id: 1)
+      }.must_raise StandardError
+    end
+
+    it "adds the original block reservation for the room to reservations array" do
+      expect(@reservation_desk.rooms[0].reservations.length).must_equal 0
+      @reservation_desk.reserve_from_block(room_id: 1, block_id: 1)
+      expect(@reservation_desk.rooms[0].reservations.length).must_equal 1
+    end
+  end
+
+  describe "check_block_availability" do
+    before do
+      @reservation_desk.make_block(room_ids: [1, 2, 3, 4, 5], start_date: "2020-9-1", end_date: "2020-9-10")
+      # @reservation_desk.make_reservation()
+    end
+
+    it "returns an Array" do
+      expect(@reservation_desk.check_block_availability(1)).must_be_kind_of Array
+    end
+
+    it "returns an array of unreserved rooms in requested block" do
+
+    end
+
+    it "returns empty array if no rooms are available" do
+    end
+
+    it "throws an ArgumentError if there is no block with a given ID" do
     end
   end
 end
