@@ -13,9 +13,18 @@ describe Hotel::DateRange do
     end
 
     it "is an an error for negative-length ranges" do
+      start_date = Date.new(2017, 01, 01)
+      end_date = start_date - 3
+
+      # range = Hotel::DateRange.new(start_date, end_date)
+
+      expect {Hotel::DateRange.new(start_date, end_date)}.must_raise ArgumentError
     end
 
     it "is an error to create a 0-length range" do
+      start_date = 0
+      end_date = 0
+      expect {Hotel::DateRange.new(start_date, end_date)}.must_raise ArgumentError
     end
   end
 
