@@ -46,19 +46,30 @@ module Hotel
     end
 
     def reserve_block(date_range, rooms, discount_rate)
-      found_rooms = []
-      rooms.each do |room|
-        found_rooms << find_room(room)
-      end
+      check_availability = check_block_availability(date_range, rooms)
 
-      available_rooms = list_available_rooms(date_range)
+      add_block_rooms(date_range, check_availability, discount_rate)
 
-      raise ArgumentError.new("Not all rooms have availability") if !(found_rooms - available_rooms).empty?
-
-      block = Hotel::HotelBlock.new(date_range, found_rooms, discount_rate, @blocks.length + 1)
+      block = Hotel::HotelBlock.new(date_range, check_availability, discount_rate, @blocks.length + 1)
       @blocks << block
 
       return block
+    end
+
+    def add_block_rooms(date_range, rooms, discount_rate)
+      rooms.each do |room|
+        @total_reservations += 1
+        reservation = Hotel::Reservation.new(date_range, @total_reservations, room.number, room.cost * (1 + discount_rate), @blocks.length + 1, true)
+        room.reservations << reservation
+      end
+    end
+
+    def check_block_availability(date_range, rooms)
+      available_rooms = list_available_rooms(date_range)
+
+      raise ArgumentError.new("Not all rooms have availability") if !(rooms - available_rooms).empty?
+
+      return rooms
     end
 
     def create_block_reservation(date_range, room, discount_rate, block)

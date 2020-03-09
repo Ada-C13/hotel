@@ -114,17 +114,23 @@ describe "HotelManager" do
       expect(reservation.cost).must_equal 200
     end
 
-    # it "sets available status to false" do
-      
-    # end
+    it "sets availability to false" do
+      expect(reservation.available).must_equal false
+    end
   end
 
   describe "blocks" do
     let(:date_range) do
       date_range = Hotel::DateRange.new(Date.new(2020,5,10), Date.new(2020,5,14))
     end
+    let(:rooms) do
+      room1 = @hotel_manager.rooms[0]
+      room2 = @hotel_manager.rooms[1]
+      room3 = @hotel_manager.rooms[2]
+      rooms = [room1, room2, room3]
+    end
     let(:reserve_block) do
-      reserve_block = @hotel_manager.reserve_block(date_range, (1..4).to_a, 0.15)
+      reserve_block = @hotel_manager.reserve_block(date_range, rooms,15)
     end
 
     describe "reserve_block" do
@@ -140,27 +146,70 @@ describe "HotelManager" do
       it "adds HotelBlock to blocks array" do
         blocks = @hotel_manager.blocks.length
         date_range = Hotel::DateRange.new(Date.new(2020,5,16), Date.new(2020,5,18))
-        reserve_block = @hotel_manager.reserve_block(date_range, (1..4).to_a, 0.15)
+        reserve_block = @hotel_manager.reserve_block(date_range, rooms, 15)
 
         expect(@hotel_manager.blocks.length).must_equal blocks + 1
       end
 
       it "creates reservations for each Room" do
-        
+        reserve_block
+        reserve_block.rooms.each do |room|
+          expect(room.reservations.length).must_equal 1
+        end
       end
 
-      it "raises ArgumentError if not all rooms in block are available" do
-        reservation = Hotel::Reservation.new(date_range, 1, 3, 200)
-        @hotel_manager.rooms[2].reservations << reservation
+      it "raises ArgumentError if room is already in another block for given date range" do
+        reserve_block
+        expect{@hotel_manager.reserve_block(date_range, rooms,15)}.must_raise ArgumentError
+      end
+    end
 
-        expect{reserve_block}.must_raise ArgumentError
+    describe "add_block_rooms" do
+      let(:add_rooms) do
+        @hotel_manager.add_block_rooms(date_range, rooms, 15)
+      end
+
+      it "adds a Reservation to each room" do
+        add_rooms
+        rooms.each do |room|
+          expect(room.reservations.length).must_equal 1
+        end
+      end
+
+      it "sets hotel_block of Reservation to Block id" do
+        current_blocks = @hotel_manager.blocks.length
+        add_rooms
+
+        rooms.each do |room|
+          room.reservations.each do |reservation|
+            expect(reservation.hotel_block).must_equal (current_blocks + 1)
+          end
+        end
+      end
+
+      it "sets Reservation: available to true" do
+        add_rooms
+        rooms.each do |room|
+          room.reservations.each do |reservation|
+            expect(reservation.available).must_equal true
+          end
+        end
       end
     end
 
     describe "create_block_reservation" do
       it "creates a Reservation" do
         room = @hotel_manager.find_room(1)
-        expect(@hotel_manager.create_block_reservation(date_range, room, 0.15, 1))
+        expect(@hotel_manager.create_block_reservation(date_range, room, 15, 1))
+      end
+    end
+
+    describe "check_block_availability" do
+      it "raises ArgumentError if not all rooms in block are available" do
+        reservation = Hotel::Reservation.new(date_range, 1, 3, 200)
+        @hotel_manager.rooms[2].reservations << reservation
+
+        expect{@hotel_manager.check_block_availability(date_range, (1..4).to_a)}.must_raise ArgumentError
       end
     end
   end
