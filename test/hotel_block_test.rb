@@ -50,7 +50,7 @@ describe 'hotel block' do
       expect(avail_rooms & my_rooms).must_be_empty
     end
 
-    it "will throw argument error if given improper no. of rooms" do
+    it "will throw argument error if given improper num of rooms" do
       my_rooms = []
       first_date = Date.new(2020, 3, 20)
       last_date = Date.new(2020, 3, 25)

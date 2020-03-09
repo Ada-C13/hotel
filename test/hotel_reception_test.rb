@@ -82,7 +82,6 @@ describe "hotel reception" do
 
       @reception.blocks << Hotel::HotelBlock.new(rooms, check_in_time, check_out_time)
 
-      #TODO: write tests!
       expect(@reception.available_rooms(check_in_time, check_out_time)).wont_include rooms[0]
     end
   end
