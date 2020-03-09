@@ -1,0 +1,7 @@
+- I would take out Room class again, because I found that the functionality it had,
+at least at this point of capability for my program, was minimal. I was hoping that
+the attributes I was following within the Room class would be more useful, but I
+found in the end that I could have written my entire program without it.
+- I feel like my logic for methods contained in DateRange were very confusing for
+even myself to follow. I want to improve on their structure more so I can understand
+how they arrive at the results they do.
