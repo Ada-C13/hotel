@@ -72,10 +72,16 @@ module Hotel
       return rooms
     end
 
-    def create_block_reservation(date_range, room, discount_rate, block)
+    def create_block_reservation(room, block)
+      found_block = find_block(block)
       @total_reservations += 1
-      reservation = Hotel::Reservation.new(date_range, @total_reservations, room.number, room.cost, discount_rate, @blocks.length + 1)
+      reservation = Hotel::Reservation.new(found_block.date_range, @total_reservations, room.number, room.cost, found_block.discount_rate, @blocks.length + 1)
       return reservation
+    end
+
+    def find_block(id)
+      found_block = @blocks.find { |block| block.id == id }
+      return found_block
     end
 
     def find_room(id)

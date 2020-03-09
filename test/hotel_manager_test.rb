@@ -198,9 +198,34 @@ describe "HotelManager" do
     end
 
     describe "create_block_reservation" do
+      before do
+        reserve_block
+        @room = @hotel_manager.find_room(1)
+        @block_reservation = @hotel_manager.create_block_reservation(@room, 1)
+      end
+      
       it "creates a Reservation" do
         room = @hotel_manager.find_room(1)
-        expect(@hotel_manager.create_block_reservation(date_range, room, 15, 1))
+        expect(@block_reservation).must_be_kind_of Hotel::Reservation
+      end
+
+      it "reserves room with correct information" do
+        @hotel_manager.create_block_reservation(@room, 1)
+
+        expect(@room.reservations[-1].date_range).must_equal date_range
+        expect(@room.reservations[-1].id).must_equal 1
+        expect(@room.reservations[-1].room_number).must_equal 1
+        expect(@room.reservations[-1].hotel_block).must_equal 1
+      end
+    end
+
+    describe "find_block" do
+      it "finds correct block given an id" do
+        reserve_block
+        found_block = @hotel_manager.find_block(1)
+        expect(found_block.discount_rate).must_equal 0.15
+        expect(found_block.date_range).must_equal date_range
+        expect(found_block.id).must_equal 1
       end
     end
 
