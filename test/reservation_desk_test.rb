@@ -94,6 +94,17 @@ describe "ReservationDesk class" do
       expect(result.length).must_equal 7
     end
 
+    it "takes into account reservertions from a block" do
+      @reservation_desk.make_block(room_ids:[7, 8, 9], start_date: "2020-3-4", end_date: "2020-3-8")
+      @reservation_desk.reserve_from_block(block_id: 1, room_id: 9)
+
+      result = @reservation_desk.find_reservations(room_id: 9, start_date: "2020-3-1", end_date: "2020-3-30")
+      expect(result.length).must_equal 1
+
+      result_2 = @reservation_desk.find_reservations(start_date: "2020-3-1", end_date: "2020-3-30")
+      expect(result_2.length).must_equal 5
+    end
+
     it "No ID provided: returns empty array if there are no reservations for the room/dates" do
       result = @reservation_desk.find_reservations(room_id: 1, start_date: "2020-4-1", end_date: "2020-4-17")
       expect(result.length).must_equal 0
