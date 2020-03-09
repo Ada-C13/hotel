@@ -29,10 +29,14 @@ class Calendar
       return available_rooms
     end
 
-    reservation.total_nights.times do |i|
-      date_range << (@date_store[(reservation.start_date + i).iso8601]).all_available_rooms
-      
-      raise NoRoomsError.new "There are no rooms available for the duration of this stay." if @date_store[(reservation.start_date + i).iso8601].unavailable?
+    (reservation.total_nights).times do |i|
+      if @date_store[(reservation.start_date + i).iso8601].nil?
+        date = CalendarDate.new
+      else
+        raise NoRoomsError.new "There are no rooms available for the duration of this stay." if @date_store[(reservation.start_date + i).iso8601].unavailable?
+        date_range << (@date_store[(reservation.start_date + i).iso8601]).all_available_rooms
+      end
+
     end
 
 
@@ -52,7 +56,7 @@ class Calendar
 
   def is_available?(room_number, date)
     date = Date.parse(date).iso8601
-    return @date_store[date].is_available?(room_number)
+    return @date_store[date].room_available?(room_number)
   end
 
 

@@ -75,7 +75,7 @@ describe "Manages calendar and it's various duties" do
   it "returns true/false if given room is available on a given date" do
     yesorno = @calendar.is_available?(5, "2020/05/07")
 
-    expect yesorno.must_be true
+    expect yesorno.must_equal true
   end
 
 end

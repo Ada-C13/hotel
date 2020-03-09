@@ -21,13 +21,13 @@ class CalendarDate
   end
 
 
-  def available?(room_number)
-    return @available_rooms.include?(room_number)
+  def room_available?(room_number)
+    return @available_rooms.rooms.include?(room_number)
   end
 
 
   def all_available_rooms
-    return  @available_rooms.rooms
+    return @available_rooms.rooms
   end
 
   
