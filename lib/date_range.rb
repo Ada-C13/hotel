@@ -20,7 +20,6 @@ module Hotel
       else
         return true
       end
-
     end
 
     def include?(input_range)
@@ -33,8 +32,6 @@ module Hotel
     end
 
     private
-    
-
 
     def self.validate_date?(start_date, end_date)
 
@@ -49,5 +46,3 @@ module Hotel
     end
   end 
 end
-# a = Hotel::DateRange.new("2015-10-10","2015-10-10")
-# p a

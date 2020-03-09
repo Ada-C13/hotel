@@ -14,6 +14,3 @@ module Hotel
     end
   end
 end
-
-# a = Hotel::Room.new(1)
-# p a.cost

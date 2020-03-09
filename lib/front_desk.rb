@@ -86,7 +86,5 @@ module Hotel
       @reservations << new_reservation
       return new_reservation
     end
-
-
   end
 end
