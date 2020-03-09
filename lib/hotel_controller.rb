@@ -32,17 +32,18 @@ module Hotel
       return available_rooms
     end
     
-    def reserve_room(arrive, depart, block = nil)
+    def reserve_rooms(arrive, depart, block = nil)
       raise ArgumentError, "End date must be after start date" if depart < arrive || depart == arrive
       raise ArgumentError, "Arrival must be today or after today's date" if arrive < Date.today
 
       rooms = find_available_rooms(arrive, depart)
-      raise ArgumentError, "Reservation can't be made, no available rooms" if rooms.empty?
 
       if block.nil?
-        new_reservation = Hotel::Reservation.new(arrive, depart, rooms.first)
+        raise ArgumentError, "Reservation can't be made, no available rooms" if rooms.empty?
+        new_reservation = Hotel::Reservation.new(arrive, depart, rooms.shift)
       else
-        new_reservation = Hotel::Reservation.new(arrive, depart, rooms.pop, block)
+        raise ArgumentError, "Reservations can't be made, not enough available rooms" if rooms.length < block.num_of_rooms
+        new_reservation = Hotel::Reservation.new(arrive, depart, rooms.shift, block)
       end
       @reservations << new_reservation
   
@@ -51,11 +52,11 @@ module Hotel
 
     def make_block(arrive, depart, rate, num_of_rooms)
       raise ArgumentError,"Max number of rooms is 5" if num_of_rooms > 5
+      raise ArgumentError,"Min number of rooms is 2" if num_of_rooms < 2
       new_block = Hotel::Block.new(arrive, depart, rate, num_of_rooms)
       @blocks << new_block
-
       num_of_rooms.times do 
-        reserve_room(arrive, depart, new_block)
+        reserve_rooms(arrive, depart, new_block)
       end
 
       return new_block

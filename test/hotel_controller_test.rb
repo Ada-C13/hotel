@@ -14,7 +14,7 @@ describe 'HotelController class' do
     # Makes a reservation for hotel
     @start_date = Date.new(2021, 2, 24)
     @end_date = Date.new(2021, 2, 26)
-    @reservation = @new_hotel.reserve_room(@start_date, @end_date)
+    @reservation = @new_hotel.reserve_rooms(@start_date, @end_date)
   end
 
   describe 'HotelController add_room' do 
@@ -53,7 +53,7 @@ describe 'HotelController class' do
 
     it 'should return an array of all available rooms' do
       15.times do 
-        @new_hotel.reserve_room(Date.new(2021, 3, 6), Date.new(2021, 3, 8))
+        @new_hotel.reserve_rooms(Date.new(2021, 3, 6), Date.new(2021, 3, 8))
       end
       available_rooms = @new_hotel.find_available_rooms(Date.new(2021, 3, 6), Date.new(2021, 3, 8))
       expect(@new_hotel.find_available_rooms(Date.new(2021, 3, 6), Date.new(2021, 3, 8))).must_equal available_rooms
@@ -61,7 +61,7 @@ describe 'HotelController class' do
 
     it 'should return an empty array if no rooms are available' do
       20.times do 
-        @new_hotel.reserve_room(Date.new(2021, 3, 6), Date.new(2021, 3, 8))
+        @new_hotel.reserve_rooms(Date.new(2021, 3, 6), Date.new(2021, 3, 8))
       end
       expect(@new_hotel.find_available_rooms(Date.new(2021, 3, 6), Date.new(2021, 3, 8))).must_equal []
     end
@@ -73,15 +73,15 @@ describe 'HotelController class' do
     end
 
     it 'raises an Error if there are not two seperate dates given' do
-      expect{@new_hotel.reserve_room(@start_date, @start_date)}.must_raise ArgumentError
+      expect{@new_hotel.reserve_rooms(@start_date, @start_date)}.must_raise ArgumentError
     end
 
     it 'raises an Error if the end date is before the start date' do
-      expect{@new_hotel.reserve_room(@end_date, @start_date)}.must_raise ArgumentError
+      expect{@new_hotel.reserve_rooms(@end_date, @start_date)}.must_raise ArgumentError
     end
 
     it 'raises an Error if reservation is trying to be made without available space' do
-      expect{@new_hotel.reserve_room(@end_date, @start_date)}.must_raise ArgumentError
+      expect{@new_hotel.reserve_rooms(@end_date, @start_date)}.must_raise ArgumentError
     end
 
     it 'should have instances of reservation' do
@@ -140,28 +140,24 @@ describe 'HotelController class' do
     it 'should make x number of reservations for block' do
       @new_hotel.make_block(@start_date, @end_date, 150, 3)
       expect(@new_hotel.reservations.length).must_equal 4
-      #TODO check that each room number is different
-    end
-
-    it 'given a range of dates determine if x amount of rooms can be booked' do
-      
     end
   end
 
-  xdescribe 'HotelController raising ArrgumentError for invalid new block' do
+  describe 'HotelController raising ArrgumentError for invalid new block' do
     it 'raises an exception if more than 5 rooms are entered for block' do
       expect{@new_hotel.make_block(@start_date, @end_date, 150, 6)}.must_raise ArgumentError
     end
 
     it 'raises an excetion if less than 2 rooms are enterd for a block' do
-      
+      expect{@new_hotel.make_block(@start_date, @end_date, 150, 1)}.must_raise ArgumentError
     end
 
     it 'raises an exception if x amount of rooms cannot be booked for given date range' do
-      17.times do 
-        @new_hotel.reserve_room(Date.new(2021, 3, 6), Date.new(2021, 3, 8))
+      19.times do 
+        @new_hotel.reserve_rooms(Date.new(2021, 3, 6), Date.new(2021, 3, 8))
       end
-      expect{@new_hotel.make_block(@start_date, @end_date, 150, 5)}.must_raise ArgumentError
+      new_block = Hotel::Block.new(Date.new(2021, 3, 6), Date.new(2021, 3, 8), 150, 3)
+      expect{@new_hotel.reserve_rooms(Date.new(2021, 3, 6), Date.new(2021, 3, 8), new_block)}.must_raise ArgumentError
     end
   end
 end
