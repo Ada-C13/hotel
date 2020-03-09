@@ -1,0 +1,15 @@
+### Design Reconsiderations ###
+
+(1). The benefits of having everything in 1 container with shallow layers.
+SystemCoordinator class knowing all @Reservations versus each Room knowing its own @[Reservations]
+The down side of each Room having its own array of reservations is that methods will easily require at least one loop to iterate through each room and probably a second loop to loop through each reservation. 
+
+
+(2). Consider DateRange as a superclass. Reservation and block both inherit from DateRange.
+It makes much sense after creating many methods for the DateRange class and fulfilling the user stories.
+Ultimately, comparing date range was a crucial concept in our algorithm throughout all Reservations and Blocks.
+
+(3). View Block as an entire hotel block instead of splitting one hotel block hold into block per room.
+Also, consider more elegant designs on how to handle blocks/reservations and mark room that is reserved from block.
+
+
