@@ -73,7 +73,7 @@ end
 
 def list_rooms(rooms_array)
   rooms_array.each do |room|
-    print "Room #{room.room_id} | "
+    print "Room #{room.room_id}, Rate: $#{room.cost} | "
   end
 end
 
@@ -95,7 +95,8 @@ def main
     choice = gets.chomp
     case choice
       when "1",  "1.", "list rooms"
-        coordinator.list_rooms
+        all_rooms = coordinator.list_rooms
+        list_rooms(all_rooms)
       when "2", "2.", "find reservations by date"
         date_given = create_date
         bookings = coordinator.find_reservations_by_date(date_given)

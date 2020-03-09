@@ -22,9 +22,9 @@ module Hotel
     end
 
     def list_rooms
-      rooms.each do |room|
-        puts "Room ID: #{room.room_id} | Rate: #{room.cost}"
-      end
+      # rooms.each do |room|
+      #   puts "Room ID: #{room.room_id} | Rate: #{room.cost}"
+      # end
       return rooms
     end
 
