@@ -27,12 +27,12 @@ module Hotel
 
     def reservations(date)
       reservation_list = []
-      @reservations.each do |room|
-      if room.date_range.include?(date)
-        reservation_list << room
+      @reservations.each do |reservation|
+      if reservation.include?(date)
+        reservation_list << reservation
       end
-        return reservation_list
     end
+      return reservation_list
   end
 
     # # Wave 2

@@ -19,7 +19,6 @@ describe Hotel::HotelController do
 
         expect {Hotel::HotelController.new.reserve_room(start_date, end_date)}.must_raise ArgumentError
       end
-      
       it "takes two Date objects and returns a Reservation" do
         start_date = @date
         end_date = start_date + 3
