@@ -24,7 +24,5 @@ module Hotel
       @reserved_rooms.push(room)
     end
 
-
-
   end
 end

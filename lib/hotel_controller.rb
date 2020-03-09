@@ -14,6 +14,7 @@ module Hotel
       20.times{ |i| rooms_array.push(Hotel::Room.new(i+1)) }
       @rooms = rooms_array
       @reservations = []
+      @blocks = []
     end
 
     def list_rooms
@@ -26,6 +27,30 @@ module Hotel
       new_reservation = RoomReservation.new(start_date, end_date, room)
       @reservations.push(new_reservation)
       return new_reservation
+    end
+
+    def create_hotel_block(date_range,collection_of_rooms,disc_rate)
+      raise ArgumentError.new("A block can only contain up to five rooms") if collection_of_rooms.length > 5
+
+
+      collection_of_rooms.each do |room|
+        raise RuntimeError.new("#{room.room_number} is not available") if available_rooms(date_range.start_date,date_range.end_date).include?(room) == false
+
+        reserve_room(date_range.start_date,date_range.end_date,room)
+      end
+
+      new_block = Hotel::Block.new(date_range.start_date, date_range.end_date, collection_of_rooms, disc_rate)
+
+      @blocks.push(new_block)
+
+      return new_block
+
+    end
+
+    def reserve_room_from_block(block,room)
+      raise ArgumentError.new("#{room.room_number} is not available") unless block.available_rooms.include?(room)
+
+      block.reserve_room_from_block(room)
     end
 
     def reservations(date)

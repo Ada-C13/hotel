@@ -98,4 +98,57 @@ describe Hotel::HotelController do
 
     end
   end
+
+  describe "wave 3" do
+    before do
+      @hotel_controller = Hotel::HotelController.new
+      @start_date = Date.new(2020,03,8)
+      @end_date = @start_date + 4
+      @date_range = Hotel::DateRange.new(@start_date,@end_date)
+
+      @collection_of_rooms = []
+      [1,3,5,10,12].each do |room_num|
+        @collection_of_rooms.push(@hotel_controller.rooms.find{ |room| room.room_number == room_num})
+      end
+
+      @disc_rate = 0.3
+      
+      @hotel_block = @hotel_controller.create_hotel_block(@date_range,@collection_of_rooms,@disc_rate)
+    end
+
+    it "can check whether a given block has any rooms available" do
+      expect(@hotel_block.available_rooms).must_be_instance_of Array
+      expect(@hotel_block.available_rooms[0]).must_be_instance_of Hotel::Room
+      expect(@hotel_block.available_rooms.length).must_equal 5
+    end
+
+    it "I can reserve a specific room from a hotel block" do
+      room5 = @hotel_controller.rooms.find{ |room| room.room_number == 5}
+      @hotel_controller.reserve_room_from_block(@hotel_block,room5)
+      expect(@hotel_block.reserved_rooms.include?(room5)).must_equal true
+      expect(@hotel_block.available_rooms.include?(room5)).must_equal false    
+    end
+
+    it "Raises exception error if I try to reserve room that's in a hotel block for  certain date" do 
+      room3 = @hotel_controller.rooms.find{ |room| room.room_number == 3}
+      expect{@hotel_controller.reserve_room(@start_date,@end_date,room3)}.must_raise RuntimeError
+    end
+
+    it "Raises error if I try to create a hotel block and a room is unavailable" do 
+      room3 = @hotel_controller.rooms.find{ |room| room.room_number == 3}
+      new_start_date = @start_date + 10
+      new_end_date = new_start_date + 3
+      new_date_range = Hotel::DateRange.new(new_start_date, new_end_date)
+      @hotel_controller.reserve_room(new_start_date,new_end_date,room3)
+     
+      expect{@hotel_controller.create_hotel_block(new_date_range,@collection_of_rooms,@disc_rate)}.must_raise RuntimeError
+    end
+
+    it "Raises error if I try to create a hotel block and a room is unavailable in another hotel block" do 
+      new_collection_of_rooms = [@collection_of_rooms[0], @collection_of_rooms[2]]
+      expect{@hotel_controller.create_hotel_block(@date_range,new_collection_of_rooms,@disc_rate)}.must_raise RuntimeError
+    end
+
+  end
+
 end
