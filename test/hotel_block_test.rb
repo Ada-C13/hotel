@@ -11,7 +11,6 @@ describe 'hotel block' do
 
     first_date = Date.new(2020, 3, 20)
     last_date = Date.new(2020, 3, 25)
-    my_dates = Hotel::DateRange.new(first_date, last_date)
 
     @reception.blocks << Hotel::HotelBlock.new(my_rooms, first_date, last_date)
   end

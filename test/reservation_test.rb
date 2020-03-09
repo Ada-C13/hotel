@@ -38,7 +38,7 @@ describe "cost method" do
   end
 
   it "can calculate correct cost" do
-    expect(@reservation.cost).must_be_instance_of Integer
-    expect(@reservation.cost).must_equal 400
+    expect(@reservation.cost).must_be_instance_of Float
+    expect(@reservation.cost).must_be_close_to 400
   end
 end

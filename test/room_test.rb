@@ -9,7 +9,7 @@ describe "initialize" do
     my_room = Hotel::Room.new(1, 200)
 
     expect(my_room.id).must_be_instance_of Integer
-    expect(my_room.cost).must_be_instance_of Integer
+    expect(my_room.cost).must_be_instance_of Float
   end
 
   it "will throw an error if you give non-integer arguments" do

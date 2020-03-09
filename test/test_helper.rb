@@ -1,11 +1,12 @@
 require "minitest"
 require "minitest/autorun"
 require "minitest/reporters"
-require 'date'
 require 'simplecov'
 SimpleCov.start do
   add_filter 'test/'
 end
+require 'date'
+
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
