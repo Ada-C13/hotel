@@ -15,18 +15,18 @@ class Reservation
     @cost = @total_nights * 200
     @room_number = room_number
 
-    # def valid_date?(date)
-    #   date_format = '%Y-%m-%d'
-    #   DateTime.strptime(date, date_format)
-    #   true
-    # rescue ArgumentError
-    #   false
-    # end
+    def valid_date?(date)
+      date_format = '%Y-%m-%d'
+      DateTime.strptime(date, date_format)
+      true
+    rescue ArgumentError
+      false
+    end
 
-    # valid_date?(start_date)
-    # valid_date?(end_date)
+    valid_date?(start_date)
+    valid_date?(end_date)
 
-    # raise InvalidDateRangeError.new ("The given date range is invalid.") if (@end_date - @start_date) <= 0
+    raise InvalidDateRangeError.new ("The given date range is invalid.") if (@end_date - @start_date) <= 0
   end
 
   def assign_room_number
