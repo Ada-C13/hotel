@@ -1,0 +1,7 @@
+Despite HotelController doing a bulk of the work, I would try to see how I can condense this to two classes
+Raise more exceptions to account for user input error
+I would consider trying to make more helper methods 
+Save the reservations and it's room number in a array of hashes
+Get better at writing tests
+Understand how to get the program to pass 95% test coverage
+Move onto Wave 3

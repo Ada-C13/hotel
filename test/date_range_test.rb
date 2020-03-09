@@ -12,10 +12,10 @@ describe Hotel::DateRange do
       expect(range.end_date).must_equal end_date
     end
 
-    xit "is an an error for negative-lenght ranges" do
+    it "is an an error for negative-lenght ranges" do
     end
 
-    xit "is an error to create a 0-length range" do
+    it "is an error to create a 0-length range" do
     end
   end
 
@@ -35,32 +35,32 @@ describe Hotel::DateRange do
       expect(@range.overlap?(test_range)).must_equal true
     end
 
-    xit "returns true for a contained range" do
+    it "returns true for a contained range" do
     end
 
-    xit "returns true for a range that overlaps in front" do
+    it "returns true for a range that overlaps in front" do
     end
 
-    xit "returns true for a range that overlaps in the back" do
+    it "returns true for a range that overlaps in the back" do
     end
 
-    xit "returns true for a containing range" do
+    it "returns true for a containing range" do
     end
 
-    xit "returns false for a range starting on the end_date date" do
+    it "returns false for a range starting on the end_date date" do
     end
 
-    xit "returns false for a range ending on the start_date date" do
+    it "returns false for a range ending on the start_date date" do
     end
 
-    xit "returns false for a range completely before" do
+    it "returns false for a range completely before" do
     end
 
-    xit "returns false for a date completely after" do
+    it "returns false for a date completely after" do
     end
   end
 
-  xdescribe "include?" do
+  describe "include?" do
     it "reutrns false if the date is clearly out" do
     end
 
@@ -71,7 +71,7 @@ describe Hotel::DateRange do
     end
   end
 
-  xdescribe "nights" do
+  describe "nights" do
     it "returns the correct number of nights" do
     end
   end
