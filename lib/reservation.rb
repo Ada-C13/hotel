@@ -16,9 +16,6 @@ class Reservation < Date_Range
   def total_cost_for_stay
     number_of_nights? * 200
   end
-
-  def check_overlap(checkin, checkout)
-  end
 end
 
 #  take in the Room class add_res method, converts date range into number of nights, each night * $200 less the one night

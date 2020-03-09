@@ -20,8 +20,13 @@ describe "HotelDispatcher class" do
   end
 
   describe "Can create a reservation" do
+    let(:room_ids) { 5 }
+    let(:room_info) { 5 }
+    let(:hotel_block_id) { 101 }
+    let(:room_rate) { 150 }
     let(:check_in_date) { Date.new(2001, 2, 3) }
     let(:check_out_date) { Date.new(2001, 2, 6) }
+
     it "Return true if reservation is can be created" do
       hotel_dispatcher = build_test_dispatcher
       hotel_dispatcher.make_rooms
@@ -36,24 +41,21 @@ describe "HotelDispatcher class" do
       expect { new_res.create_reservation }.must_raise NoMethodError
     end
   end
-
-
-  describe "Can create a Hotel room block" do
-    let(:check_in_date) { Date.new(2001, 2, 3) }
-    let(:check_out_date) { Date.new(2001, 2, 6) }
-    it "Raise expection if reservation is can't be created" do
-      hotel_dispatcher = build_test_dispatcher
-      room_ids = 5
-      hotel_dispatcher.make_rooms
-      new_res = hotel_dispatcher.create_room_block(room_ids,check_in_date, check_out_date, 150)
-      expect {new_res.create_room_block}.must_raise NoMethodError
-    end
-
-    # it "Raises error if no reservation available " do
-    #   hotel_dispatcher = build_test_dispatcher
-    #   hotel_dispatcher.make_rooms
-    #   new_res = hotel_dispatcher.create_reservation(5,check_in_date, check_out_date)
-    #   expect { new_res.create_reservation }.must_raise NoMethodError
-    # end
-  end
 end
+# describe "Can create a Hotel room block" do
+#   let(:check_in_date) { Date.new(2001, 2, 3) }
+#   let(:check_out_date) { Date.new(2001, 2, 6) }
+
+#   it "Checks the check room method block" do
+#     room_ids = [1, 2, 3, 4, 5]
+#     hotel_dispatcher = build_test_dispatcher
+#     hotel_dispatcher.make_rooms
+#     new_res = hotel_dispatcher.create_room_block(room_ids, check_in_date, check_out_date, room_rate)
+#     expect { new_res.create_room_block }.must_raise NoMethodError
+#   end
+
+# it "Raise expection if reservation is can't be created" do
+#   hotel_dispatcher = build_test_dispatcher
+#   hotel_dispatcher.create_room_block(3, check_in_date, check_out_date, 150)
+#   expect { new_res.create_room_block }.must_raise NoMethodError
+# end

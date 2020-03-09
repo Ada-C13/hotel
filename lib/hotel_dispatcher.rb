@@ -48,6 +48,7 @@ class HotelManager < Date_Range
         all_res << res
       end
     end
+    all_res << hotel_blocks
     return all_res
   end
 
@@ -80,7 +81,7 @@ class HotelManager < Date_Range
   # using the make rooms we
   def create_room_block(room_ids, check_in_date, check_out_date, room_rate)
     requested_date_range = Date_Range.new(check_in_date, check_out_date)
-     (1..room_ids).each do |room_id|
+    (1..room_ids).each do |room_id|
       room = @rooms[room_id]
       if room.check_overlap_with_room_reservations(requested_date_range)
         raise Exception.new "One of the rooms in the hotel block requested is unavailable"
@@ -88,23 +89,15 @@ class HotelManager < Date_Range
     end
 
     # Go to each room and add the reservation for the given date range
+    def add_reservation (room_info)
     (1..room_ids).each do |room_id|
       room = @rooms[room_id]
       room.create_new_reservation(check_in_date, check_out_date, true)
+      end
     end
 
     # Create the HotelBlock object and add it to the list of hotel_blocks
-    hotel_blocks << HotelBlock.new(room_ids, check_in_date, check_out_date, room_rate, @hotel_block_counter)
+    hotel_blocks << Hotel_Block.new(room_ids, check_in_date, check_out_date, room_rate, @hotel_block_counter)
     @hotel_block_counter += 1
   end
 end
-
-# - For this wave, any room can be reserved at any time, and you don't need to check whether reservations conflict with each other (this will come in wave 2!)
-
-# - When reserving a room, the user provides only the start and end dates - the library should determine which room to use for the reservation
-
-# check all rooms booked dates (if date in array unavilable)
-# for each room.all loop
-# return aval room or no room aval
-# - When reserving a room, the user provides only the start and end dates - the library should determine which room to use for the reservation
-# - I can view a list of rooms that are not reserved for a given date range, so that I can see all available rooms for that day
