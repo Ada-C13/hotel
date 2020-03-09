@@ -9,7 +9,7 @@ module Hotel
       @dates = Hotel::DateRange.new(check_in_time, check_out_time)
       @discount = discount
     
-      if !(rooms.length > 0) || !(rooms.length < 6)
+      if (!(rooms.length > 0) || !(rooms.length < 6)) || rooms.class != Array
         raise ArgumentError, "We can only block 1 to 5 rooms at this time. You tried to block #{rooms.length}."
       elsif (rooms.select { |room| room.class == Hotel::Room }).length != rooms.length
         raise ArgumentError, "Non-Room objects given as arguments"

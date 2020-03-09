@@ -236,11 +236,23 @@ describe "hotel reception" do
       end
       
       it "throws an error if a room is in a reservation" do
+        check_in = Date.new(2020, 1, 2)
+        check_out = Date.new(2020, 1, 5)
+        rooms = [@reception.rooms[5]]
 
+        expect{
+          @reception.make_block(rooms, check_in, check_out)
+        }.must_raise ArgumentError
       end
 
       it "throws an error if one of the rooms is in another block" do
+        check_in = Date.new(2020, 1, 3)
+        check_out = Date.new(2020, 1, 4)
+        rooms = @reception.rooms[6..7]
 
+        expect{
+          @reception.make_block(rooms, check_in, check_out)
+        }.must_raise ArgumentError
       end
     end
   end
