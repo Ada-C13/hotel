@@ -105,7 +105,7 @@ module Hotel
     def add_hotel_block(hotel_block)
       @hotel_blocks << hotel_block
     end
-    # Get the hotel_block_list for a given date
+    # Get the hotel_block_list for a given date (not exact match date range)
     def hotel_block_list(start_date, end_date)
       given_date_range = Hotel::DateRange.new(start_date, end_date)
       # get the list of the hotel_block for the given date
@@ -157,8 +157,8 @@ module Hotel
         return hotel_block.rooms
       end
     end
-
-
+    
+    
   # Get the list of the hotel_block for a specific full date range (exact match the full date range)
     def hotel_blocks_for_specific_date_range(start_date, end_date)
       specific_date_range = Hotel::DateRange.new(start_date, end_date)
@@ -180,33 +180,34 @@ module Hotel
       all_available_rooms_of_hotel_blocks = available_rooms_of_hotel_blocks.flatten
     end
 
-  # get specific hotel_block with a given room, start_date, and end_date
+  # Get specific hotel_block with a given room, start_date, and end_date
   def specific_hotel_block(room, start_date, end_date)
     specific_date_range = Hotel::DateRange.new(start_date, end_date)
     # Check to see which hotel_block the room lives in (one room can be assigned to only one hotel_block for a specific date range )
-    specific_hotel_block = hotel_blocks.select do |hotel_block|
-      hotel_bock.date_range == specific_date_range && hotel_block.rooms.any?(room)
+    specific_hotel_block_list = hotel_blocks.select do |hotel_block|
+      hotel_block.date_range == specific_date_range && hotel_block.rooms.any? {|r| r.id == room.id}
     end
+    if specific_hotel_block_list.empty?
+      raise ArgumentError.new("there is no hotel_block for the given room or date range.")
+    end
+    specific_hotel_block = specific_hotel_block_list[0]
     return specific_hotel_block
   end
 
   # remove the room from the hotel_block for a specific date_range
   def remove_room_from_hotel_block(room, start_date, end_date)
     specific_hotel_block = specific_hotel_block(room, start_date, end_date)
-    specific_hotel_block.delete(room)
+    specific_hotel_block.rooms.delete(room)
     return specific_hotel_block
   end
 
   # remove/delete the whole hotel block 
-  def delete_hotel_block(hetel_block)
+  def delete_hotel_block(hotel_block)
     hotel_blocks.delete(hotel_block)
   end
-    
-    
-    # Once know the which hotel_block, then remove the room from that hotel_block
   
   # I can reserve a specific room from a hotel block
-  #   I can only reserve that room from a hotel block for the full duration of the block
+  # I can only reserve that room from a hotel block for the full duration of the block
   # I can see a reservation made from a hotel block from the list of reservations for that date (see wave 1 requirements)
     def reserve_room_from_hotel_block(room,start_date, end_date)
       given_date_range = Hotel::DateRange.new(start_date, end_date)

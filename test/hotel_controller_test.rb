@@ -236,7 +236,7 @@ describe Hotel::HotelController do
         end
       end
     end
-    
+
     describe "Wave 3" do
       before do
         @start_date = Date.new(2020, 8, 10)
@@ -249,16 +249,20 @@ describe Hotel::HotelController do
         @room5 = @hotel_controller.rooms[4]
         @rooms_array = [@room1, @room2]
         @rooms_array1 = [@room1, @room2, @room3, @room4]
+        @rooms_array2 = [@room3, @room4]
         @rooms_array_empty = []
         @discount_rate = 0.1
       end
-      describe "#create a HotelBock with given date_range, rooms, and discount_rate" do
+
+
+
+
+      describe "create_hotel_block" do
         it "create a HotelBlock when all the rooms of rooms_array are avaible " do
           new_hotel_block = @hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate)
           expect(new_hotel_block).must_be_kind_of Hotel::HotelBlock
           expect(@hotel_controller.hotel_blocks).must_be_kind_of Array
-          expect(@hotel_controller.hotel_blocks.length).must_equal 1
-          
+          expect(@hotel_controller.hotel_blocks.length).must_equal 1 
       end
 
         it "raise an ArgumentEorror if at least one of the rooms is unavailable for the given date range - by checking the reservations list " do 
@@ -266,16 +270,30 @@ describe Hotel::HotelController do
           reservation1 = @hotel_controller.reserve_room(@start_date, @end_date)
 
           # Now, when we try to create a block that has room_id = 1, it will raise ArgumentError 
+          # @room_array contains @room1 which was already reserved for the same date range
           expect{(@hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate))}.must_raise ArgumentError
         end
         it "raise an ArgumentEorror if at least one of the rooms is unavailable for the given date range - by checking the existing hotel_blocks" do 
         
           new_hotel_block1 = @hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate)
-          
+          # @rooms_array = [@room1, @room2]
+          # @rooms_array1 = [@room1, @room2, @room3, @room4]
           # Cannot create a hotel block that any existing block includes that specific room for that specific date
           expect{(@hotel_controller.create_hotel_block(@date_range, @rooms_array1, @discount_rate))}.must_raise ArgumentError
         end
       end
+
+      describe "add_hotel_block" do
+        it "add a hotel_block to the hotel_blocks list" do
+          # before creating the hotel_block, hotel_blocks list is empty
+          expect(@hotel_controller.hotel_blocks).must_equal []
+
+          new_hotel_block = @hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate)
+          expect(@hotel_controller.hotel_blocks.length).must_equal 1
+        end
+      end
+
+      # Get the hotel_block_list for a given date (not exact match date range)
       describe "hotel_block_list" do
         it "return an empty array of hotel_block_list if there is no hotel_block created" do
           test_start_date = Date.new(2020, 8, 01)
@@ -299,6 +317,8 @@ describe Hotel::HotelController do
           expect(hotel_block_list.length).must_equal 2
         end
       end
+
+      # Get the hotel_block_list for a given date (not exact match date range)
       describe "rooms_list_for_hotel_block" do
         it "return a room_list_of_hotel_block for a given data range" do
           start_date2 = Date.new(2020, 8, 16)
@@ -320,8 +340,9 @@ describe Hotel::HotelController do
           expect(rooms_list_for_hotel_block.length).must_equal 6
         end
       end
+
       describe "available_rooms_of_block" do
-        it "check whether a given block has any rooms available" do
+        it "check whether a given hotel block has any rooms available" do
           new_hotel_block = @hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate)
           available_rooms_of_block = @hotel_controller.available_rooms_of_block(new_hotel_block)
           expect(@hotel_controller.rooms).must_be_kind_of Array
@@ -334,50 +355,192 @@ describe Hotel::HotelController do
           expect{(@hotel_controller.create_hotel_block(@date_range, @rooms_array_empty, @discount_rate))}.must_raise ArgumentError 
         end
       end
-      describe "reserve_from_hotel_block" do
 
-        it "can reserve a room form a hotel block for a full duration of the block" do
-        end
-
-        it "See a reservation made from a hotel block from the list of reservations for that date" do
+      # Get the list of the hotel_block for a specific full date range (exact match the full date range)
+      describe "hotel_blocks_for_specific_date_range" do
+        it "return a list of hotel_blocks_for_specific_date_range for the exact match the full date range" do
+          start_date = Date.new(2020, 8, 16)
+          end_date = start_date + 5
+          date_range = Hotel::DateRange.new(start_date, end_date)
+          new_hotel_block1 = @hotel_controller.create_hotel_block(date_range, @rooms_array, @discount_rate)
+          new_hotel_block2 = @hotel_controller.create_hotel_block(date_range, @rooms_array2, @discount_rate)
           
-        end
-
-        it "remove the specific room from the rooms_array once it is reserverse" do
- 
-        
-        end
-
-        it "create a new reservation based on the hotel_block and added to reservations list" do
+          test_start_date = Date.new(2020, 8, 16)
+          test_end_date = test_start_date + 5
+          hotel_blocks_for_specific_date_range = @hotel_controller.hotel_blocks_for_specific_date_range(test_start_date, test_end_date)
           
-        end
-        
-        it "cannot reserve a specific room the HotelBock where the date is not exact macth the full duration of the block " do
-          
+          expect(hotel_blocks_for_specific_date_range).must_be_kind_of Array
+          expect(hotel_blocks_for_specific_date_range.length).must_equal 2
         end
 
-        it "When a room is reserved from a block of rooms, the reservation dates will always match the date range of the block" do
+        it "return a empty array of list of hotel_blocks_for_specific_date_range for given date_range that doesn't exactly match the full date range of the hotel blocks" do
+          start_date = Date.new(2020, 8, 16)
+          end_date = start_date + 5
+          date_range = Hotel::DateRange.new(start_date, end_date)
+          new_hotel_block1 = @hotel_controller.create_hotel_block(date_range, @rooms_array, @discount_rate)
+          new_hotel_block2 = @hotel_controller.create_hotel_block(date_range, @rooms_array2, @discount_rate)
           
+          test_start_date = Date.new(2020, 8, 16)
+          test_end_date = test_start_date + 4
+          hotel_blocks_for_specific_date_range = @hotel_controller.hotel_blocks_for_specific_date_range(test_start_date, test_end_date)
+          
+          expect(hotel_blocks_for_specific_date_range).must_be_kind_of Array
+          expect(hotel_blocks_for_specific_date_range.length).must_equal 0
         end
-        
+      end
 
-      describe "can check whether a given block has any rooms available" do
+      # Get available_rooms_of_hotel_blocks for a specific full date range (exact match the full date range)
+      describe "available_rooms_of_hotel_blocks" do
+        it "return a available_room_of_hotel_blocks for the exact match of given date range" do
+          start_date = Date.new(2020, 8, 16)
+          end_date = start_date + 5
+          date_range = Hotel::DateRange.new(start_date, end_date)
+          new_hotel_block1 = @hotel_controller.create_hotel_block(date_range, @rooms_array, @discount_rate)
+          new_hotel_block2 = @hotel_controller.create_hotel_block(date_range, @rooms_array2, @discount_rate)
+          
+          test_start_date = Date.new(2020, 8, 16)
+          test_end_date = test_start_date + 5
+          hotel_blocks_for_specific_date_range = @hotel_controller.available_rooms_of_hotel_blocks(test_start_date, test_end_date)
+          
+          expect(hotel_blocks_for_specific_date_range).must_be_kind_of Array
+          expect(hotel_blocks_for_specific_date_range.length).must_equal 4
+        end
+
+        it "return a empty array of list of hotel_blocks_for_specific_date_range for given date_range that doesn't exactly match the full date range of the hotel blocks" do
+          start_date = Date.new(2020, 8, 16)
+          end_date = start_date + 5
+          date_range = Hotel::DateRange.new(start_date, end_date)
+          new_hotel_block1 = @hotel_controller.create_hotel_block(date_range, @rooms_array, @discount_rate)
+          new_hotel_block2 = @hotel_controller.create_hotel_block(date_range, @rooms_array2, @discount_rate)
+          
+          test_start_date = Date.new(2020, 8, 16)
+          test_end_date = test_start_date + 4
       
+          expect{(@hotel_controller.available_rooms_of_hotel_blocks(test_start_date, test_end_date))}.must_raise ArgumentError
+        end
       end
 
-  
+      # Get specific hotel_block with a given room, start_date, and end_date
+      describe "specific_hotel_block" do
+        it "return specific_hotel_block when we know at least one room of the rooms_array and date_range" do
+          start_date = Date.new(2020, 8, 16)
+          end_date = start_date + 5
+          date_range = Hotel::DateRange.new(start_date, end_date)
+
+        # @rooms_array = [@room1, @room2]
+        # @rooms_array2 = [@room3, @room4]
+          new_hotel_block1 = @hotel_controller.create_hotel_block(date_range, @rooms_array, @discount_rate)
+          new_hotel_block2 = @hotel_controller.create_hotel_block(date_range, @rooms_array2, @discount_rate)
+
+          specific_hotel_block = @hotel_controller.specific_hotel_block(@room1, start_date, end_date)
+          expect(specific_hotel_block).must_be_kind_of Hotel::HotelBlock
+          expect(specific_hotel_block.rooms).must_equal @rooms_array
+        end
+
+        it "raise ArgumentError when there is no hotel_block found for that given room or date_range" do
+          start_date = Date.new(2020, 8, 16)
+          end_date = start_date + 5
+          date_range = Hotel::DateRange.new(start_date, end_date)
+
+        # @rooms_array = [@room1, @room2]
+        # @rooms_array2 = [@room3, @room4]
+          new_hotel_block1 = @hotel_controller.create_hotel_block(date_range, @rooms_array, @discount_rate)
+          new_hotel_block2 = @hotel_controller.create_hotel_block(date_range, @rooms_array2, @discount_rate)
+
+          test_start_date = Date.new(2020, 8, 16)
+          test_end_date = test_start_date + 6
           
-        
+          expect{(@hotel_controller.specific_hotel_block(@room1, test_start_date, test_end_date))}.must_raise ArgumentError
+        end
       end
-    end
-    
+
+      describe "remove_room_from_hotel_block" do 
+        it "the specific room is removed from the list of rooms of the specific hotel_block" do
+        # @rooms_array = [@room1, @room2]
+          start_date = Date.new(2020, 8, 16)
+          end_date = start_date + 5
+          date_range = Hotel::DateRange.new(start_date, end_date)
+          new_hotel_block1 = @hotel_controller.create_hotel_block(date_range, @rooms_array, @discount_rate)
+        
+        # @rooms_array1 = [@room1, @room2, @room3, @room4]
+          start_date2 = Date.new(2020, 8, 10)
+          end_date2 = start_date2 + 2
+          date_range2 = Hotel::DateRange.new(start_date2, end_date2)
+          new_hotel_block2 = @hotel_controller.create_hotel_block(date_range2, @rooms_array1, @discount_rate)
+
+          # Before removing @room1 
+          expect(new_hotel_block1).must_be_kind_of Hotel::HotelBlock
+          expect(new_hotel_block1.rooms).must_equal @rooms_array
+          expect(new_hotel_block1.rooms.length).must_equal 2
+          expect(p new_hotel_block1.rooms).must_equal [@room1, @room2]
+
+          # After removing @room1
+          @hotel_controller.remove_room_from_hotel_block(@room1, start_date, end_date)
+          expect(new_hotel_block1).must_be_kind_of Hotel::HotelBlock
+          expect(new_hotel_block1.rooms).must_equal @rooms_array
+          expect(new_hotel_block1.rooms.length).must_equal 1
+          expect(p new_hotel_block1.rooms).must_equal [@room2]
+
+          # the removing doesn't impact new_hotel_block2 
+          expect(new_hotel_block2).must_be_kind_of Hotel::HotelBlock
+          expect(new_hotel_block2.rooms).must_equal @rooms_array1
+          expect(new_hotel_block2.rooms.length).must_equal 4
+          expect(p new_hotel_block2.rooms).must_equal [@room1, @room2, @room3, @room4]
+        end
+      end
+      describe "delete_hotel_block" do
+        it "delete a hotel_block from hotel_blocks list for given hotel_block" do
+          # @rooms_array = [@room1, @room2]
+          start_date = Date.new(2020, 8, 16)
+          end_date = start_date + 5
+          date_range = Hotel::DateRange.new(start_date, end_date)
+          new_hotel_block1 = @hotel_controller.create_hotel_block(date_range, @rooms_array, @discount_rate)
+        
+        # @rooms_array1 = [@room1, @room2, @room3, @room4]
+          start_date2 = Date.new(2020, 8, 10)
+          end_date2 = start_date2 + 2
+          date_range2 = Hotel::DateRange.new(start_date2, end_date2)
+          new_hotel_block2 = @hotel_controller.create_hotel_block(date_range2, @rooms_array1, @discount_rate)
+
+        # Before deleting a hotel_block
+          expect(@hotel_controller.hotel_blocks).must_be_kind_of Array
+          expect(@hotel_controller.hotel_blocks.length).must_equal 2
+
+        # After deleting a hotel_block
+        @hotel_controller.delete_hotel_block(new_hotel_block2)
+        expect(@hotel_controller.hotel_blocks).must_be_kind_of Array
+        expect(@hotel_controller.hotel_blocks.length).must_equal 1
+        end
+      end
+      describe "reserve_from_hotel_block" do
+        it "Can reserve a room form a hotel block for a full duration of the block" do
+        # @rooms_array = [@room1, @room2]
+          start_date = Date.new(2020, 8, 16)
+          end_date = start_date + 5
+          date_range = Hotel::DateRange.new(start_date, end_date)
+          new_hotel_block1 = @hotel_controller.create_hotel_block(date_range, @rooms_array, @discount_rate)
+        
+          expect(@hotel_controller.reservations).must_equal []
+          expect(@hotel_controller.reservations.length).must_equal 0
+          expect(@hotel_controller.hotel_blocks[0]).must_be_kind_of Hotel::HotelBlock
+          expect(@hotel_controller.hotel_blocks.length).must_equal 1
+        # reserve @room1 from new_hotel_block1
+          @hotel_controller.reserve_room_from_hotel_block(@room1,start_date, end_date)
+  
+        # After reserve @room1 from new_hotel_block1
+          expect(@hotel_controller.reservations.length).must_equal 1
+          expect(@hotel_controller.reservations[0]).must_be_kind_of Hotel::Reservation
+          expect(@hotel_controller.hotel_blocks[0]).must_be_kind_of Hotel::HotelBlock
+          expect(@hotel_controller.hotel_blocks.length).must_equal 1
+          expect(new_hotel_block1.rooms.length).must_equal 1 # @room 1 was removed from @rooms_array = [@room1, @room2]
+
+        # reserve @room2 from new_hotel_block1
+          @hotel_controller.reserve_room_from_hotel_block(@room2,start_date, end_date)
+          expect(@hotel_controller.reservations.length).must_equal 2
+          # since @room1 and @room2 were removed the new_hotel_block1 will be deleted beacuse it's rooms_array is an empty array
+          expect(@hotel_controller.hotel_blocks.length).must_equal 0 
+        end        
+      end
+    end 
   end
-
-
-
-
-
-
-
-
 end

@@ -16,7 +16,14 @@ module Hotel
       end
       @start_date = start_date
       @end_date = end_date
+
     end
+
+    # define exactly what it means for two instances of its own class to be equal.
+    def ==(other)
+      self.start_date  == other.start_date && self.end_date == other.end_date
+    end
+
 
     def overlap?(other) #other is another instance of date_range
       start_date < other.end_date && other.start_date < end_date
