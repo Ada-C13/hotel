@@ -59,6 +59,5 @@ describe "Reservation class" do
       reservation = Hotel::Reservation.new(room_id: room_id, start_date: start_date, end_date: end_date, rate: rate)
       expect(reservation.cost).must_equal 720
     end
-
   end
 end

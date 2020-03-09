@@ -1,7 +1,7 @@
 module Hotel
 
   class Room
-  # Responcibility: to reserve individual rooms
+  # Class responsibility: to reserve individual rooms
     attr_reader :id, :reservations, :block_participation
 
     def initialize(id)
@@ -10,7 +10,7 @@ module Hotel
       @block_participation = []
     end
 
-    # available? helper method
+    # available? helper method / public interface
     def reserved?(start_date:, end_date:)
       date_range = DateRange.new(start_date: start_date, end_date: end_date)
       reservations.each do |reservation|
@@ -21,7 +21,7 @@ module Hotel
       return false
     end
 
-    # available? helper method
+    # available? helper method / public interface
     def in_block?(start_date:, end_date:)
       date_range = DateRange.new(start_date: start_date, end_date: end_date)
       block_participation.each do |block_reservation|

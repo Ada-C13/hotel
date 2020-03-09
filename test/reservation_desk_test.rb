@@ -3,7 +3,6 @@ require_relative "test_helper"
 describe "ReservationDesk class" do
   before do
     @reservation_desk = Hotel::ReservationDesk.new()
-    #@reservation = Hotel::Reservation.new("2020-4-1", "2020-4-5")
   end
 
   describe "ReservationDesk instantiation" do
@@ -209,7 +208,13 @@ describe "ReservationDesk class" do
       }.must_raise ArgumentError
     end
 
-    it "Rooms IDs provided: raises ArgumentError if the room_ids array includes more then 5 rooms" do
+    it "Rooms IDs provided: raises ArgumentError if the room_ids array includes less than 2 rooms" do
+      expect {
+        @reservation_desk.make_block(room_ids: [1], start_date: "2020-9-1", end_date: "2020-9-10")
+      }.must_raise ArgumentError
+    end
+
+    it "Rooms IDs provided: raises ArgumentError if the room_ids array includes more than 5 rooms" do
       expect {
         @reservation_desk.make_block(room_ids: [1, 2, 3, 4, 5, 6], start_date: "2020-9-1", end_date: "2020-9-10")
       }.must_raise ArgumentError
