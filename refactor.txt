@@ -1,0 +1,3 @@
+- fix reserve_room method
+- change room hash structure access
+- attempt wave 3
