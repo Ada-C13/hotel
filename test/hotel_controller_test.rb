@@ -21,6 +21,7 @@ describe Hotel::HotelController do
         expect(rooms.length).must_equal 20
       end
     end
+
     describe "reservations_list_room_and_date" do
       it "when there is no reservation, retrun a empty reservation list for a specified room and a given date range" do
         room = Hotel::Room.new(1, 200)
@@ -31,6 +32,7 @@ describe Hotel::HotelController do
 
         expect(reservations_list).must_equal []
       end
+
       it "return a reservation list for a specified room and a given date range" do
         # reservation with date_range1
         room = Hotel::Room.new(1, 200)
@@ -65,6 +67,7 @@ describe Hotel::HotelController do
         expect(reservations_list_of_given_room_date_range.length).must_equal 2
       end
     end
+
     describe "add_reservation" do 
       it "add a new reservation to the reservations list" do
         room = @hotel_controller.rooms[0]
@@ -254,9 +257,6 @@ describe Hotel::HotelController do
         @discount_rate = 0.1
       end
 
-
-
-
       describe "create_hotel_block" do
         it "create a HotelBlock when all the rooms of rooms_array are avaible " do
           new_hotel_block = @hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate)
@@ -326,7 +326,6 @@ describe Hotel::HotelController do
           date_range2 = Hotel::DateRange.new(start_date2, end_date2)
           new_hotel_block1 = @hotel_controller.create_hotel_block(@date_range, @rooms_array, @discount_rate)
           new_hotel_block2 = @hotel_controller.create_hotel_block(date_range2, @rooms_array1, @discount_rate)
-          
           
           # serching the room_list_for_hotel_block for the whole month
           # we have two hotel_blocks that over lap for the whole month in Aguest 
@@ -488,6 +487,7 @@ describe Hotel::HotelController do
           expect(p new_hotel_block2.rooms).must_equal [@room1, @room2, @room3, @room4]
         end
       end
+
       describe "delete_hotel_block" do
         it "delete a hotel_block from hotel_blocks list for given hotel_block" do
           # @rooms_array = [@room1, @room2]
@@ -512,6 +512,7 @@ describe Hotel::HotelController do
         expect(@hotel_controller.hotel_blocks.length).must_equal 1
         end
       end
+      
       describe "reserve_from_hotel_block" do
         it "Can reserve a room form a hotel block for a full duration of the block" do
         # @rooms_array = [@room1, @room2]

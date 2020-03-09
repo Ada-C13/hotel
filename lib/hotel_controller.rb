@@ -8,7 +8,7 @@ module Hotel
       @hotel_blocks = [] #contain a number of rooms and a specific set of days
     end
   
-    # Wave 1
+    ################# Wave 1
 
     # Access the list of all of the rooms in the hotel
     def self.rooms
@@ -28,7 +28,6 @@ module Hotel
     def add_reservation(reservation)
       @reservations << reservation
     end 
-
     
     # Access the list of reservations for a specific date, so that I can track reservations by date
     def reservations_list(date)
@@ -44,7 +43,7 @@ module Hotel
       return total_cost
     end
 
-    # Wave 2
+    ##################### Wave 2
     # Get reservations_list for a given date range
     def reservations_list_by_date_range(start_date, end_date)
       given_date_range = Hotel::DateRange.new(start_date, end_date)
@@ -99,7 +98,7 @@ module Hotel
       return reservation
     end  
 
-    # Wave 3
+    ############## Wave 3
 
     # Add hotel_block method
     def add_hotel_block(hotel_block)
@@ -127,7 +126,7 @@ module Hotel
       return all_rooms_hotel_block
     end 
     
-    #Create a hotel_block
+    # Create a hotel_block
     def create_hotel_block(date_range, rooms_array, discount_rate)
       # all rooms of rooms_array must be available (not in the reservations list) during the given date range
       all_reserved_rooms = reserved_rooms_list(date_range.start_date, date_range.end_date)
@@ -147,8 +146,6 @@ module Hotel
       return hotel_block
     end
 
-
-    ####################################
     # check whether a given block has any rooms available
     def available_rooms_of_block(hotel_block) 
       if hotel_block.rooms.empty?
@@ -157,7 +154,6 @@ module Hotel
         return hotel_block.rooms
       end
     end
-    
     
   # Get the list of the hotel_block for a specific full date range (exact match the full date range)
     def hotel_blocks_for_specific_date_range(start_date, end_date)
@@ -209,9 +205,9 @@ module Hotel
   # I can reserve a specific room from a hotel block
   # I can only reserve that room from a hotel block for the full duration of the block
   # I can see a reservation made from a hotel block from the list of reservations for that date (see wave 1 requirements)
-    def reserve_room_from_hotel_block(room,start_date, end_date)
-      given_date_range = Hotel::DateRange.new(start_date, end_date)
-      all_available_rooms_of_hotel_blocks = available_rooms_of_hotel_blocks(start_date, end_date)
+  def reserve_room_from_hotel_block(room,start_date, end_date)
+    given_date_range = Hotel::DateRange.new(start_date, end_date)
+    all_available_rooms_of_hotel_blocks = available_rooms_of_hotel_blocks(start_date, end_date)
       if all_available_rooms_of_hotel_blocks.empty?
         raise NoRoomAvailableError.new("there is no available room.")
       end 
