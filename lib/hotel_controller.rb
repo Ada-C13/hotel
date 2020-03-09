@@ -6,7 +6,6 @@ require_relative "no_room_available"
 
 module Hotel
   class HotelController
-    # attr_reader :rooms
     attr_accessor :reservations
     attr_reader :rooms
 
@@ -53,7 +52,7 @@ module Hotel
       return result
     end
 
-
+    # Avalable rooms
     def available_rooms(start_date, end_date)
       unavalable_room = []
       another_range = Hotel::DateRange.new(start_date, end_date)

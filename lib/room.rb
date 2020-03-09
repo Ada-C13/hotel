@@ -8,8 +8,8 @@ module Hotel
     end 
   end
 
-  def ==(other)
-    room_nr == other.room_nr
-  end
+  # def ==(other)
+  #   room_nr == other.room_nr
+  # end
 
 end

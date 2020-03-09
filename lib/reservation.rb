@@ -1,4 +1,7 @@
 require_relative "date_range"
+require_relative "room"
+
+
 module Hotel
   class Reservation
    

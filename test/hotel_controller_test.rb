@@ -8,7 +8,6 @@ describe Hotel::HotelController do
   end
   describe "wave 1" do
     describe "initializer" do
-
       it "Creates an instance of hotel controler" do
         @hotel_controller.must_be_kind_of Hotel::HotelController
       end
@@ -100,7 +99,6 @@ describe Hotel::HotelController do
     describe "wave 2" do
       describe "available_rooms" do
         it "takes two dates and returns a list" do
-          # today = Date.today
           start_date = Date.new(2020, 4, 10)
           end_date = Date.new(2020, 4, 12)
 

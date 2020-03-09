@@ -11,10 +11,6 @@ module Hotel
         raise ArgumentError.new("If the start_date is biger then the end_date")
       end
 
-      # if start_date < Date.today
-      #   raise ArgumentError.new("If the start_date is date in paste") 
-      # end
-
       if start_date == end_date
         raise ArgumentError.new("If the start_date date is same with end_date") 
       end
@@ -33,13 +29,11 @@ module Hotel
 
     def include?(date)
       start_date <= date && date < end_date
-      
     end
 
     def calculate_nights
       nights = (end_date - start_date).to_i
       return nights
     end 
-
   end
 end
