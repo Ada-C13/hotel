@@ -16,10 +16,10 @@ module Hotel
     end
 
     def reserve_room(start_date, end_date)
-      reservation = Reservation.new(start_date, end_date)
       if start_date.class != Date || end_date.class != Date
         raise ArgumentError.new("Please input valid dates")
       else
+      reservation = Reservation.new(start_date, end_date)
       @reservations << reservation
       return reservation
     end

@@ -13,11 +13,17 @@ describe Hotel::HotelController do
       end
     end
     describe "reserve_room" do
+      it "raises ArgumentError for invalid dates" do
+        start_date = @date
+        end_date = 1
+
+        expect {Hotel::HotelController.new.reserve_room(start_date, end_date)}.must_raise ArgumentError
+      end
+      
       it "takes two Date objects and returns a Reservation" do
         start_date = @date
         end_date = start_date + 3
         reservation = @hotel_controller.reserve_room(start_date, end_date)
-
         expect(reservation).must_be_kind_of Hotel::Reservation
       end
     end
