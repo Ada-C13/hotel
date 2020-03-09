@@ -5,7 +5,7 @@ describe "Reservation class" do
   describe "Reservation instantiation" do
     before do
       date_range = Hotel::DateRange.new(check_in: Date.new(2020, 2, 24), check_out: Date.new(2020, 2, 25))
-      @reservation = Hotel::Reservation.new(date_range: date_range, room: 1) # change room?
+      @reservation = Hotel::Reservation.new(date_range: date_range, room: 1)
     end
     it "is an instance of Reservation" do
       expect(@reservation).must_be_kind_of Hotel::Reservation
@@ -17,6 +17,7 @@ describe "Reservation class" do
       expect(@reservation.room).must_be_kind_of Integer
     end
   end
+
   describe "calculate_cost" do
     before do
       date_range = Hotel::DateRange.new(check_in: Date.new(2020, 2, 24), check_out: Date.new(2020, 2, 25))

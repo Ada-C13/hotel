@@ -1,0 +1,7 @@
+I might want to change my find_by_date_and_room method to just a find by room method, and use it in combination with my find_by_date method, to seem less redundant (single responsibility).
+I could simplify some method and variable names.
+I could replace some == true and == false returns for implicit returns to shorten some of my conditionals.
+I could add more thorough tests.
+I didn't complete the requirements for Wave 3 - I still need a way to avoid adding unavailable rooms to blocks, maybe by using HotelController's find_available_rooms method.
+Block's initialize method can use more validation checks that raise exceptions, for example making sure that the discount rate is a valid number and is less than the usual rate.
+HotelController seems to be responsible for too many things compared to my other classes. Maybe I can split some responsibility to a new class, like a "Calendar" class and "Room" class.

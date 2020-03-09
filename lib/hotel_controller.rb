@@ -39,7 +39,6 @@ module Hotel
           available_rooms.delete(reservation.room)
         end
       end
-
       @blocks.each do |block|
         if block.date_range.overlap?(new_date_range) == true
           block.rooms.each do |room|
@@ -94,7 +93,7 @@ module Hotel
       return @rooms
     end
 
-    def show_reservation_cost(reservation) # add blocks?
+    def show_reservation_cost(reservation)
       return reservation.calculate_cost
     end
   end
