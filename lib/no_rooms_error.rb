@@ -1,0 +1,2 @@
+class NoAvailableRoomsError < StandardError
+end

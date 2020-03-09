@@ -1,0 +1,12 @@
+Refactoring Hotel:
+- go through and be consistent about passing either a daterange or start/end dates
+
+- update tests to reflect this
+
+- refactor so that FrontDesk holds a collection of @rooms, @reservations, & @blocks rather than rooms holding their reservations
+
+- make a choice about rooms; do you want them to be stored as objects or just numbers?
+
+- go through and choose a convention using .first or [0] 
+
+- go through and try to be consistent about the order in which arguments are passed
