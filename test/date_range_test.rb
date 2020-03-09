@@ -42,7 +42,6 @@ describe "DateRange Class" do
       range_1 = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
       range_2 = Hotel::DateRange.new(start_date: start_date, end_date: end_date)
       expect(range_1.overlap?(range_2)).must_equal true
-
     end 
 
     it "returns true if range is completely within other range" do
@@ -53,7 +52,6 @@ describe "DateRange Class" do
       range_1 = Hotel::DateRange.new(start_date: range_1_start_date, end_date: range_1_end_date)
       range_2 = Hotel::DateRange.new(start_date: range_2_start_date, end_date: range_2_end_date)
       expect(range_1.overlap?(range_2)).must_equal true
-
     end 
 
     it  "returns true if range's start_date is on the same start_date" do 
@@ -95,7 +93,6 @@ describe "DateRange Class" do
       range_1 = Hotel::DateRange.new(start_date: range_1_start_date, end_date: range_1_end_date)
       range_2 = Hotel::DateRange.new(start_date: range_2_start_date, end_date: range_2_end_date)
       expect(range_1.overlap?(range_2)).must_equal false
-
     end
 
     it "returns false for a date completely after" do
