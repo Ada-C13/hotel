@@ -1,6 +1,7 @@
 module Hotel
   class HotelBlock
-    attr_reader :id, :rooms, :reservations, :dates, :discount
+    attr_reader :id, :rooms, :dates, :discount
+    attr_accessor :reservations
 
     def initialize(rooms, check_in_time, check_out_time, discount: 0.2)
       @id = rand(111111..999999)
@@ -16,21 +17,14 @@ module Hotel
       end
     end
 
-    def cost
-      return (room.cost - (room.cost * discount)) * dates.nights
-    end
-    
-    def make_reservation(room: nil)
-      if room
-        raise ArgumentError, "#{room} is not in this block." unless rooms.include?(room)
-      else
-        room = rooms.pop
-      end
-      @reservations << Hotel::Reservation.new(@check_in_time, @check_out_time, room)
+    def cost(room)
+      room_cost = (room.cost - (room.cost * discount)) * dates.nights
+      return room_cost.round(2)
     end
 
     def available_rooms
-      #TODO: will let you know which rooms are available
+      unavail = reservations.map { |res| res.room }
+      return rooms.difference(unavail)
     end
   end
 end

@@ -41,12 +41,12 @@ describe 'hotel block' do
       expect(@reception.blocks[0].rooms.length).must_equal 3
     end
 
-    it "will only have available rooms" do
+    it "will make rooms not 'available' anymore" do
       my_rooms = @reception.blocks[0].rooms
       check_in = @reception.blocks[0].dates.check_in_time
       check_out = @reception.blocks[0].dates.check_out_time
       avail_rooms = @reception.available_rooms(check_in, check_out)
-      #check the array of room objects against the array of avail room objects for our date range
+
       expect(avail_rooms & my_rooms).must_be_empty
     end
 
@@ -73,19 +73,37 @@ describe 'hotel block' do
       expect{
         Hotel::HotelBlock.new(not_rooms, first_date, last_date)
       }.must_raise ArgumentError
-      end
-    end
-
-  describe "make reservation method" do
-    it "will make a reservation with correct dates" do
-
-    end
-    
-    it "will throw argument error if room is not in block" do 
-
     end
   end
 
+  describe "will calc discounted cost of a room" do
+    it "will apply the correct discount" do
+      my_room = @reception.blocks.last.rooms.first
+      cost = @reception.blocks.last.cost(my_room)
 
+      expect(cost).must_be_close_to 800
+    end
+  end
 
+  describe "available rooms method" do
+    it "will show available rooms in a block" do
+      my_block = @reception.blocks.last
+      my_rooms = my_block.rooms
+      avail = my_block.available_rooms
+
+      expect(avail).must_be_instance_of Array
+      expect(avail.length).must_equal my_rooms.length
+    end
+
+    it "will not show rooms that have reservations" do
+      my_block = @reception.blocks.last
+      my_rooms = my_block.rooms
+      @reception.reserve_from_block(my_block, my_rooms.first)
+      avail = my_block.available_rooms
+
+      expect(avail).wont_include my_rooms.first
+      expect(avail.length).wont_equal my_rooms.length
+      expect(avail.length).must_equal (my_rooms.length - 1)
+    end
+  end
 end

@@ -17,15 +17,12 @@ module Hotel
 
     def available_rooms(check_in_time, check_out_time)
       my_dates = Hotel::DateRange.new(check_in_time, check_out_time)
-      #get the reservations that overlap with these dates
+
       unavail = reservations.select { |res| res.dates.overlap?(my_dates) }
-      #get the room object for that reservation
       unavail.map! { |res| res.room }
-      #get blocks that overlap with these dates
+
       unavail_in_block = blocks.select { |block| block.dates.overlap?(my_dates) }
-      #map this array of blocks to the arrays of rooms
       unavail_in_block.map! { |block| block.rooms }
-      #convert the array of arrays to a single array
       unavail_in_block.flatten!
 
       avail_rooms = rooms.difference(unavail)
@@ -64,6 +61,22 @@ module Hotel
       else
         raise ArgumentError, "It looks like those rooms aren't all available right now. #{my_rooms}"
       end
+    end
+
+    def reserve_from_block(block, room)
+      room = block.rooms.find { |r| r.id == room.id}
+      
+      if !room
+        raise ArgumentError, "#{room} is not in this block."
+      elsif !block.available_rooms.include?(room)
+        raise ArgumentError, "#{room} has already been reserved"
+      end
+
+      my_res = Hotel::Reservation.new(block.dates.check_in_time, block.dates.check_out_time, room)
+      @reservations << my_res
+      block.reservations << my_res
+
+      return @reservations.last
     end
   end
 end

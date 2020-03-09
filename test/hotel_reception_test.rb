@@ -220,40 +220,100 @@ describe "hotel reception" do
         my_reception.make_reservation(check_in_time, check_out_time)
       }.must_raise ArgumentError
     end
+  end
 
-    describe "make block method" do
-      before do
-        check_in = Date.new(2020, 1, 2)
-        check_out = Date.new(2020, 1, 5)
-        rooms = @reception.rooms[5..7]
+  describe "make block method" do
+    before do
+      check_in = Date.new(2020, 1, 2)
+      check_out = Date.new(2020, 1, 5)
+      rooms = @reception.rooms[5..7]
 
+      @reception.make_block(rooms, check_in, check_out)
+    end
+
+    it "creates an instance of a HotelBlock and adds it to the blocks array" do
+      expect(@reception.blocks.last).must_be_instance_of Hotel::HotelBlock
+      expect(@reception.blocks).wont_be_empty
+    end
+    
+    it "throws an error if a room is in a reservation" do
+      check_in = Date.new(2020, 1, 2)
+      check_out = Date.new(2020, 1, 5)
+      rooms = [@reception.rooms[5]]
+
+      expect{
         @reception.make_block(rooms, check_in, check_out)
+      }.must_raise ArgumentError
+    end
+
+    it "throws an error if one of the rooms is in another block" do
+      check_in = Date.new(2020, 1, 3)
+      check_out = Date.new(2020, 1, 4)
+      rooms = @reception.rooms[6..7]
+
+      expect{
+        @reception.make_block(rooms, check_in, check_out)
+      }.must_raise ArgumentError
+    end
+  end
+
+  describe "reserve from block method" do
+    before do
+      my_rooms = []
+
+      3.times do |i|
+        my_rooms << @reception.rooms[i]
       end
 
-      it "creates an instance of a HotelBlock and adds it to the blocks array" do
-        expect(@reception.blocks.last).must_be_instance_of Hotel::HotelBlock
-        expect(@reception.blocks).wont_be_empty
-      end
-      
-      it "throws an error if a room is in a reservation" do
-        check_in = Date.new(2020, 1, 2)
-        check_out = Date.new(2020, 1, 5)
-        rooms = [@reception.rooms[5]]
+      first_date = Date.new(2020, 3, 20)
+      last_date = Date.new(2020, 3, 25)
 
-        expect{
-          @reception.make_block(rooms, check_in, check_out)
-        }.must_raise ArgumentError
-      end
+      @my_block = Hotel::HotelBlock.new(my_rooms, first_date, last_date)
 
-      it "throws an error if one of the rooms is in another block" do
-        check_in = Date.new(2020, 1, 3)
-        check_out = Date.new(2020, 1, 4)
-        rooms = @reception.rooms[6..7]
+      @reception.blocks << @my_block
 
-        expect{
-          @reception.make_block(rooms, check_in, check_out)
-        }.must_raise ArgumentError
-      end
+      @my_room = @reception.blocks.first.rooms.first
+
+      @my_reservation = @reception.reserve_from_block(@my_block, @my_room)
+    end
+
+    it "will make an instance of reservation class" do
+      expect(@my_reservation).must_be_instance_of Hotel::Reservation
+    end
+
+    it "will reserve an avail room in a block" do
+      check_in = Date.new(2020, 1, 2)
+      check_out = Date.new(2020, 1, 5)
+      rooms = @reception.rooms[5..7]
+
+      @reception.make_block(rooms, check_in, check_out)
+
+      my_block = @reception.blocks.last
+      my_res = @reception.reserve_from_block(my_block, my_block.rooms.first)
+
+      expect(my_res).must_be_instance_of Hotel::Reservation
+      expect(my_block.available_rooms).wont_include my_res.room
+    end
+    
+    it "will make a reservation with correct dates" do
+      block_dates = @reception.blocks.first.dates
+
+      expect(@my_reservation.dates.check_in_time).must_equal block_dates.check_in_time
+      expect(@my_reservation.dates.check_out_time).must_equal block_dates.check_out_time
+    end
+
+    it "will throw argument error if room is not in block" do 
+      my_room = @reception.rooms.last
+
+      expect{
+        @reception.reserve_from_block(@my_block, my_room)
+      }.must_raise ArgumentError
+    end
+
+    it "will throw an argument error if room is already reserved" do
+      expect{
+        @reception.reserve_from_block(@my_block, @my_room)
+      }.must_raise ArgumentError
     end
   end
 end
