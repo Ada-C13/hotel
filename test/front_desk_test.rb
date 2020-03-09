@@ -59,26 +59,60 @@ describe Hotel::FrontDesk do
         expect(total_by_date).must_be_kind_of Array
       end
 
-      it "raises an error if there are not reservations by a specific date" do
-        date = Date.new(2020,05,22)
-        expect{ @front_desk.reservations_by_date(date) }.must_raise ArgumentError
-      end
-
-      it "returns a list of reservations for a specified room and a given date range" do
-        search = @front_desk.reservations_by_room_date(1, @date_range)
-        expect(search).must_be_kind_of Array
-      end
-
-      it "raises an error if there are not reservations for a specified room and a given date range" do
-        expect{ @front_desk.reservations_by_room_date(3, @date_range) }.must_raise ArgumentError
-      end
-
       it "returns the total cost for a given reservation" do
         reserv_id = @new_reservation.id
         cost = @front_desk.cost_by_reservation(reserv_id)
-        expect(cost).must_be_close_to 400, 0.01
+        expect(cost).must_equal 400
       end
 
+      it "returns nil if reservation id not found" do
+        reserv_id = "fake_id"
+        cost = @front_desk.cost_by_reservation(reserv_id)
+        expect(cost).must_equal nil
+      end
+    end
+
+    describe "List of reservations for a specified room and a given date range" do
+      it "returns a list of reservations for a specified room and a given date range" do
+        start_date = Date.new(2016,2,01)
+        end_date = Date.new(2016,2,03)
+        date_range = Hotel::DateRange.new(start_date,end_date)
+        reservation1 = @front_desk.make_resevation(date_range)
+
+        start_date = Date.new(2016,2,04)
+        end_date = Date.new(2016,2,06)
+        date_range = Hotel::DateRange.new(start_date,end_date)
+        reservation2 = @front_desk.make_resevation(date_range)
+
+        start_date = Date.new(2016,2,07)
+        end_date = Date.new(2016,2,9)
+        date_range = Hotel::DateRange.new(start_date,end_date)
+        reservation3 = @front_desk.make_resevation(date_range)
+
+        start_date = Date.new(2016,2,10)
+        end_date = Date.new(2016,2,15)
+        date_range = Hotel::DateRange.new(start_date,end_date)
+        reservation4 = @front_desk.make_resevation(date_range)
+
+        start_date = Date.new(2016,2,16)
+        end_date = Date.new(2016,2,18)
+        date_range = Hotel::DateRange.new(start_date,end_date)
+        reservation5 = @front_desk.make_resevation(date_range)
+
+        start_date = Date.new(2016,2,05)
+        end_date = Date.new(2016,2,13)
+
+        date_range2 = Hotel::DateRange.new(start_date,end_date)
+
+        search = @front_desk.reservations_by_room_date(1, date_range2)
+        reservations = search.length
+        # It returns an array with 3 Reservation instances.
+        expect(search).must_be_kind_of Array
+        expect(reservations).must_equal 3
+        expect(reservation2).must_be_same_as search[0]
+        expect(reservation3).must_be_same_as search[1]
+        expect(reservation4).must_be_same_as search[2]
+      end
     end
   end
 end
