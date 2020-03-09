@@ -94,19 +94,8 @@ module Hotel
       return @rooms
     end
 
-    # Do I need this method here?
     def show_reservation_cost(reservation) # add blocks?
       return reservation.calculate_cost
     end
   end
 end
-
-# Wave 3: Hotel Blocks
-
-# I want an exception raised if I try to create a Hotel Block and at least one of the rooms is unavailable for the given date range
-
-# Given a specific date, and that a room is set aside in a hotel block for that specific date, I cannot create another hotel block that includes that specific room for that specific date, because it is unavailable
-
-# I can check whether a given block has any rooms available
-
-# All of the availability checking logic from Wave 2 should now respect room blocks as well as individual reservations

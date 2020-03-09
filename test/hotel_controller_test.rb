@@ -82,5 +82,3 @@ describe "HotelController class" do
     end
   end
 end
-
-# The final project submission should have 95% code coverage using simplecov

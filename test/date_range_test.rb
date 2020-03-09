@@ -11,7 +11,6 @@ describe "DateRange class" do
     it "is an instance of DateRange" do
       expect(@date_range).must_be_kind_of Hotel::DateRange
     end
-    # tests for validating each parameter: check_in:, check_out:
     it "Raises exception for invalid input" do
       start_date = Date.today
       end_date = Date.new(2020, 2, 24) # earlier than start_date
