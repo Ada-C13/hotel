@@ -1,5 +1,5 @@
 require 'date'
-
+     
 require_relative 'reservation'
 require_relative 'date_range'
 require_relative 'hotel_block'
@@ -16,6 +16,7 @@ module Hotel
     @room_list = Array.new
     @hotel_block_list = Hash.new
     
+    # added flexibilty to the number of room to have in the future
     n = 1
     number_of_room.times do
       @room_list << "Room #{n}"
@@ -24,6 +25,7 @@ module Hotel
 
     end
      
+    # to get the list of rooms in the hotel
     def get_room_list 
       return @room_list
     end
