@@ -38,15 +38,16 @@ describe "HotelDispatcher class" do
   end
 
 
-  # describe "Can create a Hotel room block" do
-  #   let(:check_in_date) { Date.new(2001, 2, 3) }
-  #   let(:check_out_date) { Date.new(2001, 2, 6) }
-  #   it "Return true if reservation is can be created" do
-  #     hotel_dispatcher = build_test_dispatcher
-  #     hotel_dispatcher.make_rooms
-  #     new_res = hotel_dispatcher.create_room_block(check_in_date, check_out_date)
-  #     expect(new_res).must_equal true
-  #   end
+  describe "Can create a Hotel room block" do
+    let(:check_in_date) { Date.new(2001, 2, 3) }
+    let(:check_out_date) { Date.new(2001, 2, 6) }
+    it "Raise expection if reservation is can't be created" do
+      hotel_dispatcher = build_test_dispatcher
+      room_ids = 5
+      hotel_dispatcher.make_rooms
+      new_res = hotel_dispatcher.create_room_block(room_ids,check_in_date, check_out_date, 150)
+      expect {new_res.create_room_block}.must_raise NoMethodError
+    end
 
     # it "Raises error if no reservation available " do
     #   hotel_dispatcher = build_test_dispatcher

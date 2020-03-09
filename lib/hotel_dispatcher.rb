@@ -80,7 +80,7 @@ class HotelManager < Date_Range
   # using the make rooms we
   def create_room_block(room_ids, check_in_date, check_out_date, room_rate)
     requested_date_range = Date_Range.new(check_in_date, check_out_date)
-    room_ids.each do |room_id|
+     (1..room_ids).each do |room_id|
       room = @rooms[room_id]
       if room.check_overlap_with_room_reservations(requested_date_range)
         raise Exception.new "One of the rooms in the hotel block requested is unavailable"
@@ -88,7 +88,7 @@ class HotelManager < Date_Range
     end
 
     # Go to each room and add the reservation for the given date range
-    room_ids.each do |room_id|
+    (1..room_ids).each do |room_id|
       room = @rooms[room_id]
       room.create_new_reservation(check_in_date, check_out_date, true)
     end
