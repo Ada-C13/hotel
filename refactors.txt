@@ -1,0 +1,21 @@
+1. Add Date class. Extract date validations from the various methods and do all this work in a Date class.
+  Single Responsibility Principle. 
+  Then call the date validation methods in other methods where date validation is needed. 
+  Do dates overlap? Are dates valid? 
+
+2. Delete Room class. 
+  Rather than have a Room object in Reservation, have room attributs in Reservation. 
+  Reservation can know a room's room number and cost and have the methods of res-duration
+  and total cost. 
+
+3. Refactor tests using 'Before' and 'Let' accordingly. 
+
+4. Instances are an instance of a class. A class is a collection of methods
+  that allows me to create objects that behave in the same way.
+
+5. Consider class methods (self) vs instance methods. Where is it appropriate to use class methods? 
+
+6. Complete Wave 3.
+
+
+
