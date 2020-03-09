@@ -1,0 +1,29 @@
+- Structure
+  - think about holding array of Reservations in HotelManager instead of array of Rooms Would need to rewrite methods but this would probably reduce amount of loops being used
+
+- HotelManager
+  - move line 77 into a find_reservations method
+  - line 28 reserve_room: move room picker into its own method
+  - line 56 - add_block_rooms method name is not clear. Rename this to say what this method does (add block reservations to rooms)
+  - see if these can be moved into HotelBlock class
+    - add_block_room
+    - check_block_availability
+    - reserve_block_room
+  - list_reservations_by_room & list_reservations_by_date have a similar loop: look into making this into a reusable method
+    - and/or, look into combining these methods (list_reservations)room = nil, date_range = nil, date = nil)
+
+- HotelBlock
+  - store reservations instead of rooms to reduce layers
+    - can get rid of find_reservations method by doing this
+
+- Reservation
+  - Room also holds cost - remove cost & keep only total_cost in Reservation
+    - Change @room_number to @room and hold instance of room
+  - move nights to DateRange and call from there
+
+- DateRange
+  - hold nights in DateRange and remove from Reservation, and call from DateRange
+
+- Room
+  - remove reservations from Room if moved into HotelManager
+    - check_availability would need to be moved into HotelManager as well
