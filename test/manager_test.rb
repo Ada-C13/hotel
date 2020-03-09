@@ -76,7 +76,6 @@ describe "manager" do
       @room2.book_room(Date.new(2014, 4, 3), Date.new(2014, 4,7))
       expect{@new_hotel.book_res(Date.new(2014, 4, 3), Date.new(2014, 4, 7))}.must_raise ArgumentError
     end   
-
   end 
 
   describe "res_by_room" do 
@@ -94,7 +93,6 @@ describe "manager" do
       expect(@new_hotel.res_by_room(1, Date.new(2014, 4, 1), Date.new(2014, 4, 7)).include?(@res1)).must_equal true
       expect(@new_hotel.res_by_room(1, Date.new(2014, 4, 1), Date.new(2014, 4, 7)).include?(@res2)).must_equal true
     end 
-
   end 
 
   describe "res_by_date" do 
@@ -113,29 +111,26 @@ describe "manager" do
     end 
   end 
 
-    describe "rooms_available_by_date" do 
-      before do 
-        @new_hotel = Hotel::Manager.new(num: 3)
-        @room1 = @new_hotel.all_rooms[0]
-        @room2 = @new_hotel.all_rooms[1]
-        @room3 = @new_hotel.all_rooms[2]
-        @res1 = @room1.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
-        @res2 = @room2.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
-        @res3 = @room2.book_room(Date.new(2014, 4, 1), Date.new(2014, 4, 2))
-      end
-  
-      it "returns an array of all rooms available during a certain date range" do 
-        expect(@new_hotel.rooms_available_by_date(Date.new(2014, 4, 3), Date.new(2014, 4, 7))).must_be_instance_of Array
-        expect(@new_hotel.rooms_available_by_date(Date.new(2014, 4, 3), Date.new(2014, 4, 7)).include?(@room3)).must_equal true
-        expect(@new_hotel.rooms_available_by_date(Date.new(2014, 4, 3), Date.new(2014, 4, 4)).include?(@room2)).must_equal false
-        expect(@new_hotel.rooms_available_by_date(Date.new(2014, 4, 1), Date.new(2014, 4, 4)).include?(@room1)).must_equal false
+  describe "rooms_available_by_date" do 
+    before do 
+      @new_hotel = Hotel::Manager.new(num: 3)
+      @room1 = @new_hotel.all_rooms[0]
+      @room2 = @new_hotel.all_rooms[1]
+      @room3 = @new_hotel.all_rooms[2]
+      @res1 = @room1.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
+      @res2 = @room2.book_room(Date.new(2014, 4, 3), Date.new(2014, 4, 7))
+      @res3 = @room2.book_room(Date.new(2014, 4, 1), Date.new(2014, 4, 2))
+    end
 
-
-      end 
+    it "returns an array of all rooms available during a certain date range" do 
+      expect(@new_hotel.rooms_available_by_date(Date.new(2014, 4, 3), Date.new(2014, 4, 7))).must_be_instance_of Array
+      expect(@new_hotel.rooms_available_by_date(Date.new(2014, 4, 3), Date.new(2014, 4, 7)).include?(@room3)).must_equal true
+      expect(@new_hotel.rooms_available_by_date(Date.new(2014, 4, 3), Date.new(2014, 4, 4)).include?(@room2)).must_equal false
+      expect(@new_hotel.rooms_available_by_date(Date.new(2014, 4, 1), Date.new(2014, 4, 4)).include?(@room1)).must_equal false
+    end 
   end 
 
-  describe "find_total_cost" do 
-    
+  describe "find_total_cost" do  
     before do 
       @new_hotel = Hotel::Manager.new(num: 3)
       @res1 = @new_hotel.all_rooms[0].book_room(Date.new(2014, 3, 4), Date.new(2014, 3, 7), recloc: "aaaaaa")
@@ -147,5 +142,4 @@ describe "manager" do
       expect(@new_hotel.find_total_cost("bbbbbb")).must_equal 200
     end 
   end 
-
 end

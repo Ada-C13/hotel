@@ -37,12 +37,12 @@ module Hotel
     end 
 
     def book_res(start_date, end_date)
-        @all_rooms.each do |room|
-          if room.is_available_range(start_date, end_date) == true 
-            return room.book_room(start_date, end_date)
-          end 
-        end
-        raise ArgumentError.new("No rooms available")
+      @all_rooms.each do |room|
+        if room.is_available_range(start_date, end_date) == true 
+          return room.book_room(start_date, end_date)
+        end 
+      end
+      raise ArgumentError.new("No rooms available")
     end
 
     def res_by_room(rm_num, start_date, end_date)

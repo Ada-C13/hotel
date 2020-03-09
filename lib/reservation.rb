@@ -7,8 +7,6 @@ require_relative 'room'
 module Hotel
   class Reservation
     attr_reader :start_date, :end_date, :rm_num, :cost_per_day, :total_cost, :recloc
-      # attr_writer
-      # attr_accessor
 
     def initialize(start_date:,
       end_date:, 
