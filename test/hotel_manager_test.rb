@@ -10,6 +10,7 @@ describe "HotelManager" do
     it "creates an instance of HotelManager" do
       expect(@hotel_manager).must_be_kind_of Hotel::HotelManager
       expect(@hotel_manager).must_respond_to :rooms
+      expect(@hotel_manager).must_respond_to :blocks
       expect(@hotel_manager).must_respond_to :total_reservations
     end
   end
@@ -112,6 +113,10 @@ describe "HotelManager" do
       cost = @hotel_manager.find_room(1).cost
       expect(reservation.cost).must_equal 200
     end
+
+    # it "sets available status to false" do
+      
+    # end
   end
 
   describe "reserve_block" do
@@ -128,6 +133,14 @@ describe "HotelManager" do
     it "contains an array of Room instances" do
       expect(@reserve_block.rooms).must_be_kind_of Array
       expect(@reserve_block.rooms[0]).must_be_kind_of Hotel::Room
+    end
+
+    it "adds HotelBlock to blocks array" do
+      blocks = @hotel_manager.blocks.length
+      date_range = Hotel::DateRange.new(Date.new(2020,5,16), Date.new(2020,5,18))
+      reserve_block = @hotel_manager.reserve_block(date_range, (1..4).to_a, 0.15)
+
+      expect(@hotel_manager.blocks.length).must_equal blocks + 1
     end
   end
 

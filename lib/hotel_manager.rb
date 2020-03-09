@@ -2,10 +2,11 @@ require_relative "hotel_block"
 
 module Hotel
   class HotelManager
-    attr_reader :rooms, :total_reservations
+    attr_reader :rooms, :blocks, :total_reservations
 
     def initialize
       @rooms = []
+      @blocks = []
       @total_reservations = 0
     end
 
@@ -47,7 +48,10 @@ module Hotel
         found_rooms << find_room(room)
       end
 
-      return Hotel::HotelBlock.new(date_range, found_rooms, discount_rate)
+      block = Hotel::HotelBlock.new(date_range, found_rooms, discount_rate)
+      @blocks << block
+
+      return block
     end
 
     def find_room(id)
