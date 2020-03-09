@@ -12,14 +12,14 @@ module Hotel
       @room = room
       @id = generate_id
     end
-
+    
+    # It retuns a secureRandom ID per each reservation made.
     def generate_id
-      id = SecureRandom.hex(5)
+      return SecureRandom.hex(5)
     end
     
     def total_cost
-      total_cost = (daterange.nights * @room.cost)
-      return total_cost
+      return daterange.nights * @room.cost
     end
   end
 end
