@@ -77,8 +77,13 @@ describe 'hotel block' do
     end
 
   describe "make reservation method" do
+    it "will make a reservation with correct dates" do
+
+    end
     
-    
+    it "will throw argument error if room is not in block" do 
+
+    end
   end
 
 

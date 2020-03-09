@@ -1,6 +1,6 @@
 module Hotel
   class HotelBlock
-    attr_reader :id, :rooms, :reservations, :dates
+    attr_reader :id, :rooms, :reservations, :dates, :discount
 
     def initialize(rooms, check_in_time, check_out_time, discount: 0.2)
       @id = rand(111111..999999)
@@ -22,12 +22,15 @@ module Hotel
     
     def make_reservation(room: nil)
       if room
-        #TODO: search for room in block, if it exists, if it doesnt...
-        
+        raise ArgumentError, "#{room} is not in this block." unless rooms.include?(room)
       else
         room = rooms.pop
       end
       @reservations << Hotel::Reservation.new(@check_in_time, @check_out_time, room)
+    end
+
+    def available_rooms
+      #TODO: will let you know which rooms are available
     end
   end
 end

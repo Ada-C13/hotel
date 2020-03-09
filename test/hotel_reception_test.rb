@@ -193,6 +193,18 @@ describe "hotel reception" do
       expect(my_reservations.last.room.id).wont_equal @reception.reservations.first.room.id
     end
 
+    it "will not reserve a room if it's in a block for that time/date" do
+      check_in = Date.new(2020, 1, 2)
+      check_out = Date.new(2020, 1, 5)
+      my_rooms = @reception.rooms[5..7]
+      @reception.make_block(my_rooms, check_in, check_out)
+      
+      expect{
+        Hotel::Reservation.new(my_rooms.first, check_in, check_out)
+      }.must_raise ArgumentError
+      
+    end
+
     it "will raise an exception if there are no rooms available" do
       my_reception = Hotel::HotelReception.new
 
@@ -210,9 +222,26 @@ describe "hotel reception" do
     end
 
     describe "make block method" do
-      # @reception.make_block()
+      before do
+        check_in = Date.new(2020, 1, 2)
+        check_out = Date.new(2020, 1, 5)
+        rooms = @reception.rooms[5..7]
 
+        @reception.make_block(rooms, check_in, check_out)
+      end
 
+      it "creates an instance of a HotelBlock and adds it to the blocks array" do
+        expect(@reception.blocks.last).must_be_instance_of Hotel::HotelBlock
+        expect(@reception.blocks).wont_be_empty
+      end
+      
+      it "throws an error if a room is in a reservation" do
+
+      end
+
+      it "throws an error if one of the rooms is in another block" do
+
+      end
     end
   end
 end

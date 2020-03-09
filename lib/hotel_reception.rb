@@ -54,12 +54,12 @@ module Hotel
       end
     end
 
-    def make_block(my_rooms, check_in_time, check_out_time)
+    def make_block(my_rooms, check_in_time, check_out_time, discount: 0.2)
       avail = available_rooms(check_in_time, check_out_time)
       all_rooms = my_rooms.select { |room| avail.include?(room) }
 
       if all_rooms.length == my_rooms.length
-        @blocks << Hotel::HotelBlock.new(all_rooms, check_in_time, check_out_time)
+        @blocks << Hotel::HotelBlock.new(all_rooms, check_in_time, check_out_time, discount: discount)
         return @blocks.last
       else
         raise ArgumentError, "It looks like those rooms aren't all available right now. #{my_rooms}"
