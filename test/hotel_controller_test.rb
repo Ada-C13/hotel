@@ -77,11 +77,14 @@ describe "Hotel Controller" do
 
   describe "reserve_room_hotel_block(hotel_block_id, customer_name, specific_room)" do
     it "will reserve room within the hotel block" do
+    
+    # Arrange & Act
     @front_desk.create_hotel_block(Date.new(2020,06,20), Date.new(2020,06,25), 5)
     @front_desk.create_hotel_block(Date.new(2020,06,20), Date.new(2020,06,25), 4)
     
     @front_desk.reserve_room_hotel_block(1, "Lily", "Room 1")
     
+    # Assert
     expect(@front_desk.get_list_of_reservations("Room 1",Date.new(2020,06,20), Date.new(2020,06,25))[0].status).must_equal :reserved_hotel_block 
     expect(@front_desk.get_list_of_reservations("Room 1",Date.new(2020,06,20), Date.new(2020,06,25))[0].customer_name).must_equal "Lily"
     expect{@front_desk.reserve_room_hotel_block(1, "Peter", "Room 1")}.must_raise ArgumentError
