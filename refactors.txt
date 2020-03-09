@@ -1,0 +1,23 @@
+# Current thoughts
+
+- review variable names
+- use more S in all waves
+- make more classes and method
+- read/ask update error types
+- let on test files
+- keyword arguments vs positional
+- make long rows more readable
+- Code:
++ reservation_manager.rb:
+- add status & discount to defaults
+- make method to make a block & it's tests
++ room_block.rb
+- remove list_rooms once method above is created
+- update the test file for above
++ booking_manager.rb
+- update for blocks
+- make method to find reservations
++ booking_manager_test.rb
+- clean w/let 
+- add tests for blocks
+
