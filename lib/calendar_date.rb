@@ -1,5 +1,7 @@
 require 'date'
+
 require_relative 'room'
+require_relative 'reservation'
 
 class CalendarDate
 
@@ -12,25 +14,24 @@ class CalendarDate
     return @day_reservation_store
   end
 
+
   def unavailable?
     return @reservation_store.length == 20 
   end
 
-  def available_rooms
-    return @available_rooms.rooms  
+
+  def available?(room_number)
+    return @available_rooms.include?(room_number)
   end
 
-  def assign_room_number(reservation)
-    @available_rooms
-    reservation.total_nights.do |i|
-      raise NoRoomError "There are no rooms available on the given date." if (resevervation.start_date + i).unavailable?
 
-
+  def all_available_rooms
+    return  @available_rooms.rooms
   end
 
   
   def add_reservation(reservation)
-    @reservation_store << reservation.reservation_details
+    @day_reservation_store << reservation.reservation_details
     @available_rooms.room_reserved(reservation.room_number)
 
     return @day_reservation_store
