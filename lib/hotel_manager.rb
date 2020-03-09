@@ -16,18 +16,37 @@ module Hotel
     def reserve_room(start_date, end_date)
       #TODO
       # room chosen is based on the method! not by the user! (see README.md)
-      # add reservation instance to @rooms array based off of room attribute
       # add date instance to @rooms array
+      
+      
+      # chosen room
+      # chosen_room = (available_rooms.sample).to_sym
+      # room_index = (((chosen_room.to_s).match('[0-9]')[0]).to_i) - 1
+
       reserved_room = Hotel::DateRange.new(start_date, end_date)
-      return Reservation.new(reserved_room.start_date, reserved_room.end_date)
+      available_rooms = available_rooms(start_date, end_date)
+
+      if available_rooms.empty?
+        raise ArgumentError.new, "No available rooms for this date range."
+      else
+         # at random choose from available rooms
+        chosen_room = (available_rooms.sample.to_sym)
+        room_index = (((chosen_room.to_s).match('[0-9]')[0]).to_i) - 1
+
+        # add reservation to master room list collection
+        reserved_room = Hotel::Reservation.new(reserved_room.start_date, reserved_room.end_date)
+        @rooms[room_index][chosen_room] << reserved_room
+
+        return Hotel::Reservation.new(reserved_room.start_date, reserved_room.end_date)
+      end
     end
 
     def reservations(date)
       reservation_list = []
 
-      @rooms.each do |room| # O(20)
-        room.each_value do |reservation| # O(20)
-          reservation.each do |reservation_instance| # O(n)
+      @rooms.each do |room|
+        room.each_value do |reservation|
+          reservation.each do |reservation_instance|
             if date.between?(reservation_instance.start_date, reservation_instance.end_date)
               reservation_list << reservation_instance
             end
@@ -78,21 +97,11 @@ module Hotel
           reservation.each do |reservation_instance|
             reservation_range = Hotel::DateRange.new(reservation_instance.start_date, reservation_instance.end_date)
             if reservation_range.overlap?(test_range) == true
-              puts room.keys
               unavailable_rooms << (room.keys).join
             end
           end
         end
       end
-
-
-       # use unless date.between?(reserv.start date, enddate)
-        # use overlap method if false, add the room to the list
-        # add the room# to the available rooms list
-
-      # you'll return an array of keys which are the rooms
-      # indicating the available rooms
-      # use logic from reservations(date)
        
       available_rooms = available_rooms - unavailable_rooms
       return available_rooms
