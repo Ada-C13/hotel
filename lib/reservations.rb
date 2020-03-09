@@ -20,7 +20,7 @@ module Hotel
         raise ArgumentError, 'you cannot have date out come before date in'
       end 
 
-      if room.test_overlap(date_in,date_out)
+      if room.test_overlap(date_in,date_out) == :UNAVAILABLE
           raise ArgumentError, 'there is an overlap'
       end  
     end

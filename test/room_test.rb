@@ -98,8 +98,8 @@ describe "Receptionist class" do
         end_date = DateTime.new(2020,2,4.5)
         start_date1= DateTime.new(2020,3,3.5)
         end_date1 = DateTime.new(2020,3,4.5)
-        expect(@hotel.rooms[0].test_overlap(start_date,end_date)).must_equal true
-        expect(@hotel.rooms[0].test_overlap(start_date1,end_date1)).must_equal false
+        expect(@hotel.rooms[0].test_overlap(start_date,end_date)).must_equal :UNAVAILABLE
+        expect(@hotel.rooms[0].test_overlap(start_date1,end_date1)).must_equal :AVAILABLE
     end
   end  
 end
