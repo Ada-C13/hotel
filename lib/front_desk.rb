@@ -70,9 +70,10 @@ module Hotel
       room_res = []
       range_resv.each do |res|
         if res.room == room_num
-          room_res << res
+          room_res.push(res)
         end
       end
+      room_res = room_res.uniq
       return room_res
     end
 
@@ -94,7 +95,7 @@ module Hotel
           empty_rooms << room
         end 
       end 
-      empty_rooms.uniq
+      empty_rooms = empty_rooms.uniq
       return empty_rooms 
     end 
   end

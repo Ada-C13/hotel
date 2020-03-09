@@ -15,10 +15,10 @@ describe Hotel::FrontDesk do
       date_range: @date_instance,
       room: 2
     )
-    res_instance2 = Hotel::Reservation.new(
-      date_range: date_instance2,
-      room: 3
-    )
+    # res_instance2 = Hotel::Reservation.new(
+    #   date_range: date_instance2,
+    #   room: 3
+    # )
     @room_list = @desk_instance.available_rooms(@date_instance)
     @reserved = @desk_instance.reserve_room(@date_instance)
     @range_res = @desk_instance.range_reservations(@date_instance)
@@ -55,11 +55,7 @@ describe Hotel::FrontDesk do
       expect(@desk_instance.rooms.length).must_equal 20
     end
   end  
-
-
  
-
-  describe "wave 1" do
 
     describe "list_rooms" do
       it "takes date range and returns a list" do
@@ -85,7 +81,6 @@ describe Hotel::FrontDesk do
       end
 
       it "creates the same number of hash keys as there are nights in the range" do
-        nights = @date_instance.nights
         expect(@cal_instance.length).must_equal 2 
       end
 
@@ -141,23 +136,18 @@ describe Hotel::FrontDesk do
 
     describe "find_room_res" do
       it "returns a list of reservations" do
-        @desk_instance.reserve_room(@date_instance)
+        Hotel::Reservation.new(
+          date_range: @date_instance,
+          room: 2
+        )
+        @room_res = @desk_instance.find_room_res(2, @range_res)
 
-        temp = nil
-        @room_res.each do |res|
-          temp = res
-        end
-        
         expect(@room_res).must_be_kind_of Array
-        @room_res[0].must_be_kind_of Hotel::Reservation
       end
     end
-    
 
 
-  end
 
-  describe "wave 2" do
     describe "available_rooms" do
       before do
         
@@ -167,6 +157,7 @@ describe Hotel::FrontDesk do
         expect(@room_list).must_be_kind_of Array
         expect(@room_list[0]).must_be_kind_of Integer
       end
+
     end
-  end
+  
 end
