@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="room::Initialize" filepath="/Users/faa/Developer/projects/ruby/hotel/test/room_test.rb" skipped="0" failures="0" errors="0" tests="2" assertions="4" time="0.0003220003563910723">
+    <testcase name="test_0001_creates a new instance of Room" lineno="8" classname="room::Initialize" assertions="1" time="0.00012000021524727345">
+    </testcase>
+    <testcase name="test_0002_keeps track of room number as an integer" lineno="12" classname="room::Initialize" assertions="3" time="0.00020200014114379883">
+    </testcase>
+  </testsuite>
+</testsuites>
