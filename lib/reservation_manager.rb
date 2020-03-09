@@ -16,7 +16,7 @@ module Hotel
     # -type: symbol (:SINGLE, :BLOCK) that indicates type of reservation
     # -range: DateRange object 
     # -occupancy: Hash or String
-    # Returns: Reservation object and also adds it to the grand list of reservations
+    # Returns: newly created Reservation object
     def create_reservation(type, range, occupancy)
       raise ArgumentError.new("Invalid reservation type (given #{type}, must be :SINGLE or :BLOCK)") unless 
         type == :SINGLE || type == :BLOCK
@@ -30,16 +30,27 @@ module Hotel
 
     # Parameters: Date object 
     # Returns: an Array of all Reservation instances that contain that date
-    def find_reservations_by_date(date)
-      by_date = @reservations.select { |reservation| reservation.dates.collide?(date,date)}
+    def find_reservations_by_date(check_in, check_out)
+      by_date = @reservations.select { |reservation| reservation.dates.overlap?(check_in, check_out)}
     end
 
     def find_reservations_by_room(room)
-      #TO DO 
+      by_room = @reservations.select { |reservation| reservation.occupancy.detect { |occupancy| occupancy[:room] == room }}
     end
 
-    def find_all_available 
-      # TO-DO return all available rooms for a given date range
+    def list_all_available(check_in, check_out)
+      reserved = find_reservations_by_date(check_in, check_out)
+
+      if reserved.length > 0
+        occupancies = reserved.map { |reservation| reservation.occupancy }
+        occupied_rooms = occupancies.flatten
+        occupied_rooms_ids = occupied_rooms.map { |occupancy| occupancy[:room].id }
+      end
+
+      rooms = @rooms.map { |room| room.id }
+
+      return (rooms - occupied_rooms_ids)
+      
     end
 
     private 
@@ -51,5 +62,6 @@ module Hotel
       end
       return rooms
     end
+
   end
 end
