@@ -1,7 +1,3 @@
-require_relative 'reservation'
-require_relative 'date_range'
-require_relative 'room'
-
 module Hotel 
   class HotelManager 
 
@@ -25,7 +21,6 @@ module Hotel
 
     # (1) list of reservations with a given date range & room id 
     #  !overlap => (booking)
- 
     def reservations_per_room(date_range, room)
       # If the room number is the same
       # check the reservation inside of the room 
@@ -44,20 +39,10 @@ module Hotel
 
         # Find reservation list per room
         reservations = reservations_per_room(date_range, room)
-
-        block_reservations = block_reservations_per_room(date_range, room)
-
-        # Question
-        block_reservations.select! do |block_reservation|
-          block_reservation.block.rooms.empty?
-        end 
-
-        # Question
-        # Get the list of the empty rooms
-        reservations.empty? && block_reservations
+        
+        reservations.empty? 
       end 
 
-      
       return available_rooms.map { |room| room.id }
     end 
 
@@ -95,10 +80,14 @@ module Hotel
 
       list = []
   
-      @reservations[:block].each do |reservation| 
-        if reservation.block.date_range.same?(date_range)
-          reservation.block.rooms.each do |block_room|
-            list << reservation if block_room.id == room.id
+      overlapped_reservation = @reservations[:block].select do |reservation|  
+        reservation.block.date_range.overlap?(date_range)
+      end 
+
+       overlapped_reservation.each do |reservation| 
+        reservation.block.rooms.each do |block_room|
+          if block_room.id == room.id
+            list << reservation  
           end 
         end 
       end 
@@ -115,8 +104,6 @@ module Hotel
       # Find available rooms for the specific date range
       available_room_ids = available_room_ids(date_range) 
       
-      # TO DO (make a custom error)
-      # If available_room_ids are less than the number_of_room, throw an error
       if (available_room_ids.length < number_of_rooms) 
         raise ArgumentError, "We have only #{available_room_ids.length} rooms between #{date_range.start_date} and #{date_range.end_date} you chose"
       end 
@@ -145,15 +132,6 @@ module Hotel
       end 
     end 
 
-    def available_block_room_ids(date_range, number_of_rooms:) 
-
-      available_block_rooms = self.available_blocks(date_range, number_of_rooms: number_of_rooms)
-
-      return available_block_rooms.map do |room|
-        room.id
-      end 
-    end 
-
 
     def make_block_reservation(date_range, number_of_rooms: 1)
 
@@ -164,22 +142,17 @@ module Hotel
       available_blocks = self.available_blocks(date_range, number_of_rooms: number_of_rooms)
 
       if available_blocks.empty?
-        raise ArgumentError, "There is no available block on the specific date range"
+        raise ArgumentError, "There is no available block within the specific date range"
       end 
 
       # Create instances of Reservation (block)
       block_reservation = Reservation.new(date_range, block: available_blocks[0])
 
       self.add_reservation(block_reservation, type: :block)
-
-
       @blocks.delete(available_blocks[0]) 
       
       return block_reservation
     end 
-
-
-    
 
 
     def find_block_reservations(date_range)
@@ -198,8 +171,6 @@ module Hotel
       end 
     end
     
-    # TO DO
-    # add test
     def find_room_by_id(number)
       return @rooms.find { |room| room.id == number}
     end 

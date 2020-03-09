@@ -45,7 +45,7 @@ describe "HotelManager class" do
       end 
     end 
 
-    # TO DO (think if there are more tests to add)
+
     describe "#make_reservation" do 
       it "takes a date range and returns a Reservation" do 
         reservation = @hotel_manager.make_reservation(@date_range)
@@ -74,15 +74,14 @@ describe "HotelManager class" do
         expect(@hotel_manager.find_reservations(@date)).must_equal []
       end 
 
-      it "returns 6 individual reservations on the specific date" do 
+      it "returns 6 individual reservations within the specific date range" do 
 
         6.times do 
           @hotel_manager.make_reservation(@date_range)
         end 
 
-        # ---- Make block reservation ----
-        @hotel_manager.set_block(@date_range, number_of_rooms: 5)
-        
+        # ---- Make block reservations for a test reason ----
+        @hotel_manager.set_block(@date_range, number_of_rooms: 5)  
         @hotel_manager.make_block_reservation(@date_range, number_of_rooms: 5)
         # ---------------------------------
 
@@ -93,11 +92,10 @@ describe "HotelManager class" do
         expect(reservations[0]).must_be_kind_of Hotel::Reservation
       end 
 
-      it "returns 19 reservations on the specific date" do 
+      it "returns 19 reservations within specific date range" do 
 
         @hotel_manager.make_reservation(@date_range)
 
-        # TO DO
         test_date_range = Hotel::DateRange.new(Date.new(2020, 07, 11), Date.new(2020, 07, 13))
 
         10.times do 
@@ -185,17 +183,11 @@ describe "HotelManager class" do
 
         reservations = @hotel_manager.block_reservations_per_room(date_range, room)
 
-        # question 
-        # I don't know how to vaildate room id (it generates the same ids)
-        # i.e. (20, 19, 18)
-        # (20, 19..)
-
-        # p "reservations?"
-        # ap reservations
-
         expect(reservations.length).must_equal 2 
 
         expect(reservations[0].block.rooms.length).must_equal 3
+
+        # TO DO (Need to Refactor) - checking room numbers for block
         expect(reservations[0].block.rooms[0].id).must_equal 20
         expect(reservations[0].block.rooms[1].id).must_equal 19
 
@@ -215,7 +207,7 @@ describe "HotelManager class" do
     end 
 
     describe "#available_blocks(date_range, number_of_rooms: number_of_rooms)" do 
-      it "returns an available block on the specific date range" do
+      it "returns an available block within the specific date range" do
         @hotel_manager.set_block(@date_range, number_of_rooms: 4)
         
         available_blocks = @hotel_manager.available_blocks(@date_range, number_of_rooms: 4)
@@ -248,6 +240,7 @@ describe "HotelManager class" do
       end 
 
 
+      # Need to refactor to raise an ArgumentError if all rooms are taken by block
       it "raise an ArgumentError if there are no available rooms for block" do 
 
         4.times do 
@@ -260,13 +253,10 @@ describe "HotelManager class" do
         end 
 
         expect{@hotel_manager.make_block_reservation(@date_range, number_of_rooms: 5)}.must_raise ArgumentError
-
-        # Question - error
-        # expect{@hotel_manager.make_reservation(@date_range)}.must_raise ArgumentError
       end 
 
 
-      # question
+      # Need to refactor
       # how to reserves a specific room from a hotel block
       it "raises an ArgumentError if number of rooms does not match with a set of block" do
         date_range = Hotel::DateRange.new(Date.new(2020, 11, 5), Date.new(2020, 11, 11))

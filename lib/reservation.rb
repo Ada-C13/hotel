@@ -6,16 +6,14 @@ module Hotel
 
     # date_range is an instance of DateRange class
     # room is an instance of Room class
-    attr_reader :date_range, :room, :id, :block
+    attr_reader :date_range, :room, :block
 
-    def initialize(date_range, id: nil, room: nil, block: nil)
+    def initialize(date_range, room: nil, block: nil)
 
       @date_range = date_range
 
-      @id = Reservation.generate_id  # Invoke class method
-
       if block == nil 
-        @room = room  #room_number TO DO  
+        @room = room  #room_number TO DO (Maybe I want to refactor as room numbers)
       else 
         @block = block
       end       
@@ -32,19 +30,6 @@ module Hotel
       total_cost = (cost_per_room * number_of_rooms) * @date_range.nights
 
       return total_cost.to_f.round(2)
-    end 
-
-
-    # TO DO (Add test)
-    def self.generate_id 
-      id = rand(111111..999999).to_s
-
-      if @@ids.include?(id)
-        id = rand(111111..999999).to_s
-        @@ids << id
-      end 
-
-      return id
     end 
   end 
 end 

@@ -35,12 +35,4 @@ describe "Block class" do
     end 
   end 
 
-  describe ".generate_id" do
-    it "creates a non-consecutive ID" do
-      id = Hotel::Block.generate_id 
-      expect(id).must_be_kind_of String
-      expect(id.length).must_equal 8 
-      expect(id).must_include "BL000"
-    end  
-  end 
 end 

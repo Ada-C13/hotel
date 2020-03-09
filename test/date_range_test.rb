@@ -141,7 +141,6 @@ describe "DateRange class" do
       expect(range.overlap?(test_range)).must_equal true
     end
 
-    # Question
     it "returns false for a range starting on the end_date" do
       range = Hotel::DateRange.new(Date.new(2020, 6, 8), Date.new(2020, 6, 15))
       test_range = Hotel::DateRange.new(Date.new(2020, 6, 15), Date.new(2020, 6, 18))
@@ -149,7 +148,6 @@ describe "DateRange class" do
       expect(range.overlap?(test_range)).must_equal false
     end
 
-    # Question
     it "returns false for a range ending on the start_date" do
       range = Hotel::DateRange.new(Date.new(2020, 6, 8), Date.new(2020, 6, 15))
       test_range = Hotel::DateRange.new(Date.new(2020, 6, 2), Date.new(2020, 6, 8))
