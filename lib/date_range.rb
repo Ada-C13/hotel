@@ -9,8 +9,8 @@ module Hotel
       @start_date = start_date
       @end_date = end_date
       
-      raise ArgumentError if start_date.class != Date || end_date.class != Date
-      raise ArgumentError if start_date > end_date
+      raise ArgumentError.new("Must be Date objects") if start_date.class != Date || end_date.class != Date
+      raise ArgumentError.new("Start date must come before end date") if (start_date > end_date)
     end
 
     def overlap?(comparison_range)

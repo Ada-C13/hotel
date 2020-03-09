@@ -88,10 +88,6 @@ describe Hotel::Controller do
   describe "find_all_within_range" do
     let(:hotel_controller) {Hotel::Controller.new}
 
-    # 1 - 2 - 3 - 4 - 5 - 6 - 7
-    #     2 - 3 - 4 
-    #                     6 - 7
-    #                         7 - 8 - 9
     before do
       @start_date = Date.new(2020, 1, 1)
       @end_date = Date.new(2020, 1, 7)
@@ -202,24 +198,3 @@ describe Hotel::Controller do
 
   end
 end
-
-
-
-
-# it "creates a new reservation" do
-    #   expect(hotel_controller.reserve_with_range(@input_range)).must_be_kind_of Hotel::Reservation
-    # end
-
-    # it "adds the new reservation to the correct room's rez list" do
-    #   other_date_range = Hotel::DateRange.new(@start_date+1, @end_date+1)
-    #   other_reservation = Hotel::Reservation.new(other_date_range,3)
-
-    #   expect(hotel_controller.all_reservations.length).must_equal 0
-    #   # add the first new reservation
-    #   hotel_controller.reserve_with_range(@input_range)
-    #   expect(hotel_controller.all_reservations.length).must_equal 1
-
-    #   # add another reservation
-    #   hotel_controller.reserve_with_range(other_date_range)
-    #   expect(hotel_controller.all_reservations.length).must_equal 2
-    # end

@@ -28,16 +28,6 @@ describe Hotel::Room do
       end
     end
 
-    # don't think I need this anymore?
-    # it "stores a room_cost" do
-    #   expect(@room.cost).must_equal @cost
-    # end
-
-    # will need to adjust this test if room cost can vary in future waves
-    it "has a fixed cost of 200" do
-      expect(@room.cost).must_equal 200
-    end
-
     it "stores an array of Reservations" do
       expect(@room.rez_list).must_be_kind_of Array
     end
@@ -45,7 +35,6 @@ describe Hotel::Room do
     it "stores an empty aray of Reservations upon initializing" do
       expect(@room.rez_list.length).must_equal 0
     end
-
   end
 
   describe "add_room_reservation" do
@@ -69,9 +58,6 @@ describe Hotel::Room do
       @room.add_room_reservation(@reservation_to_add_2)
       expect(@room.rez_list.length).must_equal 2
     end
-
-    # it "doesn't add invalid reservations" do
-    # end
   end
 
   describe "conflict?" do
@@ -139,9 +125,7 @@ describe Hotel::Room do
     before do
       @room_id = 5
       @room = Hotel::Room.new(@room_id)
-      
-      # 1 - 2 - 3 - 4 - 5
-      #     2 - 3 - 4
+    
       @start_date = Date.new(2020, 1, 1)
       @end_date = Date.new(2020, 1, 5)
       @date_range_1 = Hotel::DateRange.new(@start_date, @end_date)
@@ -179,19 +163,6 @@ describe Hotel::Room do
 
       @room.create_room_reservation(@date_range_4)
       expect(@room.find_by_range(@date_range_1).length).must_equal 1
-
-      # is this okay to add?
-      @room.add_room_reservation(@reservation_to_add_2)
-      expect(@room.find_by_range(@date_range_1)[1]).must_equal @reservation_to_add_2
-      expect(@room.find_by_range(@date_range_1).length).must_equal 2
     end
-
-    # not sure if I need this test in this class?
-    # it "throws an argument error if given an invalid reservation" do
-    #   @room.add_room_reservation("invalid reservation")
-    #   expect { @room.add_room_reservation("invalid reservation") }.must_raise ArgumentError
-    #   expect(@room.rez_list.length).must_equal 0
-    # end
-
   end
 end

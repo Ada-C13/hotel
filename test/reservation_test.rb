@@ -1,4 +1,3 @@
-# include Hotel
 require_relative 'test_helper'
 
 describe Hotel::Reservation do
@@ -11,9 +10,6 @@ describe Hotel::Reservation do
       @reservation = Hotel::Reservation.new(@date_range, room_id)
     end
 
-    # add must_respond_to tests?
-    #___________________________
-
     it "is an instance of Reservation" do
       expect(@reservation).must_be_kind_of Hotel::Reservation
     end
@@ -25,7 +21,6 @@ describe Hotel::Reservation do
         end.must_raise ArgumentError
       end
     end
-
   end
 
   describe "cost" do
@@ -56,5 +51,4 @@ describe Hotel::Reservation do
       expect(reservation.cost).must_equal 600
     end
   end
-
 end
