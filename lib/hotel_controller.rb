@@ -6,7 +6,6 @@ module Hotel
     def initialize
       @reservations = []
       @rooms = []
-      @rooms = []
       (1..20).each do |room|
         @rooms << room
       end
@@ -34,12 +33,17 @@ module Hotel
       end
         return reservation_list
     end
+  end
 
     # # Wave 2
-    # def available_rooms(start_date, end_date)
-    #   # start_date and end_date should be instances of class Date
-    #   return []
-    # end
+    def available_rooms(start_date, end_date)
+      room_list = []
+      range = DateRange.new(start_date, end_date)
+      # start_date and end_date should be instances of class Date
+      taken_rooms = reservations(range)
+      room_list = @rooms - taken_rooms
+     return room_list
+    end
   end
 end
-end
+# end

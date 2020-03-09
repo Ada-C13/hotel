@@ -13,16 +13,16 @@ module Hotel
     end
   end
 
-  def length_of_stay
-    return (@end_date - @start_date) - 1
-  end
+    def length_of_stay
+      return (@end_date - @start_date) - 1
+    end
 
-  def overlap?(range)
-    if @start_date >= range.end_date || @end_date <= range.start_date
-      return false
-    else
-      return true
+    def overlap?(range)
+      if @start_date >= range.end_date || @end_date <= range.start_date
+        return false
+      else
+        return true
+      end
     end
   end
-end
 end

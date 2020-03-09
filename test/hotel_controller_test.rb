@@ -34,16 +34,16 @@ describe Hotel::HotelController do
     end
   end
 
-#   describe "wave 2" do
-#     describe "available_rooms" do
-#       it "takes two dates and returns a list" do
-#         start_date = @date
-#         end_date = start_date + 3
+  describe "wave 2" do
+    describe "available_rooms" do
+      it "takes two dates and returns a list" do
+        start_date = @date
+        end_date = start_date + 3
 
-#         room_list = @hotel_controller.available_rooms(start_date, end_date)
+        room_list = @hotel_controller.available_rooms(start_date, end_date)
 
-#         expect(room_list).must_be_kind_of Array
-  #     end
-  #   end
-  # end
+        expect(room_list).must_be_kind_of Array
+      end
+    end
+  end
 end
