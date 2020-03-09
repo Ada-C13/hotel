@@ -33,6 +33,8 @@ module Hotel
 
     def reserve_room(requested_dates)
        available_rooms = available_rooms(requested_dates)
+       # raise ArgumentError.new("Sorry, there are no rooms available. Please try other dates.") if available_rooms == nil || []
+       
        book_room = available_rooms.first
        new_reservation = Hotel::Reservation.new(
         room: book_room, 
@@ -52,7 +54,8 @@ module Hotel
     end
 
     # User: I access the list of reservations for a specified room and a given date range
-    
+    # I split this user story into a handful of separate methods to perform different parts of the request
+
     # returns an array of reservations for requested dates
     def range_reservations(requested_dates)
       range_resv = []
@@ -76,9 +79,6 @@ module Hotel
       room_res = room_res.uniq
       return room_res
     end
-
-
-    # Wave 2
 
     # User: I can view a list of rooms that are not reserved for a given date range, so that I can see all available rooms for that day
     def available_rooms(requested_dates)

@@ -43,9 +43,14 @@ describe Hotel::DateRange do
     end
 
     it "raises an error if the end date is the same as the start date" do
-      expect { Hotel::DateRange.new(Date.new(2021, 01, 01),
-        # Date.new(2021, 01, 01)
+      expect { Hotel::DateRange.new(
+        start_date: Date.new(2021, 01, 01),
+        end_date: Date.new(2021, 01, 01)
         ) }.must_raise ArgumentError
+    end
+
+    it "raises an ArgumentError if date is not a date" do
+      # ! TODO
     end
 
     # TODO add test for start_date or end_date is nil, raise argument error

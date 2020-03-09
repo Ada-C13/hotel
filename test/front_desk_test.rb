@@ -7,17 +7,33 @@ describe Hotel::FrontDesk do
       start_date: Date.new(2021, 01, 01),
       end_date: Date.new(2021, 01, 03)
     )
-    date_instance2 = Hotel::DateRange.new(
+    @date_instance2 = Hotel::DateRange.new(
       start_date: Date.new(2021, 01, 02), 
       end_date: Date.new(2021, 01, 03)
+    )
+    @date_instance3 = Hotel::DateRange.new(
+      start_date: Date.new(2021, 04, 12), 
+      end_date: Date.new(2021, 04, 13)
+    )
+    @date_instance4 = Hotel::DateRange.new(
+      start_date: Date.new(2021, 02, 12), 
+      end_date: Date.new(2021, 02, 19)
     )
     @res_instance = Hotel::Reservation.new(
       date_range: @date_instance,
       room: 2
     )
-    # res_instance2 = Hotel::Reservation.new(
+    # @res_instance2 = Hotel::Reservation.new(
     #   date_range: date_instance2,
     #   room: 3
+    # )
+    # @res_instance3 = Hotel::Reservation.new(
+    #   date_range: date_instance3,
+    #   room: 6
+    # )
+    # @res_instance4 = Hotel::Reservation.new(
+    #   date_range: date_instance3,
+    #   room: 6
     # )
     @room_list = @desk_instance.available_rooms(@date_instance)
     @reserved = @desk_instance.reserve_room(@date_instance)
@@ -29,11 +45,6 @@ describe Hotel::FrontDesk do
     it "is an instance of FrontDesk" do
       expect(@desk_instance).must_be_kind_of Hotel::FrontDesk
     end
-
-    # ! how to test these variable
-    # it "Class.rooms is a type of Array" do
-    #   expect(Hotel::FrontDesk.rooms).must_be_kind_of Array
-    # end
 
     it "reservations is a type of Array" do
       expect(@desk_instance.reservations).must_be_kind_of Array
@@ -90,6 +101,16 @@ describe Hotel::FrontDesk do
       it "creates a Reservation" do
         expect(@reserved).must_be_kind_of Hotel::Reservation
       end
+
+      it "can create multiple reservations" do
+        # the first reservation was added in before
+        @desk_instance.reserve_room(@date_instance2)
+        @desk_instance.reserve_room(@date_instance3)
+        @desk_instance.reserve_room(@date_instance4)
+        
+        expect(@desk_instance.reservations.length).must_equal 4
+
+      end
       
     end
 
@@ -101,11 +122,13 @@ describe Hotel::FrontDesk do
 
       it "raises an ArgumentError if no reservations for date" do
         # ! TODO
+
+        # expect { Hotel::DateRange.new(Date.new(2021, 01, 01),
+        #   # Date.new(2021, 01, 01)
+        #   ) }.must_raise ArgumentError
       end
 
-      it "raises an ArgumentError if date is not a date" do
-        # ! TODO
-      end
+
 
       it "returns an array of reservations for a single date" do
         expect(@date_res).must_be_kind_of Array
