@@ -1,0 +1,17 @@
+1. Consider adding Block Class instead of hash structure in ReservationDesk
+- ReservationDesk will have a blocks array of Block objects.
+- ReservationDesk will have find_block_by_id method.
+- Block object will have block_id, rooms (array of Room objects), date_range variables.
+- Block object will have reserve_from_block and check_room_availability methods which will be called from inside current ReservationDesk methods.
+
+2. Add date input validation.
+
+3. Add defaults for start and end dates.
+(gives functionality to select all reservations from/until specific date)
+
+4. Find a more efficient way to compare dates.
+(sort and compare years/months first?..)
+
+5. Consider moving away from having start and end_date as arguments towards using date_range.
+
+6. Implement "no rooms given" scenario for make_block.
