@@ -1,0 +1,77 @@
+1. created Room class
+2. created Reservation class
+3. created DateRange class
+4. created HotelController class where rooms and Reservations are the instance attributes of the HotelController
+   added the following methods in HotelController class:
+   
+    # Access the list of all of the rooms in the hotel
+    def self.rooms
+
+    # Access the list of reservations for a specified room and a given date range
+    def reservations_list_room_and_date(given_room, given_date_range)
+  
+
+    # Add reservation to the list of the reservations
+    def add_reservation(reservation)
+    
+    # Access the list of reservations for a specific date, so that I can track reservations by date
+    def reservations_list(date)
+
+    # Can get the total cost for a given reservation
+    def total_cost(reservation)
+      
+
+    ##################### Wave 2
+    # Get reservations_list for a given date range
+    def reservations_list_by_date_range(start_date, end_date)
+
+    def reserved_rooms_list(start_date, end_date) 
+
+    # I can view a list of rooms that are not reserved for a given date range, 
+    # so that I can see all available rooms for that day
+    def available_rooms(start_date, end_date)
+      
+    # I can make a reservation of a room for a given date range, 
+    # and that room will not be part of any other reservation overlapping that date range
+    # done already in wave 1
+  
+    def reserve_room(start_date, end_date)
+
+    ############## Wave 3
+
+    # Add hotel_block method
+    def add_hotel_block(hotel_block)
+      
+    # Get the hotel_block_list for a given date (not exact match date range)
+    def hotel_block_list(start_date, end_date)
+     
+
+    # Get the rooms_list_for_hotel_block
+    def rooms_list_for_hotel_block(start_date, end_date) 
+    
+    # Create a hotel_block
+    def create_hotel_block(date_range, rooms_array, discount_rate)
+
+    # check whether a given block has any rooms available
+    def available_rooms_of_block(hotel_block) 
+
+    # Get the list of the hotel_block for a specific full date range (exact match the full date range)
+    def hotel_blocks_for_specific_date_range(start_date, end_date)
+
+    # Get available_rooms_of_hotel_blocks for a specific full date range (exact match the full date range)
+    def available_rooms_of_hotel_blocks(start_date, end_date)
+
+    # Get specific hotel_block with a given room, start_date, and end_date
+    def specific_hotel_block(room, start_date, end_date)
+
+    # remove the room from the hotel_block for a specific date_range
+    def remove_room_from_hotel_block(room, start_date, end_date)
+      
+    # remove/delete the whole hotel block 
+    def delete_hotel_block(hotel_block)
+      
+    # I can reserve a specific room from a hotel block
+    # I can only reserve that room from a hotel block for the full duration of the block
+    # I can see a reservation made from a hotel block from the list of reservations for that date (see wave 1 requirements)
+    def reserve_room_from_hotel_block(room,start_date, end_date)
+    
