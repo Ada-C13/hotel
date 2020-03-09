@@ -6,15 +6,15 @@ describe "room class" do
   end
 
   describe "Initialize" do
-    it "can create a room" do
+    it "can create an instance of room" do
       expect(@room).must_be_instance_of Stayappy::Room
     end
 
-    it "sets the room number" do
+    it "can assign the room number" do
       expect(@room.room_num).must_equal 1
     end
 
-    it "sets the cost" do
+    it "can set the cost" do
       expect(@room.cost).must_equal 200
     end
   end

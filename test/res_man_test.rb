@@ -13,6 +13,9 @@ describe "ReservationManager class" do
       it "creates 20 rooms" do
          expect(@phillip.rooms).must_be_instance_of Array
          expect(@phillip.rooms.length).must_equal 20
+         @phillip.rooms.each do |room| 
+            expect(room).must_be_instance_of Stayappy::Room
+         end
       end
 
       it "creates an empty list of bookings" do
@@ -44,6 +47,72 @@ describe "ReservationManager class" do
 
          expect{ @phillip.make_reservation(@check_in, @check_out) }.must_raise ArgumentError
       end
-
    end
+
+   describe "reservations_by_room method" do
+      before do
+         @room_num = 1
+         @start_date = Date.new(2020, 5, 30)
+         @end_date = Date.new(2020, 5, 31)
+         @reservation = @phillip.make_reservation(
+            @start_date, 
+            @end_date
+         )
+      end
+
+      it "finds reservation with room number match" do
+         matching_reservations = @phillip.reservations_by_room(
+            @room_num,
+            @start_date,
+            @end_date
+         )
+         expect(matching_reservations.length).must_equal 1
+         expect(matching_reservations[0]).must_equal @reservation
+         expect(matching_reservations[0].room.room_num).must_equal @room_num
+      end
+
+      it "finds no reservation if no room number match" do
+         matching_reservations = @phillip.reservations_by_room(
+            999,
+            @start_date,
+            @end_date
+         )
+         expect(matching_reservations.length).must_equal 0
+      end
+
+      it "finds no reservation if no date match" do
+         matching_reservations = @phillip.reservations_by_room(
+            @room_num,
+            Date.new(2019, 03, 10),
+            Date.new(2019, 03, 20),
+         )
+         expect(matching_reservations.length).must_equal 0
+      end
+   end
+
+   describe "reservations_by_date" do
+      before do
+         @check_in = Date.new(2020, 3, 10)
+         @check_out = Date.new(2020, 3, 11)
+         @reservation = @phillip.make_reservation(
+            @check_in, 
+            @check_out
+         )
+      end
+
+      it "can retrieve a reservation given a valid date" do
+         matching_reservations = @phillip.reservations_by_date(@check_in)
+         
+         expect(matching_reservations.length).must_equal 1
+         expect(matching_reservations[0]).must_equal @reservation
+      end
+
+      it "will not retrieve any reservations for a non-matching date" do
+         matching_reservations = @phillip.reservations_by_date(
+            Date.new(2019, 03, 20)
+         )
+         
+         expect(matching_reservations.length).must_equal 0
+      end
+   end 
 end 
