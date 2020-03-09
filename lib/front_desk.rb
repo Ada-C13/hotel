@@ -1,21 +1,12 @@
 module Hotel
   class FrontDesk 
-    attr_reader :rooms, :reservations
-
+    attr_reader :rooms
     def initialize
         @rooms = []
         (1..20).each do |n|
           @rooms << Room.new(n)
         end
     end
-    # TO DO: refactor so that add takes start,end or range and more Resv.new to Room#add
-    # def reserve_room(start_date, end_date)
-    #   date_range = Hotel::DateRange.new(start_date, end_date)
-    #   room = find_room(date_range)
-    #   reservation = Reservation.new(start_date, end_date, room.id)
-    #   room.add(reservation)
-    #   return reservation
-    # end
 
     def reserve_room(start_date, end_date)
       date_range = Hotel::DateRange.new(start_date, end_date)

@@ -8,7 +8,7 @@ module Hotel
       @room_rate = room_rate
     end
 
-    # This method checks if room is available for a specific reservation or a general date range
+    # is available for a specific reservation or a general date range
     def available?(date_range)
       if reservations.length == 0
         return true
@@ -19,15 +19,7 @@ module Hotel
         return true
       end
     end
-    # TO DO refactor: from FrontDesk#reserve_room, take care of Reservation.new HERE, change method param to 
-    # account for this. Additionally, take advantage of optional room_rate here. 
-    # def add(reservation)
-    #   if self.available?(reservation)
-    #     @reservations << reservation
-    #   else
-    #     raise ArgumentError.new("Room #{self.id} isn't available for that reservation.")
-    #   end
-    # end
+ 
     def add(date_range)
       if date_range.class != Reservation && date_range.class != Block
         reservation = Reservation.new(date_range.start_date, date_range.end_date, self.id, room_rate)

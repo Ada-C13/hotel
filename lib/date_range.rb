@@ -29,7 +29,6 @@ module Hotel
    
     def overlap?(other)
       other.nights.each do |night|
-        # this uses #include? not ruby enumerable
         if self.include? night
           return true
         end

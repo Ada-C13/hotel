@@ -85,9 +85,8 @@ describe Hotel::FrontDesk do
     end
 
     it "takes a Date and returns a list of Reservations" do
-      reservation_list = @front_desk.get_reservations(@date)
+      reservation_list = @fd.get_reservations(@date)
       expect(reservation_list).must_be_kind_of Array
-
       reservation_list.each do |res|
         expect(res).must_be_kind_of Hotel::Reservation
       end
