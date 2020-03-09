@@ -2,7 +2,7 @@ require_relative 'date_range'
 
 module Hotel
   class Block
-    attr_reader :date_range, :discount_rate
+    attr_reader :date_range, :discount_rate, :block_id
     attr_accessor :rooms, :total_cost
     
     def initialize(date_range, discount_rate, rooms:)
@@ -13,6 +13,7 @@ module Hotel
       
       @discount_rate = discount_rate
       @total_block_cost = total_block_cost
+      @block_id = rand(100000.999999)
     end
     
     def validate_rooms

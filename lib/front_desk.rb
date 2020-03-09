@@ -36,6 +36,7 @@ module Hotel
     end
     
     
+    # returns room object and all its deets
     def find_room_by_number(room_number)
       room = @rooms.select { |room| room.room_number == room_number }
       
@@ -43,6 +44,7 @@ module Hotel
     end
     
     
+    # returns array of reservations for a single room
     def find_reservations_by_room(room_number)
       room = find_room_by_number(room_number)
       
@@ -72,6 +74,7 @@ module Hotel
     end
     
     
+    # helper method for assigning room number in create_reservation
     def find_available_room(check_in, check_out)
       all_rooms = list_available_rooms(check_in, check_out)
       
@@ -82,7 +85,7 @@ module Hotel
       return all_rooms[0]
     end
     
-    
+    # helper for checking against block reservations
     def check_for_blocks(check_in, check_out, room_number)
       potential_range = Hotel::DateRange.new(check_in, check_out)
       

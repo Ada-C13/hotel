@@ -209,7 +209,7 @@ describe "create reservation" do
     front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
     front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
     front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3))
-  
+    
     expect{ front_desk.create_reservation(Date.new(2020,2,1), Date.new(2020,2,3)) }.must_raise NoAvailableRoomsError
   end 
 end
