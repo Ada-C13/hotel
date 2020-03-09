@@ -8,9 +8,5 @@ module Hotel
       @capacity = capacity
       @cost = cost
     end
-
-    def cost
-      return @cost
-    end
   end
 end
