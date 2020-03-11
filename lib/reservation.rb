@@ -2,7 +2,6 @@ module Hotel
   class Reservation
 
     DISCOUNT = 0.8
-    @@ids = []
 
     # date_range is an instance of DateRange class
     # room is an instance of Room class
