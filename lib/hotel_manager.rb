@@ -188,7 +188,7 @@ module Hotel
     end
     
     def find_room_by_id(number)
-      return @rooms.find { |room| room.id == number}
+      return @rooms[number - 1]
     end 
   end 
 end 

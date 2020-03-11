@@ -8,6 +8,5 @@ module Hotel
       @id = id
       @cost = cost  
     end 
-
   end 
 end
