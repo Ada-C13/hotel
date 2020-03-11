@@ -23,6 +23,7 @@ describe "Instanitates a new Hotel Block" do
   it "Correctly show Check room availablity as occupied" do
     room_ids = [1, 2, 3, 4, 5]
     new_hotel_block = Hotel_Block.new(room_ids, check_in_date, check_out_date, room_rate, hotel_block_id)
-    expect(new_hotel_block.check_rooms_available).must_equal true
+    new_hotel_block.room_info = {1=> true,2=> true,3=> true,4=> true,5=> true}
+    expect(new_hotel_block.check_rooms_available).must_equal false
   end
 end

@@ -6,6 +6,7 @@ require_relative "room"
 require_relative "hotel_block"
 
 class HotelManager < Date_Range
+  attr_reader :rooms
   attr_accessor :reservations
 
   def initialize
@@ -33,7 +34,7 @@ class HotelManager < Date_Range
     date_range = Date_Range.new(check_in_date, check_out_date)
     @rooms.each do |room|
       # If no res has any overlap return true #
-      if !room.check_overlap_with_room_reservations(date_range)
+      if room.check_overlap_with_room_reservations(date_range)
         return true
       end
     end
@@ -48,7 +49,7 @@ class HotelManager < Date_Range
         all_res << res
       end
     end
-    all_res << hotel_blocks
+    all_res << @hotel_blocks
     return all_res
   end
 
@@ -68,7 +69,6 @@ class HotelManager < Date_Range
         return true
       end
     end
-
     # # Raise exception as no room is available during the requested date_range.
     raise Exception.new "There are no rooms available for this date range"
   end
@@ -81,23 +81,22 @@ class HotelManager < Date_Range
   # using the make rooms we
   def create_room_block(room_ids, check_in_date, check_out_date, room_rate)
     requested_date_range = Date_Range.new(check_in_date, check_out_date)
-    (1..room_ids).each do |room_id|
+    room_ids.each do |room_id|
       room = @rooms[room_id]
-      if room.check_overlap_with_room_reservations(requested_date_range)
+      if !room.check_overlap_with_room_reservations(requested_date_range)
         raise Exception.new "One of the rooms in the hotel block requested is unavailable"
       end
     end
 
     # Go to each room and add the reservation for the given date range
-    def add_reservation (room_info)
-    (1..room_ids).each do |room_id|
-      room = @rooms[room_id]
-      room.create_new_reservation(check_in_date, check_out_date, true)
-      end
-    end
+      # room_ids.each do |room_id|
+      #   room = @rooms[room_id]
+      #   room.create_new_reservation(check_in_date, check_out_date, true)
+      # end
+  
 
     # Create the HotelBlock object and add it to the list of hotel_blocks
-    hotel_blocks << Hotel_Block.new(room_ids, check_in_date, check_out_date, room_rate, @hotel_block_counter)
+    @hotel_blocks << Hotel_Block.new(room_ids, check_in_date, check_out_date, room_rate, @hotel_block_counter)
     @hotel_block_counter += 1
   end
 end
