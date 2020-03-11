@@ -19,34 +19,6 @@ module Hotel
     end 
 
 
-    # (1) list of reservations with a given date range & room id 
-    #  overlap => (booking)
-    def reservations_per_room(date_range, room)
-      # If the room number is the same
-      # check the reservation inside of the room 
-      return @reservations[:individual].filter do |reservation|
-        (reservation.room.id == room.id) && (reservation.date_range.overlap?(date_range))
-      end 
-    end 
-    
-    
-    # (2) Find available room numbers (with given date range) 
-    #  and use the "reservations_per_room" from (1)
-    def available_room_ids(date_range) 
- 
-      # Find available rooms that are not reserved for the given date range
-      available_rooms = @rooms.select do |room| 
-
-        # Find reservation list per room
-        reservations = reservations_per_room(date_range, room)
-        
-        reservations.empty? 
-      end 
-
-      return available_rooms.map { |room| room.id }
-    end 
-
-
     def make_reservation(date_range)
       # Find available rooms for the specific date range
       available_room_ids = available_room_ids(date_range)
@@ -65,35 +37,63 @@ module Hotel
     end 
 
 
-    # (4) Find reservations for date 
-    # => include (searching)
+    #  Find reservations per room withinn specific date range (using overlap?)
+    def reservations_per_room(date_range, room)
+      return @reservations[:individual].filter do |reservation|
+        (reservation.room.id == room.id) && (reservation.date_range.overlap?(date_range))
+      end 
+    end 
+    
+    
+    # Find reservations for the specific date (using include?)
     def find_reservations(date)
       return @reservations[:individual].find_all do |reservation|
           (reservation.date_range.include?(date)) && (reservation.room) 
       end 
     end 
 
+    
+    def reserved_room_ids(date_range) 
+      ids = []
 
-    # ====== block =====
-
-    def block_reservations_per_room(date_range, room)
-
-      list = []
-  
-      reservations_with_same_range = @reservations[:block].select do |reservation|  
-        reservation.block.date_range.overlap?(date_range)
+      @reservations[:individual].each do |reservation| 
+        if reservation.date_range.overlap?(date_range)
+          ids << reservation.room.id
+        end 
       end 
 
-      reservations_with_same_range.each do |reservation| 
-        reservation.block.rooms.each do |block_room|
-          if block_room.id == room.id
-            list << reservation  
+      @reservations[:block].each do |reservation|  
+        if reservation.block && reservation.block.date_range.overlap?(date_range)
+          reservation.block.rooms.each do |block_room|
+            ids << block_room.id
           end 
         end 
       end 
-      return list
+
+      # Need to filter reserved blocks as well
+      @blocks.each do |block|
+        if block.date_range.overlap?(date_range)
+          block.rooms.each do |room|
+            ids << room.id
+          end 
+        end 
+      end 
+
+      return ids
+    end
+
+
+    def available_room_ids(date_range)
+      ids = (1..20).to_a
+      reserved_room_ids = reserved_room_ids(date_range)
+
+      available_room_ids = ids - reserved_room_ids
+
+      return available_room_ids
     end 
 
+
+     # ====== block =====
 
     def set_block(date_range, number_of_rooms: 1)
       # Change test file
@@ -132,7 +132,7 @@ module Hotel
       end 
     end 
 
-
+    
     def make_block_reservation(date_range, number_of_rooms: 1)
 
       if (number_of_rooms < 1) || (number_of_rooms > 5)
@@ -160,6 +160,18 @@ module Hotel
           (reservation.date_range.same?(date_range)) && (reservation.block)
       end 
     end 
+
+    
+    def find_block_reservations_by_date(date)
+      blocks = []
+      @reservations[:block].each do |reservation|  
+        if reservation.block.date_range.include?(date)
+          blocks << reservation.block
+        end 
+      end 
+      return blocks
+    end 
+
 
 
     # Helper method

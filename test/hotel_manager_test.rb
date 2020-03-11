@@ -27,20 +27,36 @@ describe "HotelManager class" do
     describe "#reservations_per_room" do 
       it "returns a list of reservations for the specific room" do 
 
-        room = @hotel_manager.rooms[0]
+        date_range = Hotel::DateRange.new(Date.new(2020, 8, 12), Date.new(2020, 8, 14))
 
-        reservations = @hotel_manager.reservations_per_room(@date_range, room)
+        3.times do 
+          @hotel_manager.make_reservation(@date_range) 
+        end 
 
-        expect(reservations).must_be_kind_of Array
+        @hotel_manager.make_reservation(date_range) 
 
-        reservations.each do |reservation| 
+        room_1 = @hotel_manager.rooms[0]
+        room_2 = @hotel_manager.rooms[1]
+        room_3 = @hotel_manager.rooms[2]
+        room_4 = @hotel_manager.rooms[3]
+
+        reservations_1 = @hotel_manager.reservations_per_room(@date_range, room_1)
+        reservations_2 = @hotel_manager.reservations_per_room(@date_range, room_2)
+        reservations_3 = @hotel_manager.reservations_per_room(@date_range, room_3)
+        reservations_4 = @hotel_manager.reservations_per_room(date_range, room_4)
+
+        expect(reservations_1).must_be_kind_of Array
+
+        reservations_1.each do |reservation| 
           expect(reservation).must_be_kind_of Hotel::Reservation
         end 
 
-        date_range = Hotel::DateRange.new(Date.new(2020, 8, 10), Date.new(2020, 8, 15))
-        
-        reservation = Hotel::Reservation.new(date_range, room: Hotel::Room.new(id: 2))
-        Hotel::HotelManager.new().add_reservation(reservation, type: :individual)
+        expect(reservations_1[0].room).must_be_kind_of Hotel::Room
+
+        expect(reservations_1[0].room.id).must_equal 1
+        expect(reservations_2[0].room.id).must_equal 2
+        expect(reservations_3[0].room.id).must_equal 3
+        expect(reservations_4[0].room.id).must_equal 4
       end 
     end 
 
@@ -63,6 +79,20 @@ describe "HotelManager class" do
         expect{
           @hotel_manager.make_reservation(@date_range)
         }.must_raise ArgumentError
+      end 
+
+      it "raise an ArgumentError if there are no available rooms due to block reservation" do 
+
+        4.times do 
+          @hotel_manager.set_block(@date_range, number_of_rooms: 5)
+        end 
+
+        # 20 rooms are booked for the same date range
+        4.times do
+          @hotel_manager.make_block_reservation(@date_range, number_of_rooms: 5) 
+        end 
+
+        expect{@hotel_manager.make_reservation(@date_range)}.must_raise ArgumentError
       end 
     end 
 
@@ -167,9 +197,10 @@ describe "HotelManager class" do
 
 
   describe "wave 3" do
-    describe "#block_reservations_per_room" do 
+    describe "#find_block_reservations_by_date" do 
       it "takes date_range & room and returns block Reservations per room" do 
         date_range = Hotel::DateRange.new(Date.new(2020, 11, 5), Date.new(2020, 11, 11))
+        date = Date.new(2020, 11, 7)
 
         @hotel_manager.set_block(date_range, number_of_rooms: 3)
         @hotel_manager.set_block(date_range, number_of_rooms: 5)
@@ -178,19 +209,20 @@ describe "HotelManager class" do
         @hotel_manager.make_block_reservation(date_range, number_of_rooms: 5)
 
 
-        room = @hotel_manager.find_room_by_id(20)
+        blocks = @hotel_manager.find_block_reservations_by_date(date)
 
-        reservations = @hotel_manager.block_reservations_per_room(date_range, room)
+        expect(blocks.length).must_equal 2 
 
-        expect(reservations.length).must_equal 2 
+        expect(blocks[0].rooms.length).must_equal 3
+        expect(blocks[1].rooms.length).must_equal 5
 
-        expect(reservations[0].block.rooms.length).must_equal 3
+        # Refactored - checking room numbers for block
+        expect(blocks[0].rooms[0].id).must_equal 20
+        expect(blocks[0].rooms[1].id).must_equal 19
+        expect(blocks[0].rooms[2].id).must_equal 18
 
-        # TO DO (Need to Refactor) - checking room numbers for block
-        expect(reservations[0].block.rooms[0].id).must_equal 20
-        expect(reservations[0].block.rooms[1].id).must_equal 19
-
-        expect(reservations[1].block.rooms.length).must_equal 5
+        expect(blocks[1].rooms[0].id).must_equal 17
+        expect(blocks[1].rooms[1].id).must_equal 16
       end 
     end 
 
@@ -239,7 +271,6 @@ describe "HotelManager class" do
       end 
 
 
-      # Need to refactor to raise an ArgumentError if all rooms are taken by block
       it "raise an ArgumentError if there are no available rooms for block" do 
 
         4.times do 
