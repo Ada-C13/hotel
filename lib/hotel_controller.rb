@@ -11,9 +11,9 @@ module Hotel
       end
     end
     # Wave 1
-    def rooms
-      return @rooms
-    end
+    # def rooms
+    #   return @rooms
+    # end
 
     def reserve_room(start_date, end_date)
       if start_date.class != Date || end_date.class != Date
@@ -28,10 +28,10 @@ module Hotel
     def reservations(date)
       reservation_list = []
       @reservations.each do |reservation|
-      if reservation.include?(date)
+        if reservation.include?(date)
         reservation_list << reservation
-      end
-    end
+          end
+        end
       return reservation_list
   end
 
@@ -46,4 +46,3 @@ module Hotel
     end
   end
 end
-# end
