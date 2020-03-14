@@ -1,62 +1,65 @@
 require_relative "date_range"
 require_relative "room"
 require_relative "reservation"
+require "pry"
 
 module Hotel 
   class FrontDesk
 
     attr_accessor :rooms, :reservations 
-    def initialize(rooms: [], reservations: [])
-      @rooms = rooms
-      @reservations = reservations
-    end  
-    
-    def update_room_list(room)
-      @rooms << room 
-    end 
 
-    def create_rooms
+    def initialize(rooms: [], reservations: [])
+      # set up 20 rooms 
+      rooms = []
       rooms_in_hotel = 20 
       room_num = 1
 
       rooms_in_hotel.times do 
-        update_room_list( Room.new(number: room_num) ) 
+        rooms << Room.new(number: room_num) 
         room_num +=1 
       end 
-    end 
 
+      @rooms = rooms 
+      @reservations = reservations
+    end  
+    
+    # accesses the list of the rooms in the hotel 
     def all_rooms
       @rooms.each do |room|
-        puts room 
+        puts "Room Number: #{room.number} | Nightly Rate: #{room.cost} | Reservation History: #{room.reservation_ids}"
       end 
     end 
 
-    # find reservations in @reservations array with matching room_num, start_date, end_date 
-    # returns: array of all reservation objects with matching room_num, start_date, and end_date
-    # modifies: nothing
-    def reservations_by_room_and_range(room_num, start_date, end_date)
-      # in @reservations, print all reservations with matching room_num, find matching start_date, find matching end_date
+    # accesses the list of reservations for a specific date
+    def reservations_by_date(date_query)
+      res_list = []
+      @reservations.each do |res|
+        if res.range.include?(date_query)
+          res_list << res
+        end
+      end 
+      return res_list 
     end 
 
-    # find a reservation in @reservations array with matching date
-    # returns: array of all reservation objects where matching date is included in the reservation's date range
-    # modifies: nothing
-    def reservations_by_date(date)
+    # accesses the list of reservations for a specified room and date range
+    def reservations_by_room_and_range(room_num_query, range_query)
+      res_list = []
+      res_list = @reservations.find_all { |res| res.room_num == room_num_query && res.range.overlap?(range_query) }
+      return res_list
     end 
 
-    # find a room in @rooms array where the room's reservation's does not match the date range 
-    # returns: array of rooms where the supplied date range is NOT overlapping with any other of the room's reservation's date range
-    # modifies: nothing
-    def available_rooms(start_date, end_date)
+    # accesses the list of rooms that are not reserved for a given date range
+    def available_rooms(range_query)
+      res_list = []
+      res_list = @reservations.find_all { |res| res.range.overlap?(range_query) == false }
+      available_rooms_list = res_list.map {|res| res.room_num}
+      return available_rooms_list
     end 
 
-    # create helper method that adds to @reservations array 
-    # returns: nothing 
-    # modifies: @reservations 
+    # helper method that adds to @reservations array 
     def update_reservations_list(reservation)
       @reservations << reservation
     end
-    
 
     # - create a new reservation object:  
     #   - with a room_id of an available room 
@@ -65,10 +68,8 @@ module Hotel
     # - then add it to room's record of reservations
     # returns: nothing
     # modifies: @reservations & @rooms
-    def reserve_rooms(start_date, end_date)
+    def reserve_room(start_date, end_date)
+      requested_range = DateRange.new(start_date: start_date, end_date: end_date)
     end
-
-
-
   end
 end  

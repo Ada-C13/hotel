@@ -144,7 +144,7 @@ describe "DateRange Class" do
       expect(range.include?(test_date)).must_equal true
     end
 
-    it "ignores end_dates as being included" do 
+    it "doesn't count end_date" do 
       test_date = Date.new(2020, 8, 7)
       start_date = Date.new(2020, 8, 5)
       end_date = Date.new(2020, 8, 7)

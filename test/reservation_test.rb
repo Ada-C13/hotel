@@ -8,6 +8,7 @@ describe "Reservation Class" do
       end_date = start_date + 5
       @test_reservation = Hotel::Reservation.new(id: 1, room_num: 1, start_date: start_date, end_date: end_date)
       expect(@test_reservation).must_be_kind_of Hotel::Reservation
+      expect(@test_reservation.range).must_be_kind_of Hotel::DateRange
     end
   end 
   
