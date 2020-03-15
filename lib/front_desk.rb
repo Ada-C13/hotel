@@ -3,6 +3,8 @@ module Hotel
     attr_reader :rooms
     def initialize
         @rooms = []
+        # Refactor: custom range - rooms. Rooms include Comparable, and implement succ and <=>
+        # See range doc
         (1..20).each do |n|
           @rooms << Room.new(n)
         end
