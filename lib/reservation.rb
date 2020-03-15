@@ -20,5 +20,6 @@ module Hotel
       room_cost = room.cost 
       return num_nights*room_cost 
     end 
+    
   end
 end  

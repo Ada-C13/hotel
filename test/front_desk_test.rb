@@ -1,5 +1,4 @@
 require_relative "test_helper"
-require "pry"
 
 describe "FrontDesk Class" do
 
@@ -93,6 +92,7 @@ describe "FrontDesk Class" do
   end
 
   describe "available_rooms(range_query)" do 
+    # ASSUMPTION: this method returns room numbers, not instances of room objects
     before do 
       test_res_1 = Hotel::Reservation.new(id: 1, room_num: 1, start_date: Date.new(2020, 8, 1), end_date: Date.new(2020, 8, 5)) 
       test_res_2 = Hotel::Reservation.new(id: 2, room_num: 2, start_date: Date.new(2020, 7, 1), end_date: Date.new(2020, 7, 11)) # available during range
@@ -106,17 +106,19 @@ describe "FrontDesk Class" do
       @test_avail_rooms_list = @test_desk.available_rooms(test_range)
     end 
 
-    # ASSUMPTION: this method returns just the room numbers, not instances of room objects
-    it "returns an array of room numbers that are available" do 
+    it "returns an array of room numbers" do 
       expect(@test_avail_rooms_list).must_be_kind_of Array
       expect(@test_avail_rooms_list.first).must_be_kind_of Integer
     end 
 
     it "lists every room that does not have a reservation whose date range overlaps with the date range being queried" do 
-      expect(@test_avail_rooms_list.length).must_equal 2
       expect(@test_avail_rooms_list[0]).must_equal 2
       expect(@test_avail_rooms_list[1]).must_equal 5
     end
+
+    it "includes rooms that don't have reservations made for them yet" do 
+     expect(@test_avail_rooms_list.length).must_equal 16 # 20 rooms total - 4 that are occupied
+    end 
   end 
 
   describe "update_reservations_list(reservation)" do 
@@ -147,6 +149,88 @@ describe "FrontDesk Class" do
       end_date = Date.new(2020, 8, 1)
       expect{@test_desk.reserve_room(start_date, end_date)}.must_raise ArgumentError
     end 
-  end
+  
+    it "raises an error when there are no rooms available for the date range provided" do 
+      @test_desk = Hotel::FrontDesk.new()
+      start_date = Date.new(2020, 8, 1)
+      end_date = Date.new(2020, 8, 8)
+      i = 1 
+      # book all 20 rooms that conflict with date range provided 
+      20.times do
+        @test_desk.update_reservations_list(Hotel::Reservation.new(id: i, room_num: i, start_date: Date.new(2020, 8, 1), end_date: Date.new(2020, 8, 5))) 
+        i += 1
+      end  
+      expect{@test_desk.reserve_room(start_date, end_date)}.must_raise ArgumentError
+    end 
 
+    it "appends a new reservation object to the @reservations list" do 
+      test_res_1 = Hotel::Reservation.new(id: 1, room_num: 1, start_date: Date.new(2020, 7, 1), end_date: Date.new(2020, 7, 5)) 
+      test_res_2 = Hotel::Reservation.new(id: 2, room_num: 2, start_date: Date.new(2020, 7, 4), end_date: Date.new(2020, 7, 10)) 
+      test_res_3 = Hotel::Reservation.new(id: 3, room_num: 3, start_date: Date.new(2020, 7, 29), end_date: Date.new(2020, 8, 1))
+      start_date = Date.new(2020, 8, 1)
+      end_date = Date.new(2020, 8, 8)
+      @test_desk = Hotel::FrontDesk.new(reservations: [test_res_1, test_res_2, test_res_3])
+      @test_desk.reserve_room(start_date, end_date)
+      expect(@test_desk.reservations.length).must_equal 4
+      expect(@test_desk.reservations[3]).must_be_kind_of Hotel::Reservation
+    end 
+
+    it "creates a reservation object with an available room" do 
+      test_res_1 = Hotel::Reservation.new(id: 1, room_num: 1, start_date: Date.new(2020, 8, 1), end_date: Date.new(2020, 8, 5)) 
+      test_res_2 = Hotel::Reservation.new(id: 2, room_num: 2, start_date: Date.new(2020, 7, 1), end_date: Date.new(2020, 7, 11)) # available during range
+      test_res_3 = Hotel::Reservation.new(id: 3, room_num: 3, start_date: Date.new(2020, 8, 4), end_date: Date.new(2020, 8, 10)) 
+      test_res_4 = Hotel::Reservation.new(id: 4, room_num: 4, start_date: Date.new(2020, 8, 3), end_date: Date.new(2020, 8, 8))
+      test_res_5 = Hotel::Reservation.new(id: 5, room_num: 5, start_date: Date.new(2020, 8, 8), end_date: Date.new(2020, 8, 21)) # available during range
+      test_res_6 = Hotel::Reservation.new(id: 6, room_num: 6, start_date: Date.new(2020, 8, 2), end_date: Date.new(2020, 8, 9)) 
+      start_date = Date.new(2020, 8, 1)
+      end_date = Date.new(2020, 8, 8)
+      @test_desk = Hotel::FrontDesk.new(reservations: [test_res_1, test_res_2, test_res_3, test_res_4, test_res_5, test_res_6])
+      @test_desk.reserve_room(start_date, end_date)
+      expect(@test_desk.reservations[6].room_num).must_be :!=, 1
+      expect(@test_desk.reservations[6].room_num).must_be :!=, 3
+      expect(@test_desk.reservations[6].room_num).must_be :!=, 4
+      expect(@test_desk.reservations[6].room_num).must_be :!=, 6
+    end 
+
+    it "creates a reservation object with start and end dates that match the ones that were requested" do 
+      @test_desk = Hotel::FrontDesk.new()
+      start_date = Date.new(2020, 8, 1)
+      end_date = Date.new(2020, 8, 8)
+      @test_desk.reserve_room(start_date, end_date)
+      expect(@test_desk.reservations[0].start_date).must_equal start_date
+      expect(@test_desk.reservations[0].end_date).must_equal end_date
+    end 
+
+    it "does not assign the same room for same date range" do 
+      @test_desk = Hotel::FrontDesk.new()
+      start_date = Date.new(2020, 8, 1)
+      end_date = Date.new(2020, 8, 8)
+      @test_desk.reserve_room(start_date, end_date)
+      @test_desk.reserve_room(start_date, end_date)
+      expect(@test_desk.reservations[1].room_num).must_be :!=, @test_desk.reservations[0].room_num
+    end 
+
+    it "does not assign the same room for overlapping date ranges" do 
+      @test_desk = Hotel::FrontDesk.new()
+      start_date_1 = Date.new(2020, 8, 1)
+      end_date_1 = Date.new(2020, 8, 8)
+      start_date_2 = Date.new(2020, 8, 1)
+      end_date_2 = Date.new(2020, 8, 3)  
+      @test_desk.reserve_room(start_date_1, end_date_1)
+      @test_desk.reserve_room(start_date_2, end_date_2)
+      expect(@test_desk.reservations[1].room_num).must_be :!=, @test_desk.reservations[0].room_num
+    end 
+
+    it "does assign the first available room for non-overlapping ranges" do 
+      @test_desk = Hotel::FrontDesk.new()
+      start_date_1 = Date.new(2020, 8, 1)
+      end_date_1 = Date.new(2020, 8, 8)
+      start_date_2 = Date.new(2020, 8, 8)
+      end_date_2 = Date.new(2020, 8, 9)  
+      @test_desk.reserve_room(start_date_1, end_date_1)
+      @test_desk.reserve_room(start_date_2, end_date_2)
+      expect(@test_desk.reservations[1].room_num).must_be :==, @test_desk.reservations[0].room_num
+    end 
+  end
+  
 end  
