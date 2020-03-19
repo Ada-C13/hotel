@@ -1,0 +1,4 @@
+* Create consistent convention for when to use date_range or start_date, end_date as parameters
+* Create RoomNotAvailableError Class
+* Map out everywhere that Room#availble? is used - there is redundancy here.
+* Figure out why block_test.rb is not included in coverage file
