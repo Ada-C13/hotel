@@ -15,7 +15,7 @@ module Hotel
 
     
     def nights 
-      return @end_date.day - @start_date.day
+      return (@end_date - @start_date).to_i
     end 
 
     # When searching for the specific date

@@ -4,7 +4,7 @@ describe "Reservation class" do
   
   # Arrange 
   before do 
-    date_range = Hotel::DateRange.new(Date.new(2020, 3, 20), Date.new(2020, 3, 27))
+    date_range = Hotel::DateRange.new(Date.today, Date.today + 7)
 
     hotel_manager = Hotel::HotelManager.new()
 
@@ -23,8 +23,8 @@ describe "Reservation class" do
       expect(@reservation.date_range).must_be_kind_of Hotel::DateRange
       expect(@reservation.room).must_be_kind_of Hotel::Room
 
-      expect(@reservation.date_range.start_date).must_equal Date.new(2020, 3, 20)
-      expect(@reservation.date_range.end_date).must_equal Date.new(2020, 3, 20) + 7
+      expect(@reservation.date_range.start_date).must_equal Date.today
+      expect(@reservation.date_range.end_date).must_equal Date.today + 7
       expect(@reservation.room.id).must_equal 1
       expect(@reservation.block).must_be_nil
     end 
@@ -43,7 +43,7 @@ describe "Reservation class" do
    describe "#block_total_cost" do 
      it "returns the correct total cost for a given block reservation" do 
 
-       date_range = Hotel::DateRange.new(Date.new(2020, 5, 6), Date.new(2020, 5, 12))
+       date_range = Hotel::DateRange.new(Date.today + 10, Date.today + 16)
 
        rooms = []
        5.times do |i|

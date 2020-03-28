@@ -4,9 +4,9 @@ require 'awesome_print'
 describe "HotelManager class" do
   before do
     @hotel_manager = Hotel::HotelManager.new()
-    @date = Date.new(2020, 8, 10)
+    @date = Date.today + 50
 
-    @date_range = Hotel::DateRange.new(Date.new(2020, 8, 10), Date.new(2020, 8, 15))
+    @date_range = Hotel::DateRange.new(Date.today + 50, Date.today + 55)
   end
 
   # wave 1
@@ -27,7 +27,7 @@ describe "HotelManager class" do
     describe "#reservations_per_room" do 
       it "returns a list of reservations for the specific room" do 
 
-        date_range = Hotel::DateRange.new(Date.new(2020, 8, 12), Date.new(2020, 8, 14))
+        date_range = Hotel::DateRange.new(Date.today + 52, Date.today + 54)
 
         3.times do 
           @hotel_manager.make_reservation(@date_range) 
@@ -125,20 +125,20 @@ describe "HotelManager class" do
 
         @hotel_manager.make_reservation(@date_range)
 
-        test_date_range = Hotel::DateRange.new(Date.new(2020, 07, 11), Date.new(2020, 07, 13))
+        test_date_range = Hotel::DateRange.new(Date.today + 40, Date.today + 42)
 
         10.times do 
           @hotel_manager.make_reservation(test_date_range)
         end 
 
-        test_date_range_2 = Hotel::DateRange.new(Date.new(2020, 07, 6), Date.new(2020, 07, 12))
+        test_date_range_2 = Hotel::DateRange.new(Date.today + 35, Date.today + 41)
 
         9.times do 
           @hotel_manager.make_reservation(test_date_range_2)
         end 
 
 
-        test_date = Date.new(2020, 07, 11)
+        test_date = Date.today + 40
         reservations = @hotel_manager.find_reservations(test_date)
 
         expect(reservations).must_be_kind_of Array
@@ -175,8 +175,8 @@ describe "HotelManager class" do
       end 
 
       it "returns the room #1 after making 20 reservations in a different date range" do 
-        date_range = Hotel::DateRange.new(Date.new(2020, 8, 10), Date.new(2020, 8, 15))
-        new_date_range = Hotel::DateRange.new(Date.new(2020, 8, 1), Date.new(2020, 8, 6))
+        date_range = Hotel::DateRange.new(Date.today + 50, Date.today + 55)
+        new_date_range = Hotel::DateRange.new(Date.today + 41, Date.today + 46)
 
         20.times do 
           @hotel_manager.make_reservation(date_range)
@@ -199,8 +199,8 @@ describe "HotelManager class" do
   describe "wave 3" do
     describe "#find_block_reservations_by_date" do 
       it "takes date_range & room and returns block Reservations per room" do 
-        date_range = Hotel::DateRange.new(Date.new(2020, 11, 5), Date.new(2020, 11, 11))
-        date = Date.new(2020, 11, 7)
+        date_range = Hotel::DateRange.new(Date.today + 90, Date.today + 96)
+        date = Date.today + 92
 
         @hotel_manager.set_block(date_range, number_of_rooms: 3)
         @hotel_manager.set_block(date_range, number_of_rooms: 5)
@@ -289,7 +289,7 @@ describe "HotelManager class" do
       # Need to refactor
       # how to reserve a specific room from a hotel block
       it "raises an ArgumentError if number of rooms does not match with a set of block" do
-        date_range = Hotel::DateRange.new(Date.new(2020, 11, 5), Date.new(2020, 11, 11))
+        date_range = Hotel::DateRange.new(Date.today + 90, Date.today + 96)
 
         @hotel_manager.set_block(date_range, number_of_rooms: 5) 
 
@@ -300,7 +300,7 @@ describe "HotelManager class" do
     describe "#find_block_reservations(date_range)" do 
       it "finds block reservations" do 
 
-        date_range_1 = Hotel::DateRange.new(Date.new(2020, 11, 5), Date.new(2020, 11, 11))
+        date_range_1 = Hotel::DateRange.new(Date.today + 90, Date.today + 96)
 
         @hotel_manager.set_block(date_range_1, number_of_rooms: 5)
 
@@ -317,7 +317,7 @@ describe "HotelManager class" do
 
     describe "#set_block" do 
       it "takes date_range and number_of_rooms and returns a block" do 
-        date_range = Hotel::DateRange.new(Date.new(2020, 11, 5), Date.new(2020, 11, 11))
+        date_range = Hotel::DateRange.new(Date.today + 90, Date.today + 96)
 
         block = @hotel_manager.set_block(date_range, number_of_rooms: 3)
 
@@ -325,7 +325,7 @@ describe "HotelManager class" do
       end 
 
       it "raises an ArgumentError if the number of rooms is not between 1 and 5" do 
-        date_range = Hotel::DateRange.new(Date.new(2020, 11, 5), Date.new(2020, 11, 11))
+        date_range = Hotel::DateRange.new(Date.today + 90, Date.today + 96)
 
         expect{@hotel_manager.set_block(date_range, number_of_rooms: 6)}.must_raise ArgumentError
 
@@ -334,7 +334,7 @@ describe "HotelManager class" do
 
       it "raises an ArgumentError if the requested number of rooms is less than available rooms" do 
 
-        date_range = Hotel::DateRange.new(Date.new(2020, 11, 5), Date.new(2020, 11, 11))
+        date_range = Hotel::DateRange.new(Date.today + 90, Date.today + 96)
 
         16.times do 
           @hotel_manager.make_reservation(date_range)

@@ -2,7 +2,7 @@ require_relative 'test_helper'
 
 describe "Block class" do
   before do 
-    @date_range = Hotel::DateRange.new(Date.new(2020, 05, 11), Date.new(2020, 05, 16))
+    @date_range = Hotel::DateRange.new(Date.today + 10, Date.today + 15)
 
     rooms = []
 
