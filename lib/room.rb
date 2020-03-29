@@ -1,12 +1,10 @@
-module Hotel 
+module Hotel
   class Room
+    attr_reader :num, :cost
 
-    attr_reader :id, :cost
- 
-    def initialize(id: nil, cost: 200.00)
-
-      @id = id
-      @cost = cost  
-    end 
-  end 
+    def initialize(num: nil, cost: 200.00)
+      @num = num
+      @cost = cost
+    end
+  end
 end

@@ -1,84 +1,64 @@
-require_relative 'test_helper'
+require_relative "test_helper"
 
-describe "DateRange class" do 
+describe "DateRange class" do
   let (:date_range) {
 
-    # Arrange 
+    # Arrange
     start_date = Date.today
     end_date = start_date + 7
 
     # Act
     Hotel::DateRange.new(start_date, end_date)
   }
-  
+
   describe "#initialize" do
     it "creates start_date and end_date" do
-      # Assert 
+      # Assert
       expect(date_range).must_respond_to :start_date
-      expect(date_range).must_respond_to :end_date 
-      
+      expect(date_range).must_respond_to :end_date
+
       expect(date_range.start_date).must_be_instance_of Date
       expect(date_range.end_date).must_be_instance_of Date
 
       expect(date_range.start_date).must_equal date_range.start_date
       expect(date_range.end_date).must_equal date_range.end_date
-    end 
+    end
 
+    it "raises a DateRangeError if start date is after end date" do
+      expect { Hotel::DateRange.new(Date.today, Date.today - 5) }.must_raise Hotel::DateRangeError
+    end
 
-    # I want an exception raised when an invalid date range is provided, so that I can't make a reservation for an invalid date range
-    it "raises an ArugmentError if start date is after end date" do 
-
-      expect{Hotel::DateRange.new(Date.today, Date.today - 5)}.must_raise ArgumentError
-    end 
-
-    it "raise an ArgumentError to create a 0-length range" do
-      expect{
+    it "raise a DateRangeError to create a 0-length range" do
+      expect {
         Hotel::DateRange.new(Date.today, Date.today)
-      }.must_raise ArgumentError
-    end 
+      }.must_raise Hotel::DateRangeError
+    end
 
-    it "raises an ArgumentError if start_date or end_date is not a Date class" do 
-      expect{
-        Hotel::DateRange.new("string", Date.today)
-      }.must_raise ArgumentError
 
-      expect{
-        Hotel::DateRange.new(Date.today, 10)
-      }.must_raise ArgumentError
-    end 
+    it "raises a DateRangeError when the date range is not between current date and end of the year" do
 
-    it "raises an ArgumentError when the date range is not between current date and end of the year" do 
-     
       # Act & Assert
-      expect{
+      expect {
         Hotel::DateRange.new(Date.today - 10, Date.today - 5)
-      }.must_raise ArgumentError
+      }.must_raise Hotel::DateRangeError
 
-      expect{
+      expect {
         Hotel::DateRange.new(Date.today - 400, Date.today + 7)
-      }.must_raise ArgumentError
-    end 
+      }.must_raise Hotel::DateRangeError
+    end
   end
 
-  
-  describe "#nights" do 
-    it "calculates the correct number of nights" do       
+  describe "#nights" do
+    it "calculates the correct number of nights" do
       expect(date_range).must_respond_to :nights
-      
+
       expect(date_range.nights).must_be_kind_of Integer
 
       expect(date_range.nights).must_equal 7
-    end 
-  end 
+    end
+  end
 
-
-  describe "#include?" do 
-    it "returns false if the date is clearly out" do
-      date = Date.today + 90
-
-      expect(date_range.include?(date)).must_equal false
-    end 
-
+  describe "#include?" do
     it "returns true for dates in the range" do
       date_1 = Date.today
       date_2 = Date.today + 5
@@ -88,13 +68,26 @@ describe "DateRange class" do
       expect(date_range.include?(date_2)).must_equal true
       expect(date_range.include?(date_3)).must_equal true
     end
-      
+
+    it "returns ture for the start_date" do
+      date = Date.today
+
+      expect(date_range.include?(date)).must_equal true
+    end
+
+    it "returns false if the date is clearly out" do
+      date = Date.today + 90
+
+      expect(date_range.include?(date)).must_equal false
+    end
+
     it "returns false for the end_date" do
       date = Date.today + 7
 
       expect(date_range.include?(date)).must_equal false
     end
-  end 
+  end
+
 
   describe "#overlap?" do
     before do
@@ -107,7 +100,7 @@ describe "DateRange class" do
     it "returns true for the same range" do
       start_date = Date.today
       end_date = start_date + 7
-      
+
       test_range = Hotel::DateRange.new(start_date, end_date)
 
       expect(@range.overlap?(test_range)).must_equal true
@@ -169,4 +162,4 @@ describe "DateRange class" do
       expect(range.overlap?(test_range)).must_equal false
     end
   end
-end 
+end

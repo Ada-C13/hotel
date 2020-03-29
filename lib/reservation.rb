@@ -1,34 +1,17 @@
-module Hotel 
+require "securerandom"
+
+module Hotel
   class Reservation
+    attr_reader :id, :date_range, :rooms
 
-    DISCOUNT = 0.8
-
-    # date_range is an instance of DateRange class
-    # room is an instance of Room class
-    attr_reader :date_range, :room, :block
-
-    def initialize(date_range, room: nil, block: nil)
-
+    def initialize(id: nil, date_range:, rooms: [])
+      @id = SecureRandom.alphanumeric
       @date_range = date_range
+      @rooms = rooms
+    end
 
-      if block == nil 
-        @room = room 
-      else 
-        @block = block
-      end       
-    end 
-
-    def individual_total_cost 
-      return (room.cost * @date_range.nights).to_f.round(2) 
-    end 
-
-    def block_total_cost 
-      cost_per_room = block.rooms[0].cost * DISCOUNT
-      number_of_rooms = block.rooms.length
-
-      total_cost = (cost_per_room * number_of_rooms) * @date_range.nights
-
-      return total_cost.to_f.round(2)
-    end 
-  end 
-end 
+    def total_cost
+      return (rooms[0].cost * @date_range.nights).to_f.round(2)
+    end
+  end
+end
