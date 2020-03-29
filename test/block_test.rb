@@ -38,7 +38,6 @@ describe "Block class" do
     end
   end
 
-
   describe "#total_cost (block)" do
     it "returns the correct total cost for a given block reservation" do
       date_range = Hotel::DateRange.new(Date.today + 10, Date.today + 16)
@@ -54,8 +53,7 @@ describe "Block class" do
       expect(block.total_cost).must_be_close_to (160.00 * 5 * 6), 0.01
     end
 
-    it "applies the correct discount rate" do 
-
+    it "applies the correct discount rate" do
       date_range = Hotel::DateRange.new(Date.today + 10, Date.today + 16)
 
       room_7 = Hotel::Room.new(num: 7)
@@ -64,30 +62,42 @@ describe "Block class" do
       block = Hotel::Block.new(date_range: date_range, rooms: [room_7, room_8], discount_rate: 0.5)
 
       expect(block.total_cost).must_be_close_to (100.00 * 2 * 6), 0.01
-    end 
+    end
   end
-  
 
   describe "#reserve_room" do
     it "reserves a room in a block" do
       hotel_manager = Hotel::HotelManager.new()
 
-      hotel_manager.reserve_block(date_range: @date_range, room_qty: 5)
+      block = hotel_manager.reserve_block(date_range: @date_range, room_qty: 5)
 
-      expect(@block.reserve_room).must_equal true
+      expect(block.reserve_room).must_equal true
+    end
+
+    it "reserves 3 rooms in a block and there are 2 available rooms left" do
+      hotel_manager = Hotel::HotelManager.new()
+
+      block = hotel_manager.reserve_block(date_range: @date_range, room_qty: 5)
+
+      3.times do
+        block.reserve_room
+      end
+
+      expect(block.reserved_rooms.length).must_equal 3
+      expect(block.available_rooms.length).must_equal 2
     end
 
     it "raises NoRoomError if there is no available room in a block" do
       hotel_manager = Hotel::HotelManager.new()
       date_range = Hotel::DateRange.new(Date.today, Date.today + 5)
-      
+
       block = hotel_manager.reserve_block(date_range: date_range, room_qty: 5)
 
-      5.times do 
+      5.times do
         block.reserve_room
-      end 
+      end
 
-      expect{block.reserve_room}.must_raise Hotel::NoRoomError
+      expect { block.reserve_room }.must_raise Hotel::NoRoomError
     end
   end
 end

@@ -8,7 +8,11 @@ module Hotel
       validate_room_qty(@rooms.length)
 
       @discount_rate = discount_rate
-      @available_rooms = @rooms
+
+      if @rooms
+        @available_rooms = @rooms
+      end
+
       @reserved_rooms = []
     end
 
@@ -24,7 +28,7 @@ module Hotel
     def reserve_room
       raise NoRoomError, "No room available" if @available_rooms.empty?
 
-      reserved_rooms << available_rooms[0]
+      @reserved_rooms << available_rooms[0]
       @available_rooms.delete(available_rooms[0])
 
       return true

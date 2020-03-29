@@ -1,7 +1,7 @@
 require "date"
 
 module Hotel
-  class DateRangeError < ArgumentError; end 
+  class DateRangeError < ArgumentError; end
 
   class DateRange
     attr_reader :start_date, :end_date
@@ -22,7 +22,6 @@ module Hotel
       return @start_date <= date && @end_date > date # excluding end_date
     end
 
-
     # Reference: https://makandracards.com/makandra/984-test-if-two-date-ranges-overlap-in-ruby-or-rails
     # @start_date <= other.end_date && @end_date >= other.start_date
 
@@ -31,11 +30,10 @@ module Hotel
       @start_date < other.end_date && @end_date > other.start_date
     end
 
-
     private
 
     def check_valid_date
-      if @start_date >= @end_date 
+      if @start_date >= @end_date
         raise DateRangeError, "An invalid date range"
       end
 

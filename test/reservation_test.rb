@@ -20,7 +20,7 @@ describe "Reservation class" do
       expect(@reservation).must_respond_to :date_range
       expect(@reservation).must_respond_to :rooms
 
-      expect(@reservation.id.length).must_equal 16 
+      expect(@reservation.id.length).must_equal 16
       expect(@reservation.date_range).must_be_kind_of Hotel::DateRange
       expect(@reservation.rooms[0]).must_be_kind_of Hotel::Room
 

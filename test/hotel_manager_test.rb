@@ -5,8 +5,16 @@ describe "HotelManager class" do
   before do
     @hotel_manager = Hotel::HotelManager.new()
     @date = Date.today + 50
+    @date_3 = Date.today + 60
 
     @date_range = Hotel::DateRange.new(Date.today + 50, Date.today + 55)
+    @date_range_2 = Hotel::DateRange.new(Date.today + 20, Date.today + 25)
+    @date_range_3 = Hotel::DateRange.new(Date.today + 60, Date.today + 65)
+    @date_range_4 = Hotel::DateRange.new(Date.today + 90, Date.today + 95)
+    @date_range_5 = Hotel::DateRange.new(Date.today, Date.today + 5)
+    @date_range_5 = Hotel::DateRange.new(Date.today + 11, Date.today + 16)
+    @date_range_6 = Hotel::DateRange.new(Date.today + 200, Date.today + 207)
+    @date_range_7 = Hotel::DateRange.new(Date.today + 30, Date.today + 36)
   end
 
   # wave 1
@@ -24,8 +32,8 @@ describe "HotelManager class" do
       end
     end
 
-    describe "#find_bookings_by_range(date_range)" do 
-      it "returns a list of bookings for the given date range" do 
+    describe "#find_bookings_by_range(date_range)" do
+      it "returns a list of bookings for the given date range" do
         date_range = Hotel::DateRange.new(Date.today, Date.today + 15)
 
         3.times do
@@ -36,18 +44,17 @@ describe "HotelManager class" do
 
         expect(bookings).must_be_instance_of Array
         expect(bookings.length).must_equal 3
-      end 
-    end 
-
+      end
+    end
 
     describe "#bookings_per_room(date_range, room_num)" do
       it "returns a list of bookings for the specific room and the given date range" do
-        date_range = Hotel::DateRange.new(Date.today + 52, Date.today + 54)
+        date_range = Hotel::DateRange.new(Date.today + 22, Date.today + 24)
 
-        @hotel_manager.reserve_room(@date_range)
+        @hotel_manager.reserve_room(@date_range_2)
         @hotel_manager.reserve_room(date_range)
 
-        reservations_1 = @hotel_manager.bookings_per_room(@date_range, 1)
+        reservations_1 = @hotel_manager.bookings_per_room(@date_range_2, 1)
         reservations_2 = @hotel_manager.bookings_per_room(date_range, 2)
 
         expect(reservations_1).must_be_kind_of Array
@@ -61,17 +68,16 @@ describe "HotelManager class" do
       end
     end
 
-
     describe "#find_bookings_by_date(date)" do
       it "returns 6 individual reservations and 1 block reservation within the specific date range" do
         6.times do
-          @hotel_manager.reserve_room(@date_range)
+          @hotel_manager.reserve_room(@date_range_3)
         end
 
         # reserve block
-        @hotel_manager.reserve_block(date_range: @date_range, room_qty: 5)
+        @hotel_manager.reserve_block(date_range: @date_range_3, room_qty: 5)
 
-        reservations = @hotel_manager.find_bookings_by_date(@date)
+        reservations = @hotel_manager.find_bookings_by_date(@date_3)
 
         expect(reservations).must_be_kind_of Array
         expect(reservations.length).must_equal 7
@@ -79,8 +85,6 @@ describe "HotelManager class" do
       end
 
       it "returns 19 reservations within specific date range" do
-        @hotel_manager.reserve_room(@date_range)
-
         test_date_range = Hotel::DateRange.new(Date.today + 40, Date.today + 42)
 
         10.times do
@@ -107,7 +111,6 @@ describe "HotelManager class" do
     end
   end
 
-
   describe "wave 2" do
     describe "#reserve_room" do
       it "takes a date range and returns a Reservation" do
@@ -120,23 +123,22 @@ describe "HotelManager class" do
 
       it "raise a NoRoomError error after making 20 reservations for the same date range" do
         20.times do
-          @hotel_manager.reserve_room(@date_range)
+          @hotel_manager.reserve_room(@date_range_4)
         end
 
         expect {
-          @hotel_manager.reserve_room(@date_range)
+          @hotel_manager.reserve_room(@date_range_4)
         }.must_raise Hotel::NoRoomError
       end
 
       it "raise a NoRoomError if there are no available rooms due to block reservation" do
         4.times do
-          @hotel_manager.reserve_block(date_range: @date_range, room_qty: 5)
+          @hotel_manager.reserve_block(date_range: @date_range_5, room_qty: 5)
         end
 
-        expect { @hotel_manager.reserve_room(@date_range) }.must_raise Hotel::NoRoomError
+        expect { @hotel_manager.reserve_room(@date_range_5) }.must_raise Hotel::NoRoomError
       end
     end
-
 
     describe "#add_reservation" do
       it "adds a reservation in reservations" do
@@ -146,30 +148,28 @@ describe "HotelManager class" do
         reservations = @hotel_manager.add_reservation(reservation)
 
         expect(reservations).must_be_instance_of Array
-        expect(reservations[0]).must_be_instance_of Hotel::Reservation
-        expect(reservations[0].rooms[0].num).must_equal 8
+        expect(reservations[-1]).must_be_instance_of Hotel::Reservation
+        expect(reservations[-1].rooms[0].num).must_equal 8
       end
     end
 
+    describe "#reserved_room_ids" do
+      it "returns reserved room_ids" do
+        5.times do
+          @hotel_manager.reserve_room(@date_range_6)
+        end
 
-    describe "#reserved_room_ids" do 
-      it "returns reserved room_ids" do 
-        5.times do 
-          @hotel_manager.reserve_room(@date_range)
-        end 
-
-        reserved_room_ids = @hotel_manager.reserved_room_ids(@date_range)
+        reserved_room_ids = @hotel_manager.reserved_room_ids(@date_range_6)
 
         expect(reserved_room_ids.length).must_equal 5
-      end 
+      end
 
-      it "returns an empty array if there is no reservation" do 
+      it "returns an empty array if there is no reservation" do
         reserved_room_ids = @hotel_manager.reserved_room_ids(@date_range)
 
         expect(reserved_room_ids).must_equal []
-      end 
-    end 
-
+      end
+    end
 
     describe "#available_room_ids" do
       it "returns available rooms for the given date range" do
@@ -182,7 +182,7 @@ describe "HotelManager class" do
       end
 
       it "returns the room #1 after making 20 reservations in a different date range" do
-        date_range = Hotel::DateRange.new(Date.today + 50, Date.today + 55)
+        date_range = Hotel::DateRange.new(Date.today + 250, Date.today + 255)
         new_date_range = Hotel::DateRange.new(Date.today + 41, Date.today + 46)
 
         20.times do
@@ -194,21 +194,21 @@ describe "HotelManager class" do
 
       it "returns the room #20 after making 19 reservations for the same date range" do
         19.times do
-          @hotel_manager.reserve_room(@date_range)
+          @hotel_manager.reserve_room(@date_range_7)
         end
 
-        expect(@hotel_manager.available_room_ids(@date_range)[0]).must_equal 20
+        expect(@hotel_manager.available_room_ids(@date_range_7)[0]).must_equal 20
       end
 
-      it "raises an ArgumentError if there is no available room for the given date range" do 
+      it "raises an ArgumentError if there is no available room for the given date range" do
         date_range = Hotel::DateRange.new(Date.today + 50, Date.today + 55)
 
         20.times do
           @hotel_manager.reserve_room(date_range)
         end
 
-        expect{@hotel_manager.available_room_ids(date_range)}.must_raise Hotel::NoRoomError
-      end 
+        expect { @hotel_manager.available_room_ids(date_range) }.must_raise Hotel::NoRoomError
+      end
     end
   end
 
@@ -245,16 +245,15 @@ describe "HotelManager class" do
 
         expect { @hotel_manager.reserve_block(date_range: @date_range, room_qty: 5) }.must_raise Hotel::NoRoomError
       end
-
     end
 
-    describe "find_room_by_id(number)" do 
+    describe "#find_room_by_id(number)" do
       it "returns a Room instance by the given id" do
         room = @hotel_manager.find_room_by_id(5)
 
         expect(room).must_be_kind_of Hotel::Room
         expect(room.num).must_equal 5
-      end 
-    end 
+      end
+    end
   end
 end

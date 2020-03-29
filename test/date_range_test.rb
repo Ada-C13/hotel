@@ -34,7 +34,6 @@ describe "DateRange class" do
       }.must_raise Hotel::DateRangeError
     end
 
-
     it "raises a DateRangeError when the date range is not between current date and end of the year" do
 
       # Act & Assert
@@ -87,7 +86,6 @@ describe "DateRange class" do
       expect(date_range.include?(date)).must_equal false
     end
   end
-
 
   describe "#overlap?" do
     before do
