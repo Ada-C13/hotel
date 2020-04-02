@@ -1,0 +1,37 @@
+## Before Submission: `refactors.txt` Requirement
+
+
+A short list of the changes that I could make:
+
+reservation.rb: 
+(1) Instead of having `room instances` in a `rooms` array, I may want to change to room numbers to make it easier to access.
+(2) I may want to change `room` attribute's data structure to `rooms` so that I can use Reservation as Super class
+
+hotel_manager.rb:
+(1) I need to decide whether or not I want to reserve a specific room from a hotel block or not. As it is currently, I can reserve the same amount of rooms from a block that I set originally.
+
+(2) I think the HotelManager class has too many responsibilties. I should find a way to change this factor.
+
+
+block.rb:
+(1) I want to relocate "valide_number_of_rooms" in block.rb (currently, it is located in hotel_manager.rb)
+
+(2) I may want to change it to subclass of Reservation class
+
+
+CLI & csv file 
+(1) I need to do optional parts 
+
+
+
+I refactored the parts below:
+(1) By using `reserved_blocks_per_room(date_range, room)` method, I created a method where I can get reserved room lists for blocks. Once I have the room numbers, I will be able to get the sorted available room numbers. 
+Not having this funciton, I had the following problems. (a) ~ (b)
+
+  (a)I refactored `make_block_reservation` method to assign the right room number. 
+    (AS IS: Block 1 => room 20, 19, 18, Block 2 => room 20, 19, 18, 17, 16) 
+    (TO BE: Block 1 => room 20, 19, 18, Block 2 => room 17, 16, 15, 14, 13)
+
+  (b)I refactored to raise an ArgumentError if all rooms are taken by a block when trying to reserve an individual room.
+
+      
